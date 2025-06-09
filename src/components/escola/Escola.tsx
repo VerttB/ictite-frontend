@@ -1,5 +1,5 @@
 import { House, MapPin, PanelsTopLeft, Printer } from "lucide-react";
-import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
+import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "../ui/drawer";
 import { Button } from "../ui/button";
 
 export default function Escola () {
@@ -21,7 +21,7 @@ export default function Escola () {
                             </div>
                             {/* TÍTULO E SUBTÍTULO */}
                             <div className="flex flex-col gap-2 items-center">
-                                <p className="text-3xl font-bold">NOME DA ESCOLA</p>
+                                <DrawerTitle className="text-3xl font-bold">NOME DA ESCOLA</DrawerTitle>
                                 <p className="text-2xl font-semibold text-gray-400">CIDADE DA ESCOLA</p>
                             </div>
                             {/* DESCRIÇÃO */}
@@ -31,9 +31,9 @@ export default function Escola () {
                         </div>
                         <div>
                             <div className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
-                                <Button variant={"outline"}> <House/>         <p>Pesquisadores</p> </Button>
-                                <Button variant={"outline"}> <Printer/>       <p>Equipamentos</p>  </Button>
-                                <Button variant={"outline"}> <PanelsTopLeft/> <p>Projetos</p>      </Button>
+                                <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <House/>         <p>Pesquisadores</p> </Button>
+                                <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <Printer/>       <p>Equipamentos</p>  </Button>
+                                <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <PanelsTopLeft/> <p>Projetos</p>      </Button>
                             </div>
                         </div>
                     </div>
