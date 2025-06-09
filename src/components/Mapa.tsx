@@ -1,58 +1,49 @@
 "use client"
-
 import { useEffect, useRef, useState } from "react"
-import mapboxgl from "mapbox-gl"
+import mapboxgl, { GeoJSONFeature } from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
-import { FeatureCollection } from "geojson"
-
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY!
 
 type LngLatBoundsLike =
   | [[number, number], [number, number]]
   | [number, number, number, number]
 
-const brazilBounds: LngLatBoundsLike = [
-  [-74.0, -34.0],
-  [-34.0, 5.5]
-]
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY
 
 export default function MapaRender() {
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
-  const [geojsonData, setGeojsonData] = useState<FeatureCollection | null>(null)
+  const [geojsonData, setGeojsonData] = useState<any>(null)
 
-  // 1. Primeiro: buscar os dados
+  const brazilBounds: LngLatBoundsLike = [
+    [-74.0, -34.0],
+    [-34.0, 5.5]
+  ]
+
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const res = await fetch("/instituicoes_bahia.geojson")
-        if (!res.ok) throw new Error("Erro ao carregar GeoJSON")
-        const data = await res.json()
-        setGeojsonData(data)
-      } catch (err) {
-        console.error(err)
-      }
+      const res = await fetch("/instituicoes_bahia.geojson")
+      const data = await res.json()
+      setGeojsonData(data)
     }
-
     fetchData()
   }, [])
 
-  // 2. Depois: criar o mapa só quando os dados estiverem prontos
-  useEffect(() => {
-    if (!geojsonData || !mapContainerRef.current) return
 
-    const map = new mapboxgl.Map({
+  useEffect(() => {
+    if (!geojsonData || !mapContainerRef.current || !process.env.NEXT_PUBLIC_MAPBOX_KEY) return
+
+
+     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/monochrome", // usar o seu depois
-      center: [-41.5, -12.9],
+      style: "mapbox://styles/verttb/cmav7e36p00vx01sd6w6h9690",
+      center: [-41.5, -12.9], 
       zoom: 5,
       maxBounds: brazilBounds
     })
 
-    mapRef.current = map
+    const map = mapRef.current
 
     map.on("load", () => {
-      // só adiciona a fonte e os layers quando o mapa estiver pronto
       map.addSource("instituicoes", {
         type: "geojson",
         data: geojsonData,
@@ -111,36 +102,48 @@ export default function MapaRender() {
           "circle-stroke-color": "#fff"
         }
       })
-
-      map.on("click", "clusters", (e) => {
+      map.on('click', 'clusters', (e) => {
         const features = map.queryRenderedFeatures(e.point, {
-          layers: ["clusters"]
-        })
+          layers:['clusters']
+        });
 
-        const feature = features[0]
-        if (!feature?.properties || feature.geometry.type !== "Point") return
+        if(features[0].properties){
+           const cluster_id = features[0].properties.cluster_id;
+           const source = map.getSource('instituicoes') as mapboxgl.GeoJSONSource;
+           if (features[0].geometry.type !== 'Point') return;
+           const coordinates = features[0].geometry.coordinates
 
-        const cluster_id = feature.properties.cluster_id
-        const coordinates = feature.geometry.coordinates as [number, number]
-        const source = map.getSource("instituicoes") as mapboxgl.GeoJSONSource
+           source.getClusterExpansionZoom(cluster_id, 
+            (err, zoom) => {
+              if(err) return;
+              map.easeTo({
+                center: coordinates as [number,number],
+                zoom: zoom as number
+              });
+            });}
 
-        source.getClusterExpansionZoom(cluster_id, (err, expansionZoom) => {
-          if (err || expansionZoom == null) return
-          map.easeTo({ center: coordinates, zoom: expansionZoom })
-        })
-      })
+      });
 
-      map.on("click", "unclustered-point", (e) => {
-        const feature = e.features?.[0]
-        if (!feature || feature.geometry.type !== "Point") return
+      
 
-        const { cidade, estado } = feature.properties || {}
-        alert(`Cidade: ${cidade}\nEstado: ${estado}`)
+      map.on('click', 'unclustered-point', (e) => {
+        if(e.features && e.features[0]){
+          const features  = e.features[0];
+
+          if(features.geometry.type !== 'Point') return;
+          const coordinates = features.geometry.coordinates.slice();
+          if(features.properties)
+            alert(`Cidade: ${features.properties.cidade}
+          \nEstado: ${features.properties.estado}`)
+          
+        }
+      
+           
       })
     })
 
     return () => map.remove()
   }, [geojsonData])
 
-  return <div  ref={mapContainerRef} className="w-full h-full rounded-2xl" />
+  return <div ref={mapContainerRef} className="w-full h-128" />
 }
