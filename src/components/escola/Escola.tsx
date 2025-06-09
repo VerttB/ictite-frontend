@@ -1,5 +1,6 @@
-import { MapPin } from "lucide-react";
+import { House, MapPin, PanelsTopLeft, Printer } from "lucide-react";
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
+import { Button } from "../ui/button";
 
 export default function Escola () {
     return(
@@ -12,7 +13,7 @@ export default function Escola () {
                     </div>
                 </DrawerTrigger>
                 <DrawerContent>
-                    <div>
+                    <div className="flex flex-col gap-10 px-10">
                         <div className="flex flex-col gap-4 px-36 items-center">
                             {/* IMAGEM */}
                             <div className="bg-gray-300 h-60 w-60">
@@ -29,7 +30,11 @@ export default function Escola () {
                             </div>
                         </div>
                         <div>
-                            
+                            <div className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
+                                <Button variant={"outline"}> <House/>         <p>Pesquisadores</p> </Button>
+                                <Button variant={"outline"}> <Printer/>       <p>Equipamentos</p>  </Button>
+                                <Button variant={"outline"}> <PanelsTopLeft/> <p>Projetos</p>      </Button>
+                            </div>
                         </div>
                     </div>
                 </DrawerContent>
