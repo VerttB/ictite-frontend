@@ -24,15 +24,13 @@ const items = [
     }
 ]
 
-const SIDEBAR_WIDTH = "16rem"
-const SIDEBAR_WIDTH_MOBILE = "18rem"
 
 export function AppSidebar() {
 
     
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent>
+      <SidebarContent >
             <SidebarGroup>
                 <SidebarGroupLabel className="text-sm">
                     Navegação
@@ -40,11 +38,11 @@ export function AppSidebar() {
                 <SidebarGroupContent>
                     <SidebarMenu className="gap-4" >
                         {items.map(item => 
-                            <SidebarMenuItem className="bg-gray-200 p-2 rounded-xl"  key={item.title}>
+                            <SidebarMenuItem className="bg-gray-200 rounded-xl hover:bg-gray-400"  key={item.title}>
                                 <SidebarMenuButton asChild>
                                     <Link  href={item.url}>
                                     <item.icon />
-                                    <span className="text-2xl">{item.title}</span>
+                                    <span >{item.title}</span>
                                     </Link>
                                 </SidebarMenuButton>
 
