@@ -8,9 +8,9 @@ export const Header = () => {
                 src={"/logo_ia_editais.png"}
                 alt="Logo"
                 width={200}
-                height={200}
+                height={150}
                 className="
-                    inline-block ml-2
+                    inline-block 
                 "
             />
 
@@ -20,11 +20,11 @@ export const Header = () => {
                 width={150}
                 height={150}
                 className="
-                    ml-2 inline-block mb-[3px]
+                   inline-block 
                 "
             />
             </div>
-            <button className="bg-verde text-xl cursor-pointer text-branco rounded-xl py-2 h-fit px-10">
+            <button className="bg-verde text-xl cursor-pointer text-branco rounded-xl py-1 h-fit px-10">
                 Fazer Login
             </button>
         </div>

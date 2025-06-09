@@ -29,7 +29,7 @@ export function AppSidebar() {
 
     
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" >
       <SidebarContent >
             <SidebarGroup>
                 <SidebarGroupLabel className="text-sm">
@@ -40,7 +40,7 @@ export function AppSidebar() {
                         {items.map(item => 
                             <SidebarMenuItem className="bg-gray-200 rounded-xl hover:bg-gray-400"  key={item.title}>
                                 <SidebarMenuButton asChild>
-                                    <Link  href={item.url}>
+                                    <Link className="flex"  href={item.url}>
                                     <item.icon />
                                     <span >{item.title}</span>
                                     </Link>
