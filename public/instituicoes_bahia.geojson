@@ -1,0 +1,855 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1,
+        "nome": "Fundação 1",
+        "tipo": "Fundação",
+        "cidade": "Jequié",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.08366800702559,
+          -13.855370529592793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
+        "nome": "Associação 2",
+        "tipo": "Associação",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.49544640914406,
+          -12.962785319034863
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "nome": "Fundação 3",
+        "tipo": "Fundação",
+        "cidade": "Itabuna",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.27075664129016,
+          -14.786969200367697
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4,
+        "nome": "ONG 4",
+        "tipo": "ONG",
+        "cidade": "Itabuna",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.27325699425208,
+          -14.790208343617012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5,
+        "nome": "Associação 5",
+        "tipo": "Associação",
+        "cidade": "Feira de Santana",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.96510556642561,
+          -12.256767155568925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 6,
+        "nome": "Centro Comunitário 6",
+        "tipo": "Centro Comunitário",
+        "cidade": "Ilhéus",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.03468820358409,
+          -14.788075193101815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 7,
+        "nome": "Associação 7",
+        "tipo": "Associação",
+        "cidade": "Itabuna",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.285010937503536,
+          -14.78671146749003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 8,
+        "nome": "Associação 8",
+        "tipo": "Associação",
+        "cidade": "Jequié",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.09028145216037,
+          -13.845869585303484
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 9,
+        "nome": "ONG 9",
+        "tipo": "ONG",
+        "cidade": "Ilhéus",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.03421200102005,
+          -14.783478995632176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 10,
+        "nome": "Associação 10",
+        "tipo": "Associação",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.32482062647159,
+          -12.706009555016934
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 11,
+        "nome": "Cooperativa 11",
+        "tipo": "Cooperativa",
+        "cidade": "Itabuna",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.288531300666875,
+          -14.78897012723862
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 12,
+        "nome": "Cooperativa 12",
+        "tipo": "Cooperativa",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.504058864506916,
+          -12.971666836169657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 13,
+        "nome": "Centro Comunitário 13",
+        "tipo": "Centro Comunitário",
+        "cidade": "Itabuna",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.28351236497994,
+          -14.780568519867568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 14,
+        "nome": "Centro Comunitário 14",
+        "tipo": "Centro Comunitário",
+        "cidade": "Ilhéus",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.03901165332848,
+          -14.795095379734892
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 15,
+        "nome": "Associação 15",
+        "tipo": "Associação",
+        "cidade": "Ilhéus",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.03818034587033,
+          -14.789049384326306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 16,
+        "nome": "ONG 16",
+        "tipo": "ONG",
+        "cidade": "Barreiras",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -44.991562196391754,
+          -12.135144734367165
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 17,
+        "nome": "Fundação 17",
+        "tipo": "Fundação",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.32596512435571,
+          -12.70766579549471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 18,
+        "nome": "Associação 18",
+        "tipo": "Associação",
+        "cidade": "Feira de Santana",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.96859222115508,
+          -12.261884686964517
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 19,
+        "nome": "Fundação 19",
+        "tipo": "Fundação",
+        "cidade": "Jequié",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.0873316151856,
+          -13.855781615871317
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 20,
+        "nome": "ONG 20",
+        "tipo": "ONG",
+        "cidade": "Feira de Santana",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.966076692104096,
+          -12.274296636865005
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 21,
+        "nome": "Centro Comunitário 21",
+        "tipo": "Centro Comunitário",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.32377858096499,
+          -12.693455927488575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 22,
+        "nome": "ONG 22",
+        "tipo": "ONG",
+        "cidade": "Juazeiro",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.49526939817121,
+          -9.421350076386203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 23,
+        "nome": "Centro Comunitário 23",
+        "tipo": "Centro Comunitário",
+        "cidade": "Vitória da Conquista",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.8435501884789,
+          -14.86485182339937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 24,
+        "nome": "Centro Comunitário 24",
+        "tipo": "Centro Comunitário",
+        "cidade": "Barreiras",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -45.00253823778221,
+          -12.137386226302482
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 25,
+        "nome": "Fundação 25",
+        "tipo": "Fundação",
+        "cidade": "Vitória da Conquista",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.837123406001595,
+          -14.862853890632675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 26,
+        "nome": "Cooperativa 26",
+        "tipo": "Cooperativa",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.506544279394724,
+          -12.976068780914126
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 27,
+        "nome": "Cooperativa 27",
+        "tipo": "Cooperativa",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.50078289685277,
+          -12.97151920537274
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 28,
+        "nome": "ONG 28",
+        "tipo": "ONG",
+        "cidade": "Ilhéus",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -39.04927823539648,
+          -14.786418698934172
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 29,
+        "nome": "ONG 29",
+        "tipo": "ONG",
+        "cidade": "Juazeiro",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.51006729208401,
+          -9.412457128173125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 30,
+        "nome": "Associação 30",
+        "tipo": "Associação",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.321432398351654,
+          -12.70586552159734
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 31,
+        "nome": "Cooperativa 31",
+        "tipo": "Cooperativa",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.49919893049515,
+          -12.978942803362795
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 32,
+        "nome": "Centro Comunitário 32",
+        "tipo": "Centro Comunitário",
+        "cidade": "Feira de Santana",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.958702899581944,
+          -12.2565066001288
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 33,
+        "nome": "Centro Comunitário 33",
+        "tipo": "Centro Comunitário",
+        "cidade": "Lauro de Freitas",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.318861648989746,
+          -12.896964867984593
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 34,
+        "nome": "Cooperativa 34",
+        "tipo": "Cooperativa",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.50236129826362,
+          -12.972271201390978
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 35,
+        "nome": "Centro Comunitário 35",
+        "tipo": "Centro Comunitário",
+        "cidade": "Juazeiro",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.50832570051581,
+          -9.415235796659772
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 36,
+        "nome": "ONG 36",
+        "tipo": "ONG",
+        "cidade": "Feira de Santana",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.96731547429963,
+          -12.263602341317496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 37,
+        "nome": "ONG 37",
+        "tipo": "ONG",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.49561832232379,
+          -12.97868092544709
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 38,
+        "nome": "Associação 38",
+        "tipo": "Associação",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.33536985408745,
+          -12.705088943591054
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 39,
+        "nome": "Centro Comunitário 39",
+        "tipo": "Centro Comunitário",
+        "cidade": "Salvador",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.49532872125471,
+          -12.962121931465903
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 40,
+        "nome": "Associação 40",
+        "tipo": "Associação",
+        "cidade": "Vitória da Conquista",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.83918953001565,
+          -14.865201188963319
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 41,
+        "nome": "Fundação 41",
+        "tipo": "Fundação",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.3343862636709,
+          -12.692790932393866
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 42,
+        "nome": "Associação 42",
+        "tipo": "Associação",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.31826486608409,
+          -12.701023274929831
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 43,
+        "nome": "Centro Comunitário 43",
+        "tipo": "Centro Comunitário",
+        "cidade": "Lauro de Freitas",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.33072205762714,
+          -12.884103453150749
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 44,
+        "nome": "Associação 44",
+        "tipo": "Associação",
+        "cidade": "Jequié",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.09186129859368,
+          -13.846570194225647
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 45,
+        "nome": "Associação 45",
+        "tipo": "Associação",
+        "cidade": "Vitória da Conquista",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.85015294660669,
+          -14.869848577071117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 46,
+        "nome": "ONG 46",
+        "tipo": "ONG",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.328843347663444,
+          -12.697610150094285
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 47,
+        "nome": "Centro Comunitário 47",
+        "tipo": "Centro Comunitário",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.33090018905531,
+          -12.70591516069691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 48,
+        "nome": "ONG 48",
+        "tipo": "ONG",
+        "cidade": "Feira de Santana",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.96582035854658,
+          -12.268444302189533
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 49,
+        "nome": "Fundação 49",
+        "tipo": "Fundação",
+        "cidade": "Lauro de Freitas",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.32018274118793,
+          -12.88941243699525
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 50,
+        "nome": "Associação 50",
+        "tipo": "Associação",
+        "cidade": "Camaçari",
+        "estado": "BA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.326039485121534,
+          -12.706680634708865
+        ]
+      }
+    }
+  ]
+}
