@@ -1,4 +1,5 @@
 'use client'
+import Escola from "@/components/escola/Escola";
 import MapaRender from "@/components/Mapa";
 import dynamic from "next/dynamic";
 const Map = dynamic(() => import("@/components/Mapa"), {
@@ -11,8 +12,10 @@ export default function page(){
         <div className="w-full p-8 flex flex-col space-between rounded-xl">
             <h1 className="h-fit text-xl rounded-xl bg-cinza-light p-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores earum quis in quos vel sequi exercitationem assumenda, quasi distinctio. Autem nostrum laboriosam harum aliquid assumenda nesciunt voluptatibus velit eveniet? Quisquam?</h1>
             <div className='h-full  w-full  p-4'>
-            <Map/>
-        </div>
+                {/*<Map/>*/}
+            </div>
+
+            <Escola />
         </div>
     )
 }
