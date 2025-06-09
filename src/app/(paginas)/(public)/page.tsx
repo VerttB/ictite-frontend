@@ -1,7 +1,7 @@
 'use client'
 import MapaRender from "@/components/Map";
 import dynamic from "next/dynamic";
-const Map = dynamic(() => import("@/components/Map"), {
+const Map = dynamic(() => import("@/components/Mapa"), {
     loading: () => <p>Carregando..</p>,
     ssr: false
   })
