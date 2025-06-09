@@ -34,17 +34,17 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
             <SidebarGroup>
-                <SidebarGroupLabel>
+                <SidebarGroupLabel className="text-sm">
                     Navegação
                 </SidebarGroupLabel>
                 <SidebarGroupContent>
-                    <SidebarMenu >
+                    <SidebarMenu className="gap-4" >
                         {items.map(item => 
-                            <SidebarMenuItem key={item.title}>
+                            <SidebarMenuItem className="bg-gray-200 p-2 rounded-xl"  key={item.title}>
                                 <SidebarMenuButton asChild>
-                                    <Link href={item.url}>
-                                    <item.icon/>
-                                    <span>{item.title}</span>
+                                    <Link  href={item.url}>
+                                    <item.icon />
+                                    <span className="text-2xl">{item.title}</span>
                                     </Link>
                                 </SidebarMenuButton>
 
