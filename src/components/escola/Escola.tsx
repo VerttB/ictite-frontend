@@ -3,8 +3,13 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "../ui/drawer"
 import { Button } from "../ui/button";
 import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { useState } from "react";
 
 export default function Escola () {
+
+    const [activeTab, setActiveTab] = useState("pesquisadores");
+
     return(
         <div>
             <Drawer>
@@ -35,20 +40,45 @@ export default function Escola () {
                                 </div>
                             </div>
                             <div>
-                                <div className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
-                                    <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <House/>         <p>Pesquisadores</p> </Button>
-                                    <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <Printer/>       <p>Equipamentos</p>  </Button>
-                                    <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <PanelsTopLeft/> <p>Projetos</p>      </Button>
-                                </div>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
-                                    <CardPesquisador />
-                                    <CardPesquisador />
-                                    <CardPesquisador />
-                                    <CardPesquisador />
-                                    <CardPesquisador />
-                                    <CardPesquisador />
-                                    <CardPesquisador />
-                                </div>
+                                <Tabs value={activeTab} onValueChange={setActiveTab}>
+                                    <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
+                                        <TabsTrigger value="pesquisadores" asChild>
+                                            <Button variant={activeTab === "pesquisadores" ? "default" : "outline"} 
+                                                className={`gap-2 ${activeTab === "pesquisadores" ? "bg-verde text-branco  hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}> 
+                                                <House/> <p>Pesquisadores</p> 
+                                            </Button>
+                                        </TabsTrigger>
+                                        <TabsTrigger value="equipamentos" asChild>
+                                            <Button variant={activeTab === "equipamentos" ? "default" : "outline"} 
+                                                className={`gap-2 ${activeTab === "equipamentos" ? "bg-verde text-branco  hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}> 
+                                                <Printer/> <p>Equipamentos</p>  
+                                            </Button>
+                                        </TabsTrigger>
+                                        <TabsTrigger value="projetos" asChild>
+                                            <Button variant={activeTab === "projetos" ? "default" : "outline"} 
+                                                className={`gap-2 ${activeTab === "projetos" ? "bg-verde text-branco hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                                <PanelsTopLeft/> <p>Projetos</p>
+                                            </Button>
+                                        </TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value="pesquisadores" className="mt-4">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
+                                            <CardPesquisador />
+                                            <CardPesquisador />
+                                            <CardPesquisador />
+                                            <CardPesquisador />
+                                            <CardPesquisador />
+                                            <CardPesquisador />
+                                            <CardPesquisador />
+                                        </div>
+                                    </TabsContent>
+                                    <TabsContent value="equipamentos" className="mt-4">
+                                        <p>Equipamentos</p>
+                                    </TabsContent>
+                                    <TabsContent value="projetos" className="mt-4">
+                                        <p>Projetos</p>
+                                    </TabsContent>
+                                </Tabs>
                             </div>
                         </div>
                     </div>
