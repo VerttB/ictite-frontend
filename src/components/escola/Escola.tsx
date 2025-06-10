@@ -18,8 +18,8 @@ export default function Escola () {
                     <div className="flex flex-col gap-10 px-10 mb-5">
                         <div className="flex flex-col gap-4 px-36 items-center">
                             {/* IMAGEM */}
-                            <div className="rounded-md">
-                                <Image width={240} height={240} src={"https://picsum.photos/240/240"} alt="escola"
+                            <div className="">
+                                <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="escola"
                                     className="rounded-md border-4 border-cinza-light">
                                 </Image>
                             </div>
