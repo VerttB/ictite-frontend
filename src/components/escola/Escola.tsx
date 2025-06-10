@@ -1,6 +1,8 @@
 import { House, MapPin, PanelsTopLeft, Printer } from "lucide-react";
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "../ui/drawer";
 import { Button } from "../ui/button";
+import CardPesquisador from "../card/CardPesquisador";
+import Image from "next/image";
 
 export default function Escola () {
     return(
@@ -13,11 +15,13 @@ export default function Escola () {
                     </div>
                 </DrawerTrigger>
                 <DrawerContent>
-                    <div className="flex flex-col gap-10 px-10">
+                    <div className="flex flex-col gap-10 px-10 mb-5">
                         <div className="flex flex-col gap-4 px-36 items-center">
                             {/* IMAGEM */}
-                            <div className="bg-gray-300 h-60 w-60">
-
+                            <div className="rounded-md">
+                                <Image width={240} height={240} src={"https://picsum.photos/240/240"} alt="escola"
+                                    className="rounded-md border-4 border-cinza-light">
+                                </Image>
                             </div>
                             {/* TÍTULO E SUBTÍTULO */}
                             <div className="flex flex-col gap-2 items-center">
@@ -34,6 +38,9 @@ export default function Escola () {
                                 <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <House/>         <p>Pesquisadores</p> </Button>
                                 <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <Printer/>       <p>Equipamentos</p>  </Button>
                                 <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <PanelsTopLeft/> <p>Projetos</p>      </Button>
+                            </div>
+                            <div>
+                                <CardPesquisador />
                             </div>
                         </div>
                     </div>
