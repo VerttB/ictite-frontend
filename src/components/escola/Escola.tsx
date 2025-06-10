@@ -14,7 +14,7 @@ export default function Escola () {
                         <p className="text-xl">Salvador-BA</p>
                     </div>
                 </DrawerTrigger>
-                <DrawerContent>
+                <DrawerContent className="overflow-y-auto">
                     <div className="flex flex-col gap-10 px-10 mb-5">
                         <div className="flex flex-col gap-4 px-36 items-center">
                             {/* IMAGEM */}
@@ -39,7 +39,12 @@ export default function Escola () {
                                 <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <Printer/>       <p>Equipamentos</p>  </Button>
                                 <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <PanelsTopLeft/> <p>Projetos</p>      </Button>
                             </div>
-                            <div>
+                            <div className="grid grid-cols-6 items-center justify-center gap-5">
+                                <CardPesquisador />
+                                <CardPesquisador />
+                                <CardPesquisador />
+                                <CardPesquisador />
+                                <CardPesquisador />
                                 <CardPesquisador />
                             </div>
                         </div>
