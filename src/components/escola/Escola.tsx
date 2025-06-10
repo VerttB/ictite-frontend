@@ -14,38 +14,41 @@ export default function Escola () {
                         <p className="text-xl">Salvador-BA</p>
                     </div>
                 </DrawerTrigger>
-                <DrawerContent className="overflow-y-auto">
-                    <div className="flex flex-col gap-10 px-10 mb-5">
-                        <div className="flex flex-col gap-4 px-36 items-center">
-                            {/* IMAGEM */}
-                            <div className="">
-                                <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="escola"
-                                    className="rounded-md border-4 border-cinza-light">
-                                </Image>
+                <DrawerContent className="h-[95vh] flex flex-col">
+                    <div className="flex-1 overflow-y-auto px-4 py-6"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
+                        <div className="flex flex-col gap-10 px-10 mb-5">
+                            <div className="flex flex-col gap-4 px-36 items-center">
+                                {/* IMAGEM */}
+                                <div className="">
+                                    <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="escola"
+                                        className="rounded-md border-4 border-cinza-light">
+                                    </Image>
+                                </div>
+                                {/* TÍTULO E SUBTÍTULO */}
+                                <div className="flex flex-col gap-2 items-center">
+                                    <DrawerTitle className="text-3xl font-bold">NOME DA ESCOLA</DrawerTitle>
+                                    <p className="text-2xl font-semibold text-gray-400">CIDADE DA ESCOLA</p>
+                                </div>
+                                {/* DESCRIÇÃO */}
+                                <div className="text-2xl font-semibold text-gray-400">
+                                    <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores earum quis in quos vel sequi exercitationem assumenda, quasi distinctio. Autem nostrum laboriosam harum aliquid assumenda nesciunt voluptatibus velit eveniet? Quisquam?</p>
+                                </div>
                             </div>
-                            {/* TÍTULO E SUBTÍTULO */}
-                            <div className="flex flex-col gap-2 items-center">
-                                <DrawerTitle className="text-3xl font-bold">NOME DA ESCOLA</DrawerTitle>
-                                <p className="text-2xl font-semibold text-gray-400">CIDADE DA ESCOLA</p>
-                            </div>
-                            {/* DESCRIÇÃO */}
-                            <div className="text-2xl font-semibold text-gray-400">
-                                <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores earum quis in quos vel sequi exercitationem assumenda, quasi distinctio. Autem nostrum laboriosam harum aliquid assumenda nesciunt voluptatibus velit eveniet? Quisquam?</p>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
-                                <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <House/>         <p>Pesquisadores</p> </Button>
-                                <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <Printer/>       <p>Equipamentos</p>  </Button>
-                                <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <PanelsTopLeft/> <p>Projetos</p>      </Button>
-                            </div>
-                            <div className="grid grid-cols-6 items-center justify-center gap-5">
-                                <CardPesquisador />
-                                <CardPesquisador />
-                                <CardPesquisador />
-                                <CardPesquisador />
-                                <CardPesquisador />
-                                <CardPesquisador />
+                            <div>
+                                <div className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
+                                    <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <House/>         <p>Pesquisadores</p> </Button>
+                                    <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <Printer/>       <p>Equipamentos</p>  </Button>
+                                    <Button variant={"outline"} className="hover:bg-verde hover:text-branco"> <PanelsTopLeft/> <p>Projetos</p>      </Button>
+                                </div>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
+                                    <CardPesquisador />
+                                    <CardPesquisador />
+                                    <CardPesquisador />
+                                    <CardPesquisador />
+                                    <CardPesquisador />
+                                    <CardPesquisador />
+                                    <CardPesquisador />
+                                </div>
                             </div>
                         </div>
                     </div>
