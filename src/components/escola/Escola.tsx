@@ -1,24 +1,25 @@
-import { House, MapPin, PanelsTopLeft, Printer } from "lucide-react";
-import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "../ui/drawer";
+import { House, PanelsTopLeft, Printer } from "lucide-react";
+import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
 
-export default function Escola () {
+type EscolaProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  //school: EscolaData | null;
+};
+
+export default function Escola ({open, onOpenChange}:EscolaProps) {
 
     const [activeTab, setActiveTab] = useState("pesquisadores");
 
     return(
         <div>
-            <Drawer>
-                <DrawerTrigger>
-                    <div className="flex flex-row gap-3 items-center h-fit w-fit hover:scale-[105%] hover:cursor-pointer transition-all duration-200 p-2 rounded">
-                        <MapPin/>
-                        <p className="text-xl">Salvador-BA</p>
-                    </div>
-                </DrawerTrigger>
+            <Drawer open={open} onOpenChange={onOpenChange}>
+                
                 <DrawerContent className="h-[95vh] flex flex-col">
                     <div className="flex-1 overflow-y-auto px-4"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
                         <div className="flex flex-col gap-10 px-10 mb-5">

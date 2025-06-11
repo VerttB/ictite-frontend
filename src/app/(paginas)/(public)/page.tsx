@@ -1,8 +1,8 @@
 'use client'
-import Escola from "@/components/escola/Escola";
-import MapaRender from "@/components/Mapa";
+//import Escola from "@/components/escola/Escola";
+//import MapaRender from "@/components/Mapa";
 import dynamic from "next/dynamic";
-const Map = dynamic(() => import("@/components/Mapa"), {
+const Map = dynamic(() => import("@/components/MapaComDrawer"), {
     loading: () => <p>Carregando..</p>,
     ssr: false
   })
@@ -15,7 +15,7 @@ export default function page(){
                 <Map/>
             </div>
 
-            <Escola />
+            {/*<Escola />*/}
         </div>
     )
 }

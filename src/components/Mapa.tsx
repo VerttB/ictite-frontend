@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
-import mapboxgl, { GeoJSONFeature } from "mapbox-gl"
+import mapboxgl from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 
 type LngLatBoundsLike =
@@ -9,7 +9,11 @@ type LngLatBoundsLike =
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY
 
-export default function MapaRender() {
+export type MapProps = {
+    onUnclusteredPointClick: (props: any) => void;
+};
+
+export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const [geojsonData, setGeojsonData] = useState<any>(null)
@@ -102,6 +106,14 @@ export default function MapaRender() {
           "circle-stroke-color": "#fff"
         }
       })
+
+      map.on("mouseenter", "unclustered-point", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", "unclustered-point", () => {
+        map.getCanvas().style.cursor = "";
+      });
+
       map.on('click', 'clusters', (e) => {
         const features = map.queryRenderedFeatures(e.point, {
           layers:['clusters']
@@ -124,26 +136,17 @@ export default function MapaRender() {
 
       });
 
-      
+          map.on("click", "unclustered-point", (e) => {
+            const feat = e.features?.[0];
+            if (!feat || feat.geometry.type !== "Point") return;
+            // dispara callback passando as propriedades
+            onUnclusteredPointClick(feat.properties);
+          });
+        
+    });
 
-      map.on('click', 'unclustered-point', (e) => {
-        if(e.features && e.features[0]){
-          const features  = e.features[0];
-
-          if(features.geometry.type !== 'Point') return;
-          const coordinates = features.geometry.coordinates.slice();
-          if(features.properties)
-            alert(`Cidade: ${features.properties.cidade}
-          \nEstado: ${features.properties.estado}`)
-          
-        }
-      
-           
-      })
-    })
-
-    return () => map.remove()
-  }, [geojsonData])
+    return () => { map.remove() };
+  }, [geojsonData, onUnclusteredPointClick]);
 
   return <div ref={mapContainerRef} className="w-full h-128" />
 }
