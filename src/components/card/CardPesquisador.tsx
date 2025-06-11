@@ -5,7 +5,9 @@ export default function CardPesquisador () {
     return(
         <div>
             <div className="relative">
-                <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="pesquisador"></Image>
+                <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="pesquisador"
+                    className="rounded-md border-4 border-cinza"
+                ></Image>
 
                 <div className="absolute top-25 left-0 w-full p-2">
                     <h2 className="text-white font-bold drop-shadow-md">Nome do pesquisador</h2>

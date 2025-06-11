@@ -26,7 +26,7 @@ export default function Escola () {
                                 {/* IMAGEM */}
                                 <div className="">
                                     <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="escola"
-                                        className="rounded-md border-4 border-cinza-light">
+                                        className="rounded-md border-4 border-cinza">
                                     </Image>
                                 </div>
                                 {/* TÍTULO E SUBTÍTULO */}
