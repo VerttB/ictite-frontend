@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function CardPesquisador () {
     return(
-        <div>
+        <div className="">
             <div className="relative">
                 <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="pesquisador"
                     className="rounded-md border-4 border-cinza"

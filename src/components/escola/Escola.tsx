@@ -20,7 +20,7 @@ export default function Escola () {
                     </div>
                 </DrawerTrigger>
                 <DrawerContent className="h-[95vh] flex flex-col">
-                    <div className="flex-1 overflow-y-auto px-4 py-6"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
+                    <div className="flex-1 overflow-y-auto px-4"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
                         <div className="flex flex-col gap-10 px-10 mb-5">
                             <div className="flex flex-col gap-4 px-36 items-center">
                                 {/* IMAGEM */}
@@ -62,7 +62,7 @@ export default function Escola () {
                                         </TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="pesquisadores" className="mt-4">
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 justify-items-center">
                                             <CardPesquisador />
                                             <CardPesquisador />
                                             <CardPesquisador />
