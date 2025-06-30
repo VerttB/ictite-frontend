@@ -1,9 +1,13 @@
 import { Book } from "lucide-react";
 import Image from "next/image";
 
-export default function CardPesquisador () {
+interface CardPesquisadorProps {
+    onClick?: () => void; // Adicione esta prop
+}
+
+export default function CardPesquisador ({ onClick }: CardPesquisadorProps) {
     return(
-        <div className="">
+        <div className="cursor-pointer" onClick={onClick}>
             <div className="relative">
                 <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="pesquisador"
                     className="rounded-md border-4 border-cinza"

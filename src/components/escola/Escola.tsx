@@ -5,6 +5,7 @@ import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
+import Pesquisador from "./Pesquisador";
 
 type EscolaProps = {
   open: boolean;
@@ -15,6 +16,7 @@ type EscolaProps = {
 export default function Escola ({open, onOpenChange}:EscolaProps) {
 
     const [activeTab, setActiveTab] = useState("pesquisadores");
+    const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
 
     return(
         <div>
@@ -64,13 +66,13 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                                     </TabsList>
                                     <TabsContent value="pesquisadores" className="mt-4">
                                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 justify-items-center">
-                                            <CardPesquisador />
-                                            <CardPesquisador />
-                                            <CardPesquisador />
-                                            <CardPesquisador />
-                                            <CardPesquisador />
-                                            <CardPesquisador />
-                                            <CardPesquisador />
+                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
+                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
+                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
+                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
+                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
+                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
+                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
                                         </div>
                                     </TabsContent>
                                     <TabsContent value="equipamentos" className="mt-4">
@@ -84,6 +86,10 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                         </div>
                     </div>
                 </DrawerContent>
+
+                {/* |=======| DRAWER DO PESQUISADOR |=======| */}
+                <Pesquisador isOpen={isPesquisadorDrawerOpen} onClose={() => setIsPesquisadorDrawerOpen(false)} />
+
             </Drawer>
         </div>
     );
