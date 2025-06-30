@@ -1,6 +1,4 @@
-import MapaRender from "@/components/Mapa";      
 import MapaComDrawer from "@/components/MapaComDrawer";
-import Escola from "@/components/escola/Escola";
 import { GETictite } from "@/core/service/ICTITEService";
 
 export default async function ProjetoPage() {

@@ -5,7 +5,7 @@
       "type": "Feature",
       "properties": {
         "id": 1,
-        "nome": "Fundação 1",
+        "nome": "Colégio Estadual de Salvador",
         "tipo": "Fundação",
         "cidade": "Jequié",
         "estado": "BA"
@@ -22,7 +22,7 @@
       "type": "Feature",
       "properties": {
         "id": 2,
-        "nome": "Associação 2",
+        "nome": "Escola Municipal Professor Rui Barbosa",
         "tipo": "Associação",
         "cidade": "Salvador",
         "estado": "BA"
@@ -39,7 +39,7 @@
       "type": "Feature",
       "properties": {
         "id": 3,
-        "nome": "Fundação 3",
+        "nome": "Instituto Federal da Bahia - Campus Vitória da Conquista",
         "tipo": "Fundação",
         "cidade": "Itabuna",
         "estado": "BA"

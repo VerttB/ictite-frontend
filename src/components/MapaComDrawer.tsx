@@ -21,8 +21,8 @@ export default function MapaComDrawer () {
     const [selectedSchool, setSelectedSchool] = useState<EscolaData | null>(null);
 
     // Função que o mapa vai chamar ao clicar num ponto
-    function handlePointClick(props: any) {
-        // Extrai as propriedades que quiser
+    async function handlePointClick(props: any) {
+        
         const escola: EscolaData = {
         nome: props.nome || '—',
         cidade: props.cidade,
@@ -31,6 +31,7 @@ export default function MapaComDrawer () {
         imagemUrl: props.imagemUrl || 'https://picsum.photos/200/200',
         // … outros campos
         };
+        console.log(props)
         setSelectedSchool(escola);
         setDrawerOpen(true);
     }
