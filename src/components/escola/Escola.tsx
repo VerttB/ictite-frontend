@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import Pesquisador from "./Pesquisador";
+import Projeto from "./Projeto";
 
 type EscolaProps = {
   open: boolean;
@@ -17,6 +18,7 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
 
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
+    const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
 
     return(
         <div>
@@ -79,7 +81,7 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                                         <p>Equipamentos</p>
                                     </TabsContent>
                                     <TabsContent value="projetos" className="mt-4">
-                                        <p>Projetos</p>
+                                        <p onClick={() => setIsProjetoDrawerOpen(true)}>Projetos</p>
                                     </TabsContent>
                                 </Tabs>
                             </div>
@@ -89,6 +91,9 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
 
                 {/* |=======| DRAWER DO PESQUISADOR |=======| */}
                 <Pesquisador isOpen={isPesquisadorDrawerOpen} onClose={() => setIsPesquisadorDrawerOpen(false)} />
+                
+                {/* |=======| DRAWER DO PROJETO |=======| */}
+                <Projeto isOpen={isProjetoDrawerOpen} onClose={() => setIsProjetoDrawerOpen(false)}/>
 
             </Drawer>
         </div>

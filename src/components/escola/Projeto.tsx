@@ -1,19 +1,18 @@
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 
-interface PesquisadorProps {
+interface ProjetoProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
+export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
     return(
-        <Drawer open={isOpen} onOpenChange={onClose} >
+        <Drawer open={isOpen} onOpenChange={onClose} direction="right">
             <DrawerContent>
                 <DrawerHeader>
-                    <DrawerTitle>Pesquisador</DrawerTitle>
+                    <DrawerTitle>Projeto</DrawerTitle>
                 </DrawerHeader>
             </DrawerContent>
         </Drawer>
-
     );
 }
