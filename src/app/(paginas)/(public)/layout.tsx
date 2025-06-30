@@ -10,7 +10,7 @@ export default function layout({
   
        <SidebarProvider>
         <AppSidebar/>
-        <div className="flex flex-col bg-cinza-light pb-4 pr-4">
+        <div className="w-full flex flex-col bg-cinza-light pb-4 pr-4">
         <Header></Header>
 
           <main className="w-full min-h-full bg-branco p-2  " style={{
