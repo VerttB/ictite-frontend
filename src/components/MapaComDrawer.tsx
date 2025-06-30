@@ -1,8 +1,19 @@
+"use client"
 import { useState } from "react";
 import Escola from "./escola/Escola";
 import MapaRender from "./Mapa";
 
+interface EscolaData{
+    nome: string,
+    cidade: string,
+    estado:string,
+    descricao:string,
+    imagemUrl:string,
+}
+
 export default function MapaComDrawer () {
+
+
     // Estado para controlar abertura do Drawer
     const [drawerOpen, setDrawerOpen] = useState(false);
 
