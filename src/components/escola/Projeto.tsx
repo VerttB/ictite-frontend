@@ -2,6 +2,7 @@ import { School, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import Image from "next/image";
+//import CardPesquisador from "../card/CardPesquisador";
 
 interface ProjetoProps {
     isOpen: boolean;
@@ -12,7 +13,7 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent className="w-full">
-                <DrawerHeader>
+                <DrawerHeader className="shadow">
                     <div className="flex justify-start border-b items-center pb-2.5">
                         <Button variant={"outline"} size={"icon"} onClick={() => onClose(false)}><X/></Button>
                     </div>
@@ -26,13 +27,41 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
                 </DrawerHeader>
 
                 {/* BODY DOS PESQUISADORES */}
-                <div className="pl-5 pt-2">
+                <div className="pl-5 pt-2 overflow-y-auto">
                     {/* IMAGENS DO PROJETO */}
-                    <div className="flex flex-row gap-5 py-7 border-t border-b">
+                    <div className="flex flex-row gap-5 py-7 border-b">
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
+                    </div>
+
+                    <div className="flex flex-col gap-2 border-b pb-7 pt-3">
+                        <h2 className="text-2xl font-semibold">Professores</h2>
+                        <div className="flex flex-row gap-5 ">
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-2 border-b pb-7 pt-3">
+                        <h2 className="text-2xl font-semibold">Alunos</h2>
+                        <div className="flex flex-row gap-5 ">
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-2 border-b pb-7 pt-3">
+                        <h2 className="text-2xl font-semibold">Facilitadores</h2>
+                        <div className="flex flex-row gap-5 ">
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                        </div>
                     </div>
                 </div>
 
