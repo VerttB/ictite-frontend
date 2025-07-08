@@ -50,7 +50,7 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
                         <div className="py-4 px-12 overflow-y-auto">
                             {/* DESCRIÇÃO */}
-                            <div className="text-sm mb-2 font-semibold text-gray-400">
+                            <div className="text-sm mb-2 font-semibold text-justify text-gray-400">
                                 <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores earum quis in quos vel sequi exercitationem assumenda, quasi distinctio. Autem nostrum laboriosam harum aliquid assumenda nesciunt voluptatibus velit eveniet? Quisquam?</p>
                             </div>
                             {/* MENU DE BOTÕES - TABS */}
