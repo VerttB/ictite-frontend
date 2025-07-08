@@ -8,6 +8,7 @@ import { useState } from "react";
 import Pesquisador from "./Pesquisador";
 import Projeto from "./Projeto";
 import CardEquipamento from "../card/CardEquipamento";
+import CardProjeto from "../card/CardProjeto";
 
 type EscolaProps = {
   open: boolean;
@@ -86,6 +87,7 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                                             <CardEquipamento />
                                         </TabsContent>
                                         <TabsContent value="projetos" className="mt-4">
+                                            <CardProjeto />
                                             <p onClick={() => setIsProjetoDrawerOpen(true)}>Projetos</p>
                                         </TabsContent>
                                     </Tabs>
