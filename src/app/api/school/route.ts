@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
     try{
         const result = await pool.query(`
-            SELECT name, city, ictite_id, latitude ,longitude from school
+            SELECT name, city, id, latitude ,longitude from school
             `)
 
             const features = result.rows.map((row: any) => ({
