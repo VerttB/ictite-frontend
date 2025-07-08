@@ -1,8 +1,8 @@
-import { Bolsistas } from "./IBolsistas"
-import { Departments } from "./IDepartments"
-import { Researcher } from "./IResearcher"
-import { Ufmg } from "./IUFMG"
-import { User } from "./IUser"
+import { Bolsistas } from "./Bolsistas"
+import { Departments } from "./Departments"
+import { Researcher } from "./Researcher"
+import { Ufmg } from "./UFMG"
+import { User } from "./User"
 import { ResearchGroups } from "./ResearcherGroups"
 
 
