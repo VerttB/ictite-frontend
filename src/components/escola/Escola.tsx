@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import Pesquisador from "./Pesquisador";
 import Projeto from "./Projeto";
+import CardEquipamento from "../card/CardEquipamento";
 
 type EscolaProps = {
   open: boolean;
@@ -82,7 +83,7 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                                             </div>
                                         </TabsContent>
                                         <TabsContent value="equipamentos" className="mt-4">
-                                            <p>Equipamentos</p>
+                                            <CardEquipamento />
                                         </TabsContent>
                                         <TabsContent value="projetos" className="mt-4">
                                             <p onClick={() => setIsProjetoDrawerOpen(true)}>Projetos</p>

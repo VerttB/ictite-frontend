@@ -25,8 +25,10 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
                 </DrawerHeader>
 
                 {/* CORPO DO DRAWER */}
-                <div>
-
+                <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div className="text-sm text-gray-500 ">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur odio corporis temporibus dignissimos laborum sequi voluptates non, vitae reiciendis laudantium! Soluta provident ratione placeat. Molestiae sequi aspernatur aliquid ipsam eligendi.</p>
+                    </div>
                 </div>
             </DrawerContent>
         </Drawer>
