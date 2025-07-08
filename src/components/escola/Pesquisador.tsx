@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
-import { MapPin, X } from "lucide-react";
+import { House, MapPin, PanelsTopLeft, Printer, X } from "lucide-react";
 import { Button } from "../ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { useState } from "react";
 
 interface PesquisadorProps {
     isOpen: boolean;
@@ -9,6 +11,9 @@ interface PesquisadorProps {
 }
 
 export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
+    // |=======| ESTADO DO TAB |=======|
+    const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
+
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent>
@@ -33,11 +38,53 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
                 </DrawerHeader>
 
                 {/* CORPO DO DRAWER */}
-                <div className="flex-1 flex flex-col p-2 overflow-hidden">
+                <div className="flex-1 flex flex-col p-2 overflow-hidden overflow-y-auto">
                     <div className="text-sm text-justify text-gray-500 ">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur odio corporis temporibus dignissimos laborum sequi voluptates non, vitae reiciendis laudantium! Soluta provident ratione placeat. Molestiae sequi aspernatur aliquid ipsam eligendi.</p>
                     </div>
                     
+                    {/* BOTÕES DE NAVEGAÇÃO DO PESQUISADOR - TABS */}
+                    <Tabs value={activePesquisadorTab} onValueChange={setActivePesquisadorTab}>
+                        <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
+                            <TabsTrigger value="artigos" asChild>
+                                <Button variant={activePesquisadorTab === "artigos" ? "default" : "outline"}
+                                    className={`gap-2 ${activePesquisadorTab === "artigos" ? "bg-verde text-branco  hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    <House/> <p>Artigos</p>
+                                </Button>
+                            </TabsTrigger>
+                            <TabsTrigger value="participacaoEventos" asChild>
+                                <Button variant={activePesquisadorTab === "participacaoEventos" ? "default" : "outline"}
+                                    className={`gap-2 ${activePesquisadorTab === "participacaoEventos" ? "bg-verde text-branco  hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    <Printer/> <p>Participação Eventos</p>
+                                </Button>
+                            </TabsTrigger>
+                            <TabsTrigger value="projetos" asChild>
+                                <Button variant={activePesquisadorTab === "projetos" ? "default" : "outline"}
+                                    className={`gap-2 ${activePesquisadorTab === "projetos" ? "bg-verde text-branco hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    <PanelsTopLeft/> <p>Projetos</p>
+                                </Button>
+                            </TabsTrigger>
+                            <TabsTrigger value="livros e capitulos" asChild>
+                                <Button variant={activePesquisadorTab === "livros e capitulos" ? "default" : "outline"}
+                                    className={`gap-2 ${activePesquisadorTab === "livros e capitulos" ? "bg-verde text-branco hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    <PanelsTopLeft/> <p>Livros e Capítulos</p>
+                                </Button>
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="artigos" className="mt-4">
+                            <p>Artigos</p>
+                        </TabsContent>
+                        <TabsContent value="participacaoEventos" className="mt-4">
+                            <p>Participação Eventos</p>
+                        </TabsContent>
+                        <TabsContent value="projetos" className="mt-4">
+                            <p>Projetos</p>
+                        </TabsContent>
+                        <TabsContent value="livros e capitulos" className="mt-4">
+                            <p>Livros e Capítulos</p>
+                        </TabsContent>
+                    </Tabs>
+
                 </div>
             </DrawerContent>
         </Drawer>
