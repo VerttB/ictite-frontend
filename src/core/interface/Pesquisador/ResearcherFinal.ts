@@ -3,5 +3,5 @@ import { ResearchSIMCC } from "./ResearcherSIMCC"
 
 export interface ResearcherFinal extends Researcher{
     image: string | null
-    simc: ResearchSIMCC
+    simcc: ResearchSIMCC
 }
