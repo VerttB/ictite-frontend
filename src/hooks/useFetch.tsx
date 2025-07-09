@@ -4,11 +4,12 @@ export function useFetch<T = unknown>(url: string) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-    if(!url) return null;
 
 
 
  useEffect(() => {
+
+  if(!url) return;
   let isCancelled = false;
   const fetchedData = async () => {
 
@@ -31,7 +32,7 @@ export function useFetch<T = unknown>(url: string) {
   return () => {
     isCancelled = true;
   };
-  
+
  },[url])
 
  return {data, loading ,error}
