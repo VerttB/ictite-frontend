@@ -51,10 +51,10 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                             </div>
                             {/* TÍTULO E SUBTÍTULO */}
                             <div className="flex flex-col gap-2 items-center">
-                                <DrawerTitle className="text-2xl font-bold">NOME DA ESCOLA</DrawerTitle>
+                                <DrawerTitle className="text-2xl font-bold">{school.name}</DrawerTitle>
                                 <div className="flex flex-row gap-1 items-center">
                                     <MapPin size={15} />
-                                    <DrawerDescription className="font-semibold">CIDADE DA ESCOLA</DrawerDescription>
+                                    <DrawerDescription className="font-semibold">{school.city}</DrawerDescription>
                                 </div>
                             </div>
                         </div>

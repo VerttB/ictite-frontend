@@ -28,7 +28,7 @@ export async function GET(
           else image = `http://200.128.66.226/ictite/api/ResearcherData/Image?researcher_id=${data[0].id}`;
           return {
             ...r,
-            simcc: data[0],
+            simcc: data[0] ?? null,
             image: image
           };
         } catch (e) {
