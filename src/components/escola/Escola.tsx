@@ -1,29 +1,40 @@
+'use client'
 import { House, PanelsTopLeft, Printer } from "lucide-react";
 import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pesquisador from "./Pesquisador";
 import Projeto from "./Projeto";
+import { SchoolData } from "@/core/interface/School";
+import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import { Project } from "@/core/interface/Project";
+import { useFetch } from "@/hooks/useFetch";
 
 type EscolaProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  //school: EscolaData | null;
+  schoolId: string
 };
 
-export default function Escola ({open, onOpenChange}:EscolaProps) {
+export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
 
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
     const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
 
+    const { data:school, loading: loadingSchool } = useFetch<SchoolData>(`/api/school/${schoolId}`);
+    // const { data: researchers, loading: loadingResearchers } = useFetch<Researcher[]>(`/api/school/${schoolId}/researchers`);
+    // const { data: projects, loading: loadingProjects } = useFetch<Project[]>(`/api/school/${schoolId}/projects`);
+
+
+    if(loadingSchool) return <p>Carregando....</p>
+    if(!school) return <p>Escola n encontrada</p>
     return(
         <div>
             <Drawer open={open} onOpenChange={onOpenChange}>
-                
                 <DrawerContent className="h-[95vh] flex flex-col">
                     <div className="flex-1 overflow-y-auto px-4"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
                         <div className="flex flex-col gap-10 px-10 mb-5">
@@ -34,16 +45,19 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                                         className="rounded-md border-4 border-cinza">
                                     </Image>
                                 </div>
-                                {/* TÍTULO E SUBTÍTULO */}
+                                
+                                
+                                
                                 <div className="flex flex-col gap-2 items-center">
-                                    <DrawerTitle className="text-3xl font-bold">NOME DA ESCOLA</DrawerTitle>
-                                    <p className="text-2xl font-semibold text-gray-400">CIDADE DA ESCOLA</p>
+                                    <DrawerTitle className="text-3xl font-bold">{school.name}</DrawerTitle>
+                                    <p className="text-2xl font-semibold text-gray-400">{school.city}</p>
                                 </div>
-                                {/* DESCRIÇÃO */}
                                 <div className="text-2xl font-semibold text-gray-400">
                                     <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores earum quis in quos vel sequi exercitationem assumenda, quasi distinctio. Autem nostrum laboriosam harum aliquid assumenda nesciunt voluptatibus velit eveniet? Quisquam?</p>
                                 </div>
+
                             </div>
+                            
                             <div>
                                 <Tabs value={activeTab} onValueChange={setActiveTab}>
                                     <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
