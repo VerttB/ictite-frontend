@@ -1,12 +1,10 @@
 import { Bolsistas } from "./Bolsistas"
-import { Departments } from "./Departments"
-import { Researcher } from "./Researcher"
+
 import { Ufmg } from "./UFMG"
 import { User } from "./User"
-import { ResearchGroups } from "./ResearcherGroups"
 
 
-export interface  ResearchSIMCC extends Researcher{
+export interface  ResearchSIMCC{
   among: number,
   articles: number,
   institution_id:string
