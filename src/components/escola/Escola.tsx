@@ -12,6 +12,8 @@ import { SchoolData } from "@/core/interface/School";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
 import { useFetch } from "@/hooks/useFetch";
+import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
+import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 
 type EscolaProps = {
   open: boolean;
@@ -26,12 +28,13 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
     const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
 
     const { data:school, loading: loadingSchool } = useFetch<SchoolData>(`/api/school/${schoolId}`);
-    // const { data: researchers, loading: loadingResearchers } = useFetch<Researcher[]>(`/api/school/${schoolId}/researchers`);
+    const { data: researchers, loading: loadingResearchers } = useFetch<ResearcherFinal[]>(`/api/school/${schoolId}/researchers`);
     // const { data: projects, loading: loadingProjects } = useFetch<Project[]>(`/api/school/${schoolId}/projects`);
 
-
+    console.log(researchers)
+   
     if(loadingSchool) return <p>Carregando....</p>
-    if(!school) return <p>Escola n encontrada</p>
+    if(!school || !researchers) return <p>Escola n encontrada</p>
     return(
         <div>
             <Drawer open={open} onOpenChange={onOpenChange}>
@@ -82,13 +85,15 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                     </TabsList>
                                     <TabsContent value="pesquisadores" className="mt-4">
                                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 justify-items-center">
-                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
-                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
-                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
-                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
-                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
-                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
-                                            <CardPesquisador onClick={() => setIsPesquisadorDrawerOpen(true)}/>
+                                           {Array.isArray(researchers) && researchers.map((r) => (
+                                                        <CardPesquisador
+                                                            key={r.name}
+                                                            researcher={r}
+                                                            onClick={() => setIsPesquisadorDrawerOpen(true)}
+                                                        />
+                                                        ))}
+
+
                                         </div>
                                     </TabsContent>
                                     <TabsContent value="equipamentos" className="mt-4">
