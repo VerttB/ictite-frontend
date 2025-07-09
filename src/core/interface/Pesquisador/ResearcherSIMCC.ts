@@ -38,8 +38,8 @@ export interface  ResearchSIMCC extends Researcher{
   classification: string
   subsidy: Bolsistas[]
   graduate_programs: GraduatePrograms[]
-  departments: Departments[]
-  research_groups: ResearchGroups[]
+  departments: string[]
+  research_groups: string[]
   status: boolean
   ufmg: Ufmg
   user:User
