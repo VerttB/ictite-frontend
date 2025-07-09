@@ -1,6 +1,6 @@
 'use client'
-import { House, PanelsTopLeft, Printer } from "lucide-react";
-import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
+import { House, MapPin, PanelsTopLeft, Printer } from "lucide-react";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
@@ -91,9 +91,13 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                 </TabsList>
                                 <TabsContent value="pesquisadores" className="mt-4">
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 justify-items-center">
-                                        {Array.from({length:12}).map((_, i) => (
-                                            <CardPesquisador key={i} onClick={() => setIsPesquisadorDrawerOpen(true)}/>
-                                        ))}
+                                          {Array.isArray(researchers) && researchers.map((r) => (
+                                                        <CardPesquisador
+                                                            key={r.name}
+                                                            researcher={r}
+                                                            onClick={() => setIsPesquisadorDrawerOpen(true)}
+                                                        />
+                                                        ))}
                                     </div>
                                 </TabsContent>
                                 <TabsContent value="equipamentos" className="mt-4">
