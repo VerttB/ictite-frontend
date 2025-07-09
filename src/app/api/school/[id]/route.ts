@@ -8,7 +8,7 @@ export async function GET(
     console.log(id)
     try{
          const result = await pool.query(
-      `SELECT name,city, ictite_id FROM school 
+      `SELECT name,city,id,photo_id FROM school 
        WHERE id = $1`,
       [id]
     );
@@ -17,8 +17,8 @@ export async function GET(
             return NextResponse.json({ msg: "Escola não encontrada" }, { status: 404 });
             }
 
-
-        return  NextResponse.json(result.rows)
+        
+        return  NextResponse.json(result.rows[0])
     }catch(e:any){
         console.log(e);
         return NextResponse.json({msg: "Erro ao dar fetch"})

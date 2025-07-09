@@ -25,7 +25,7 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/instituicoes_bahia.geojson")
+      const res = await fetch("/api/school")
       const data = await res.json()
       setGeojsonData(data)
     }

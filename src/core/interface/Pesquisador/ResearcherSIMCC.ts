@@ -1,12 +1,10 @@
-import { Bolsistas } from "./IBolsistas"
-import { Departments } from "./IDepartments"
-import { Researcher } from "./IResearcher"
-import { Ufmg } from "./IUFMG"
-import { User } from "./IUser"
-import { ResearchGroups } from "./ResearcherGroups"
+import { Bolsistas } from "./Bolsistas"
+
+import { Ufmg } from "./UFMG"
+import { User } from "./User"
 
 
-export interface  ResearchSIMCC extends Researcher{
+export interface  ResearchSIMCC{
   among: number,
   articles: number,
   institution_id:string
@@ -38,8 +36,8 @@ export interface  ResearchSIMCC extends Researcher{
   classification: string
   subsidy: Bolsistas[]
   graduate_programs: GraduatePrograms[]
-  departments: Departments[]
-  research_groups: ResearchGroups[]
+  departments: string[]
+  research_groups: string[]
   status: boolean
   ufmg: Ufmg
   user:User

@@ -1,30 +1,44 @@
-import { House, MapPin, PanelsTopLeft, Printer } from "lucide-react";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
+'use client'
+import { House, PanelsTopLeft, Printer } from "lucide-react";
+import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pesquisador from "./Pesquisador";
 import CardEquipamento from "../card/CardEquipamento";
 import CardProjeto from "../card/CardProjeto";
+import { SchoolData } from "@/core/interface/School";
+import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import { Project } from "@/core/interface/Project";
+import { useFetch } from "@/hooks/useFetch";
+import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
+import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 
 type EscolaProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  //school: EscolaData | null;
+  schoolId: string
 };
 
-export default function Escola ({open, onOpenChange}:EscolaProps) {
+export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
 
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
-    
+    const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
 
+    const { data:school, loading: loadingSchool } = useFetch<SchoolData>(`/api/school/${schoolId}`);
+    const { data: researchers, loading: loadingResearchers } = useFetch<ResearcherFinal[]>(`/api/school/${schoolId}/researchers`);
+    // const { data: projects, loading: loadingProjects } = useFetch<Project[]>(`/api/school/${schoolId}/projects`);
+
+    console.log(researchers)
+   
+    if(loadingSchool) return <p>Carregando....</p>
+    if(!school || !researchers) return <p>Escola n encontrada</p>
     return(
         <div>
             <Drawer open={open} onOpenChange={onOpenChange}>
-                
                 <DrawerContent className="h-[95vh] flex flex-col">
                         
                     <DrawerHeader className="">
