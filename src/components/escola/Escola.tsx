@@ -55,7 +55,7 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                             </div>
                             {/* MENU DE BOTÕES - TABS */}
                             <Tabs value={activeTab} onValueChange={setActiveTab}>
-                                <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
+                                <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md overflow-x-auto bg-blue-100">
                                     <TabsTrigger value="pesquisadores" asChild>
                                         <Button variant={activeTab === "pesquisadores" ? "default" : "outline"}
                                             className={`gap-2 ${activeTab === "pesquisadores" ? "bg-verde text-branco  hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
@@ -83,10 +83,14 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                                     </div>
                                 </TabsContent>
                                 <TabsContent value="equipamentos" className="mt-4">
-                                    <CardEquipamento />
+                                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                        {Array.from({length:8}).map((_, i) => (
+                                            <CardEquipamento key={i} />
+                                        ))}
+                                    </div>
                                 </TabsContent>
                                 <TabsContent value="projetos" className="mt-4">
-                                    <div className="grid grid-cols-4 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                         {Array.from({length:8}).map((_, i) => (
                                             <CardProjeto key={i} />
                                         ))}
