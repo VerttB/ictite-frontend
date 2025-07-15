@@ -86,7 +86,11 @@ export default function Escola ({open, onOpenChange}:EscolaProps) {
                                     <CardEquipamento />
                                 </TabsContent>
                                 <TabsContent value="projetos" className="mt-4">
-                                    <CardProjeto />
+                                    <div className="grid grid-cols-4 gap-4">
+                                        {Array.from({length:8}).map((_, i) => (
+                                            <CardProjeto key={i} />
+                                        ))}
+                                    </div>
                                 </TabsContent>
                             </Tabs>
                         </div>

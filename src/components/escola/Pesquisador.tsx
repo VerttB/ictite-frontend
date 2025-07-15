@@ -83,7 +83,11 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
                             <p>Participação Eventos</p>
                         </TabsContent>
                         <TabsContent value="projetos" className="mt-4">
-                            <CardProjeto />
+                            <div className="grid grid-cols-2 gap-4">
+                                {Array.from({length:6}).map((_, i) => (
+                                    <CardProjeto key={i} />
+                                ))}
+                            </div>
                         </TabsContent>
                         <TabsContent value="livros e capitulos" className="mt-4">
                             <p>Livros e Capítulos</p>
