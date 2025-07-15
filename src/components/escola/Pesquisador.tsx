@@ -46,28 +46,32 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
                     
                     {/* BOTÕES DE NAVEGAÇÃO DO PESQUISADOR - TABS */}
                     <Tabs value={activePesquisadorTab} onValueChange={setActivePesquisadorTab}>
-                        <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
+                        <TabsList className="flex flex-row gap-5 w-full py-2 px-4 h-12 rounded-md bg-blue-100">
                             <TabsTrigger value="artigos" asChild>
                                 <Button variant={activePesquisadorTab === "artigos" ? "default" : "outline"}
-                                    className={`gap-2 ${activePesquisadorTab === "artigos" ? "bg-verde text-branco  hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    className={`px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco
+                                                data-[state=active]:bg-verde data-[state=active]:text-branco`}>
                                     <House/> <p>Artigos</p>
                                 </Button>
                             </TabsTrigger>
                             <TabsTrigger value="participacaoEventos" asChild>
                                 <Button variant={activePesquisadorTab === "participacaoEventos" ? "default" : "outline"}
-                                    className={`gap-2 ${activePesquisadorTab === "participacaoEventos" ? "bg-verde text-branco  hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    className={`px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco
+                                                data-[state=active]:bg-verde data-[state=active]:text-branco`}>
                                     <Printer/> <p>Participação Eventos</p>
                                 </Button>
                             </TabsTrigger>
                             <TabsTrigger value="projetos" asChild>
                                 <Button variant={activePesquisadorTab === "projetos" ? "default" : "outline"}
-                                    className={`gap-2 ${activePesquisadorTab === "projetos" ? "bg-verde text-branco hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    className={`px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco
+                                                data-[state=active]:bg-verde data-[state=active]:text-branco`}>
                                     <PanelsTopLeft/> <p>Projetos</p>
                                 </Button>
                             </TabsTrigger>
                             <TabsTrigger value="livros e capitulos" asChild>
                                 <Button variant={activePesquisadorTab === "livros e capitulos" ? "default" : "outline"}
-                                    className={`gap-2 ${activePesquisadorTab === "livros e capitulos" ? "bg-verde text-branco hover:bg-branco hover:text-black" : "hover:bg-verde hover:text-branco"}`}>
+                                    className={`px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco
+                                                data-[state=active]:bg-verde data-[state=active]:text-branco`}>
                                     <PanelsTopLeft/> <p>Livros e Capítulos</p>
                                 </Button>
                             </TabsTrigger>
