@@ -4,6 +4,7 @@ import { House, MapPin, PanelsTopLeft, Printer, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useState } from "react";
+import CardProjeto from "../card/CardProjeto";
 
 interface PesquisadorProps {
     isOpen: boolean;
@@ -78,7 +79,7 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
                             <p>Participação Eventos</p>
                         </TabsContent>
                         <TabsContent value="projetos" className="mt-4">
-                            <p>Projetos</p>
+                            <CardProjeto />
                         </TabsContent>
                         <TabsContent value="livros e capitulos" className="mt-4">
                             <p>Livros e Capítulos</p>
