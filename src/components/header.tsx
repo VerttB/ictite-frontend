@@ -5,24 +5,16 @@ export const Header = () => {
         <div className="w-full p-3 bg-cinza-light flex justify-between items-center">
             <div>
                 <Image
-                src={"/logo_ia_editais.png"}
+                src={"/logoImagem.png"}
                 alt="Logo"
-                width={200}
-                height={150}
+                width={128}
+                height={128}
                 className="
                     inline-block 
                 "
             />
 
-            <Image 
-                src={"/logo_fiocruz.png"}
-                alt="Logo"
-                width={150}
-                height={150}
-                className="
-                   inline-block 
-                "
-            />
+        
             </div>
             <Button  className="text-xl cursor-pointerrounded-xl py-1 h-fit px-10">
                 Fazer Login

@@ -23,6 +23,7 @@ export async function GET(
 
     const researcherSIMCC = await Promise.all(
       result.rows.map(async (r) => {
+        //https://simcc.uesc.br/v3/api/ResearcherData/Image?researcher_id=9ae33668-b5a9-4d1c-af5d-2b5d1f166601
         try {
           console.log(r.name)
           const res = await fetch(`http://200.128.66.226/ictite/api/researcherName?name=${encodeURIComponent(r.name)}`);
