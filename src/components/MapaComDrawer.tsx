@@ -10,13 +10,8 @@ import { SchoolData } from "@/core/interface/School";
 export default function MapaComDrawer () {
 
 
-    // Estado para controlar abertura do Drawer
     const [drawerOpen, setDrawerOpen] = useState(false);
-
-    // Dados da escola selecionada (ou null)
     const [selectedSchoolId, setSelectedSchoolId] = useState<string>("");
-
-    // Função que o mapa vai chamar ao clicar num ponto
     async function handlePointClick(props: any) {
         setSelectedSchoolId(props.id);
         setDrawerOpen(true);
