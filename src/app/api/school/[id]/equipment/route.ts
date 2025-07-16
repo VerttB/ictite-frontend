@@ -22,6 +22,6 @@ export async function GET(
         return  NextResponse.json(result.rows)
     }catch(e:any){
         console.log(e);
-        return NextResponse.json({msg: "Erro ao dar fetch"})
+        return NextResponse.json({msg: "Erro ao dar fetch em equipamento"})
     }
 }

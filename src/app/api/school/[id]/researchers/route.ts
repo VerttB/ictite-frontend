@@ -9,7 +9,11 @@ export async function GET(
   console.log(id)
   try {
     const result = await pool.query(
-      `SELECT name, lattes_id, sex, race, type FROM researcher WHERE school_id = $1`,
+      `SELECT researcher.name,researcher.lattes_id,researcher.sex,researcher.race,researcher.type
+            ,school.name as schoolName, school.city as schoolCity FROM researcher
+            INNER JOIN school
+            ON school.id = researcher.school_id
+            WHERE school_id = $1`,
       [id]
     );
 

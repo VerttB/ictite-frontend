@@ -28,6 +28,6 @@ export async function GET() {
         return  NextResponse.json(geoJson)
     }catch(e:any){
         console.log(e);
-        return NextResponse.json({msg: "Erro ao dar fetch"})
+        return NextResponse.json({msg: "Erro ao dar fetch em escolas"})
     }
 }

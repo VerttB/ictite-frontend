@@ -5,16 +5,18 @@ import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useState } from "react";
 import CardProjeto from "../card/CardProjeto";
+import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 
 interface PesquisadorProps {
     isOpen: boolean;
     onClose: (open:boolean) => void;
+    reseacher: ResearcherFinal | null;
 }
 
-export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
+export default function Pesquisador ({ isOpen, onClose, reseacher } : PesquisadorProps) {
     // |=======| ESTADO DO TAB |=======|
     const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
-
+    if(!reseacher) return
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent>
@@ -24,15 +26,15 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <div>
-                            <Image width={100} height={100} src={"https://picsum.photos/100/100"} alt="escola"
+                            <Image width={100} height={100} src={reseacher.image || "https://picsum.photos/100/100"} alt="escola"
                                 className="rounded-md border border-cinza">
                             </Image>
                         </div>
                         <div className="items-center">
-                            <DrawerTitle>Nome do Pesquisador</DrawerTitle>
+                            <DrawerTitle>{reseacher.name}</DrawerTitle>
                             <div className="flex flex-row gap-1 items-center">
                                 <MapPin size={15} />
-                                <DrawerDescription className="font-semibold">Cidade da Escola</DrawerDescription>
+                                <DrawerDescription className="font-semibold">{reseacher.schoolcity}</DrawerDescription>
                             </div>
                         </div>
                     </div>
@@ -41,7 +43,7 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
                 {/* CORPO DO DRAWER */}
                 <div className="flex-1 flex flex-col p-2 overflow-hidden overflow-y-auto">
                     <div className="text-sm text-justify text-gray-500 ">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur odio corporis temporibus dignissimos laborum sequi voluptates non, vitae reiciendis laudantium! Soluta provident ratione placeat. Molestiae sequi aspernatur aliquid ipsam eligendi.</p>
+                        <p>{reseacher.simcc.abstract}</p>
                     </div>
                     
                     {/* BOTÕES DE NAVEGAÇÃO DO PESQUISADOR - TABS */}

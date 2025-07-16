@@ -26,12 +26,17 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
     const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
-
     const { data:school, loading: loadingSchool } = useFetch<SchoolData>(`/api/school/${schoolId}`);
     const { data: researchers, loading: loadingResearchers } = useFetch<ResearcherFinal[]>(`/api/school/${schoolId}/researchers`);
+    const [ selectedReseacher, setSelectedResearcher ] = useState<ResearcherFinal | null>(null)
     // const { data: projects, loading: loadingProjects } = useFetch<Project[]>(`/api/school/${schoolId}/projects`);
 
     console.log(researchers)
+
+    const handleReseacherClick = (reseacher: ResearcherFinal) => {
+        setSelectedResearcher(reseacher);
+        setIsPesquisadorDrawerOpen(true)
+    }
    
     if(loadingSchool) return <p>Carregando....</p>
     if(!school || !researchers) return <p>Escola n encontrada</p>
@@ -88,7 +93,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                                         <CardPesquisador
                                                             key={r.name}
                                                             researcher={r}
-                                                            onClick={() => setIsPesquisadorDrawerOpen(true)}
+                                                            onClick={() => handleReseacherClick(r)}
                                                         />
                                                         ))}
 
@@ -108,7 +113,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                 </DrawerContent>
 
                 {/* |=======| DRAWER DO PESQUISADOR |=======| */}
-                <Pesquisador isOpen={isPesquisadorDrawerOpen} onClose={() => setIsPesquisadorDrawerOpen(false)} />
+                <Pesquisador isOpen={isPesquisadorDrawerOpen} reseacher={selectedReseacher} onClose={() => setIsPesquisadorDrawerOpen(false)} />
                 
                 
 
