@@ -19,8 +19,8 @@ export default function Pesquisador ({ isOpen, onClose } : PesquisadorProps) {
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent>
                 <DrawerHeader className="shadow">
-                    <div className="flex justify-start border-b items-center pb-2.5">
-                        <Button variant={"outline"} size={"icon"} onClick={() => onClose(false)}><X/></Button>
+                    <div className="flex justify-start border-b items-center pb-2.5 ">
+                        <Button variant={"outline"} size={"icon"} onClick={() => onClose(false)} className="cursor-pointer"><X/></Button>
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <div>

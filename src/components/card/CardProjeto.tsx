@@ -13,7 +13,7 @@ export default function CardProjeto () {
             ">
             <div className="flex flex-row justify-between items-center">
                 <h2 className="text-2xl font-semibold">Nome do Projeto</h2>
-                <Button variant={"outline"} size={"icon"} 
+                <Button variant={"outline"} size={"icon"}  className="cursor-pointer"
                     onClick={(e) => {
                         e.preventDefault()
                         setIsProjetoDrawerOpen(true);

@@ -15,8 +15,8 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent className="w-full">
                 <DrawerHeader className="shadow">
-                    <div className="flex justify-start border-b items-center pb-2.5">
-                        <Button variant={"outline"} size={"icon"} onClick={() => onClose(false)}><X/></Button>
+                    <div className="flex justify-start border-b items-center pb-2.5 ">
+                        <Button variant={"outline"} size={"icon"} onClick={() => onClose(false)} className="cursor-pointer"><X/></Button>
                     </div>
                     <DrawerTitle className="text-2xl">Nome do Projeto</DrawerTitle>
                     <DrawerDescription>Descrição do Projeto: Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam dolores, officia quidem hic culpa enim quae cumque autem provident temporibus labore quibusdam, tempore odit omnis ducimus inventore voluptate obcaecati modi!</DrawerDescription>
