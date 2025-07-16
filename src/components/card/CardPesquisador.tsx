@@ -1,11 +1,13 @@
+import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import { Book } from "lucide-react";
 //import Image from "next/image";
 
 interface CardPesquisadorProps {
     onClick?: () => void; // Adicione esta prop
+    researcher: ResearcherFinal
 }
 
-export default function CardPesquisador ({ onClick }: CardPesquisadorProps) {
+export default function CardPesquisador ({ onClick, researcher }: CardPesquisadorProps) {
     return(
         <div  onClick={onClick} 
             className="relative border-2 h-[250px] w-[200px] rounded-md p-2 

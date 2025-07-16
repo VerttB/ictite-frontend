@@ -1,26 +1,50 @@
+import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
-import {  NextRequest, NextResponse } from "next/server";
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-){
-    const { id } = await params
-    console.log(id)
-    try{
-        const result = await pool.query(
-      `SELECT name, lattes_id,sex,race,type FROM researcher 
-       WHERE school_id = $1`,
+{ params }: { params: Promise<{ id: string }>}
+) {
+  const { id } =  await params;
+  console.log(id)
+  try {
+    const result = await pool.query(
+      `SELECT name, lattes_id, sex, race, type FROM researcher WHERE school_id = $1`,
       [id]
     );
-            
-        if (result.rows.length === 0) {
-            return NextResponse.json({ msg: "Pesquisadores da não encontrada" }, { status: 404 });
-            }
 
-
-        return  NextResponse.json(result.rows)
-    }catch(e:any){
-        console.log(e);
-        return NextResponse.json({msg: "Erro ao dar fetch"})
+    if (result.rows.length === 0) {
+      return NextResponse.json({ msg: "Nenhum pesquisador encontrado." }, { status: 404 });
     }
+
+    const researcherSIMCC = await Promise.all(
+      result.rows.map(async (r) => {
+        try {
+          console.log(r.name)
+          const res = await fetch(`http://200.128.66.226/ictite/api/researcherName?name=${encodeURIComponent(r.name)}`);
+          let data = await res.json();
+          let image = null;
+          if (!data[0]) data = null
+          else image = `http://200.128.66.226/ictite/api/ResearcherData/Image?researcher_id=${data[0].id}`;
+          return {
+            ...r,
+            simcc: data[0],
+            image: image
+          };
+        } catch (e) {
+          console.error("Erro ao buscar SIMCC:", e);
+          return {
+            ...r,
+            simcc: null,
+            image: null
+          };
+        }
+      })
+    );
+
+    return NextResponse.json(researcherSIMCC);
+  } catch (e: any) {
+    console.error("Erro geral:", e);
+    return NextResponse.json({ msg: "Erro ao buscar pesquisadores" }, { status: 500 });
+  }
 }
