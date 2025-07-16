@@ -2,6 +2,7 @@ import { School, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import Image from "next/image";
+import CardPesquisador from "../card/CardPesquisador";
 //import CardPesquisador from "../card/CardPesquisador";
 
 interface ProjetoProps {
@@ -38,29 +39,26 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
 
                     <div className="flex flex-col gap-2 border-b pb-7 pt-3">
                         <h2 className="text-2xl font-semibold">Professores</h2>
-                        <div className="flex flex-row gap-5 ">
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                        <div className="grid grid-cols-3 gap-5 ">
+                            {Array.from({length:5}).map((_, i) => (
+                                <CardPesquisador key={i} />
+                            ))}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2 border-b pb-7 pt-3">
                         <h2 className="text-2xl font-semibold">Alunos</h2>
                         <div className="flex flex-row gap-5 ">
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            {Array.from({length:2}).map((_, i) => (
+                                <CardPesquisador key={i} />
+                            ))}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2 border-b pb-7 pt-3">
                         <h2 className="text-2xl font-semibold">Facilitadores</h2>
                         <div className="flex flex-row gap-5 ">
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
-                            <Image src={"https://picsum.photos/100/100"} alt={"Pesquisador"} width={100} height={100}></Image>
+                            {Array.from({length:3}).map((_, i) => (
+                                <CardPesquisador key={i} />
+                            ))}
                         </div>
                     </div>
                 </div>
