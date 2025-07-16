@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Home ,  SquareChartGantt} from "lucide-react"
+import { Home ,  Newspaper,  SquareChartGantt} from "lucide-react"
 import Link from "next/link"
 const items = [
     {
@@ -21,6 +21,11 @@ const items = [
         title: "Projeto",
         url:"/projeto",
         icon: SquareChartGantt
+    },
+    {
+        title: "Artigos",
+        url: "/artigos",
+        icon: Newspaper
     }
 ]
 
