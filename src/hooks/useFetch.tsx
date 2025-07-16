@@ -15,7 +15,10 @@ export function useFetch<T = unknown>(url: string) {
 
     try{
     const res = await fetch(url);
-    if(!res.ok) throw new Error("Erro ao buscar po dados");
+    if(!res.ok){
+      setData(null)
+      return;
+    };
     const jsonData = await res.json();
     if(!isCancelled) setData(jsonData);
     

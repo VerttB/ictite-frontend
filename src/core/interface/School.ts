@@ -3,5 +3,6 @@ export interface SchoolData{
     name: string,
     city: string,
     photo_id: string,
+    description:string,
 
 }

@@ -8,7 +8,7 @@ export async function GET(
     console.log(id)
     try{
          const result = await pool.query(
-      `SELECT name,city,id,photo_id FROM school 
+      `SELECT name,city,id,photo_id,description FROM school 
        WHERE id = $1`,
       [id]
     );

@@ -43,7 +43,7 @@ export default function Pesquisador ({ isOpen, onClose, reseacher } : Pesquisado
                 {/* CORPO DO DRAWER */}
                 <div className="flex-1 flex flex-col p-2 overflow-hidden overflow-y-auto">
                     <div className="text-sm text-justify text-gray-500 ">
-                        <p>{reseacher.simcc.abstract ||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae at earum nostrum saepe recusandae quos. Architecto magni fugiat quia, tenetur voluptas voluptatem sequi ipsa eaque dolores. Voluptas itaque velit a?"}</p>
+                        <p className="line-clamp-4 hover:line-clamp-none">{reseacher.simcc.abstract ||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae at earum nostrum saepe recusandae quos. Architecto magni fugiat quia, tenetur voluptas voluptatem sequi ipsa eaque dolores. Voluptas itaque velit a?"}</p>
                     </div>
                     {/* BOTÕES DE NAVEGAÇÃO DO PESQUISADOR - TABS */}
                     <Tabs value={activePesquisadorTab} onValueChange={setActivePesquisadorTab}>

@@ -7,8 +7,8 @@ export const Header = () => {
                 <Image
                 src={"/logoImagem.png"}
                 alt="Logo"
-                width={128}
-                height={128}
+                width={192}
+                height={192}
                 className="
                     inline-block 
                 "

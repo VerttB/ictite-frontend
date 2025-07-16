@@ -24,14 +24,14 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
 
             <div className="relative flex flex-col h-full justify-end gap-2">
                 <div className="text-white">
-                    <p className="font-semibold text-xl ">{researcher.name}</p>
+                    <p className=" text-xl ">{researcher.name}</p>
                     <div className="hidden group-hover:block ">
-                        <p>{researcher.sexo}</p>
-                        <p>{researcher.raca}</p>
+                        <p>{researcher.sex}</p>
+                        <p>{researcher.race}</p>
                     </div>
                 </div>
                 <div className=" flex items-center
-                            bg-vermelho py-1 px-1.5 ml-1 rounded-md w-fit text-xl font-bold">
+                            bg-vermelho py-1 px-1.5 ml-1 rounded-md w-fit text-xl ">
                     <Book size={20}/>
                     <p className="">{researcher.type}</p>
                 </div>

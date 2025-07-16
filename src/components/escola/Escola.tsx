@@ -43,7 +43,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
     return(
         <div>
             <Drawer open={open} onOpenChange={onOpenChange}>
-                <DrawerContent className="h-[95vh] flex flex-col">
+                {loadingResearchers ? <p>Carregando</p> : (<DrawerContent className="h-[95vh] flex flex-col">
                     <div className="flex-1 overflow-y-auto px-4"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
                         <div className="flex flex-col gap-10 px-10 mb-5">
                             <div className="flex flex-col gap-4 px-36 items-center">
@@ -61,7 +61,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                     <p className="text-2xl font-semibold text-gray-400">{school.city}</p>
                                 </div>
                                 <div className="text-2xl font-semibold text-gray-400">
-                                    <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores earum quis in quos vel sequi exercitationem assumenda, quasi distinctio. Autem nostrum laboriosam harum aliquid assumenda nesciunt voluptatibus velit eveniet? Quisquam?</p>
+                                    <p >{school.description}</p>
                                 </div>
                             </div>
                             
@@ -110,8 +110,9 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                             </div>
                         </div>
                     </div>
-                </DrawerContent>
-
+                </DrawerContent>)
+                }
+                
                 {/* |=======| DRAWER DO PESQUISADOR |=======| */}
                 <Pesquisador isOpen={isPesquisadorDrawerOpen} reseacher={selectedReseacher} onClose={() => setIsPesquisadorDrawerOpen(false)} />
                 
