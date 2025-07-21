@@ -20,12 +20,12 @@ export default function MapaComDrawer () {
     return (
         <>
         <MapaRender onUnclusteredPointClick={handlePointClick} />
+        {selectedSchoolId &&
         <Escola
             schoolId={selectedSchoolId}
             open={drawerOpen}
             onOpenChange={setDrawerOpen}
-            
-        />
+        />}
         </>
     );
 }
