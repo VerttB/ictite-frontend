@@ -10,6 +10,8 @@ import {
   PopoverAnchor, // Usaremos o Anchor para posicionar o Popover dinamicamente
 } from "@/components/ui/popover" // Ajuste o caminho se necessário
 import { SchoolData } from "@/core/interface/School"
+import { useFetch } from "@/hooks/useFetch"
+import { Spinner } from "./LoadingSpin"
 
 type LngLatBoundsLike =
   | [[number, number], [number, number]]
@@ -26,8 +28,8 @@ export type MapProps = {
 export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
-  const [geojsonData, setGeojsonData] = useState<any>(null)
-
+  //const [geojsonData, setGeojsonData] = useState<any>(null)
+  const {data: geojsonData, loading} = useFetch<any>("/api/school")
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);
@@ -37,16 +39,16 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
     [-34.0, 5.5]
   ]
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch("/api/school")
-      const data = await res.json()
-      setGeojsonData(data)
-    }
-    fetchData()
-  }, [])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const res = await fetch("/api/school")
+  //     const data = await res.json()
+  //     setGeojsonData(data)
+  //   }
+  //   fetchData()
+  // }, [])
 
-
+  
   useEffect(() => {
     if (!geojsonData || !mapContainerRef.current || !process.env.NEXT_PUBLIC_MAPBOX_KEY) return
 
@@ -119,7 +121,10 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
     return () => { map.remove() };
   }, [geojsonData, onUnclusteredPointClick]);
 
-
+  if(loading) return <div className="h-64 w-full flex flex-col items-center justify-center">
+                        <Spinner/>
+                        <h2>Carregando Mapa....</h2>
+                        </div>
   return (
     <div className="relative  w-full">
     <div ref={mapContainerRef} className="w-full h-128 rounded-2xl shadow-2xl"/>
