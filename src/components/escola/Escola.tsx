@@ -15,6 +15,8 @@ import { useFetch } from "@/hooks/useFetch";
 import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../card/CardProjeto";
+import { Spinner } from "../LoadingSpin";
+import { SchoolFull } from "@/core/interface/School/SchoolFull";
 
 type EscolaProps = {
   open: boolean;
@@ -27,23 +29,23 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
     const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
-    const { data:school, loading: loadingSchool } = useFetch<SchoolData>(`/api/school/${schoolId}`);
+    const { data:school, loading: loadingSchool } = useFetch<SchoolFull>(`/api/school/${schoolId}`);
     const { data: researchers, loading: loadingResearchers } = useFetch<ResearcherFinal[]>(`/api/school/${schoolId}/researchers`);
-    const [ selectedReseacher, setSelectedResearcher ] = useState<ResearcherFinal | null>(null);
+    const [ selectedReseacher, setSelectedResearcher ] = useState<Researcher | null>(null);
     const { data: projects, loading: loadingProjects } = useFetch<Project[]>(`/api/school/${schoolId}/projects`);
 
   
-    const handleReseacherClick = (reseacher: ResearcherFinal) => {
+    const handleReseacherClick = (reseacher: Researcher) => {
         setSelectedResearcher(reseacher);
         setIsPesquisadorDrawerOpen(true)
     }
    
-    if(loadingSchool) return <p>Carregando....</p>
     if(!school || !researchers || !projects) return <p>Escola n encontrada</p>
+ 
     return(
         <div>
             <Drawer open={open} onOpenChange={onOpenChange}>
-                {loadingResearchers ? <p>Carregando</p> : (<DrawerContent className="h-[95vh] flex flex-col">
+                {(loadingResearchers || loadingSchool || loadingProjects) ? <p>Carregando</p> : (<DrawerContent className="h-[95vh] flex flex-col">
                     <div className="flex-1 overflow-y-auto px-4"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
                         <div className="flex flex-col gap-10 px-10 mb-5">
                             <div className="flex flex-col gap-4 px-36 items-center">
@@ -89,7 +91,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                     </TabsList>
                                     <TabsContent value="pesquisadores" className="mt-4">
                                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 justify-items-center">
-                                           {Array.isArray(researchers) && researchers.map((r) => (
+                                           {school.researchers.map((r) => (
                                                         <CardPesquisador
                                                             key={r.name}
                                                             researcher={r}
@@ -116,7 +118,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                 }
                 
                 {/* |=======| DRAWER DO PESQUISADOR |=======| */}
-                <Pesquisador isOpen={isPesquisadorDrawerOpen} reseacher={selectedReseacher} onClose={() => setIsPesquisadorDrawerOpen(false)} />
+                {/* <Pesquisador isOpen={isPesquisadorDrawerOpen} reseacher={selectedReseacher} onClose={() => setIsPesquisadorDrawerOpen(false)} /> */}
                 
                 
 

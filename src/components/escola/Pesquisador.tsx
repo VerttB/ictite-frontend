@@ -14,7 +14,9 @@ interface PesquisadorProps {
 }
 
 export default function Pesquisador ({ isOpen, onClose, reseacher } : PesquisadorProps) {
-    // |=======| ESTADO DO TAB |=======|
+    
+    
+
     const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
     if(!reseacher) return
     return(
@@ -85,9 +87,9 @@ export default function Pesquisador ({ isOpen, onClose, reseacher } : Pesquisado
                         </TabsContent>
                         <TabsContent value="projetos" className="mt-4">
                             <div className="grid grid-cols-2 gap-4">
-                                {Array.from({length:6}).map((_, i) => (
+                                {/* {Array.from({length:6}).map((_, i) => (
                                     <CardProjeto key={i} />
-                                ))}
+                                ))} */}
                             </div>
                         </TabsContent>
                         <TabsContent value="livros e capitulos" className="mt-4">
