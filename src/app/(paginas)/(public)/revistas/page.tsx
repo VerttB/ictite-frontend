@@ -17,10 +17,22 @@ export default function Revistas () {
                 <h1 className="text-2xl font-semibold">Revistas</h1>
             </div>
             {/* |=======| REVISTAS DA FECIBA |=======| */}
-            <div>
-                <h2 className="text-xl font-semibold">FECIBA</h2>
-                <div>
-                    <CardRevista />
+            <div className="relative">
+                <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-verde h-[230px] rounded-md"></div>
+                <div className="relative">
+                    <div className="flex flex-col gap-4 p-4">
+                        <h2 className="text-xl font-semibold text-branco">FECIBA</h2>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 justify-items-center">
+                            <CardRevista />
+                            <CardRevista />
+                            <CardRevista />
+                            <CardRevista />
+                            <CardRevista />
+                            <CardRevista />
+                            <CardRevista />
+                            <CardRevista />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
