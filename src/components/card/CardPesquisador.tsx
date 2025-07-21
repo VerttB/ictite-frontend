@@ -8,6 +8,7 @@ import { Spinner } from "../LoadingSpin";
 interface CardPesquisadorProps {
     onClick?: () => void; // Adicione esta prop
     researcher: Researcher
+   
 }
 
 export default function CardPesquisador ({ onClick, researcher }: CardPesquisadorProps) {

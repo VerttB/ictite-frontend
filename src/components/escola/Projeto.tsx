@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import Image from "next/image";
 import CardPesquisador from "../card/CardPesquisador";
-//import CardPesquisador from "../card/CardPesquisador";
+import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 
 interface ProjetoProps {
     isOpen: boolean;
@@ -11,6 +11,37 @@ interface ProjetoProps {
 }
 
 export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
+
+    // |=======| PESQUISADOR MOCK |=======|
+    const pesquisadorProfessorMock:Researcher = {
+        name: "Mario Almeida Silva",
+        race: "Indigina",
+        sex: "Maculina",
+        schoolname: "Escola de Itabuna",
+        schoolcity: "Itabuna",
+        type: "PROFESSOR"
+    }
+
+    // |=======| PESQUISADOR MOCK |=======|
+    const pesquisadorAlunoMock:Researcher = {
+        name: "Tereza Cerqueira Santos",
+        race: "Indigina",
+        sex: "Maculina",
+        schoolname: "Escola de Itabuna",
+        schoolcity: "Itabuna",
+        type: "ALUNO"
+    }
+
+    // |=======| PESQUISADOR MOCK |=======|
+    const pesquisadorFacilitadorMock:Researcher = {
+        name: "Mary de Oliveira Rodrigues",
+        race: "Indigina",
+        sex: "Maculina",
+        schoolname: "Escola de Itabuna",
+        schoolcity: "Itabuna",
+        type: "FACILITADOR"
+    }
+
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent className="w-full">
@@ -41,7 +72,7 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
                         <h2 className="text-2xl font-semibold">Professores</h2>
                         <div className="grid grid-cols-3 gap-5 ">
                             {Array.from({length:5}).map((_, i) => (
-                                <CardPesquisador key={i} />
+                                <CardPesquisador key={i} researcher={pesquisadorProfessorMock} />
                             ))}
                         </div>
                     </div>
@@ -49,7 +80,7 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
                         <h2 className="text-2xl font-semibold">Alunos</h2>
                         <div className="flex flex-row gap-5 ">
                             {Array.from({length:2}).map((_, i) => (
-                                <CardPesquisador key={i} />
+                                <CardPesquisador key={i} researcher={pesquisadorAlunoMock} />
                             ))}
                         </div>
                     </div>
@@ -57,7 +88,7 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
                         <h2 className="text-2xl font-semibold">Facilitadores</h2>
                         <div className="flex flex-row gap-5 ">
                             {Array.from({length:3}).map((_, i) => (
-                                <CardPesquisador key={i} />
+                                <CardPesquisador key={i} researcher={pesquisadorFacilitadorMock} />
                             ))}
                         </div>
                     </div>

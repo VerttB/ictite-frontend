@@ -5,12 +5,13 @@ import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useState } from "react";
 import CardProjeto from "../card/CardProjeto";
-import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+//import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 
 interface PesquisadorProps {
     isOpen: boolean;
     onClose: (open:boolean) => void;
-    reseacher: ResearcherFinal | null;
+    reseacher: Researcher | null;
 }
 
 export default function Pesquisador ({ isOpen, onClose, reseacher } : PesquisadorProps) {
@@ -28,7 +29,7 @@ export default function Pesquisador ({ isOpen, onClose, reseacher } : Pesquisado
                     </div>
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <div>
-                            <Image width={100} height={100} src={reseacher.image || "https://picsum.photos/100/100"} alt="escola"
+                            <Image width={100} height={100} src={"https://picsum.photos/100/100"} alt="escola"
                                 className="rounded-md border border-cinza">
                             </Image>
                         </div>
@@ -45,7 +46,7 @@ export default function Pesquisador ({ isOpen, onClose, reseacher } : Pesquisado
                 {/* CORPO DO DRAWER */}
                 <div className="flex-1 flex flex-col p-2 overflow-hidden overflow-y-auto">
                     <div className="text-sm text-justify text-gray-500 ">
-                        <p className="line-clamp-4 hover:line-clamp-none">{reseacher.simcc.abstract ||"Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae at earum nostrum saepe recusandae quos. Architecto magni fugiat quia, tenetur voluptas voluptatem sequi ipsa eaque dolores. Voluptas itaque velit a?"}</p>
+                        <p className="line-clamp-4 hover:line-clamp-none">{"Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae at earum nostrum saepe recusandae quos. Architecto magni fugiat quia, tenetur voluptas voluptatem sequi ipsa eaque dolores. Voluptas itaque velit a?"}</p>
                     </div>
                     {/* BOTÕES DE NAVEGAÇÃO DO PESQUISADOR - TABS */}
                     <Tabs value={activePesquisadorTab} onValueChange={setActivePesquisadorTab}>

@@ -23,8 +23,8 @@ const items = [
         icon: SquareChartGantt
     },
     {
-        title: "Artigos",
-        url: "/artigos",
+        title: "Revistas",
+        url: "/revistas",
         icon: Newspaper
     }
 ]

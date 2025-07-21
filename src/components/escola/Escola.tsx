@@ -5,19 +5,19 @@ import { Button } from "../ui/button";
 import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Pesquisador from "./Pesquisador";
-import Projeto from "./Projeto";
 import { SchoolData } from "@/core/interface/School";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { Project } from "@/core/interface/Project";
+//import { Project } from "@/core/interface/Project";
 import { useFetch } from "@/hooks/useFetch";
-import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
+//import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../card/CardProjeto";
 import { Spinner } from "../LoadingSpin";
 import { SchoolFull } from "@/core/interface/School/SchoolFull";
 import CardEquipamento from "../card/CardEquipamento";
+import { Project } from "@/core/interface/Project";
 
 type EscolaProps = {
   open: boolean;
@@ -60,11 +60,11 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                 
                                 
                                 <div className="flex flex-col gap-2 items-center">
-                                    <DrawerTitle className="text-3xl font-bold">{school.name}</DrawerTitle>
-                                    <p className="text-2xl font-semibold text-gray-400">{school.city}</p>
+                                    <DrawerTitle className="text-3xl font-bold">{/*school.name*/}Nome da Escola</DrawerTitle>
+                                    <p className="text-2xl font-semibold text-gray-400">{/*school.city*/}Cidade</p>
                                 </div>
                                 <div className="text-2xl font-semibold text-gray-400">
-                                    <p >{school.description}</p>
+                                    <p >{/*school.description*/} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore deleniti suscipit quod natus! Quis, laborum ipsa. Perferendis ipsam sapiente, provident, laborum laudantium tenetur, quis nostrum quaerat aliquid dignissimos recusandae eum! </p>
                                 </div>
                             </div>
                             
@@ -99,7 +99,6 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                                             onClick={() => handleReseacherClick(r)}
                                                         />
                                                         ))}
-
 
                                         </div>
                                     </TabsContent>
