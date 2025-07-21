@@ -1,10 +1,11 @@
-import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+//import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import { Book } from "lucide-react";
 import Image from "next/image";
 
 interface CardPesquisadorProps {
     onClick?: () => void; // Adicione esta prop
-    researcher: ResearcherFinal
+    researcher: Researcher
 }
 
 export default function CardPesquisador ({ onClick, researcher }: CardPesquisadorProps) {
@@ -19,7 +20,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                      bg-cover bg-center 
                     opacity-70 group-hover:opacity-45 transition-opacity duration-300
 `}>
-            <Image fill alt="Imagem do pesquisador" className="rounded-t-lg object-cover" src={researcher.image || "https://picsum.photos/100/100"}/>
+            <Image fill alt="Imagem do pesquisador" className="rounded-t-lg object-cover" src={"https://picsum.photos/100/100"}/>
           </div>
 
             <div className="relative flex flex-col h-full justify-end gap-2">
