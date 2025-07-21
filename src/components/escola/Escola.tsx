@@ -17,6 +17,7 @@ import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../card/CardProjeto";
 import { Spinner } from "../LoadingSpin";
 import { SchoolFull } from "@/core/interface/School/SchoolFull";
+import CardEquipamento from "../card/CardEquipamento";
 
 type EscolaProps = {
   open: boolean;
@@ -102,12 +103,20 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
 
                                         </div>
                                     </TabsContent>
-                                    <TabsContent value="equipamentos" className="mt-4">
-                                        <p>Equipamentos</p>
+                                    <TabsContent value="equipamentos" className="mt-4 flex flex-wrap gap-4">
+                                        {school.equipment.map((e,i) => (
+                                            <CardEquipamento 
+                                                    key={i}
+                                                    equipment={e}/>
+                                        ))}
                                     </TabsContent>
-                                    <TabsContent value="projetos" className="mt-4">
-                                        <p onClick={() => setIsProjetoDrawerOpen(true)}>Projetos</p>
-                                        {projects && projects?.map((p,i) => <CardProjeto key={i} project={p}/> )}
+                                    <TabsContent value="projetos" className="mt-4 flex flex-wrap gap-4">
+                               
+                                        {projects && projects?.map((p,i) =>
+                                                            <CardProjeto 
+                                                            key={i}
+                                                            project={p}
+                                                            /> )}
                                         
                                     </TabsContent>
                                 </Tabs>
