@@ -23,14 +23,24 @@ export default function Revistas () {
                     <div className="flex flex-col gap-4 p-4">
                         <h2 className="text-xl font-semibold text-branco">FECIBA</h2>
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 justify-items-center">
-                            <CardRevista />
-                            <CardRevista />
-                            <CardRevista />
-                            <CardRevista />
-                            <CardRevista />
-                            <CardRevista />
-                            <CardRevista />
-                            <CardRevista />
+                            {Array.from({length: 8}).map((_, i) => (
+                                <CardRevista key={i} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* |=======| OUTRAS REVISTAS |=======| */}
+            <div className="relative">
+                <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-vermelho h-[230px] rounded-md"></div>
+                <div className="relative">
+                    <div className="flex flex-col gap-4 p-4">
+                        <h2 className="text-xl font-semibold text-branco">OUTRAS REVISTAS</h2>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 justify-items-center">
+                            {Array.from({length: 6}).map((_, i) => (
+                                <CardRevista key={i} />
+                            ))}
                         </div>
                     </div>
                 </div>
