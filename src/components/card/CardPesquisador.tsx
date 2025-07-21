@@ -13,7 +13,6 @@ interface CardPesquisadorProps {
 export default function CardPesquisador ({ onClick, researcher }: CardPesquisadorProps) {
     
     const {data: img, loading} = useFetch<String>(`api/researcher/image/${researcher.name}`)
-    //console.log(researcher.name ," - ",img)
     if(loading) return <Spinner/>
     return(
         <div  onClick={onClick} 
