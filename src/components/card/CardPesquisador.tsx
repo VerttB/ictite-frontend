@@ -1,14 +1,19 @@
+import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import { useFetch } from "@/hooks/useFetch";
 import { Book } from "lucide-react";
 import Image from "next/image";
+import { Spinner } from "../LoadingSpin";
 
 interface CardPesquisadorProps {
     onClick?: () => void; // Adicione esta prop
-    researcher: ResearcherFinal
+    researcher: Researcher
 }
 
 export default function CardPesquisador ({ onClick, researcher }: CardPesquisadorProps) {
     
+    const {data: img, loading} = useFetch<String>(`api/researcher/image/${researcher.name}`)
+    if(loading) return <Spinner/>
     return(
         <div  onClick={onClick} 
             className="relative border-2 h-[250px] w-[200px] rounded-md p-2 
@@ -19,7 +24,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                      bg-cover bg-center 
                     opacity-70 group-hover:opacity-45 transition-opacity duration-300
 `}>
-            <Image fill alt="Imagem do pesquisador" className="rounded-t-lg object-cover" src={researcher.image || "https://picsum.photos/100/100"}/>
+            <Image fill alt="Imagem do pesquisador" className="rounded-t-lg object-cover" src={img ? `${img}` : "https://picsum.photos/100/100"}/>
           </div>
 
             <div className="relative flex flex-col h-full justify-end gap-2">
