@@ -14,6 +14,7 @@ import { Project } from "@/core/interface/Project";
 import { useFetch } from "@/hooks/useFetch";
 import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import CardProjeto from "../card/CardProjeto";
 
 type EscolaProps = {
   open: boolean;
@@ -22,24 +23,23 @@ type EscolaProps = {
 };
 
 export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
-
+   
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
     const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
     const { data:school, loading: loadingSchool } = useFetch<SchoolData>(`/api/school/${schoolId}`);
     const { data: researchers, loading: loadingResearchers } = useFetch<ResearcherFinal[]>(`/api/school/${schoolId}/researchers`);
-    const [ selectedReseacher, setSelectedResearcher ] = useState<ResearcherFinal | null>(null)
-    // const { data: projects, loading: loadingProjects } = useFetch<Project[]>(`/api/school/${schoolId}/projects`);
+    const [ selectedReseacher, setSelectedResearcher ] = useState<ResearcherFinal | null>(null);
+    const { data: projects, loading: loadingProjects } = useFetch<Project[]>(`/api/school/${schoolId}/projects`);
 
-    console.log(researchers)
-
+  
     const handleReseacherClick = (reseacher: ResearcherFinal) => {
         setSelectedResearcher(reseacher);
         setIsPesquisadorDrawerOpen(true)
     }
    
     if(loadingSchool) return <p>Carregando....</p>
-    if(!school || !researchers) return <p>Escola n encontrada</p>
+    if(!school || !researchers || !projects) return <p>Escola n encontrada</p>
     return(
         <div>
             <Drawer open={open} onOpenChange={onOpenChange}>
@@ -105,6 +105,8 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                     </TabsContent>
                                     <TabsContent value="projetos" className="mt-4">
                                         <p onClick={() => setIsProjetoDrawerOpen(true)}>Projetos</p>
+                                        {projects && projects?.map((p,i) => <CardProjeto key={i} project={p}/> )}
+                                        
                                     </TabsContent>
                                 </Tabs>
                             </div>
