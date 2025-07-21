@@ -1,6 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import {Header} from "@/components/header";
+import { Footer } from "@/components/footer";
 export default function layout({
   children,
 }: Readonly<{
@@ -20,6 +21,7 @@ export default function layout({
             <SidebarTrigger/>
             {children}
           </main>
+          <Footer/>
           </div>
        </SidebarProvider>
       
