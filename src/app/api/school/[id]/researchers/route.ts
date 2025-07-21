@@ -29,11 +29,11 @@ export async function GET(
           const res = await fetch(`http://200.128.66.226/ictite/api/researcherName?name=${encodeURIComponent(r.name)}`);
           let data = await res.json();
           let image = null;
-          if (!data[0]) data = null
+          if (!data[0]) data[0] = null
           else image = `http://200.128.66.226/ictite/api/ResearcherData/Image?researcher_id=${data[0].id}`;
           return {
             ...r,
-            simcc: data[0] ?? null,
+            simcc: data[0],
             image: image
           };
         } catch (e) {
