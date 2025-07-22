@@ -25,6 +25,8 @@ import CardProjeto from "../card/CardProjeto";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { useFetch } from "@/hooks/useFetch";
 import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
+import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import CardArtigo from "../card/CardArtigos";
 
 interface PesquisadorProps {
   isOpen: boolean;
@@ -38,22 +40,19 @@ export default function Pesquisador({
   researcher,
 }: PesquisadorProps) {
   if (!researcher) return null;
-  const { data: simcc, loading } = useFetch<ResearchSIMCC[]>(
-    `http://200.128.66.226/ictite/api/researcherName?name=${encodeURIComponent(
+  const { data: simcc, loading } = useFetch<ResearcherFinal>(
+    `/api/researcher/simcc/${encodeURIComponent(
       researcher.name
     )}`
-  );
-
-  const researcherFull = useMemo(
+  );  const researcherFull = useMemo(
     () => ({
-      simcc: simcc?.[0],
+      simcc,
       ...researcher,
     }),
     [simcc, researcher]
   );
-
+  
   const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
-  console.log(researcherFull)
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
       <DrawerContent>
@@ -166,8 +165,10 @@ export default function Pesquisador({
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="artigos" className="mt-4">
-                  <p>Artigos</p>
+                <TabsContent value="artigos" className="mt-4 flex flex-wrap gap-4">
+                  {researcherFull.simcc?.articlesData.map((a,i) => 
+                    <CardArtigo key={i} article={a}/>
+                  )}
                 </TabsContent>
 
                 <TabsContent value="participacaoEventos" className="mt-4">
