@@ -14,7 +14,7 @@ export default function layout({
         <div className="w-full flex flex-col bg-cinza-light pb-4 pr-4">
         <Header></Header>
 
-          <main className="w-full min-h-full bg-branco p-2  " style={{
+          <main className="w-full h-full bg-branco p-2  " style={{
                       boxShadow: "inset 0px 0px 5px rgba(0, 0, 0, .5)",
                       borderRadius: "10px 10px 0 0"
                     }}>

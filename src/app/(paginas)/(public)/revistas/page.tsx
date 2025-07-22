@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function Revistas () {
     
     return(
-        <div className="w-full p-8 flex flex-col gap-8">
+        <div className="w-full  p-8 flex flex-col gap-8">
             {/* |=======| SUPERIOR DE REVISTAS |=======| */}
             <div className="flex flex-row gap-4 items-center">
                 <Link href={"/"}>
