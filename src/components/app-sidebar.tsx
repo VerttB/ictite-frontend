@@ -1,4 +1,4 @@
- 
+'use client'
 import {
   Sidebar,
   SidebarContent,
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const items = [
     {
@@ -37,9 +38,8 @@ const items = [
 
 
 export function AppSidebar() {
-
-    
-  return (
+    const path = usePathname();
+    return (
     <Sidebar collapsible="icon" >
       <SidebarContent >
             <SidebarGroup>
@@ -49,7 +49,7 @@ export function AppSidebar() {
                 <SidebarGroupContent>
                     <SidebarMenu className="gap-4" >
                         {items.map(item => 
-                            <SidebarMenuItem className="bg-gray-200 rounded-xl hover:bg-gray-400"  key={item.title}>
+                            <SidebarMenuItem className={`rounded-md ${path !== item.url ? "bg-gray-200 rounded-xl hover:bg-gray-400" : "bg-verde text-branco"}`}  key={item.title}>
                                 <SidebarMenuButton asChild>
                                     <Link className="flex"  href={item.url}>
                                     <item.icon />
