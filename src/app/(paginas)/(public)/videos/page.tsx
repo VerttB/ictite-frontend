@@ -17,8 +17,8 @@ export default function Videos () {
         },
         {
             id: "2",
-            title: "Como cse logar com o ORCCID",
-            description: "Passo a passo completo parase logar com ORCCID no portal ICTITE...",
+            title: "Como logar com o ORCCID",
+            description: "Passo a passo completo para logar com ORCCID no portal ICTITE...",
             url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
             duration: "8:15",
             date: "15/10/2024",
