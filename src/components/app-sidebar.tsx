@@ -49,9 +49,9 @@ export function AppSidebar() {
                 <SidebarGroupContent>
                     <SidebarMenu className="gap-4" >
                         {items.map(item => 
-                            <SidebarMenuItem className={`rounded-md ${path !== item.url ? "bg-gray-200 rounded-xl hover:bg-gray-400" : "bg-verde text-branco hover:bg-verde"}`}  key={item.title}>
-                                <SidebarMenuButton asChild>
-                                    <Link className="flex"  href={item.url}>
+                            <SidebarMenuItem className="rounded-md" key={item.title}>
+                                <SidebarMenuButton className={`rounded-md ${path !== item.url ? "bg-gray-200 rounded-xl hover:bg-verde/50" : "bg-verde text-branco hover:bg-verde hover:text-white"}`}  asChild>
+                                    <Link className="flex rounded-md"  href={item.url}>
                                     <item.icon />
                                     <span >{item.title}</span>
                                     </Link>

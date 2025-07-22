@@ -16,7 +16,7 @@ export default function layout({
 
           <main className="w-full h-full bg-branco p-2  " style={{
                       boxShadow: "inset 0px 0px 5px rgba(0, 0, 0, .5)",
-                      borderRadius: "10px 10px 0 0"
+                      borderRadius: "10px 10px 10px 10px"
                     }}>
             <SidebarTrigger/>
             {children}
