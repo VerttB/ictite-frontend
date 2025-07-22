@@ -9,8 +9,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Home ,  Newspaper,  SquareChartGantt} from "lucide-react"
+import { Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
 import Link from "next/link"
+
 const items = [
     {
         title: "Página Inicial",
@@ -26,6 +27,11 @@ const items = [
         title: "Revistas",
         url: "/revistas",
         icon: Newspaper
+    },
+    {
+        title: "Vídeos",
+        url: "/videos",
+        icon: Video
     }
 ]
 
