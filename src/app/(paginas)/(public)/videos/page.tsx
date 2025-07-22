@@ -1,8 +1,40 @@
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, PlaySquare } from "lucide-react";
+import { Calendar, ChevronLeft, PlaySquare } from "lucide-react";
 import Link from "next/link";
 
 export default function Videos () {
+
+    const videosMock = [
+        {
+            id: "1",
+            title: "Como criar sua conta Lattes",
+            description: "Passo a passo completo para registro na plataforma Lattes...",
+            url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
+            duration: "8:15",
+            date: "15/10/2024",
+            category: "Tutoriais",
+        },
+        {
+            id: "2",
+            title: "Como cse logar com o ORCCID",
+            description: "Passo a passo completo parase logar com ORCCID no portal ICTITE...",
+            url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
+            duration: "8:15",
+            date: "15/10/2024",
+            category: "Tutoriais",
+        },
+        {
+            id: "3",
+            title: "Como Visualizar os projetos das escolas",
+            description: "Passo a passo completo para visualizar os projetos científicos das escolas...",
+            url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
+            duration: "8:15",
+            date: "15/10/2024",
+            category: "Tutoriais",
+        },
+        
+    ]
+
     return(
         <div className="w-full p-8 flex flex-col gap-8">
             {/* |=======| SUPERIOR DOS VÍDEOS |=======| */}
@@ -30,6 +62,34 @@ export default function Videos () {
                     audiovisuais produzidos para apoiar sua jornada no mundo da pesquisa e inovação educacional.
                     Aqui você acessa tutoriais, registros de eventos científicos, depoimentos e materiais</p>
             </div>
+
+            {/* |=======| VÍDEOS |=======|*/}
+            <div className="mx-28 flex flex-col gap-2">
+                {videosMock.map((video) => (
+                    <div key={video.id} 
+                        className="flex flex-col xl:flex-row gap-6 p-4 bg-gray-50 rounded-md">
+                        <div className="xl:w-1/2">
+                            <iframe 
+                                src={video.url}
+                                className="w-full aspect-video rounded-md shadow"
+                                allowFullScreen
+                            />
+                        </div>
+                        <div className="xl:w-1/2">
+                            <div className="w-full">
+                                <h3 className="font-semibold text-xl mb-2">{video.title}</h3>
+                                <p className="text-gray-600 mb-3">{video.description}</p>
+                                <p className="text-gray-600 mb-3">{video.category}</p>
+                                <div className="flex items-center text-sm text-gray-500">
+                                    <Calendar className="w-4 h-4 mr-1" />
+                                    {video.date} | {video.duration}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
         </div>
     );
 }
