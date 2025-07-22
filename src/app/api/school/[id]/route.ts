@@ -22,7 +22,9 @@ export async function GET(
                     'name', r.name,
                     'sex', r.sex,
                     'race', r.race,
-                    'type', r.type
+                    'type', r.type,
+                    'schoolcity', s.city,
+                    'schoolname', s.name
                     ))
                     FROM researcher r
                     WHERE r.school_id = s.id
