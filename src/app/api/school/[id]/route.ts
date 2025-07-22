@@ -60,12 +60,38 @@ export async function GET(
             `,
       [id]
     );
-            
+
         if (result.rows.length === 0) {
             return NextResponse.json({ msg: "Escola não encontrada" }, { status: 404 });
             }
 
-        
+        const schoolData = result.rows[0];
+
+        const researchersImages = await Promise.all(
+            schoolData.researchers.map(async (r:any) => {
+                let imageUrl = null;
+
+                try{
+                    const res = await fetch(`http://200.128.66.226/ictite/api/researcherName?name=${encodeURIComponent(r.name)}`);
+
+                    if(res.ok){
+                        const data = await res.json();
+                        if(data && data.length > 0 && data[0] && data[0].id){
+                            imageUrl = `http://200.128.66.226/ictite/api/ResearcherData/Image?researcher_id=${data[0].id}`;
+                        }
+                    }else{
+                        console.log("Erro ao fazer a requisição externa para ",r.name,":", res.status);
+                    }
+                }catch(e){
+                    console.log("Erro ao buscar imagem de ", r.name)
+                }
+                return{
+                    ...r,
+                    image: imageUrl
+                };
+            })
+        );
+        schoolData.researchers = researchersImages;
         return  NextResponse.json(result.rows[0])
     }catch(e:any){
         console.log(e);
