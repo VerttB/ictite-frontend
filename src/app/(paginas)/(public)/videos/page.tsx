@@ -1,5 +1,6 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Calendar, ChevronLeft, PlaySquare } from "lucide-react";
+import { Calendar, ChevronLeft, PlayCircleIcon, PlaySquare } from "lucide-react";
 import Link from "next/link";
 
 export default function Videos () {
@@ -65,29 +66,43 @@ export default function Videos () {
 
             {/* |=======| VÍDEOS |=======|*/}
             <div className="mx-28 flex flex-col gap-2">
-                {videosMock.map((video) => (
-                    <div key={video.id} 
-                        className="flex flex-col xl:flex-row gap-6 p-4 bg-gray-50 rounded-md">
-                        <div className="xl:w-1/2">
-                            <iframe 
-                                src={video.url}
-                                className="w-full aspect-video rounded-md shadow"
-                                allowFullScreen
-                            />
-                        </div>
-                        <div className="xl:w-1/2">
-                            <div className="w-full">
-                                <h3 className="font-semibold text-xl mb-2">{video.title}</h3>
-                                <p className="text-gray-600 mb-3">{video.description}</p>
-                                <p className="text-gray-600 mb-3">{video.category}</p>
-                                <div className="flex items-center text-sm text-gray-500">
-                                    <Calendar className="w-4 h-4 mr-1" />
-                                    {video.date} | {video.duration}
+                <Accordion type="multiple">
+                    {videosMock.map((video) => (
+                        <AccordionItem key={video.id} value={video.id}>
+                            <AccordionTrigger className="hover:bg-gray-50 p-4 rounded-lg">
+                                <div className="flex gap-5 items-center">
+                                    <PlayCircleIcon  />
+                                    <span className="text-left font-medium">{video.title}</span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                <div
+                                    className="flex flex-col xl:flex-row gap-6 p-4 bg-gray-50 rounded-md">
+                                    {/* IFRAME DO VÍDEO */}
+                                    <div className="xl:w-1/2">
+                                        <iframe
+                                            src={video.url}
+                                            className="w-full aspect-video rounded-md shadow"
+                                            allowFullScreen
+                                        />
+                                    </div>
+                                    {/* INFORMAÇÃO DO VÍDEO */}
+                                    <div className="xl:w-1/2">
+                                        <div className="w-full">
+                                            <h3 className="font-semibold text-xl mb-2">{video.title}</h3>
+                                            <p className="text-gray-600 mb-3">{video.description}</p>
+                                            <p className="text-gray-600 mb-3">{video.category}</p>
+                                            <div className="flex items-center text-sm text-gray-500">
+                                                <Calendar className="w-4 h-4 mr-1" />
+                                                {video.date} | {video.duration}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
             </div>
 
         </div>
