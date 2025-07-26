@@ -1,6 +1,7 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import {Header} from "@/components/header";
+import { Toaster } from "@/components/ui/sonner";
 export default function layout({
   children,
 }: Readonly<{
@@ -18,6 +19,7 @@ export default function layout({
                       borderRadius: "10px 10px 0 0"
                     }}>
             <SidebarTrigger/>
+            <Toaster />
             {children}
           </main>
           </div>
