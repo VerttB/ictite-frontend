@@ -70,7 +70,7 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
 
                     <div className="flex flex-col gap-2 border-b pb-7 pt-3">
                         <h2 className="text-2xl font-semibold">Professores</h2>
-                        <div className="grid grid-cols-3 gap-5 ">
+                        <div className="flex flex-wrap gap-5 ">
                             {Array.from({length:5}).map((_, i) => (
                                 <CardPesquisador key={i} researcher={pesquisadorProfessorMock} />
                             ))}

@@ -13,34 +13,7 @@ export const Header = () => {
                     inline-block 
                 "
             />
-            <Image
-                        src={"/apoios/UnebLogo.jpg"}
-                        alt="Logo"
-                        width={128}
-                        height={64}
-                        className="inline-block object-contain h-16"
-                                />
-                        <Image
-                        src={"/apoios/fapesbLogo.jpg"}
-                        alt="Logo"
-                        width={128}
-                        height={64}
-                        className="inline-block object-contain  h-16"
-                        />           
-                        <Image
-                        src={"/apoios/governoDoEstadologo.png"}
-                        alt="Logo"
-                        width={128}
-                        height={64}
-                        className="inline-block object-contain  h-16"
-                        />   
-                         <Image
-                        src={"/apoios/fiocruzLogo.png"}
-                        alt="Logo"
-                        width={128}
-                        height={64}
-                        className="inline-block object-contain  h-16"
-                        /> 
+          
 
         
             </div>

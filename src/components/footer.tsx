@@ -4,31 +4,31 @@ export const Footer = () => {
     <footer className="w-full px-4 py-2 h-16 gap-4 bg-cinza-light flex items-center relative ">
 
             <Image
-            src={"/apoios/UnebLogo.jpg"}
+            src={"/apoios/UnebLogo.svg"}
             alt="Logo"
-            width={64}
-            height={64}
+            width={96}
+            height={96}
             className="inline-block object-contain"
                     />
             <Image
             src={"/apoios/fapesbLogo.jpg"}
             alt="Logo"
-            width={64}
-            height={64}
+            width={96}
+            height={96}
             className="inline-block object-contain"
             />           
             <Image
-            src={"/apoios/governoDoEstadologo.png"}
+            src={"/apoios/governoDoEstadoLogo.png"}
             alt="Logo"
-            width={64}
-            height={64}
+            width={96}
+            height={96}
             className="inline-block object-contain"
             />   
              <Image
             src={"/apoios/fiocruzLogo.png"}
             alt="Logo"
-            width={64}
-            height={64}
+            width={96}
+            height={96}
             className="inline-block object-contain"
             /> 
 

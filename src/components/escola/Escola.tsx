@@ -34,7 +34,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
         setIsPesquisadorDrawerOpen(true)
     }
    
-    if(!school && !loadingSchool) return <p>Escola n encontrada</p>
+    // if(!school && !loadingSchool) return <p>Escola n encontrada</p>
  
     return(
         <div>
@@ -49,7 +49,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                             <div className="flex flex-col gap-4 px-36 items-center">
                                 {/* IMAGEM */}
                                 <div className="">
-                                    <Image width={200} height={200} src={"https://picsum.photos/200/200"} alt="escola"
+                                    <Image width={256} height={256} src={"https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="escola"
                                         className="rounded-md border-4 border-cinza">
                                     </Image>
                                 </div>
@@ -86,7 +86,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                         </TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="pesquisadores" className="mt-4">
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 justify-items-center">
+                                        <div className="flex flex-wrap gap-4 justify-items-center">
                                            {school?.researchers.map((r) => (
                                                         <CardPesquisador
                                                             key={r.name}

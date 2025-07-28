@@ -23,7 +23,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
             <Image fill alt="Imagem do pesquisador" className="rounded-t-lg object-cover" src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}/>
           </div>
 
-            <div className="relative flex flex-col h-full justify-end gap-2">
+            <div className="relative p-2 flex flex-col h-full justify-end gap-2">
                 <div className="text-white">
                     <p className=" text-xl ">{researcher.name}</p>
                     <div className="hidden group-hover:block ">
@@ -32,7 +32,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                     </div>
                 </div>
                 <div className=" flex items-center
-                            bg-vermelho py-1 px-1.5 ml-1 rounded-md w-fit text-xl ">
+                            bg-vermelho py-1 px-2 ml-1 rounded-md w-fit text-xl ">
                     <Book size={20}/>
                     <p className="">{researcher.type}</p>
                 </div>

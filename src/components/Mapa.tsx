@@ -127,7 +127,7 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
                         </div>
   return (
     <div className="relative  w-full">
-    <div ref={mapContainerRef} className="w-full h-128 rounded-2xl shadow-2xl"/>
+    <div ref={mapContainerRef} className="w-full h-128 rounded-2xl shadow-2xl border-1 border-gray-600 border-style inset-2"/>
       
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
        

@@ -17,6 +17,10 @@ export default function MapaComDrawer () {
         setDrawerOpen(true);
     }
 
+    const handleDrawerClose = () => {
+        setSelectedSchoolId("");
+        setDrawerOpen(false);
+    }
     return (
         <>
         <MapaRender onUnclusteredPointClick={handlePointClick} />
@@ -24,7 +28,7 @@ export default function MapaComDrawer () {
         <Escola
             schoolId={selectedSchoolId}
             open={drawerOpen}
-            onOpenChange={setDrawerOpen}
+            onOpenChange={handleDrawerClose}
         />}
         </>
     );

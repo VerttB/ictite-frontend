@@ -71,7 +71,7 @@ export async function GET(
 
         const researchersImages = await Promise.all(
             schoolData.researchers.map(async (r:any) => {
-                let imageUrl = null;
+                let imageUrl = "https://plus.unsplash.com/premium_photo-1664300900349-afd61c20f8b8?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
                 try{
                     const res = await fetch(`http://200.128.66.226/ictite/api/researcherName?name=${encodeURIComponent(r.name)}`);
