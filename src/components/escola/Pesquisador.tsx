@@ -20,13 +20,14 @@ import {
   TabsList,
   TabsTrigger,
 } from "../ui/tabs";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import CardProjeto from "../card/CardProjeto";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { useFetch } from "@/hooks/useFetch";
 import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardArtigo from "../card/CardArtigos";
+import Masonry from "react-responsive-masonry";
 
 interface PesquisadorProps {
   isOpen: boolean;
@@ -48,16 +49,19 @@ export default function Pesquisador({
     () => ({
       simcc,
       ...researcher,
-    }),
+    }
+    
+  ),
     [simcc, researcher]
   );
-  
+  researcherFull.simcc?.articlesData.sort( (a,b) => b.year - a.year)
+
   const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
       <DrawerContent>
         <DrawerHeader className="shadow">
-          <div className="flex justify-start border-b items-center pb-2.5 ">
+          <div className="flex justify-start border-b items-center  pb-2.5 ">
             <Button
               variant={"outline"}
               size={"icon"}
@@ -89,7 +93,7 @@ export default function Pesquisador({
           </div>
         </DrawerHeader>
 
-        <div className="flex-1 flex flex-col p-2 overflow-hidden overflow-y-auto">
+        <div className="flex-1 flex flex-col px-6 py-2 overflow-hidden overflow-y-auto">
           {loading ? (
             <div className="flex flex-col justify-center items-center h-full gap-2">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-verde" />
@@ -107,7 +111,7 @@ export default function Pesquisador({
                 value={activePesquisadorTab}
                 onValueChange={setActivePesquisadorTab}
               >
-                <TabsList className="flex flex-row gap-5 w-full py-2 px-4 h-12 rounded-md bg-blue-100">
+                <TabsList className="flex flex-row gap-5 w-full py-2 px-4 h-12 rounded-sm bg-blue-100">
                   <TabsTrigger value="artigos" asChild>
                     <Button
                       variant={
@@ -115,7 +119,7 @@ export default function Pesquisador({
                           ? "default"
                           : "outline"
                       }
-                      className="px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
+                      className="px-3 py-1 text-zinc-700 rounded-sm hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
                     >
                       <House />
                       <p>Artigos</p>
@@ -129,7 +133,7 @@ export default function Pesquisador({
                           ? "default"
                           : "outline"
                       }
-                      className="px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
+                      className="px-3 py-1 text-zinc-700  hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
                     >
                       <Printer />
                       <p>Participação Eventos</p>
@@ -164,11 +168,14 @@ export default function Pesquisador({
                     </Button>
                   </TabsTrigger>
                 </TabsList>
-
-                <TabsContent value="artigos" className="mt-4 flex flex-wrap gap-4">
-                  {researcherFull.simcc?.articlesData.map((a,i) => 
-                    <CardArtigo key={i} article={a}/>
-                  )}
+                <TabsContent value="artigos" className="mt-4 ">
+                  <Masonry 
+                        columnsCount={3}
+                        gutter="10px" >
+                      {researcherFull.simcc?.articlesData.map((a,i) => 
+                        <CardArtigo key={i} article={a}/>
+                      )}
+                  </Masonry>
                 </TabsContent>
 
                 <TabsContent value="participacaoEventos" className="mt-4">

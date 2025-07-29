@@ -55,7 +55,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                 </div>
                                 
                                 <div className="flex flex-col gap-2 items-center">
-                                    <DrawerTitle className="text-3xl font-bold">{school?.name}</DrawerTitle>
+                                    <DrawerTitle className="text-3xl">{school?.name}</DrawerTitle>
                                     <p className="text-2xl font-semibold text-gray-400">{school?.city}</p>
                                 </div>
                                 <div className="text-2xl font-semibold text-gray-400">

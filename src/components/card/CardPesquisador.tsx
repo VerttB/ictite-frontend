@@ -31,10 +31,10 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                         <p>{researcher.race}</p>
                     </div>
                 </div>
-                <div className=" flex items-center
-                            bg-vermelho py-1 px-2 ml-1 rounded-md w-fit text-xl ">
-                    <Book size={20}/>
-                    <p className="">{researcher.type}</p>
+                <div className="flex items-center justify-center gap-2
+                            bg-vermelho text-white py-1 px-3 rounded-sm w-fit text-md ">
+                    <Book  size={20}/>
+                    <p className="mb-1">{researcher.type}</p>
                 </div>
             </div>
 
