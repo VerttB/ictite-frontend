@@ -12,8 +12,8 @@ export default function CardProjeto ({project}:{project: Project}) {
         <div className=" p-2 flex flex-col gap-4 border shadow justify-center
             border-l-amber-500 border-l-8 w-80 h-full rounded-md bg-slate-50
             ">
-            <div className="flex flex-row justify-between items-center">
-                <h2 className="text-2xl font-semibold">{project.name}</h2>
+            <div className="flex flex-row justify-between items-center gap-2">
+                <h2 className="text-2xl">{project.name}</h2>
                 <Button variant={"outline"} size={"icon"}  className="cursor-pointer"
                     onClick={(e) => {
                         e.preventDefault()
