@@ -1,4 +1,4 @@
- 
+'use client'
 import {
   Sidebar,
   SidebarContent,
@@ -8,42 +8,62 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
-import { Home ,  SquareChartGantt} from "lucide-react"
+import { Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+
 const items = [
     {
         title: "Página Inicial",
         url: "/",
         icon: Home,
+        size: 10,
     },
     {
         title: "Projeto",
         url:"/projeto",
-        icon: SquareChartGantt
+        icon: SquareChartGantt,
+        size: 10,
+    },
+    {
+        title: "Revistas",
+        url: "/revistas",
+        icon: Newspaper,
+        size: 10,
+    },
+    {
+        title: "Vídeos",
+        url: "/videos",
+        icon: Video,
+        size: 10,
     }
 ]
 
-const SIDEBAR_WIDTH = "16rem"
-const SIDEBAR_WIDTH_MOBILE = "18rem"
 
 export function AppSidebar() {
-
     
-  return (
+    const path = usePathname();
+    const { open } = useSidebar()
+  
+
+    return (
     <Sidebar collapsible="icon">
       <SidebarContent>
             <SidebarGroup>
-                <SidebarGroupLabel>
+                <SidebarGroupLabel className="text-sm mb-1">
                     Navegação
                 </SidebarGroupLabel>
+
                 <SidebarGroupContent>
-                    <SidebarMenu >
+                    <SidebarMenu className="flex gap-2" >
                         {items.map(item => 
-                            <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton asChild>
-                                    <Link href={item.url}>
-                                    <item.icon/>
+                            <SidebarMenuItem className={`rounded-sm flex transition-all duration-200 ${open ? "w-full" : "justify-center"}  ${path !== item.url ? "bg-gray-200 hover:bg-verde/50" : "bg-verde text-branco hover:bg-verde hover:text-branco"} `} key={item.title}>
+                                <SidebarMenuButton className={`rounded-sm `}  asChild>
+                                    <Link className="flex"  href={item.url}>
+                                    <item.icon size={item.size}/>
                                     <span>{item.title}</span>
                                     </Link>
                                 </SidebarMenuButton>
