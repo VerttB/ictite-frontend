@@ -8,52 +8,63 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import { Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+
 
 const items = [
     {
         title: "Página Inicial",
         url: "/",
         icon: Home,
+        size: 10,
     },
     {
         title: "Projeto",
         url:"/projeto",
-        icon: SquareChartGantt
+        icon: SquareChartGantt,
+        size: 10,
     },
     {
         title: "Revistas",
         url: "/revistas",
-        icon: Newspaper
+        icon: Newspaper,
+        size: 10,
     },
     {
         title: "Vídeos",
         url: "/videos",
-        icon: Video
+        icon: Video,
+        size: 10,
     }
 ]
 
 
 export function AppSidebar() {
+    
     const path = usePathname();
+    const { open } = useSidebar()
+  
+
     return (
-    <Sidebar collapsible="icon" >
-      <SidebarContent >
+    <Sidebar collapsible="icon">
+      <SidebarContent>
             <SidebarGroup>
-                <SidebarGroupLabel className="text-sm">
+                <SidebarGroupLabel className="text-sm mb-1">
                     Navegação
                 </SidebarGroupLabel>
+
                 <SidebarGroupContent>
-                    <SidebarMenu className="gap-4" >
+                    <SidebarMenu className="flex gap-2" >
                         {items.map(item => 
-                            <SidebarMenuItem className="rounded-md" key={item.title}>
-                                <SidebarMenuButton className={`rounded-md ${path !== item.url ? "bg-gray-200 rounded-xl hover:bg-verde/50" : "bg-verde text-branco hover:bg-verde hover:text-white"}`}  asChild>
-                                    <Link className="flex rounded-md"  href={item.url}>
-                                    <item.icon />
-                                    <span >{item.title}</span>
+                            <SidebarMenuItem className={`rounded-sm flex transition-all duration-200 ${open ? "w-full" : "justify-center"}  ${path !== item.url ? "bg-gray-200 hover:bg-verde/50" : "bg-verde text-branco hover:bg-verde hover:text-branco"} `} key={item.title}>
+                                <SidebarMenuButton className={`rounded-sm `}  asChild>
+                                    <Link className="flex"  href={item.url}>
+                                    <item.icon size={item.size}/>
+                                    <span>{item.title}</span>
                                     </Link>
                                 </SidebarMenuButton>
 

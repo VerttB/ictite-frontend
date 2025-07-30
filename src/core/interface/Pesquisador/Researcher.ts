@@ -8,6 +8,6 @@ export interface Researcher{
     type: string,
     schoolname: string,
     schoolcity:string,
-    image: string,
+    image?: string,
 }
 

@@ -9,7 +9,7 @@ export default function CardProjeto ({project}:{project: Project}) {
     const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
 
     return(
-        <div className=" p-2 flex flex-col gap-4 border shadow justify-center
+        <div className="p-5 flex flex-col gap-4 border shadow justify-center
             border-l-amber-500 border-l-8 w-80 h-full rounded-md bg-slate-50
             ">
             <div className="flex flex-row justify-between items-center gap-2">

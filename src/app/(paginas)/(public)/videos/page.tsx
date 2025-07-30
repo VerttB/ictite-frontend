@@ -37,7 +37,7 @@ export default function Videos () {
     ]
 
     return(
-        <div className="w-full p-8 flex flex-col gap-8">
+        <div className="w-full px-8 py-4 flex flex-col gap-8">
             {/* |=======| SUPERIOR DOS VÍDEOS |=======| */}
             <div className="flex flex-row gap-4 items-center">
                 <Link href={"/"}>
@@ -71,7 +71,7 @@ export default function Videos () {
                         <AccordionItem key={video.id} value={video.id}>
                             <AccordionTrigger className="hover:bg-gray-50 p-4 rounded-lg">
                                 <div className="flex gap-5 items-center">
-                                    <PlayCircleIcon  />
+                                    <PlayCircleIcon size={24}  />
                                     <span className="text-left font-medium">{video.title}</span>
                                 </div>
                             </AccordionTrigger>

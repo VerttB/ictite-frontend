@@ -1,6 +1,6 @@
 'use client'
 import { House, PanelsTopLeft, Printer } from "lucide-react";
-import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { Button } from "../ui/button";
 import CardPesquisador from "../card/CardPesquisador";
 import Image from "next/image";
@@ -44,13 +44,13 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                         
                                         <Spinner/>
                                         <h2>Carregando Dados da Escola......</h2></div> : (
-                    <div className="flex-1 overflow-y-auto px-4"> {/* FLEX-1 PARA PODER OCUPAR TODO O ESPAÇO DISPONÍVEL DO COMPONENTE */}
+                    <div className="flex-1  px-4"> 
                         <div className="flex flex-col gap-10 px-10 mb-5">
-                            <div className="flex flex-col gap-4 px-36 items-center">
                                 {/* IMAGEM */}
-                                <div className="">
+                                <DrawerHeader className="flex flex-col items-center ">
+                                <div className="flex w-full  justify-center relative -mt-32">
                                     <Image width={256} height={256} src={"https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="escola"
-                                        className="rounded-md border-4 border-cinza">
+                                        className="rounded-sm border-3 shadow-lg border-white">
                                     </Image>
                                 </div>
                                 
@@ -58,11 +58,8 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
                                     <DrawerTitle className="text-3xl">{school?.name}</DrawerTitle>
                                     <p className="text-2xl font-semibold text-gray-400">{school?.city}</p>
                                 </div>
-                                <div className="text-2xl font-semibold text-gray-400">
-                                    <p >{school?.description}</p>
-                                </div>
-                            </div>
-                            
+                                <p className="text-2xl font-semibold text-gray-400" >{school?.description}</p>
+                            </DrawerHeader>
                             <div>
                                 <Tabs value={activeTab} onValueChange={setActiveTab}>
                                     <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">

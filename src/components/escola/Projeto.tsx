@@ -13,33 +13,33 @@ interface ProjetoProps {
 export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
 
     // |=======| PESQUISADOR MOCK |=======|
-    const pesquisadorProfessorMock:Researcher = {
+    const pesquisadorProfessorMock: Researcher = {
         name: "Mario Almeida Silva",
         race: "Indigina",
         sex: "Maculina",
         schoolname: "Escola de Itabuna",
         schoolcity: "Itabuna",
-        type: "PROFESSOR"
+        type: "Professor"
     }
 
     // |=======| PESQUISADOR MOCK |=======|
-    const pesquisadorAlunoMock:Researcher = {
+    const pesquisadorAlunoMock: Researcher = {
         name: "Tereza Cerqueira Santos",
         race: "Indigina",
         sex: "Maculina",
         schoolname: "Escola de Itabuna",
         schoolcity: "Itabuna",
-        type: "ALUNO"
+        type: "Aluno"
     }
 
     // |=======| PESQUISADOR MOCK |=======|
-    const pesquisadorFacilitadorMock:Researcher = {
+    const pesquisadorFacilitadorMock: Researcher = {
         name: "Mary de Oliveira Rodrigues",
         race: "Indigina",
         sex: "Maculina",
         schoolname: "Escola de Itabuna",
         schoolcity: "Itabuna",
-        type: "FACILITADOR"
+        type: "Facilitador"
     }
 
     return(
