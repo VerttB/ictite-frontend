@@ -47,9 +47,9 @@ export async function GET(
                 (
                     SELECT json_agg(json_build_object(
                     'id', e.id,
-                    'name', te.name,          -- Pegando o nome do type_equipment
-                    'description', te.description, -- Pegando a descrição do type_equipment
-                    'photo', te.photo         -- Pegando a foto do type_equipment
+                    'name', te.name,        
+                    'description', te.description, 
+                    'photo', te.photo_id       
                     ))
                     FROM equipment e
                     JOIN type_equipment te ON e.type_equipment_id = te.id -- JOIN para acessar a tabela type_equipment
