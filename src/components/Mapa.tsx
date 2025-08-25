@@ -29,7 +29,7 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   //const [geojsonData, setGeojsonData] = useState<any>(null)
-  const { data: geojsonData, loading } = useFetch<any>("/api/school")
+  const { data: geojsonData, loading } = useFetch<any>("http://localhost:8000/schools")
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);

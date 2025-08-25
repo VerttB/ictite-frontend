@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
+import { BookOpen, Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -38,6 +38,12 @@ const items = [
         title: "Vídeos",
         url: "/videos",
         icon: Video,
+        size: 10,
+    },
+    {
+        title: "Material Didático",
+        url: "/materiais",
+        icon: BookOpen,
         size: 10,
     }
 ]
