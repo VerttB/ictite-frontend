@@ -1,3 +1,4 @@
+import CardMateriais from "@/components/card/CardMateriais";
 import { Button } from "@/components/ui/button";
 import { BookText, ChevronLeft } from "lucide-react";
 
@@ -25,6 +26,14 @@ export default function Materiais () {
                     alinhados à realidade local e de acesso gratuito. Ideal para professores e estudantes, nossos materiais incentivam 
                     aprendizagem mão na massa e abordagem investigativa. Em breve: novidades em realidade virtual e impressão 3D para 
                     educação.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+                <div className="text-2xl font-semibold"><h2>Categorias</h2></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2 justify-items-center">
+                    {Array.from({length : 4}).map((_, i) => (
+                        <CardMateriais key={i}/>
+                    ))}
+                </div>
             </div>
         </div>
     );
