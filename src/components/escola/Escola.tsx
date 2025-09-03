@@ -25,7 +25,7 @@ export default function Escola ({open, onOpenChange, schoolId}:EscolaProps) {
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const [isPesquisadorDrawerOpen, setIsPesquisadorDrawerOpen] = useState(false);
     const [isProjetoDrawerOpen, setIsProjetoDrawerOpen] = useState(false);
-    const { data:school, loading: loadingSchool } = useFetch<SchoolFull>(`/api/school/${schoolId}`);
+    const { data:school, loading: loadingSchool } = useFetch<SchoolFull>(`http://localhost:8000/schools/${schoolId}?full=True`);
     const [ selectedReseacher, setSelectedResearcher ] = useState<Researcher | null>(null);
 
   
