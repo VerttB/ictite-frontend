@@ -39,16 +39,6 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
     [-34.0, 5.5]
   ]
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const res = await fetch("/api/school")
-  //     const data = await res.json()
-  //     setGeojsonData(data)
-  //   }
-  //   fetchData()
-  // }, [])
-
-
   useEffect(() => {
     if (!geojsonData || !mapContainerRef.current || !process.env.NEXT_PUBLIC_MAPBOX_KEY) return
 
