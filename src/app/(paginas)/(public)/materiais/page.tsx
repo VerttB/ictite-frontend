@@ -24,8 +24,7 @@ export default function Materiais () {
                 <p>Explore recursos educativos desenvolvidos para transformar o ensino de ciências e tecnologia na Bahia. Oferecemos 
                     planos de aula, kits experimentais e guias práticos sobre robótica, energias renováveis e inovação, todos 
                     alinhados à realidade local e de acesso gratuito. Ideal para professores e estudantes, nossos materiais incentivam 
-                    aprendizagem mão na massa e abordagem investigativa. Em breve: novidades em realidade virtual e impressão 3D para 
-                    educação.</p>
+                    aprendizagem mão na massa e abordagem investigativa.</p>
             </div>
             <div className="flex flex-col gap-2">
                 <div className="text-2xl font-semibold"><h2>Categorias</h2></div>
