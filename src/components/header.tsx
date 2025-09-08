@@ -17,9 +17,14 @@ export const Header = () => {
 
         
             </div>
-            <Button  className="text-xl cursor-pointerrounded-xl py-1 h-fit px-10">
-                Fazer Login
-            </Button>
+            <div className="flex flex-row gap-5">
+                <Button className="text-xl cursor-pointerrounded-xl py-1 h-fit px-10">
+                    Console
+                </Button>
+                <Button  className="text-xl cursor-pointerrounded-xl py-1 h-fit px-10">
+                    Fazer Login
+                </Button>
+            </div>
         </header>
     )
 }
