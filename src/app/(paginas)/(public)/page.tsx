@@ -24,7 +24,8 @@ export default async function ProjetoPage() {
         <Input type={"search"} placeholder="Busca por escola, pesquisador ou projetos" 
             className="pl-4 pr-10 py-2 w-full rounded-lg border-2"/>
         <Button variant={"ghost"} size={"icon"}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 cursor-pointer">
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 cursor-pointer bg-verde text-white
+                      hover:bg-lime-600 hover:text-white transition-colors">
             <Search/>
         </Button>
       </div>
