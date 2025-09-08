@@ -17,7 +17,13 @@ export default async function ProjetoPage() {
         </div>
       </div>
 
-      <div className="h-full w-full p-2 mt-5">
+      <div className="flex flex-col gap-1 h-full w-full p-2 mt-5 
+        border-2 bg-cinza-light rounded-md">
+        <div className="flex flex-row gap-2 justify-end items-center text-sm">
+          <p className="border-l-2 pl-2">Total de escolas: XX</p>
+          <p className="border-l-2 pl-2">Total de pesquisadores: XX</p>
+          <p className="border-l-2 pl-2">Total de projetos: XX</p>
+        </div>
         <MapaComDrawer />
       </div>
 
