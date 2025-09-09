@@ -1,35 +1,36 @@
+import { Project } from '@/core/interface/Project'
 import { getSchoolEquiments, getSchoolProjects, getSchoolResearchers } from '@/core/service/School/SchoolService'
 import useSWR from 'swr'
 
-export const useSchoolResearchers = async (id: string) => {
+export const useSchoolResearchers = (id: string) => {
     const { data, isLoading , error} = useSWR(id ? `school-${id}-researchers` : null, () => getSchoolResearchers(id),)
 
 
     return {
         researchers: data,
-        isLoadingResearchers: isLoading,
+        isLoading,
         errorReseachers: error
     }
 }
 
-export const useSchoolProjects = async (id: string) => {
-    const { data, isLoading , error} = useSWR(id ? `school-${id}-projects` : null, () => getSchoolProjects(id),)
+export const useSchoolProjects = (id: string) => {
+    const { data, isLoading , error} = useSWR<Project[]>(id ? `school-${id}-projects` : null, () => getSchoolProjects(id),)
 
 
     return {
         projects: data,
-        isLoadingProjects: isLoading,
+        isLoading,
         errorProjects: error
     }
 }
 
-export const useSchoolEquipments = async (id: string) => {
+export const useSchoolEquipments = (id: string) => {
     const { data, isLoading , error} = useSWR( id ? `school-${id}-equipments` : null, () => getSchoolEquiments(id),)
 
 
     return {
         equipments: data,
-        isLoadingEquipments: isLoading,
+        isLoading,
         errorEquipments: error
     }
 }
