@@ -1,6 +1,7 @@
 import { Equipment } from "@/core/interface/Equipment";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
+import { SchoolData } from "@/core/interface/School";
 
 export const getSchoolGeoData =  async () => {
     try{
@@ -19,7 +20,7 @@ export const getSchoolGeoData =  async () => {
     }
 }
 
-export const getSchoolById =  async (id: string, full?:boolean) => {
+export const getSchoolById =  async (id: string, full:boolean=false):Promise<SchoolData | null> => {
     try{
         const res  = await fetch(`http://localhost:8000/schools/${id}?full=${full}`)
         
