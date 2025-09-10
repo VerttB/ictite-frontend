@@ -3,9 +3,11 @@ import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
 import { SchoolData } from "@/core/interface/School";
 
+const url_base = process.env.URL_BASE
+
 export const getSchoolGeoData =  async () => {
     try{
-        const res  = await fetch("http://localhost:8000/schools/geojson")
+        const res  = await fetch(`${url_base}/schools/geojson`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -22,7 +24,7 @@ export const getSchoolGeoData =  async () => {
 
 export const getSchoolById =  async (id: string, full:boolean=false):Promise<SchoolData | null> => {
     try{
-        const res  = await fetch(`http://localhost:8000/schools/${id}?full=${full}`)
+        const res  = await fetch(`${url_base}/schools/${id}?full=${full}`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -39,7 +41,7 @@ export const getSchoolById =  async (id: string, full:boolean=false):Promise<Sch
 
 export const getSchools = async () => {
      try{
-        const res  = await fetch(`http://localhost:8000/schools`)
+        const res  = await fetch(`${url_base}/schools`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -56,7 +58,7 @@ export const getSchools = async () => {
 
 export const getSchoolResearchers = async (id:string): Promise<Researcher[]> => {
      try{
-        const res  = await fetch(`http://localhost:8000/schools/${id}/researchers`)
+        const res  = await fetch(`${url_base}/schools/${id}/researchers`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -73,7 +75,7 @@ export const getSchoolResearchers = async (id:string): Promise<Researcher[]> => 
 
 export const getSchoolProjects = async (id:string):Promise<Project[]> => {
      try{
-        const res  = await fetch(`http://localhost:8000/schools/${id}/projects`)
+        const res  = await fetch(`${url_base}/schools/${id}/projects`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -90,7 +92,7 @@ export const getSchoolProjects = async (id:string):Promise<Project[]> => {
 
 export const getSchoolEquiments = async (id:string):Promise<Equipment[]> => {
      try{
-        const res  = await fetch(`http://localhost:8000/schools/${id}/equipments`)
+        const res  = await fetch(`${url_base}/schools/${id}/equipments`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
