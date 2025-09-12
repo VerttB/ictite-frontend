@@ -22,7 +22,7 @@ export const SearchBar = () => {
         setEscolas(data || [])
     }
     useEffect(() => {
-        if(value.length > 2){
+        if(value.length >= 2){
             const debounce = setTimeout(() => {
                 console.log(value)
                 getescolas()
