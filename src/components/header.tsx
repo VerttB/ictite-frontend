@@ -1,6 +1,6 @@
 import Image from "next/image"
 import {Button} from "../components/ui/button"
-import { CircleUserRound, SquareChartGantt } from "lucide-react"
+import { Bolt, CircleUserRound } from "lucide-react"
 import Link from "next/link"
 export const Header = () => {
     return(
@@ -22,7 +22,7 @@ export const Header = () => {
             <div className="flex flex-row gap-5">
                 <Link href={"/console"}>
                     <Button className="text-xl cursor-pointerrounded-xl cursor-pointer py-1 h-fit px-10">
-                        <SquareChartGantt />
+                        <Bolt />
                         Console
                     </Button>
                 </Link>
