@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronLeft, Upload } from "lucide-react";
+import { ChevronLeft, FileText, Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -44,6 +44,13 @@ export default function Console () {
         
     };
 
+    // |=======| REMOVER ARQUIVO |=======|
+    const handleRemoveFile = () => {
+        setArquivo(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ""; // limpa o input
+        }
+    };
 
     return(
         <div className="flex flex-col gap-8 w-full px-8 py-4">
@@ -125,9 +132,26 @@ export default function Console () {
                 )}
             </div>
 
-            <div>
-
-            </div>
+            {/* |=======| PRÉ-VISUALIZAÇÃO DO ARQUIVO |======= */}
+            {arquivo && (
+                <div className="flex flex-row items-center justify-between bg-white border rounded-md shadow-sm px-4 py-3">
+                    <div className="flex items-center gap-3">
+                        <FileText size={22} className="text-verde" />
+                        <div>
+                            <p className="text-sm font-medium">{arquivo.name}</p>
+                            <p className="text-xs text-gray-500">{(arquivo.size / 1024).toFixed(1)} KB</p>
+                        </div>
+                    </div>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={handleRemoveFile}
+                        className="hover:bg-red-100 hover:text-red-600"
+                    >
+                        <X size={18} />
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }
