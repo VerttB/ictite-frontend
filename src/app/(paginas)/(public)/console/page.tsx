@@ -3,16 +3,18 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, Upload } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 type Entidade = "escola" | "revista" | "material" | "pesquisador" | "projeto" | "equipamento";
 
 export default function Console () {
 
-    const [entidadeId, setEntidadeId] = useState<string | undefined>("");
     const [entidadeSelecionada, setEntidadeSelecionada] = useState<Entidade | null>(null);
     const [escolaSelecionada, setEscolaSelecionada] = useState<string | null>(null);
+    const [arquivo, setArquivo] = useState<File | null>(null);
 
+    // |=======| DADOS MOCK |=======|
     const escolas = [
         { id: "1", nome: "Escola Municipal A" },
         { id: "2", nome: "Colégio Estadual B" },
@@ -20,6 +22,28 @@ export default function Console () {
     ];
 
     const entidades: Entidade[] = ["escola", "revista", "material", "pesquisador", "projeto", "equipamento"];
+
+    // |=======| USEREF |=======|
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // |=======| ABRIR ARQUIVO DO PC |=======|
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        const extension = file.name.split('.').pop()?.toLowerCase();
+
+        // Validar tipo de arquivo
+        if (extension !== 'csv' && extension !== 'xlsx') {
+            toast.error("Formato não suportado. Use CSV ou XLSX.");
+            return;
+        }
+
+        setArquivo(file);
+        
+    };
+
 
     return(
         <div className="flex flex-col gap-8 w-full px-8 py-4">
@@ -30,17 +54,26 @@ export default function Console () {
                     <h2 className="text-2xl font-semibold">Console</h2>
                 </div>
                 
-                <Button
-                    style={{ boxShadow: "0 0 3px rgba(0,0,0,.5)" }}
-                    className={`
-                        flex rounded-md gap-2 items-center px-4 py-2
-                        bg-verde text-white
-                        hover:cursor-pointer
-                    `}
-                >
-                    <Upload size={18} />
-                    <span className="text-sm">Carregar Arquivo</span>
-                </Button>
+                <div>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileSelect}
+                        accept=".csv,.xlsx"
+                        className="hidden"
+                    />
+                    <Button onClick={() => fileInputRef.current?.click()}
+                        style={{ boxShadow: "0 0 3px rgba(0,0,0,.5)" }}
+                        className={`
+                            flex rounded-md gap-2 items-center px-4 py-2
+                            bg-verde text-white
+                            hover:cursor-pointer
+                        `}
+                    >
+                        <Upload size={18} />
+                        <span className="text-sm">Carregar Arquivo</span>
+                    </Button>
+                </div>
             </div>
 
             {/* |=======| FILTRO (SELECT) |=======| */}
@@ -75,17 +108,17 @@ export default function Console () {
                             value={escolaSelecionada || undefined}
                         >
                             <SelectTrigger className="w-full bg-white">
-                            <SelectValue placeholder="Selecione a escola" />
+                                <SelectValue placeholder="Selecione a escola" />
                             </SelectTrigger>
                             <SelectContent>
-                            <SelectGroup>
-                                <SelectLabel>Escolas</SelectLabel>
-                                {escolas.map((escola) => (
-                                <SelectItem key={escola.id} value={escola.id}>
-                                    {escola.nome}
-                                </SelectItem>
-                                ))}
-                            </SelectGroup>
+                                <SelectGroup>
+                                    <SelectLabel>Escolas</SelectLabel>
+                                    {escolas.map((escola) => (
+                                    <SelectItem key={escola.id} value={escola.id}>
+                                        {escola.nome}
+                                    </SelectItem>
+                                    ))}
+                                </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
