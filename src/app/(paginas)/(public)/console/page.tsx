@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronLeft, FileText, Upload, X } from "lucide-react";
+import { ChevronLeft, FileText, Save, Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -52,6 +52,58 @@ export default function Console () {
         }
     };
 
+    // |=======| UPLOAD DO ARQUIVO |=======|
+    const handleUpload = async () => {
+        if (!arquivo) {
+            toast.error("Selecione um arquivo primeiro.");
+            return;
+        }
+        if (!entidadeSelecionada) {
+            toast.error("Selecione a entidade.");
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append("file", arquivo);
+        
+        if (escolaSelecionada) formData.append("school_id", escolaSelecionada);
+        
+        let rotaBase: string = "";
+        
+        if(entidadeSelecionada === "escola") rotaBase = "schools";
+        else if(entidadeSelecionada === "pesquisador") rotaBase = "researchers";
+        else if(entidadeSelecionada === "equipamento") rotaBase = "equipment";
+        else if(entidadeSelecionada === "projeto") rotaBase = "project";
+        else if(entidadeSelecionada === "revista") rotaBase = "magazine";
+        else if(entidadeSelecionada === "material") rotaBase = "material";
+        
+        try {
+            
+            const backendBase = process.env.NEXT_PUBLIC_BASE_URL;
+            const res = await fetch(`${backendBase}/${rotaBase}/import`, {
+                method: "POST",
+                body: formData,
+            });
+            
+
+            if (!res.ok) {
+                const err = await res.json();
+                toast.error(`Erro: ${err.detail || res.statusText}`);
+                return;
+            }
+
+            const result = await res.json();
+            
+            toast.success(`Importados: ${result.imported}. Erros: ${result.errors?.length || 0}`);
+            
+            console.log("Resultado do back:", result);
+        } catch (err) {
+            
+            console.error(err);
+            toast.error("Erro ao enviar arquivo.");
+        }
+    };
+
     return(
         <div className="flex flex-col gap-8 w-full px-8 py-4">
             {/* |=======| MENU SUPERIOR - CONSOLE |=======| */}
@@ -69,17 +121,30 @@ export default function Console () {
                         accept=".csv,.xlsx"
                         className="hidden"
                     />
-                    <Button onClick={() => fileInputRef.current?.click()}
-                        style={{ boxShadow: "0 0 3px rgba(0,0,0,.5)" }}
-                        className={`
-                            flex rounded-md gap-2 items-center px-4 py-2
-                            bg-verde text-white
-                            hover:cursor-pointer
-                        `}
-                    >
-                        <Upload size={18} />
-                        <span className="text-sm">Carregar Arquivo</span>
-                    </Button>
+                    <div className="flex flex-row gap-3">
+                        <Button onClick={handleUpload}
+                            style={{ boxShadow: "0 0 3px rgba(0,0,0,.5)" }}
+                            className={`
+                                flex rounded-md gap-2 items-center px-4 py-2
+                                bg-verde text-white
+                                hover:cursor-pointer
+                            `}
+                        >
+                            <Save size={18} />
+                            <span className="text-sm">Salvar</span>
+                        </Button>
+                        <Button onClick={() => fileInputRef.current?.click()}
+                            style={{ boxShadow: "0 0 3px rgba(0,0,0,.5)" }}
+                            className={`
+                                flex rounded-md gap-2 items-center px-4 py-2
+                                bg-verde text-white
+                                hover:cursor-pointer
+                            `}
+                        >
+                            <Upload size={18} />
+                            <span className="text-sm">Carregar Arquivo</span>
+                        </Button>
+                    </div>
                 </div>
             </div>
 
