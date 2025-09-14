@@ -10,13 +10,14 @@ import { getResearchers } from "@/core/service/Pesquisador/PesquisadorService"
 import { SugestionList } from "./SugestionList"
 import { SugestionBase } from "@/core/interface/SugestionBase"
 import useSWR from "swr"
+import { getProjects } from "@/core/service/ProjetoService"
 
 
 
 export const SearchBar = () => {
     const [value, setValue ] = useState("")
     const inputRef = useRef<HTMLInputElement | null>(null)
-    const [sugestions,setSugestions] = useState<Record<string, SugestionBase[]>>({researchers:[], schools: []})
+    const [sugestions,setSugestions] = useState<Record<string, SugestionBase[]>>({pesquisadores:[], escolas: [], projetos: []})
     const [isFocused, setIsFocused] = useState<boolean>()
     
     const handleValueChange = (e:ChangeEvent<HTMLInputElement>) => {
@@ -24,21 +25,24 @@ export const SearchBar = () => {
        
     }
 
-    function arrayFetcher(...urlArr:string[]) {
-    const f = (u) => fetch(u).then((r) => r.json());
-    return Promise.all(urlArr.map(f));
+//     function arrayFetcher(...urlArr:string[]) {
+//     const f = (u:string) => fetch(u).then((r) => r.json());
+//     return Promise.all(urlArr.map(f));
     
-}
+// }
     const getData = async (val: string) => {
-        const [schools, researchers] = await Promise.all([
+        const [schools, researchers, projects] = await Promise.all([
             getSchools(val),
             getResearchers(val),
+            getProjects(val)
+            
     ])
-    const {data: [school, researcher]} = useSWR(["http://localhost:8000/"])
+
 
         setSugestions({
-            schools: schools || [],
-            researchers: researchers || [],
+            escolas: schools || [],
+            pesquisadores: researchers || [],
+            projetos : projects || []
         })
     }
     useEffect(() => {
@@ -49,7 +53,7 @@ export const SearchBar = () => {
           return () => clearTimeout(debounce)  
         }
         else{
-            setSugestions({ schools: [], researchers: [] });
+            setSugestions({ escolas: [], pesquisadores: [], projetos: [] });
         }
 
     },[value])
