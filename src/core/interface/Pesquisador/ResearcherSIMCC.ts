@@ -6,7 +6,6 @@ import { User } from "./User"
 
 export interface  ResearchSIMCC{
   among: number,
-  articles: number,
   institution_id:string
   book: number,
   book_chapters: number,
@@ -19,7 +18,6 @@ export interface  ResearchSIMCC{
   abstract: string,
   city: string,
   orcid: string,
-  image: string
   graduation: string,
   patent: string,
   software: string,
