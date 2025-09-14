@@ -1,5 +1,7 @@
 import Image from "next/image"
 import {Button} from "../components/ui/button"
+import { Bolt, CircleUserRound } from "lucide-react"
+import Link from "next/link"
 export const Header = () => {
     return(
         <header className="w-full p-3 bg-cinza-light flex justify-between items-center">
@@ -18,10 +20,14 @@ export const Header = () => {
         
             </div>
             <div className="flex flex-row gap-5">
-                <Button className="text-xl cursor-pointerrounded-xl py-1 h-fit px-10">
-                    Console
-                </Button>
-                <Button  className="text-xl cursor-pointerrounded-xl py-1 h-fit px-10">
+                <Link href={"/console"}>
+                    <Button className="text-xl cursor-pointerrounded-xl cursor-pointer py-1 h-fit px-10">
+                        <Bolt />
+                        Console
+                    </Button>
+                </Link>
+                <Button  className="text-xl cursor-pointerrounded-xl cursor-pointer py-1 h-fit px-10">
+                    <CircleUserRound />
                     Fazer Login
                 </Button>
             </div>
