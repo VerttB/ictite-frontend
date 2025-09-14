@@ -1,7 +1,7 @@
 
-export const  GetPesquisadores = async () => {
+export const  getResearchers = async (name: string) => {
     try{
-        const res: Response = await fetch("http://localhost:3000/api/pesquisadores");
+        const res: Response = await fetch(`http://localhost:8000/researchers?name=${name}`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();
         return data;

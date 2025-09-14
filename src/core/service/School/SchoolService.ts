@@ -3,7 +3,7 @@ import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
 import { SchoolData } from "@/core/interface/School";
 
-const url_base = process.env.URL_BASE
+const url_base = process.env.NEXT_PUBLIC_BASE_URL
 
 export const getSchoolGeoData =  async () => {
     try{
@@ -39,9 +39,10 @@ export const getSchoolById =  async (id: string, full:boolean=false):Promise<Sch
     }
 }
 
-export const getSchools = async () => {
+export const getSchools = async (name:string = "", city:string = ""): Promise<SchoolData[]> => {
+    console.log(url_base)
      try{
-        const res  = await fetch(`${url_base}/schools`)
+        const res  = await fetch(`${url_base}/schools?name=${name}&city=${city}`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -52,7 +53,7 @@ export const getSchools = async () => {
         return data
     } catch (e) {
         console.error("Falha ao buscar dados de escolas:", e);
-        return null; 
+        return []; 
     }
 }
 

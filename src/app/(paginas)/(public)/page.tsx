@@ -1,13 +1,12 @@
 import MapaComDrawer from "@/components/MapaComDrawer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+
 import { GETictite } from "@/core/service/ICTITEService";
 import { Ictite } from "@/core/interface/IIctite";
+import { SearchBar } from "@/components/escola/SearchBar";
 
 export default async function ProjetoPage() {
   const projeto: Ictite = await GETictite();
-  
+
   return (
     <div className="w-full px-8 flex flex-col gap-4 space-between rounded-xl">
       <div className="flex flex-row w-full gap-4">
@@ -22,7 +21,7 @@ export default async function ProjetoPage() {
         </div>
       </div>
 
-      <div className="relative flex-grow w-full mt-5">
+      {/* <div className="relative flex-grow w-full mt-5">
         <Input type={"search"} placeholder="Busca por escola, pesquisador ou projetos" 
             className="pl-4 pr-10 py-2 w-full rounded-lg border-2"/>
         <Button variant={"ghost"} size={"icon"}
@@ -30,8 +29,8 @@ export default async function ProjetoPage() {
                       hover:bg-lime-600 hover:text-white transition-colors">
             <Search/>
         </Button>
-      </div>
-
+      </div> */}
+      <SearchBar/>
       <div className="flex flex-col gap-1 h-full w-full p-2 mt-5 
         border-2 bg-cinza-light rounded-md">
         <div className="flex flex-row gap-2 justify-end items-center text-sm">
