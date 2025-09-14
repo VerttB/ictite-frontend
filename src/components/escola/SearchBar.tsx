@@ -5,33 +5,51 @@ import { Input } from "../ui/input"
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { getSchools } from "@/core/service/School/SchoolService"
 import Link from "next/link"
-import { SchoolData } from "@/core/interface/School"
+
+import { getResearchers } from "@/core/service/Pesquisador/PesquisadorService"
+import { SugestionList } from "./SugestionList"
+import { SugestionBase } from "@/core/interface/SugestionBase"
+import useSWR from "swr"
+
+
+
 export const SearchBar = () => {
     const [value, setValue ] = useState("")
-    const [escolas, setEscolas] = useState<SchoolData[]>([])
     const inputRef = useRef<HTMLInputElement | null>(null)
+    const [sugestions,setSugestions] = useState<Record<string, SugestionBase[]>>({researchers:[], schools: []})
     const [isFocused, setIsFocused] = useState<boolean>()
+    
     const handleValueChange = (e:ChangeEvent<HTMLInputElement>) => {
         setValue(_ => e.target.value)
        
     }
 
+    function arrayFetcher(...urlArr:string[]) {
+    const f = (u) => fetch(u).then((r) => r.json());
+    return Promise.all(urlArr.map(f));
     
-    const getescolas = async () => {
-        const data = await getSchools(value)
-        setEscolas(data || [])
+}
+    const getData = async (val: string) => {
+        const [schools, researchers] = await Promise.all([
+            getSchools(val),
+            getResearchers(val),
+    ])
+    const {data: [school, researcher]} = useSWR(["http://localhost:8000/"])
+
+        setSugestions({
+            schools: schools || [],
+            researchers: researchers || [],
+        })
     }
     useEffect(() => {
         if(value.length >= 2){
             const debounce = setTimeout(() => {
-                console.log(value)
-                getescolas()
-                console.log(escolas)
+                getData(value)
             }, 500)
           return () => clearTimeout(debounce)  
         }
         else{
-            setEscolas([])
+            setSugestions({ schools: [], researchers: [] });
         }
 
     },[value])
@@ -56,20 +74,9 @@ export const SearchBar = () => {
             <Search/>
         </Button>
       </div>
-            {escolas.length > 0  && (
-                <div className="flex flex-col bg-cinza-light rounded-2xl shadow-2xl max-h-64 py-4 px-8 overflow-auto">
-            <div className="flex flex-col gap-4">
-                <h3 className="py-2 px-8 rounded-md w-fit bg-blue-100">Escolas</h3>
-                <div className="grid grid-cols-2 items-start gap-1 ">
-                {escolas.map(e => 
-                <Link 
-                    href={`escola/${e.id}`} 
-                    key={e.id}
-                    className="w-full hover:bg-verde py-1 px-4 rounded-md hover:text-white">
-                    {e.name}
-                </Link>)}
-                </div>
-            </div> 
+            {value.length >= 2  && (
+        <div className="flex  bg-cinza-light rounded-2xl shadow-2xl max-h-64 py-4 px-8 overflow-auto">
+            <SugestionList data={sugestions}/>
             </div>
             )}
             
