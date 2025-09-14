@@ -28,33 +28,24 @@ import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardArtigo from "../card/CardArtigos";
 import Masonry from "react-responsive-masonry";
+import useSWR from "swr";
+import { getResearcherById } from "@/core/service/Pesquisador/PesquisadorService";
 
 interface PesquisadorProps {
   isOpen: boolean;
   onClose: (open: boolean) => void;
-  researcher: Researcher | null;
+  researcherId: Researcher | null;
 }
 
 export default function Pesquisador({
   isOpen,
   onClose,
-  researcher,
+  researcherId,
 }: PesquisadorProps) {
-  if (!researcher) return null;
-  const { data: simcc, loading } = useFetch<ResearcherFinal>(
-    `/api/researcher/simcc/${encodeURIComponent(
-      researcher.name
-    )}`
-  );  const researcherFull = useMemo(
-    () => ({
-      simcc,
-      ...researcher,
-    }
-    
-  ),
-    [simcc, researcher]
-  );
-  researcherFull.simcc?.articlesData.sort( (a,b) => b.year - a.year)
+  if (!researcherId) return null;
+  const {data:researcher, isLoading} = useSWR("simcc-researcher",() => getResearcherById(researcherId.id, true))
+  if(!researcher) return null;
+  researcher.articles.sort( (a,b) => b.year - a.year)
 
   const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
   return (
@@ -94,7 +85,7 @@ export default function Pesquisador({
         </DrawerHeader>
 
         <div className="flex-1 flex flex-col px-6 py-2 overflow-hidden overflow-y-auto">
-          {loading ? (
+          {isLoading ? (
             <div className="flex flex-col justify-center items-center h-full gap-2">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-verde" />
               <p className="text-sm text-gray-500">Carregando dados do pesquisador...</p>
@@ -103,7 +94,7 @@ export default function Pesquisador({
             <>
               <div className="text-sm text-justify text-gray-500 mb-4">
                 <p className="line-clamp-4 hover:line-clamp-none">
-                 {researcherFull.simcc?.abstract ?? "Descrição não disponível."}
+                 {researcher.simcc?.abstract ?? "Descrição não disponível."}
                 </p>
               </div>
 
@@ -172,7 +163,7 @@ export default function Pesquisador({
                   <Masonry 
                         columnsCount={3}
                         gutter="10px" >
-                      {researcherFull.simcc?.articlesData.map((a,i) => 
+                      {researcher.articles.map((a,i) => 
                         <CardArtigo key={i} article={a}/>
                       )}
                   </Masonry>
