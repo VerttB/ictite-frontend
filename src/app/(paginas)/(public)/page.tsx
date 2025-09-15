@@ -1,8 +1,7 @@
-import MapaComDrawer from "@/components/MapaComDrawer";
-
 import { GETictite } from "@/core/service/ICTITEService";
 import { Ictite } from "@/core/interface/IIctite";
 import { SearchBar } from "@/components/escola/SearchBar";
+import Mapa from "@/components/Mapa";
 
 export default async function ProjetoPage() {
   const projeto: Ictite = await GETictite();
@@ -20,16 +19,6 @@ export default async function ProjetoPage() {
           <h1 className="">{projeto.objective}</h1>
         </div>
       </div>
-
-      {/* <div className="relative flex-grow w-full mt-5">
-        <Input type={"search"} placeholder="Busca por escola, pesquisador ou projetos" 
-            className="pl-4 pr-10 py-2 w-full rounded-lg border-2"/>
-        <Button variant={"ghost"} size={"icon"}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 cursor-pointer bg-verde text-white
-                      hover:bg-lime-600 hover:text-white transition-colors">
-            <Search/>
-        </Button>
-      </div> */}
       <SearchBar/>
       <div className="flex flex-col gap-1 h-full w-full p-2 mt-5 
         border-2 bg-cinza-light rounded-md">
@@ -38,7 +27,7 @@ export default async function ProjetoPage() {
           <p className="border-l-2 pl-2">Total de pesquisadores: XX</p>
           <p className="border-l-2 pl-2">Total de projetos: XX</p>
         </div>
-        <MapaComDrawer />
+        <Mapa />
       </div>
 
     </div>
