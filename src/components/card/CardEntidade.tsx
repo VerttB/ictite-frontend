@@ -1,4 +1,8 @@
+"use client"
+
 import { LucideIcon } from "lucide-react";
+import CamposEntidades from "../console/CamposEntidades";
+import { useState } from "react";
 
 interface EntidadeProps {
     nome  : string;
@@ -11,11 +15,18 @@ interface CardEntidadeProps {
 }
 
 export default function CardEntidade ({ entidade }: CardEntidadeProps) { 
+
+    const [isDialogCamposEntidadeOpen, setIsDialogCamposEntidadeOpen] = useState(false);
+
     return(
-        <div className="flex flex-col items-center justify-center h-28 w-28 bg-cinza-light rounded-sm
-                        hover:shadow-sm hover:shadow-verde hover:border-2 hover:border-verde transition-all cursor-pointer">
-            <entidade.icon size={50}/>
-            <span className="font-semibold">{entidade.nome}</span>
-        </div>
+        <>
+            <div onClick={() => setIsDialogCamposEntidadeOpen(true)}
+                className="flex flex-col items-center justify-center h-28 w-28 bg-cinza-light rounded-sm
+                            hover:shadow-sm hover:shadow-verde hover:border-2 hover:border-verde transition-all cursor-pointer">
+                <entidade.icon size={50}/>
+                <span className="font-semibold">{entidade.nome}</span>
+            </div>
+            <CamposEntidades isOpen={isDialogCamposEntidadeOpen} onClose={setIsDialogCamposEntidadeOpen} entidade={entidade} />
+        </>
     );
 }
