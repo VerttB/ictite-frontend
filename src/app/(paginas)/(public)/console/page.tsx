@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SchoolData } from "@/core/interface/School";
 import { getSchools } from "@/core/service/School/SchoolService";
-import { Book, BookOpen, Box, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Save, School2, Upload, X } from "lucide-react";
+import { Book, BookOpen, Box, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Newspaper, Save, School2, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,11 +22,11 @@ export default function Console () {
 
     const entidades = [
         { nome: "Escola", icon: School2, campos: ["name", "city", "descriprion", "cep"] },
-        { nome: "Revista", icon: BookOpen, campos: ["title", "link", "description"] },
-        { nome: "Material", icon: Box, campos: ["title", "link", "description"] },
+        { nome: "Revista", icon: Newspaper, campos: ["title", "link", "description"] },
+        { nome: "Material", icon: BookOpen, campos: ["title", "link", "description"] },
         { nome: "Pesquisador", icon: Book, campos: ["name", "lattes_id", "type", "sex", "race"] },
         { nome: "Projeto", icon: Folder, campos: ["name", "descrition"] },
-        { nome: "Equipamento", icon: Folder, campos: ["name"] },
+        { nome: "Equipamento", icon: Cpu, campos: ["name"] },
     ]
     //Entidade[] = ["escola", "revista", "material", "pesquisador", "projeto", "equipamento"];
 
