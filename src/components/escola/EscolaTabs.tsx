@@ -68,7 +68,6 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                                           project={p}/> )}
       </TabsContent>
     </Tabs>
-    { selectedReseacher && <Pesquisador isOpen={openDrawer} researcherId={selectedReseacher} onClose={() => {setOpenDrawer(false), setSelectedResearcher(null)}}/> }
     </>
   )
 }
