@@ -33,7 +33,7 @@ import { getResearcherById } from "@/core/service/Pesquisador/PesquisadorService
 
 interface PesquisadorProps {
   isOpen: boolean;
-  onClose: (open: boolean) => void;
+  onClose: () => void;
   researcherId: Researcher | null;
 }
 
@@ -43,11 +43,12 @@ export default function Pesquisador({
   researcherId,
 }: PesquisadorProps) {
   if (!researcherId) return null;
+  const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
   const {data:researcher, isLoading} = useSWR("simcc-researcher",() => getResearcherById(researcherId.id, true))
   if(!researcher) return null;
-  researcher.articles.sort( (a,b) => b.year - a.year)
+  if(researcher.articles)
+    researcher.articles.sort( (a,b) => b.year - a.year)
 
-  const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
       <DrawerContent>
@@ -56,7 +57,7 @@ export default function Pesquisador({
             <Button
               variant={"outline"}
               size={"icon"}
-              onClick={() => onClose(false)}
+              onClick={onClose}
               className="cursor-pointer"
             >
               <X />
@@ -163,7 +164,7 @@ export default function Pesquisador({
                   <Masonry 
                         columnsCount={3}
                         gutter="10px" >
-                      {researcher.articles.map((a,i) => 
+                      {researcher.articles && researcher.articles.map((a,i) => 
                         <CardArtigo key={i} article={a}/>
                       )}
                   </Masonry>

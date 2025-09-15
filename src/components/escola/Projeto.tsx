@@ -4,44 +4,21 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } f
 import Image from "next/image";
 import CardPesquisador from "../card/CardPesquisador";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import useSWR from "swr";
+import { getProjects, getProjectResearchers } from "@/core/service/ProjetoService";
+import { Project } from "@/core/interface/Project";
+import { capitalize } from "@/core/utils/capitalize";
 
 interface ProjetoProps {
     isOpen: boolean;
     onClose: (open:boolean) => void;
+    project: Project
 }
 
-export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
+export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
+    const {data : pesquisadores} = useSWR(`project-reseachers-${project.id}`, () => getProjectResearchers(project.id))
 
-    // |=======| PESQUISADOR MOCK |=======|
-    const pesquisadorProfessorMock: Researcher = {
-        name: "Mario Almeida Silva",
-        race: "Indigina",
-        sex: "Maculina",
-        schoolname: "Escola de Itabuna",
-        schoolcity: "Itabuna",
-        type: "Professor"
-    }
-
-    // |=======| PESQUISADOR MOCK |=======|
-    const pesquisadorAlunoMock: Researcher = {
-        name: "Tereza Cerqueira Santos",
-        race: "Indigina",
-        sex: "Maculina",
-        schoolname: "Escola de Itabuna",
-        schoolcity: "Itabuna",
-        type: "Aluno"
-    }
-
-    // |=======| PESQUISADOR MOCK |=======|
-    const pesquisadorFacilitadorMock: Researcher = {
-        name: "Mary de Oliveira Rodrigues",
-        race: "Indigina",
-        sex: "Maculina",
-        schoolname: "Escola de Itabuna",
-        schoolcity: "Itabuna",
-        type: "Facilitador"
-    }
-
+  
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent className="w-full">
@@ -49,12 +26,12 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
                     <div className="flex justify-start border-b items-center pb-2.5 ">
                         <Button variant={"outline"} size={"icon"} onClick={() => onClose(false)} className="cursor-pointer"><X/></Button>
                     </div>
-                    <DrawerTitle className="text-2xl">Nome do Projeto</DrawerTitle>
-                    <DrawerDescription>Descrição do Projeto: Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam dolores, officia quidem hic culpa enim quae cumque autem provident temporibus labore quibusdam, tempore odit omnis ducimus inventore voluptate obcaecati modi!</DrawerDescription>
+                    <DrawerTitle className="text-2xl">{project.name}</DrawerTitle>
+                    <DrawerDescription>{project.description}</DrawerDescription>
                     {/* NOME DA ESCOLA */}
                     <div className="flex flex-row gap-0.5 items-center text-gray-500 mt-2">
                         <School size={16} />
-                        <span className="text-sm">Nome da Escola</span>
+                        <span className="text-sm">{project.school}</span>
                     </div>
                 </DrawerHeader>
 
@@ -68,30 +45,21 @@ export default function Projeto ({ isOpen, onClose } : ProjetoProps) {
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
                     </div>
 
-                    <div className="flex flex-col gap-2 border-b pb-7 pt-3">
-                        <h2 className="text-2xl font-semibold">Professores</h2>
-                        <div className="flex flex-wrap gap-5 ">
-                            {Array.from({length:5}).map((_, i) => (
-                                <CardPesquisador key={i} researcher={pesquisadorProfessorMock} />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-2 border-b pb-7 pt-3">
-                        <h2 className="text-2xl font-semibold">Alunos</h2>
-                        <div className="flex flex-row gap-5 ">
-                            {Array.from({length:2}).map((_, i) => (
-                                <CardPesquisador key={i} researcher={pesquisadorAlunoMock} />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-2 border-b pb-7 pt-3">
-                        <h2 className="text-2xl font-semibold">Facilitadores</h2>
-                        <div className="flex flex-row gap-5 ">
-                            {Array.from({length:3}).map((_, i) => (
-                                <CardPesquisador key={i} researcher={pesquisadorFacilitadorMock} />
-                            ))}
-                        </div>
-                    </div>
+                        {pesquisadores && Object.keys(pesquisadores).map((key:string )=> {
+                            const items = pesquisadores[key as keyof typeof pesquisadores]
+                            return(
+                                <div key={key} className="flex flex-col gap-2 border-b pb-7 pt-3">
+                                <h2 className="text-2xl font-semibold">{capitalize(key)}</h2>
+                                <div className="flex flex-row gap-5 ">
+                                {items && items.map((p,i) => 
+                                        <CardPesquisador key={i} researcher={p} />
+                            
+                            
+                                )}
+                        </div>              
+                                </div>
+                            )})}
+                             
                 </div>
 
             </DrawerContent>
