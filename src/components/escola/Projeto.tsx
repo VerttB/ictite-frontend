@@ -1,3 +1,4 @@
+"use client"
 import { School, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
@@ -8,6 +9,8 @@ import useSWR from "swr";
 import { getProjects, getProjectResearchers } from "@/core/service/ProjetoService";
 import { Project } from "@/core/interface/Project";
 import { capitalize } from "@/core/utils/capitalize";
+import { useRouter } from "next/navigation";
+import { getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
 
 interface ProjetoProps {
     isOpen: boolean;
@@ -16,9 +19,10 @@ interface ProjetoProps {
 }
 
 export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
-    const {data : pesquisadores} = useSWR(`project-reseachers-${project.id}`, () => getProjectResearchers(project.id))
-
-  
+    const router = useRouter();
+    const {data : pesquisadores} = useSWR(`project-${project.id}`, () => getProjectResearchers(project.id))
+    console.log(pesquisadores)
+    
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent className="w-full">
@@ -52,7 +56,10 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
                                 <h2 className="text-2xl font-semibold">{capitalize(key)}</h2>
                                 <div className="flex flex-row gap-5 ">
                                 {items && items.map((p,i) => 
-                                        <CardPesquisador key={i} researcher={p} />
+                                        <CardPesquisador 
+                                                        key={i}
+                                                        researcher={p}
+                                                        onClick={() => router.push(`/pesquisadores/${p.id}`)} />
                             
                             
                                 )}

@@ -14,10 +14,12 @@ export const  getProjects = async (name: string = "") => {
 }
 
 export const  getProjectResearchers= async (projectId : string): Promise<ProjectResearchers | null> => {
+    console.log("BUSCANDO PROJETOS")
     try{
         const res: Response = await fetch(`http://localhost:8000/projects/${projectId}/researchers`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();
+        console.log(data)
         return data;
 
     }catch(e: any){

@@ -11,15 +11,18 @@ import {
 import Masonry from "react-responsive-masonry";
 import CardArtigo from "../card/CardArtigos";
 import useSWR from "swr";
-import { getResearcherById } from "@/core/service/Pesquisador/PesquisadorService";
+import { getResearcherById, getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
 import { Article } from "@/core/interface/Pesquisador/Article";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import CardProjeto from "../card/CardProjeto";
 
 export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) => {
     const [activeTab, setActiveTab] = useState("artigos")
+    const {data: projects, isLoading: isLoadingProjects} = useSWR(`researcher-projects-${researcher.id}`, () => getResearcherProjects(researcher.id))
+
     if(!researcher) return null
     researcher.articles.sort( (a,b) => b.year - a.year)
-
+    console.log(projects)
     return(
         <>
      
@@ -100,9 +103,10 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
 
                 <TabsContent value="projetos" className="mt-4">
                   <div className="grid grid-cols-2 gap-4">
-                    {/* {researcherFull.simcc?.projects?.map((projeto, i) => (
-                      <CardProjeto key={i} data={projeto} />
-                    ))} */}
+                      {projects &&
+                                   projects?.map((projeto, i) => (
+                                  <CardProjeto key={i} project={projeto} />
+                                ))}
                   </div>
                 </TabsContent>
 
