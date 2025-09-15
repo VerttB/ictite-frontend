@@ -1,5 +1,6 @@
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import { Project } from "@/core/interface/Project";
 
 export const  getResearchers = async (name: string) => {
     try{
@@ -17,6 +18,20 @@ export function getResearcherById(researcherId: string, full: true): Promise<Res
 export async function getResearcherById (researcherId:string ,full: boolean = false) {
     try{
         const res: Response = await fetch(`http://localhost:8000/researchers/${researcherId}?full=${full}`);
+        if(!res) throw new Error(`Erro: ${res}`)
+        const data = await res.json();
+        return data;
+
+    }catch(e: any){
+        console.error(e);
+        return null
+    }
+}
+
+export async function getResearcherProjects (researcherId:string): Promise<Project[] | null> {
+    try{
+        console.log("Tentando pegar projetos de pesquisador")
+        const res: Response = await fetch(`http://localhost:8000/researchers/${researcherId}/projects`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();
         return data;

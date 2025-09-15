@@ -29,12 +29,12 @@ import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardArtigo from "../card/CardArtigos";
 import Masonry from "react-responsive-masonry";
 import useSWR from "swr";
-import { getResearcherById } from "@/core/service/Pesquisador/PesquisadorService";
+import { getResearcherById, getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
 
 interface PesquisadorProps {
   isOpen: boolean;
   onClose: () => void;
-  researcherId: Researcher | null;
+  researcherId: string;
 }
 
 export default function Pesquisador({
@@ -44,11 +44,13 @@ export default function Pesquisador({
 }: PesquisadorProps) {
   if (!researcherId) return null;
   const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
-  const {data:researcher, isLoading} = useSWR("simcc-researcher",() => getResearcherById(researcherId.id, true))
+  const {data:researcher, isLoading} = useSWR(`simcc-researcher-${researcherId}`,() => getResearcherById(researcherId, true))
+  const {data: projects, isLoading: isLoadingProjects} = useSWR(`researcher-projects-${researcherId}`, () => getResearcherProjects(researcherId))
+
   if(!researcher) return null;
   if(researcher.articles)
     researcher.articles.sort( (a,b) => b.year - a.year)
-
+  console.log(projects)
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
       <DrawerContent>
@@ -176,9 +178,9 @@ export default function Pesquisador({
 
                 <TabsContent value="projetos" className="mt-4">
                   <div className="grid grid-cols-2 gap-4">
-                    {/* {researcherFull.simcc?.projects?.map((projeto, i) => (
-                      <CardProjeto key={i} data={projeto} />
-                    ))} */}
+                    {projects && projects?.map((projeto, i) => (
+                      <CardProjeto key={i} project={projeto} />
+                    ))}
                   </div>
                 </TabsContent>
 

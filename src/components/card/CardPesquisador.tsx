@@ -15,7 +15,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
     const [openDrawer, setOpenDrawer] = useState(false);
     
     return(
-        <div  onClick={onClick} 
+        <div  onClick={onClick ?  onClick : () => setOpenDrawer(true)} 
             className="relative border-2 h-[250px] w-[200px] rounded-md p-2 
                     cursor-pointer overflow-hidden bg-black group
             ">
@@ -41,7 +41,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                     <p className="mb-1">{researcher.type}</p>
                 </div>
             </div>
-            {openDrawer && <Pesquisador isOpen={openDrawer}researcherId={researcher}  onClose={() => {setOpenDrawer(false)}}/>}
+            {openDrawer && <Pesquisador isOpen={openDrawer} researcherId={researcher.id}  onClose={() => {setOpenDrawer(false)}}/>}
 
         </div>
     );
