@@ -16,9 +16,9 @@ interface ProjetoProps {
 }
 
 export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
-    const {data : pesquisadores} = useSWR("project-reseachers", () => getProjectResearchers(project.id))
-    if(!pesquisadores) return null
-    console.log(pesquisadores)
+    const {data : pesquisadores} = useSWR(`project-reseachers-${project.id}`, () => getProjectResearchers(project.id))
+
+  
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent className="w-full">
@@ -31,7 +31,7 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
                     {/* NOME DA ESCOLA */}
                     <div className="flex flex-row gap-0.5 items-center text-gray-500 mt-2">
                         <School size={16} />
-                        <span className="text-sm">Nome da Escola</span>
+                        <span className="text-sm">{project.school}</span>
                     </div>
                 </DrawerHeader>
 
@@ -45,7 +45,7 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
                     </div>
 
-                        {Object.keys(pesquisadores).map((key:string )=> {
+                        {pesquisadores && Object.keys(pesquisadores).map((key:string )=> {
                             const items = pesquisadores[key as keyof typeof pesquisadores]
                             return(
                                 <div key={key} className="flex flex-col gap-2 border-b pb-7 pt-3">

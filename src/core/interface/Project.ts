@@ -4,6 +4,7 @@ export interface Project{
     id: string,
     name: string,
     description: string,
+    school: string
 }
 
 export interface ProjectResearchers{
