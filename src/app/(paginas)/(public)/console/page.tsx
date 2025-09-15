@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronLeft, FileText, Save, Upload, X } from "lucide-react";
+import { ChevronLeft, File, FileText, Save, Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -196,6 +196,19 @@ export default function Console () {
                     </div>
                 )}
             </div>
+
+            {/* |=======| VISUALIZAÇÃO DE QUANDO O ARQUIVO NÃO TIVER SIDO SELECIONADO |======= */}
+            {!arquivo && (
+                <div className="flex items-center justify-center p-11 border-4 border-dashed rounded-md">
+                    <div className="flex flex-col gap-2 items-center">
+                        <File size={35} className="text-verde"/>
+                        <div className="relative">
+                            <h4 className="text-lg">Nenhum arquivo foi selecionado ainda</h4>
+                            <p className="absolute top-5 text-sm text-gray-400">Selecione um arquivo .csv ou .xml</p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* |=======| PRÉ-VISUALIZAÇÃO DO ARQUIVO |======= */}
             {arquivo && (
