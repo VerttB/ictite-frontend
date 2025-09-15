@@ -28,13 +28,6 @@ export default function CamposEntidades ( { isOpen, onClose, entidade }:CamposEn
                         </div>
                     </div>
                 </DialogHeader>
-                <DialogClose asChild>
-                    <button
-                        className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none"
-                    >
-                        <X className="h-5 w-5" />
-                    </button>
-                </DialogClose>
             </DialogContent>
         </Dialog>
     );

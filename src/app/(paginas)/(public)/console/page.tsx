@@ -3,8 +3,10 @@
 import CardEntidade from "@/components/card/CardEntidade";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Book, BookOpen, Box, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Save, School2, Upload, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { SchoolData } from "@/core/interface/School";
+import { getSchools } from "@/core/service/School/SchoolService";
+import { Book, BookOpen, Box, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Newspaper, Save, School2, Upload, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 type EntidadeType = "escola" | "revista" | "material" | "pesquisador" | "projeto" | "equipamento";
@@ -14,26 +16,43 @@ export default function Console () {
     const [entidadeSelecionada, setEntidadeSelecionada] = useState<EntidadeType | null>(null);
     const [escolaSelecionada, setEscolaSelecionada] = useState<string | null>(null);
     const [arquivo, setArquivo] = useState<File | null>(null);
-
-    // |=======| DADOS MOCK |=======|
-    const escolas = [
-        { id: "1", nome: "Escola Municipal A" },
-        { id: "2", nome: "Colégio Estadual B" },
-        { id: "3", nome: "Instituto Federal C" },
-    ];
+    const [schools, setSchools] = useState<SchoolData[]>([]);
+    const [schoolsLoading, setSchoolsLoading] = useState(false);
+    const [schoolsError, setSchoolsError] = useState<string | null>(null);
 
     const entidades = [
         { nome: "Escola", icon: School2, campos: ["name", "city", "descriprion", "cep"] },
-        { nome: "Revista", icon: BookOpen, campos: ["title", "link", "description"] },
-        { nome: "Material", icon: Box, campos: ["title", "link", "description"] },
+        { nome: "Revista", icon: Newspaper, campos: ["title", "link", "description"] },
+        { nome: "Material", icon: BookOpen, campos: ["title", "link", "description"] },
         { nome: "Pesquisador", icon: Book, campos: ["name", "lattes_id", "type", "sex", "race"] },
         { nome: "Projeto", icon: Folder, campos: ["name", "descrition"] },
-        { nome: "Equipamento", icon: Folder, campos: ["name"] },
+        { nome: "Equipamento", icon: Cpu, campos: ["name"] },
     ]
     //Entidade[] = ["escola", "revista", "material", "pesquisador", "projeto", "equipamento"];
 
     // |=======| USEREF |=======|
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // |=======| USEEFFECT |=======|
+    useEffect(() => {
+        // CARREGANDO AS ESCOLAS:  
+        const loadSchools = async () => {
+        setSchoolsLoading(true);
+        setSchoolsError(null);
+        try {
+            const data = await getSchools();
+            setSchools(data || []);
+        } catch (err: any) {
+            console.error("Erro ao buscar escolas:", err);
+            setSchoolsError("Não foi possível carregar as escolas.");
+            setSchools([]);
+        } finally {
+            setSchoolsLoading(false);
+        }
+        };
+
+        loadSchools();
+    }, []);
 
     // |=======| ABRIR ARQUIVO DO PC |=======|
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,6 +82,8 @@ export default function Console () {
 
     // |=======| UPLOAD DO ARQUIVO |=======|
     const handleUpload = async () => {
+        console.log(schools);
+
         if (!arquivo) {
             toast.error("Selecione um arquivo primeiro.");
             return;
@@ -174,7 +195,7 @@ export default function Console () {
                             <SelectGroup>
                                 <SelectLabel>Entidade</SelectLabel>
                                 {entidades.map(entidade => (
-                                    <SelectItem key={entidade.nome} value={entidade.nome}>{entidade.nome}</SelectItem>
+                                    <SelectItem key={entidade.nome} value={(entidade.nome).toLowerCase()}>{entidade.nome}</SelectItem>
                                 ))}
                             </SelectGroup>
                         </SelectContent>
@@ -189,15 +210,27 @@ export default function Console () {
                             value={escolaSelecionada || undefined}
                         >
                             <SelectTrigger className="w-full bg-white">
-                                <SelectValue placeholder="Selecione a escola" />
+                                <SelectValue placeholder={schoolsLoading ? "Carregando..." : "Selecione a escola"} />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Escolas</SelectLabel>
-                                    {escolas.map((escola) => (
-                                    <SelectItem key={escola.id} value={escola.id}>
-                                        {escola.nome}
-                                    </SelectItem>
+                                    {schoolsLoading && (
+                                        <SelectItem value="loading" disabled>Carregando...</SelectItem>
+                                    )}
+
+                                    {schoolsError && (
+                                        <SelectItem value="error" disabled>{schoolsError}</SelectItem>
+                                    )}
+
+                                    {!schoolsLoading && !schoolsError && schools.length === 0 && (
+                                        <SelectItem value="empty" disabled>Sem escolas cadastradas</SelectItem>
+                                    )}
+
+                                    {!schoolsLoading && !schoolsError && schools.map((escola) => (
+                                        <SelectItem key={escola.id} value={escola.id}>
+                                        {escola.name}
+                                        </SelectItem>
                                     ))}
                                 </SelectGroup>
                             </SelectContent>
