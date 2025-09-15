@@ -1,8 +1,9 @@
 'use client'
 
+import CardEntidade from "@/components/card/CardEntidade";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronLeft, File, FileText, Milestone, Save, Upload, X } from "lucide-react";
+import { Book, BookOpen, Box, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Save, School2, Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -231,23 +232,38 @@ export default function Console () {
                 </div>
             )}
 
-            {/* |=======| INSTRUÇÕES PARA SABER MEXER NO CONSOLE |=======| */}
-            <div className="flex flex-col gap-3">
-                <div className="flex flex-row gap-5 items-center">
-                    <Milestone />
-                    <h2 className="font-semibold text-xl">Insrtuções</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                {/* |=======| INSTRUÇÕES PARA SABER MEXER NO CONSOLE |=======| */}
+                <div className="flex flex-col gap-3">
+                    <div className="flex flex-row gap-5 items-center">
+                        <ClipboardList />
+                        <h2 className="font-semibold text-xl">Insrtuções</h2>
+                    </div>
+                    <div>
+                        <ul className="list-decimal list- list-outside pl-5">
+                            <li>Escolha no <strong>select</strong> a entidade</li>
+                            <li>Caso necessário, selecione qual a escola</li>
+                            <li>Visualize os arquivos selecionados</li>
+                            <li>Selecione qual arquivo irá <strong>enviar e salve</strong></li>
+                            <li>Irá <strong>retornar</strong> quantos foram importados e quais deram erro</li>
+                        </ul>
+                    </div>
                 </div>
-
-                <div>
-                    <ul className="list-decimal list- list-outside pl-5">
-                        <li>Escolha no <strong>select</strong> a entidade</li>
-                        <li>Caso necessário, selecione qual a escola</li>
-                        <li>Visualize os arquivos selecionados</li>
-                        <li>Selecione qual arquivo irá <strong>enviar e salve</strong></li>
-                        <li>Irá <strong>retornar</strong> quantos foram importados e quais deram erro</li>
-                    </ul>
+                {/* |=======| LISTA DOS CARDS DE EXEMPLO DAS ENTIDADES DE CADASTRO |=======| */}
+                <div className="flex flex-col gap-3">
+                    <div className="flex flex-row gap-5 items-center">
+                        <Milestone />
+                        <h2 className="font-semibold text-xl">Entidades</h2>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                        <CardEntidade icon={School2} nome={"Escola"}/>
+                        <CardEntidade icon={BookOpen} nome={"Revista"}/>
+                        <CardEntidade icon={Box} nome={"Material"}/>
+                        <CardEntidade icon={Book} nome={"Pesquisador"}/>
+                        <CardEntidade icon={Folder} nome={"Projeto"}/>
+                        <CardEntidade icon={Cpu} nome={"Equipamento"}/>
+                    </div>
                 </div>
-
             </div>
 
         </div>
