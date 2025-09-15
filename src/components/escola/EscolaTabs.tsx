@@ -10,6 +10,8 @@ import { Spinner } from "../LoadingSpin"
 import CardProjeto from "../card/CardProjeto"
 import CardEquipamento from "../card/CardEquipamento"
 import CardPesquisador from "../card/CardPesquisador"
+import { Researcher } from "@/core/interface/Pesquisador/Researcher"
+import Pesquisador from "./Pesquisador"
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   const [activeTab, setActiveTab] = useState("pesquisadores")
@@ -18,7 +20,12 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   const { equipments, isLoading: loadingEq } = useSchoolEquipments(schoolId)
   const { projects, isLoading: loadingPr } = useSchoolProjects(schoolId)
 
+  const [ selectedReseacher, setSelectedResearcher ] = useState<Researcher | null>(null);
+  const [openDrawer, setOpenDrawer] = useState(false)
+  
+
   return (
+    <>
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
       <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-blue-100">
         <TabsTrigger value="pesquisadores" asChild>
@@ -41,6 +48,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
       <TabsContent value="pesquisadores" className="mt-4 flex flex-wrap gap-4">
         {loadingRes ? <Spinner/> :
         researchers?.map((r) => (<CardPesquisador
+                                                onClick={() => {setSelectedResearcher(r); setOpenDrawer(true)}}
                                                 key={r.name}
                                                 researcher={r}/>))}
       </TabsContent>
@@ -48,6 +56,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
       <TabsContent value="equipamentos" className="mt-4 flex flex-wrap gap-4">
         {loadingEq ? <Spinner/> : 
         equipments?.map((e,i) => (<CardEquipamento 
+                                                  
                                                   key={i}
                                                   equipment={e}/> ))}
       </TabsContent>
@@ -59,5 +68,6 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                                           project={p}/> )}
       </TabsContent>
     </Tabs>
+    </>
   )
 }

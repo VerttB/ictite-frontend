@@ -1,6 +1,9 @@
+'use client'
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Book } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import Pesquisador from "../escola/Pesquisador";
 
 interface CardPesquisadorProps {
     onClick?: () => void; // Adicione esta prop
@@ -9,6 +12,7 @@ interface CardPesquisadorProps {
 }
 
 export default function CardPesquisador ({ onClick, researcher }: CardPesquisadorProps) {
+    const [openDrawer, setOpenDrawer] = useState(false);
     
     return(
         <div  onClick={onClick} 
@@ -37,6 +41,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                     <p className="mb-1">{researcher.type}</p>
                 </div>
             </div>
+            {openDrawer && <Pesquisador isOpen={openDrawer}researcherId={researcher}  onClose={() => {setOpenDrawer(false)}}/>}
 
         </div>
     );

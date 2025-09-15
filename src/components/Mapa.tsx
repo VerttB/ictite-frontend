@@ -3,15 +3,15 @@ import { useEffect, useRef, useState } from "react"
 import mapboxgl from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 
-// Importe os componentes do ShadCN
 import {
   Popover,
   PopoverContent,
-  PopoverAnchor, // Usaremos o Anchor para posicionar o Popover dinamicamente
-} from "@/components/ui/popover" // Ajuste o caminho se necessário
+  PopoverAnchor, 
+} from "@/components/ui/popover"
 import { SchoolData } from "@/core/interface/School"
 import { useFetch } from "@/hooks/useFetch"
 import { Spinner } from "./LoadingSpin"
+import { useRouter } from "next/navigation"
 
 type LngLatBoundsLike =
   | [[number, number], [number, number]]
@@ -19,21 +19,15 @@ type LngLatBoundsLike =
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY
 
-export type MapProps = {
-  onUnclusteredPointClick: (props: any) => void;
-};
 
-
-
-export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
+export default function MapaRender() {
+  const router = useRouter()
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
-  //const [geojsonData, setGeojsonData] = useState<any>(null)
   const { data: geojsonData, loading } = useFetch<any>("http://localhost:8000/schools/geojson")
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);
-  console.log(geojsonData)
   const brazilBounds: LngLatBoundsLike = [
     [-74.0, -34.0],
     [-34.0, 5.5]
@@ -92,10 +86,10 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
       });
 
       map.on("click", "unclustered-point", (e) => {
-        setPopoverOpen(false); // Fecha o popover se um ponto único for clicado
+        setPopoverOpen(false); 
         const feat = e.features?.[0];
         if (!feat || feat.geometry.type !== "Point") return;
-        onUnclusteredPointClick(feat.properties);
+           if(feat.properties && feat.properties.id) router.push(`escolas/${feat.properties.id}`)
       });
 
 
@@ -109,7 +103,7 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
     });
 
     return () => { map.remove() };
-  }, [geojsonData, onUnclusteredPointClick]);
+  }, [geojsonData]);
 
   if (loading) return <div className="h-64 w-full flex flex-col items-center justify-center">
     <Spinner />
@@ -148,7 +142,7 @@ export default function MapaRender({ onUnclusteredPointClick }: MapProps) {
                 {popoverContent.map((school) => (
                   <li onClick={() => {
                     setPopoverOpen(false);
-                    onUnclusteredPointClick(school)
+                    router.push(`escolas/${school.id}`)
                   }} key={school.id} className="text-sm border-b rounded-md p-2 hover:bg-verde hover:text-white cursor-pointer">
                     {school.name}
                   </li>

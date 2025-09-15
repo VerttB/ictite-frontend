@@ -25,7 +25,7 @@ export default function CardProjeto ({project}:{project: Project}) {
             <p className="text-sm text-gray-500 text-justify max-h-28 overflow-y-auto">{project.description}</p>
         
             {/* |=======| DRAWER DO PROJETO |=======| */}
-            <Projeto isOpen={isProjetoDrawerOpen} onClose={() => setIsProjetoDrawerOpen(false)}/>
+            {isProjetoDrawerOpen && <Projeto isOpen={isProjetoDrawerOpen} project={project} onClose={() => setIsProjetoDrawerOpen(false)}/>}
 
         </div>
     );
