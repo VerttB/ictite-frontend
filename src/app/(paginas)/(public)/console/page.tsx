@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronLeft, File, FileText, Save, Upload, X } from "lucide-react";
+import { ChevronLeft, File, FileText, Milestone, Save, Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -230,6 +230,26 @@ export default function Console () {
                     </Button>
                 </div>
             )}
+
+            {/* |=======| INSTRUÇÕES PARA SABER MEXER NO CONSOLE |=======| */}
+            <div className="flex flex-col gap-3">
+                <div className="flex flex-row gap-5 items-center">
+                    <Milestone />
+                    <h2 className="font-semibold text-xl">Insrtuções</h2>
+                </div>
+
+                <div>
+                    <ul className="list-decimal list- list-outside pl-5">
+                        <li>Escolha no <strong>select</strong> a entidade</li>
+                        <li>Caso necessário, selecione qual a escola</li>
+                        <li>Visualize os arquivos selecionados</li>
+                        <li>Selecione qual arquivo irá <strong>enviar e salve</strong></li>
+                        <li>Irá <strong>retornar</strong> quantos foram importados e quais deram erro</li>
+                    </ul>
+                </div>
+
+            </div>
+
         </div>
     );
 }
