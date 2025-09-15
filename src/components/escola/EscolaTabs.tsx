@@ -48,7 +48,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
       <TabsContent value="pesquisadores" className="mt-4 flex flex-wrap gap-4">
         {loadingRes ? <Spinner/> :
         researchers?.map((r) => (<CardPesquisador
-                                                onClick={() => {setSelectedResearcher(r); setOpenDrawer(true)}}
+                                                
                                                 key={r.name}
                                                 researcher={r}/>))}
       </TabsContent>
