@@ -7,7 +7,7 @@ interface EntidadeProps {
 }
 
 interface CardEntidadeProps {
-  entidade: EntidadeProps
+    entidade: EntidadeProps
 }
 
 export default function CardEntidade ({ entidade }: CardEntidadeProps) { 

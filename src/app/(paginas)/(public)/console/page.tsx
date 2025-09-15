@@ -7,11 +7,11 @@ import { Book, BookOpen, Box, ChevronLeft, ClipboardList, Cpu, File, FileText, F
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
-type Entidade = "escola" | "revista" | "material" | "pesquisador" | "projeto" | "equipamento";
+type EntidadeType = "escola" | "revista" | "material" | "pesquisador" | "projeto" | "equipamento";
 
 export default function Console () {
 
-    const [entidadeSelecionada, setEntidadeSelecionada] = useState<Entidade | null>(null);
+    const [entidadeSelecionada, setEntidadeSelecionada] = useState<EntidadeType | null>(null);
     const [escolaSelecionada, setEscolaSelecionada] = useState<string | null>(null);
     const [arquivo, setArquivo] = useState<File | null>(null);
 
@@ -22,7 +22,15 @@ export default function Console () {
         { id: "3", nome: "Instituto Federal C" },
     ];
 
-    const entidades: Entidade[] = ["escola", "revista", "material", "pesquisador", "projeto", "equipamento"];
+    const entidades = [
+        { nome: "Escola", icon: School2, campos: ["name", "city", "descriprion", "cep"] },
+        { nome: "Revista", icon: BookOpen, campos: ["title", "link", "description"] },
+        { nome: "Material", icon: Box, campos: ["title", "link", "description"] },
+        { nome: "Pesquisador", icon: Book, campos: ["name", "lattes_id", "type", "sex", "race"] },
+        { nome: "Projeto", icon: Folder, campos: ["name", "descrition"] },
+        { nome: "Equipamento", icon: Folder, campos: ["name"] },
+    ]
+    //Entidade[] = ["escola", "revista", "material", "pesquisador", "projeto", "equipamento"];
 
     // |=======| USEREF |=======|
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -155,7 +163,7 @@ export default function Console () {
                     <p className="font-semibold">Entidade: </p>
                     <Select
                         onValueChange={(value) => {
-                            setEntidadeSelecionada(value as Entidade);
+                            setEntidadeSelecionada(value as EntidadeType);
                         }}
                     >
                         <SelectTrigger className="w-full bg-white">
@@ -166,7 +174,7 @@ export default function Console () {
                             <SelectGroup>
                                 <SelectLabel>Entidade</SelectLabel>
                                 {entidades.map(entidade => (
-                                    <SelectItem key={entidade} value={entidade}>{entidade}</SelectItem>
+                                    <SelectItem key={entidade.nome} value={entidade.nome}>{entidade.nome}</SelectItem>
                                 ))}
                             </SelectGroup>
                         </SelectContent>
@@ -256,13 +264,10 @@ export default function Console () {
                         <Milestone />
                         <h2 className="font-semibold text-xl">Entidades</h2>
                     </div>
-                    <div className="grid grid-cols-3 gap-3">
-                        <CardEntidade icon={School2} nome={"Escola"}/>
-                        <CardEntidade icon={BookOpen} nome={"Revista"}/>
-                        <CardEntidade icon={Box} nome={"Material"}/>
-                        <CardEntidade icon={Book} nome={"Pesquisador"}/>
-                        <CardEntidade icon={Folder} nome={"Projeto"}/>
-                        <CardEntidade icon={Cpu} nome={"Equipamento"}/>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                        {entidades.map((entidade) => (
+                            <CardEntidade key={entidade.nome} entidade={entidade}/>
+                        ))}
                     </div>
                 </div>
             </div>
