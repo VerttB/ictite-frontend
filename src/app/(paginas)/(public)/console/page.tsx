@@ -204,7 +204,7 @@ export default function Console () {
                     <div className="flex flex-col gap-2 items-center">
                         <File size={35} className="text-verde"/>
                         <div className="relative">
-                            <h4 className="text-lg">Nenhum arquivo foi selecionado ainda</h4>
+                            <h4 className="text-lg truncate">Nenhum arquivo foi selecionado ainda</h4>
                             <p className="absolute top-5 text-sm text-gray-400">Selecione um arquivo .csv ou .xml</p>
                         </div>
                     </div>
@@ -232,20 +232,21 @@ export default function Console () {
                 </div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* |=======| INSTRUÇÕES PARA SABER MEXER NO CONSOLE |=======| */}
                 <div className="flex flex-col gap-3">
                     <div className="flex flex-row gap-5 items-center">
                         <ClipboardList />
-                        <h2 className="font-semibold text-xl">Insrtuções</h2>
+                        <h2 className="font-semibold text-xl">Instruções</h2>
                     </div>
                     <div>
-                        <ul className="list-decimal list- list-outside pl-5">
-                            <li>Escolha no <strong>select</strong> a entidade</li>
-                            <li>Caso necessário, selecione qual a escola</li>
-                            <li>Visualize os arquivos selecionados</li>
-                            <li>Selecione qual arquivo irá <strong>enviar e salve</strong></li>
-                            <li>Irá <strong>retornar</strong> quantos foram importados e quais deram erro</li>
+                        <ul className="list-decimal list-outside pl-5 space-y-2">
+                            <li>Selecione a <strong>entidade</strong> desejada no campo de opções.</li>
+                            <li>Se necessário, escolha também a <strong>escola</strong> vinculada.</li>
+                            <li>Caso tenha dúvida de como deve ficar o arquivo, <strong>visualize em entidades</strong></li>
+                            <li>Carregue o arquivo clicando em <strong>Carregar Arquivo</strong>.</li>
+                            <li>Confira a lista de arquivos selecionados e clique em <strong>Salvar</strong> para enviar.</li>
+                            <li>Ao final, será exibido um resumo com a quantidade de registros <strong>importados</strong> e os <strong>erros encontrados</strong>, se houver.</li>
                         </ul>
                     </div>
                 </div>
