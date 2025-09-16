@@ -82,7 +82,7 @@ export default function Console () {
 
     // |=======| UPLOAD DO ARQUIVO |=======|
     const handleUpload = async () => {
-        console.log(schools);
+        console.log(escolaSelecionada);
 
         if (!arquivo) {
             toast.error("Selecione um arquivo primeiro.");
@@ -103,7 +103,7 @@ export default function Console () {
         if(entidadeSelecionada === "escola") rotaBase = "schools";
         else if(entidadeSelecionada === "pesquisador") rotaBase = "researchers";
         else if(entidadeSelecionada === "equipamento") rotaBase = "equipment";
-        else if(entidadeSelecionada === "projeto") rotaBase = "project";
+        else if(entidadeSelecionada === "projeto") rotaBase = "projects";
         else if(entidadeSelecionada === "revista") rotaBase = "magazine";
         else if(entidadeSelecionada === "material") rotaBase = "material";
         
