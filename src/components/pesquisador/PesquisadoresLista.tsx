@@ -1,5 +1,5 @@
 "use client"
-import CardPesquisador from "../card/CardPesquisador"
+import CardPesquisador from "./CardPesquisador"
 import { capitalize } from "@/core/utils/capitalize"
 import { useRouter } from "next/navigation"
 import useSWR from "swr"

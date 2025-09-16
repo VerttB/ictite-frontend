@@ -21,11 +21,7 @@ import {
   TabsTrigger,
 } from "../ui/tabs";
 import { useState, useMemo, useEffect } from "react";
-import CardProjeto from "../card/CardProjeto";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { useFetch } from "@/hooks/useFetch";
-import { ResearchSIMCC } from "@/core/interface/Pesquisador/ResearcherSIMCC";
-import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import CardProjeto from "../projeto/CardProjeto";
 import CardArtigo from "../card/CardArtigos";
 import Masonry from "react-responsive-masonry";
 import useSWR from "swr";

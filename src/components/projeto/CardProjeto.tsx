@@ -1,7 +1,7 @@
 import { Maximize2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import Projeto from "../escola/Projeto";
+import Projeto from "./ProjetoDrawer";
 import { Project } from "@/core/interface/Project";
 
 interface ProjectProps {

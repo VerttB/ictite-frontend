@@ -14,7 +14,7 @@ import useSWR from "swr";
 import { getResearcherById, getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
 import { Article } from "@/core/interface/Pesquisador/Article";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
-import CardProjeto from "../card/CardProjeto";
+import CardProjeto from "../projeto/CardProjeto";
 
 export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) => {
     const [activeTab, setActiveTab] = useState("artigos")
