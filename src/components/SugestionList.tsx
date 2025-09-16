@@ -1,5 +1,4 @@
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { SchoolData } from "@/core/interface/School";
+
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import { capitalize } from "@/core/utils/capitalize";
 import Link from "next/link";

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { House, Printer, PanelsTopLeft } from "lucide-react"
 
 import { useState } from "react"
-import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/hooks/useSchools"
+import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers, useSchoolStatistcs } from "@/hooks/useSchools"
 import { Spinner } from "../LoadingSpin"
 import CardProjeto from "../projeto/CardProjeto"
 import CardEquipamento from "../card/CardEquipamento"
