@@ -20,11 +20,13 @@ type LngLatBoundsLike =
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY
 
 
+const url_base = process.env.NEXT_PUBLIC_BASE_URL
+
 export default function MapaRender() {
   const router = useRouter()
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
-  const { data: geojsonData, loading } = useFetch<any>("http://localhost:8000/schools/geojson")
+  const { data: geojsonData, loading } = useFetch<any>(`${url_base}/schools/geojson`)
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);
