@@ -11,7 +11,7 @@ import CardProjeto from "../card/CardProjeto"
 import CardEquipamento from "../card/CardEquipamento"
 import CardPesquisador from "../card/CardPesquisador"
 import { Researcher } from "@/core/interface/Pesquisador/Researcher"
-import Pesquisador from "./Pesquisador"
+import Pesquisador from "../pesquisador/PesquisadorDrawer"
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   const [activeTab, setActiveTab] = useState("pesquisadores")

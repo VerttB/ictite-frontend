@@ -30,6 +30,7 @@ import CardArtigo from "../card/CardArtigos";
 import Masonry from "react-responsive-masonry";
 import useSWR from "swr";
 import { getResearcherById, getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
+import { useRouter } from "next/navigation";
 
 interface PesquisadorProps {
   isOpen: boolean;
@@ -43,6 +44,7 @@ export default function Pesquisador({
   researcherId,
 }: PesquisadorProps) {
   if (!researcherId) return null;
+  const router = useRouter()
   const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
   const {data:researcher, isLoading} = useSWR(`simcc-researcher-${researcherId}`,() => getResearcherById(researcherId, true))
   const {data: projects, isLoading: isLoadingProjects} = useSWR(`researcher-projects-${researcherId}`, () => getResearcherProjects(researcherId))
@@ -50,7 +52,7 @@ export default function Pesquisador({
   if(!researcher) return null;
   if(researcher.articles)
     researcher.articles.sort( (a,b) => b.year - a.year)
-  console.log(projects)
+ 
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
       <DrawerContent>
@@ -179,7 +181,10 @@ export default function Pesquisador({
                 <TabsContent value="projetos" className="mt-4">
                   <div className="grid grid-cols-2 gap-4">
                     {projects && projects?.map((projeto, i) => (
-                      <CardProjeto key={i} project={projeto} />
+                      <CardProjeto 
+                                  key={i}
+                                  project={projeto}
+                                  onClick={() => router.push(`projetos/${projeto.id}`)} />
                     ))}
                   </div>
                 </TabsContent>
