@@ -1,6 +1,6 @@
 import { GETictite } from "@/core/service/ICTITEService";
 import { Ictite } from "@/core/interface/IIctite";
-import { SearchBar } from "@/components/escola/SearchBar";
+import { SearchBar } from "@/components/SearchBar";
 import Mapa from "@/components/Mapa";
 
 export default async function ProjetoPage() {

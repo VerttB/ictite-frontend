@@ -9,7 +9,6 @@ import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Project } from "@/core/interface/Project";
 import { capitalize } from "@/core/utils/capitalize";
 import { useRouter } from "next/navigation";
-import { getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
 
 interface ProjetoProps {
     isOpen: boolean;

@@ -10,8 +10,7 @@ import { Spinner } from "../LoadingSpin"
 import CardProjeto from "../card/CardProjeto"
 import CardEquipamento from "../card/CardEquipamento"
 import CardPesquisador from "../card/CardPesquisador"
-import { Researcher } from "@/core/interface/Pesquisador/Researcher"
-import Pesquisador from "../pesquisador/PesquisadorDrawer"
+
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   const [activeTab, setActiveTab] = useState("pesquisadores")
@@ -19,11 +18,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   const { researchers, isLoading: loadingRes } = useSchoolResearchers(schoolId)
   const { equipments, isLoading: loadingEq } = useSchoolEquipments(schoolId)
   const { projects, isLoading: loadingPr } = useSchoolProjects(schoolId)
-
-  const [ selectedReseacher, setSelectedResearcher ] = useState<Researcher | null>(null);
-  const [openDrawer, setOpenDrawer] = useState(false)
   
-
   return (
     <>
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
