@@ -1,6 +1,7 @@
-import { getSchoolById, getSchools } from "@/core/service/School/SchoolService"
+import { getSchoolById, getSchools, getSchoolStatistics } from "@/core/service/School/SchoolService"
 import Image from "next/image"
 import { EscolaTabs } from "@/components/escola/EscolaTabs"
+import { capitalize } from "@/core/utils/capitalize";
 
 
 
@@ -13,7 +14,9 @@ export default async function Page({
     
     const { id } = await params
     const school = await getSchoolById(id)
+    const schoolStatistics = await getSchoolStatistics(id)
     if(!school) throw new Error("Erro")
+    console.log(schoolStatistics)
     return(
              
                     <div className="flex flex-col gap-8  px-10"> 
@@ -33,6 +36,13 @@ export default async function Page({
                                     <p className="text-2xl font-semibold text-gray-400" >{school.description}</p>
                                 </div>
                             </div>
+                            </div>
+                            <div className="flex flex-row w-full gap-8 h-24 justify-between">
+                                {schoolStatistics && Object.entries(schoolStatistics).map(([key, value]) => (
+                                <div key={key} className="bg-cinza-light rounded-md w-full p-4 flex items-center justify-center text-2xl">
+                                        {capitalize(key)}: {value}
+                                </div>
+                                                    ))}
                             </div>
                             <EscolaTabs schoolId={school.id}/>
                         </div>

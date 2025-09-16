@@ -2,6 +2,7 @@ import { Equipment } from "@/core/interface/Equipment";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
 import { SchoolData } from "@/core/interface/School";
+import { SchoolStatistics } from "@/core/interface/School/SchoolStatistics";
 
 const url_base = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -107,3 +108,23 @@ export const getSchoolEquiments = async (id:string):Promise<Equipment[]> => {
         return []; 
     }
 }
+
+
+export const getSchoolStatistics = async (id:string):Promise<SchoolStatistics | null> => {
+     try{
+        const res  = await fetch(`${url_base}/schools/${id}/statistics`)
+        
+        if (!res.ok) {
+            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
+        }
+
+        const  data = res.json()
+
+        return data
+    } catch (e) {
+        console.error("Falha ao buscar equipamentos de escolas:", e);
+        return null; 
+    }
+}
+
+

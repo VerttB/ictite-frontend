@@ -3,14 +3,12 @@ import { School, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import Image from "next/image";
-import CardPesquisador from "../card/CardPesquisador";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import CardPesquisador from "../pesquisador/CardPesquisador";
 import useSWR from "swr";
-import { getProjects, getProjectResearchers } from "@/core/service/ProjetoService";
+import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Project } from "@/core/interface/Project";
 import { capitalize } from "@/core/utils/capitalize";
 import { useRouter } from "next/navigation";
-import { getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
 
 interface ProjetoProps {
     isOpen: boolean;

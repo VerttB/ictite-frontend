@@ -5,13 +5,12 @@ import { Button } from "@/components/ui/button"
 import { House, Printer, PanelsTopLeft } from "lucide-react"
 
 import { useState } from "react"
-import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/hooks/useSchools"
+import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers, useSchoolStatistcs } from "@/hooks/useSchools"
 import { Spinner } from "../LoadingSpin"
-import CardProjeto from "../card/CardProjeto"
+import CardProjeto from "../projeto/CardProjeto"
 import CardEquipamento from "../card/CardEquipamento"
-import CardPesquisador from "../card/CardPesquisador"
-import { Researcher } from "@/core/interface/Pesquisador/Researcher"
-import Pesquisador from "./Pesquisador"
+import CardPesquisador from "../pesquisador/CardPesquisador"
+
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   const [activeTab, setActiveTab] = useState("pesquisadores")
@@ -19,11 +18,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   const { researchers, isLoading: loadingRes } = useSchoolResearchers(schoolId)
   const { equipments, isLoading: loadingEq } = useSchoolEquipments(schoolId)
   const { projects, isLoading: loadingPr } = useSchoolProjects(schoolId)
-
-  const [ selectedReseacher, setSelectedResearcher ] = useState<Researcher | null>(null);
-  const [openDrawer, setOpenDrawer] = useState(false)
   
-
   return (
     <>
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

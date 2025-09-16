@@ -1,9 +1,9 @@
 import { Project } from '@/core/interface/Project'
-import { getSchoolEquiments, getSchoolProjects, getSchoolResearchers } from '@/core/service/School/SchoolService'
+import { getSchoolEquiments, getSchoolProjects, getSchoolResearchers, getSchoolStatistics } from '@/core/service/School/SchoolService'
 import useSWR from 'swr'
 
 export const useSchoolResearchers = (id: string) => {
-    const { data, isLoading , error} = useSWR(id ? `school-${id}-researchers` : null, () => getSchoolResearchers(id),)
+    const { data, isLoading , error} = useSWR(id ? `school-${id}-researchers` : null, () => getSchoolResearchers(id))
 
 
     return {
@@ -14,7 +14,7 @@ export const useSchoolResearchers = (id: string) => {
 }
 
 export const useSchoolProjects = (id: string) => {
-    const { data, isLoading , error} = useSWR<Project[]>(id ? `school-${id}-projects` : null, () => getSchoolProjects(id),)
+    const { data, isLoading , error} = useSWR<Project[]>(id ? `school-${id}-projects` : null, () => getSchoolProjects(id))
 
 
     return {
@@ -25,12 +25,21 @@ export const useSchoolProjects = (id: string) => {
 }
 
 export const useSchoolEquipments = (id: string) => {
-    const { data, isLoading , error} = useSWR( id ? `school-${id}-equipments` : null, () => getSchoolEquiments(id),)
+    const { data, isLoading , error} = useSWR( id ? `school-${id}-equipments` : null, () => getSchoolEquiments(id))
 
 
     return {
         equipments: data,
         isLoading,
         errorEquipments: error
+    }
+}
+
+export const useSchoolStatistcs = (id:string) => {
+    const { data, isLoading, error} = useSWR( id ? `school-${id}-statistics` : null, () => getSchoolStatistics(id))
+    return {
+        statistics: data,
+        isLoading,
+        errorStatistics: error
     }
 }

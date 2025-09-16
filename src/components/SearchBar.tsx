@@ -1,15 +1,12 @@
 'use client'
 import { Search } from "lucide-react"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { getSchools } from "@/core/service/School/SchoolService"
-import Link from "next/link"
-
 import { getResearchers } from "@/core/service/Pesquisador/PesquisadorService"
 import { SugestionList } from "./SugestionList"
 import { SugestionBase } from "@/core/interface/SugestionBase"
-import useSWR from "swr"
 import { getProjects } from "@/core/service/ProjetoService"
 
 

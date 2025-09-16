@@ -3,7 +3,7 @@ import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Book } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import Pesquisador from "../escola/Pesquisador";
+import Pesquisador from "../pesquisador/PesquisadorDrawer";
 
 interface CardPesquisadorProps {
     onClick?: () => void; // Adicione esta prop
