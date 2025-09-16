@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["picsum.photos", "200.128.66.226", "images.unsplash.com", "plus.unsplash.com"]
     
-  }
+  },
+  output:'standalone'
 };
 
 export default nextConfig;
