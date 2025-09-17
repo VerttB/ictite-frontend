@@ -57,7 +57,7 @@ export default function Videos () {
                         <PlaySquare size={18}/>
                         Vídeos Tutorias e Explicativos
                     </h2>
-                    <p className="text-xs text-gray-300">Versão pré-beta do site ICTITE</p>
+                    <p className="text-xs text-gray-300">Versão beta β 1.0 do site ICTITE</p>
                 </div>
                 <p>Bem-vindo à nossa aba de vídeos! Nesta seção, você encontrará um acervo dinâmico de conteúdos 
                     audiovisuais produzidos para apoiar sua jornada no mundo da pesquisa e inovação educacional.
