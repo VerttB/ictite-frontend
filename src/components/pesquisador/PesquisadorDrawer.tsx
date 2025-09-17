@@ -180,7 +180,7 @@ export default function Pesquisador({
                       <CardProjeto 
                                   key={i}
                                   project={projeto}
-                                  onClick={() => router.push(`projetos/${projeto.id}`)} />
+                                  onClick={() => router.push(`/projetos/${projeto.id}`)} />
                     ))}
                   </div>
                 </TabsContent>
