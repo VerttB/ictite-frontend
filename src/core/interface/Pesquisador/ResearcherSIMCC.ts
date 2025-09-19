@@ -1,4 +1,5 @@
 import { Bolsistas } from "./Bolsistas"
+import { GraduatePrograms } from "./GraduatePrograms"
 
 import { Ufmg } from "./UFMG"
 import { User } from "./User"
