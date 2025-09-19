@@ -40,7 +40,7 @@ export default function MapaRender() {
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/verttb/cmdp67hh801z201sa4xjdet4o",
+      style: "mapbox://styles/mapbox/navigation-night-v1",
       center: [-41.5, -12.9],
       zoom: 5,
       maxBounds: brazilBounds
