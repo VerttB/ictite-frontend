@@ -6,7 +6,7 @@ export const GETBibliographicProductionResearcher = async (researcherId: string,
         const data = await res.json();
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e)
     }
 }

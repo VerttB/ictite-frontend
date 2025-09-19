@@ -1,12 +1,10 @@
 "use client"
 import CardPesquisador from "./CardPesquisador"
 import { capitalize } from "@/core/utils/capitalize"
-import { useRouter } from "next/navigation"
 import useSWR from "swr"
 import { getProjectResearchers } from "@/core/service/ProjetoService"
 import { Spinner } from "../LoadingSpin"
 export const PesquisadoresLista = ({projectId}:{projectId:string}) => {
-    const router = useRouter()
     const {data : pesquisadores, isLoading} = useSWR(`project-${projectId}`, () => getProjectResearchers(projectId))
     console.log(pesquisadores)
     return(

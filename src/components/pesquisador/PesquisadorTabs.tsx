@@ -11,14 +11,13 @@ import {
 import Masonry from "react-responsive-masonry";
 import CardArtigo from "../card/CardArtigos";
 import useSWR from "swr";
-import { getResearcherById, getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
-import { Article } from "@/core/interface/Pesquisador/Article";
+import {  getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../projeto/CardProjeto";
 
 export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) => {
     const [activeTab, setActiveTab] = useState("artigos")
-    const {data: projects, isLoading: isLoadingProjects} = useSWR(`researcher-projects-${researcher.id}`, () => getResearcherProjects(researcher.id))
+    const {data: projects} = useSWR(`researcher-projects-${researcher.id}`, () => getResearcherProjects(researcher.id))
 
     if(!researcher) return null
     researcher.articles.sort( (a,b) => b.year - a.year)

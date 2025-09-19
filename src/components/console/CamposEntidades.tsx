@@ -1,5 +1,5 @@
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { LucideIcon, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { LucideIcon } from "lucide-react";
 
 interface EntidadeProps {
     nome  : string;

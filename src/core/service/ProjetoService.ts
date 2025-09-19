@@ -1,4 +1,3 @@
-import { Researcher } from "../interface/Pesquisador/Researcher";
 import { Project, ProjectResearchers } from "../interface/Project";
 
 const url_base = process.env.NEXT_PUBLIC_BASE_URL
@@ -11,7 +10,7 @@ export const  getProjects = async (name: string = "") => {
         const data = await res.json();
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e);
     }
 }
@@ -23,7 +22,7 @@ export const  getProjectById = async (projectId:string): Promise<Project | null>
         const data = await res.json();
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e);
         return null;
     }
@@ -37,7 +36,7 @@ export const  getProjectResearchers= async (projectId : string): Promise<Project
         console.log(data)
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e);
         return null
     }

@@ -21,7 +21,7 @@ export const Header = () => {
             </div>
             <div className="flex flex-row gap-5">
                 <Link href={"/console"}>
-                    <Button variant={"outline"} style={{ boxShadow: "2px 2px 3px rgba(0, 0, 0, .4)"}} className="text-xl  cursor-pointerrounded-xl cursor-pointer py-1 px-10">
+                    <Button variant={"outline"}  className="text-xl  cursor-pointerrounded-xl cursor-pointer py-1 px-10">
                         <Bolt />
                         Console
                     </Button>

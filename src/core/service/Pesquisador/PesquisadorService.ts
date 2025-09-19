@@ -11,7 +11,7 @@ export const  getResearchers = async (name: string) => {
         const data = await res.json();
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e);
     }
 }
@@ -24,7 +24,7 @@ export async function getResearcherById (researcherId:string ,full: boolean = fa
         const data = await res.json();
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e);
         return null
     }
@@ -38,7 +38,7 @@ export async function getResearcherProjects (researcherId:string): Promise<Proje
         const data = await res.json();
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e);
         return null
     }
@@ -52,7 +52,7 @@ export const GetPesquisadorSIMCC = async (name: string) => {
         const data = await res.json();
         return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e)
     }
 }

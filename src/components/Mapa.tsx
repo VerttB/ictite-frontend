@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import mapboxgl from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 
@@ -9,9 +9,10 @@ import {
   PopoverAnchor, 
 } from "@/components/ui/popover"
 import { SchoolData } from "@/core/interface/School"
-import { useFetch } from "@/hooks/useFetch"
 import { Spinner } from "./LoadingSpin"
 import { useRouter } from "next/navigation"
+import useSWR from "swr"
+import { getSchoolGeoData } from "@/core/service/School/SchoolService"
 
 type LngLatBoundsLike =
   | [[number, number], [number, number]]
@@ -19,21 +20,18 @@ type LngLatBoundsLike =
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_KEY
 
-
-const url_base = process.env.NEXT_PUBLIC_BASE_URL
-
 export default function MapaRender() {
   const router = useRouter()
   const mapRef = useRef<mapboxgl.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
-  const { data: geojsonData, loading } = useFetch<any>(`${url_base}/schools/geojson`)
+  const { data: geojsonData, isLoading:loading } = useSWR('schools-geo-data', getSchoolGeoData)
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);
-  const brazilBounds: LngLatBoundsLike = [
+  const brazilBounds = useMemo<LngLatBoundsLike>(() => [
     [-74.0, -34.0],
     [-34.0, 5.5]
-  ]
+  ], []);
 
   useEffect(() => {
     if (!geojsonData || !mapContainerRef.current || !process.env.NEXT_PUBLIC_MAPBOX_KEY) return
@@ -105,7 +103,7 @@ export default function MapaRender() {
     });
 
     return () => { map.remove() };
-  }, [geojsonData]);
+  }, [geojsonData, brazilBounds, router]);
 
   if (loading) return <div className="h-64 w-full flex flex-col items-center justify-center">
     <Spinner />

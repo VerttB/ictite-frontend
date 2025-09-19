@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SchoolData } from "@/core/interface/School";
 import { getSchools } from "@/core/service/School/SchoolService";
-import { Book, BookOpen, Box, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Newspaper, Save, School2, Upload, X } from "lucide-react";
+import { Book, BookOpen, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Newspaper, Save, School2, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -42,7 +42,7 @@ export default function Console () {
         try {
             const data = await getSchools();
             setSchools(data || []);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Erro ao buscar escolas:", err);
             setSchoolsError("Não foi possível carregar as escolas.");
             setSchools([]);

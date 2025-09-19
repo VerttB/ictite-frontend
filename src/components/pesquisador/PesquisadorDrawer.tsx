@@ -20,7 +20,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../ui/tabs";
-import { useState, useMemo, useEffect } from "react";
+import { useState} from "react";
 import CardProjeto from "../projeto/CardProjeto";
 import CardArtigo from "../card/CardArtigos";
 import Masonry from "react-responsive-masonry";
@@ -39,11 +39,19 @@ export default function Pesquisador({
   onClose,
   researcherId,
 }: PesquisadorProps) {
-  if (!researcherId) return null;
   const router = useRouter()
   const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
-  const {data:researcher, isLoading} = useSWR(`simcc-researcher-${researcherId}`,() => getResearcherById(researcherId, true))
-  const {data: projects, isLoading: isLoadingProjects} = useSWR(`researcher-projects-${researcherId}`, () => getResearcherProjects(researcherId))
+
+  const { data: researcher, isLoading } = useSWR(
+    researcherId ? `simcc-researcher-${researcherId}` : null,
+    () => getResearcherById(researcherId, true)
+  ); 
+  
+  const { data: projects } = useSWR(
+    researcherId ? `researcher-projects-${researcherId}` : null,
+    () => getResearcherProjects(researcherId)
+
+  );  if (!researcherId) return null;
 
   if(!researcher) return null;
   if(researcher.articles)

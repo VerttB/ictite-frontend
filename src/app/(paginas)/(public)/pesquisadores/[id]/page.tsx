@@ -1,8 +1,6 @@
 import { PesquisadorTabs } from "@/components/pesquisador/PesquisadorTabs";
-import { Button } from "@/components/ui/button";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { getResearcherById } from "@/core/service/Pesquisador/PesquisadorService";
-import { GraduationCap, MapPin, X } from "lucide-react";
+import { GraduationCap, MapPin} from "lucide-react";
 import Image from "next/image";
 
 export default async function Page({

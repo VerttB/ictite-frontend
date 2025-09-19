@@ -9,9 +9,10 @@ export const  GETictite = async ():Promise<Ictite> => {
         const data = await res.json();
          return data;
 
-    }catch(e: any){
+    }catch(e: unknown){
         console.error(e);
-        throw new Error(e)
+        
+        throw new Error("Erro ao buscar ictite")
        
     }
 

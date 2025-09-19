@@ -15,10 +15,9 @@ export const SearchBar = () => {
     const [value, setValue ] = useState("")
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [sugestions,setSugestions] = useState<Record<string, SugestionBase[]>>({pesquisadores:[], escolas: [], projetos: []})
-    const [isFocused, setIsFocused] = useState<boolean>()
     
     const handleValueChange = (e:ChangeEvent<HTMLInputElement>) => {
-        setValue(_ => e.target.value)
+        setValue(e.target.value)
        
     }
 
@@ -65,8 +64,7 @@ export const SearchBar = () => {
             type={"search"}
             placeholder="Busca por escola, pesquisador ou projetos" 
             className="px-4 pr-10 py-2 w-full rounded-lg border-2"
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}/>
+         />
         <Button
             variant={"ghost"}
             size={"icon"}
