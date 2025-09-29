@@ -19,7 +19,6 @@ interface ProjetoProps {
 export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
     const router = useRouter();
     const {data : pesquisadores} = useSWR(`project-${project.id}`, () => getProjectResearchers(project.id))
-    console.log(pesquisadores)
     
     return(
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >

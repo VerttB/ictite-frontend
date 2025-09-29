@@ -33,7 +33,6 @@ export const  getProjectResearchers= async (projectId : string): Promise<Project
         const res: Response = await fetch(`${url_base}/projects/${projectId}/researchers`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();
-        console.log(data)
         return data;
 
     }catch(e: unknown){

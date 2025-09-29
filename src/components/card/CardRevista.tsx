@@ -15,7 +15,6 @@ export default function CardRevista ({ revista }: CardRevistaProps) {
     const handleCopiarLink = async () => {
         try {
             await navigator.clipboard.writeText(revista.link)
-            console.log("Link copiado para a área de transferência!")
             toast.success("Link copiado para a área de transferência!")
         } catch (error) {
             console.error("Falha ao copiar o link: ", error);

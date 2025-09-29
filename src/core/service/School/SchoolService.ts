@@ -41,7 +41,6 @@ export const getSchoolById =  async (id: string, full:boolean=false):Promise<Sch
 }
 
 export const getSchools = async (name:string = "", city:string = ""): Promise<SchoolData[]> => {
-    console.log(url_base)
      try{
         const res  = await fetch(`${url_base}/schools/?name=${name}&city=${city}`)
         

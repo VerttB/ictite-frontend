@@ -6,7 +6,6 @@ import { getProjectResearchers } from "@/core/service/ProjetoService"
 import { Spinner } from "../LoadingSpin"
 export const PesquisadoresLista = ({projectId}:{projectId:string}) => {
     const {data : pesquisadores, isLoading} = useSWR(`project-${projectId}`, () => getProjectResearchers(projectId))
-    console.log(pesquisadores)
     return(
     <>
         {isLoading ? <Spinner/> : pesquisadores && Object.keys(pesquisadores).map((key:string ) => {

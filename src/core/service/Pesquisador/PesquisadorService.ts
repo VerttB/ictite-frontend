@@ -32,7 +32,6 @@ export async function getResearcherById (researcherId:string ,full: boolean = fa
 
 export async function getResearcherProjects (researcherId:string): Promise<Project[] | null> {
     try{
-        console.log("Tentando pegar projetos de pesquisador")
         const res: Response = await fetch(`${url_base}/researchers/${researcherId}/projects`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();

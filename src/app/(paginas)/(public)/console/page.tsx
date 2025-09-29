@@ -126,7 +126,6 @@ export default function Console () {
             
             toast.success(`Importados: ${result.imported}. Erros: ${result.errors?.length || 0}`);
             
-            console.log("Resultado do back:", result);
         } catch (err) {
             
             console.error(err);

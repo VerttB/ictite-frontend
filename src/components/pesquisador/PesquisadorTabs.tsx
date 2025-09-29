@@ -1,6 +1,6 @@
 'use client'
 import { House, PanelsTopLeft, Printer } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import {
   Tabs,
@@ -19,9 +19,13 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
     const [activeTab, setActiveTab] = useState("artigos")
     const {data: projects} = useSWR(`researcher-projects-${researcher.id}`, () => getResearcherProjects(researcher.id))
 
+
     if(!researcher) return null
     researcher.articles.sort( (a,b) => b.year - a.year)
-    console.log(projects)
+
+    useEffect(() => {
+
+    }, [])
     return(
         <>
      
