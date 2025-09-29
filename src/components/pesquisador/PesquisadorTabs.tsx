@@ -1,6 +1,6 @@
 'use client'
 import { House, PanelsTopLeft, Printer } from "lucide-react"
-import { useEffect, useState } from "react"
+import {  useState } from "react"
 import { Button } from "../ui/button"
 import {
   Tabs,
