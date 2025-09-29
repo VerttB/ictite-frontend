@@ -9,28 +9,28 @@ export const Footer = () => {
 >
 
             <Image
-            src={"/apoios/UnebLogo.svg"}
+            src={"/ictite/v1/web/apoios/UnebLogo.svg"}
             alt="Logo"
             width={96}
             height={96}
             className="inline-block object-contain"
                     />
             <Image
-            src={"/apoios/fapesbLogo.jpg"}
+            src={"/ictite/v1/web/apoios/fapesbLogo.jpg"}
             alt="Logo"
             width={96}
             height={96}
             className="inline-block object-contain"
             />           
             <Image
-            src={"/apoios/governoDoEstadoLogo.png"}
+            src={"/ictite/v1/web/apoios/governoDoEstadoLogo.png"}
             alt="Logo"
             width={96}
             height={96}
             className="inline-block object-contain"
             />   
              <Image
-            src={"/apoios/fiocruzLogo.png"}
+            src={"/ictite/v1/web/apoios/fiocruzLogo.png"}
             alt="Logo"
             width={96}
             height={96}

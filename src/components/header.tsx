@@ -7,7 +7,7 @@ export const Header = () => {
         <header className="w-full p-3 bg-cinza-light flex justify-between items-center">
             <div className="flex justify-between gap-4">
                 <Image
-                src={"/logoImagem.png"}
+                src={"/ictite/v1/web/logoImagem.png"}
                 alt="Logo"
                 width={192}
                 height={192}
