@@ -1,3 +1,7 @@
+'use client'
+
+import React from 'react'
+
 export default function Projeto(){
     return(
         <div className="w-full  overflow-hidden ">

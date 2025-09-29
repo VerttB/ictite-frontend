@@ -6,10 +6,10 @@ import { getSchoolById, getSchoolStatistics } from "@/core/service/School/School
 import Image from "next/image"
 import { EscolaTabs } from "@/components/escola/EscolaTabs"
 import { capitalize } from "@/core/utils/capitalize";
+import { useParams } from "next/navigation";
 
-export default function Page({ params }: { params: { id: string } }){
-  const { id } = params
-
+export default function Page(){
+  const { id } = useParams<{ id: string }>();
   const { data: school, error: schoolError } = useSWR(id ? ["school", id] : null, () => getSchoolById(id))
   const { data: schoolStatistics, error: statsError } = useSWR(id ? ["schoolStatistics", id] : null, () => getSchoolStatistics(id))
 

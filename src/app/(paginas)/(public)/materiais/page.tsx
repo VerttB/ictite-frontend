@@ -1,3 +1,6 @@
+'use client'
+
+import React from 'react';
 import CardMateriais from "@/components/card/CardMateriais";
 import { Button } from "@/components/ui/button";
 import { BookText, ChevronLeft } from "lucide-react";
