@@ -11,7 +11,7 @@ export const getSchoolGeoData =  async () => {
         const res  = await fetch(`${url_base}/schools/geojson/`)
         
         if (!res.ok) {
-            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
+            throw new Error(`Erro na buca: ${res.status} ${res.statusText}`);
         }
 
         const  data = await res.json()

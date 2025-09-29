@@ -1,0 +1,13 @@
+services:
+  ictite-front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: next-app
+    ports:
+      - "8010:8010"
+    environment:
+      NODE_ENV: production
+      API_INTERNAL_URL: "http://api:8000"
+      NEXT_PUBLIC_BASE_URL: "http://200.128.66.226/ictite/v1/api"
+    restart: unless-stopped

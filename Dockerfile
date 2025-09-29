@@ -22,6 +22,6 @@ COPY --from=BUILD_IMAGE /app/.next ./.next
 COPY --from=BUILD_IMAGE /app/public ./public
 
 EXPOSE 3030
-CMD ["npm", "start"] 
+CMD ["npm", "start", "--", "-p", "8010"] 
 
 
