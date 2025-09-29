@@ -23,9 +23,6 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
     if(!researcher) return null
     researcher.articles.sort( (a,b) => b.year - a.year)
 
-    useEffect(() => {
-
-    }, [])
     return(
         <>
      
