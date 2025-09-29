@@ -8,7 +8,7 @@ const url_base = process.env.NEXT_PUBLIC_BASE_URL
 
 export const getSchoolGeoData =  async () => {
     try{
-        const res  = await fetch(`${url_base}/schools/geojson/`)
+        const res  = await fetch(`${url_base}/schools/geojson`)
         
         if (!res.ok) {
             throw new Error(`Erro na buca: ${res.status} ${res.statusText}`);

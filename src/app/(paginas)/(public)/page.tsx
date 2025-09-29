@@ -1,10 +1,23 @@
+"use client"
+
+import React from "react";
+import useSWR from "swr";
 import { GETictite } from "@/core/service/ICTITEService";
 import { Ictite } from "@/core/interface/IIctite";
 import { SearchBar } from "@/components/SearchBar";
 import Mapa from "@/components/Mapa";
+import { Spinner } from "@/components/LoadingSpin";
 
-export default async function ProjetoPage() {
-  const projeto: Ictite = await GETictite();
+export default function ProjetoPage() {
+  const { data: projeto, error } = useSWR<Ictite, Error>("ictite", GETictite);
+
+  if (!projeto && !error) return (
+    <div className="px-8 py-6"><Spinner size="large">Carregando...</Spinner></div>
+  )
+
+  if (error) return (
+    <div className="px-8 py-6 text-red-600">{error.message || 'Erro ao carregar projeto'}</div>
+  )
 
   return (
     <div className="w-full px-8 flex flex-col gap-4 space-between rounded-xl">
@@ -16,7 +29,7 @@ export default async function ProjetoPage() {
             px-4 py-6 border-2 indent-4
           "
         >
-          <h1 className="">{projeto.objective}</h1>
+          <h1 className="">{projeto?.objective}</h1>
         </div>
       </div>
       <SearchBar/>
