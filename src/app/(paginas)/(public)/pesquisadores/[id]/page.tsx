@@ -3,7 +3,7 @@
 import React from "react";
 import useSWR from "swr";
 import { PesquisadorTabs } from "@/components/pesquisador/PesquisadorTabs";
-import { getResearcherById } from "@/core/service/Pesquisador/PesquisadorService";
+import { getResearcherById } from "@/core/service/PesquisadorService";
 import { GraduationCap, MapPin} from "lucide-react";
 import Image from "next/image";
 import { Spinner } from "@/components/LoadingSpin";

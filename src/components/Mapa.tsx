@@ -12,7 +12,7 @@ import { SchoolData } from "@/core/interface/School"
 import { Spinner } from "./LoadingSpin"
 import { useRouter } from "next/navigation"
 import useSWR from "swr"
-import { getSchoolGeoData } from "@/core/service/School/SchoolService"
+import { getSchoolGeoData } from "@/core/service/SchoolService"
 
 type LngLatBoundsLike =
   | [[number, number], [number, number]]

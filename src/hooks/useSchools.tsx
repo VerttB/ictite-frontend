@@ -1,5 +1,5 @@
 import { Project } from '@/core/interface/Project'
-import { getSchoolEquiments, getSchoolProjects, getSchoolResearchers, getSchoolStatistics } from '@/core/service/School/SchoolService'
+import { getSchoolEquiments, getSchoolProjects, getSchoolResearchers, getSchoolStatistics } from '@/core/service/SchoolService'
 import useSWR from 'swr'
 
 export const useSchoolResearchers = (id: string) => {

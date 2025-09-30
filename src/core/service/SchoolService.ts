@@ -3,12 +3,14 @@ import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
 import { SchoolData } from "@/core/interface/School";
 import { SchoolStatistics } from "@/core/interface/School/SchoolStatistics";
+import { getBaseUrl } from "@/core/utils/api";
 
 const url_base = process.env.NEXT_PUBLIC_BASE_URL
 
 export const getSchoolGeoData =  async () => {
+    console.log(url_base)
     try{
-        const res  = await fetch(`${url_base}/schools/geojson`)
+        const res  = await fetch(`${getBaseUrl()}/schools/geojson/`)
         
         if (!res.ok) {
             throw new Error(`Erro na buca: ${res.status} ${res.statusText}`);
@@ -25,7 +27,7 @@ export const getSchoolGeoData =  async () => {
 
 export const getSchoolById =  async (id: string, full:boolean=false):Promise<SchoolData | null> => {
     try{
-        const res  = await fetch(`${url_base}/schools/${id}?full=${full}`)
+        const res  = await fetch(`${getBaseUrl()}/schools/${id}?full=${full}`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -42,7 +44,7 @@ export const getSchoolById =  async (id: string, full:boolean=false):Promise<Sch
 
 export const getSchools = async (name:string = "", city:string = ""): Promise<SchoolData[]> => {
      try{
-        const res  = await fetch(`${url_base}/schools/?name=${name}&city=${city}`)
+        const res  = await fetch(`${getBaseUrl()}/schools/?name=${name}&city=${city}`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -59,7 +61,7 @@ export const getSchools = async (name:string = "", city:string = ""): Promise<Sc
 
 export const getSchoolResearchers = async (id:string): Promise<Researcher[]> => {
      try{
-        const res  = await fetch(`${url_base}/schools/${id}/researchers`)
+        const res  = await fetch(`${getBaseUrl()}/schools/${id}/researchers`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -76,7 +78,7 @@ export const getSchoolResearchers = async (id:string): Promise<Researcher[]> => 
 
 export const getSchoolProjects = async (id:string):Promise<Project[]> => {
      try{
-        const res  = await fetch(`${url_base}/schools/${id}/projects`)
+        const res  = await fetch(`${getBaseUrl()}/schools/${id}/projects`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -93,7 +95,7 @@ export const getSchoolProjects = async (id:string):Promise<Project[]> => {
 
 export const getSchoolEquiments = async (id:string):Promise<Equipment[]> => {
      try{
-        const res  = await fetch(`${url_base}/schools/${id}/equipments`)
+        const res  = await fetch(`${getBaseUrl()}/schools/${id}/equipments`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -111,7 +113,7 @@ export const getSchoolEquiments = async (id:string):Promise<Equipment[]> => {
 
 export const getSchoolStatistics = async (id:string):Promise<SchoolStatistics | null> => {
      try{
-        const res  = await fetch(`${url_base}/schools/${id}/statistics`)
+        const res  = await fetch(`${getBaseUrl()}/schools/${id}/statistics`)
         
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);

@@ -25,7 +25,7 @@ import CardProjeto from "../projeto/CardProjeto";
 import CardArtigo from "../card/CardArtigos";
 import Masonry from "react-responsive-masonry";
 import useSWR from "swr";
-import { getResearcherById, getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
+import { getResearcherById, getResearcherProjects } from "@/core/service/PesquisadorService";
 import { useRouter } from "next/navigation";
 
 interface PesquisadorProps {

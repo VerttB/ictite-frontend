@@ -2,7 +2,7 @@
 
 import React from "react";
 import useSWR from "swr";
-import { getSchoolById, getSchoolStatistics } from "@/core/service/School/SchoolService"
+import { getSchoolById, getSchoolStatistics } from "@/core/service/SchoolService"
 import Image from "next/image"
 import { EscolaTabs } from "@/components/escola/EscolaTabs"
 import { capitalize } from "@/core/utils/capitalize";

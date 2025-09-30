@@ -1,11 +1,9 @@
 import { Project, ProjectResearchers } from "../interface/Project";
-
-const url_base = process.env.NEXT_PUBLIC_BASE_URL
-
+import { getBaseUrl } from "../utils/api";
 
 export const  getProjects = async (name: string = "") => {
     try{
-        const res: Response = await fetch(`${url_base}/projects/?name=${name}`);
+        const res: Response = await fetch(`${getBaseUrl()}/projects/?name=${name}`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();
         return data;
@@ -17,7 +15,7 @@ export const  getProjects = async (name: string = "") => {
 
 export const  getProjectById = async (projectId:string): Promise<Project | null> => {
     try{
-        const res: Response = await fetch(`${url_base}/projects/${projectId}`);
+        const res: Response = await fetch(`${getBaseUrl()}/projects/${projectId}`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();
         return data;
@@ -30,7 +28,7 @@ export const  getProjectById = async (projectId:string): Promise<Project | null>
 
 export const  getProjectResearchers= async (projectId : string): Promise<ProjectResearchers | null> => {
     try{
-        const res: Response = await fetch(`${url_base}/projects/${projectId}/researchers`);
+        const res: Response = await fetch(`${getBaseUrl()}/projects/${projectId}/researchers`);
         if(!res) throw new Error(`Erro: ${res}`)
         const data = await res.json();
         return data;

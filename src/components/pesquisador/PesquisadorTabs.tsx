@@ -11,7 +11,7 @@ import {
 import Masonry from "react-responsive-masonry";
 import CardArtigo from "../card/CardArtigos";
 import useSWR from "swr";
-import {  getResearcherProjects } from "@/core/service/Pesquisador/PesquisadorService";
+import {  getResearcherProjects } from "@/core/service/PesquisadorService";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../projeto/CardProjeto";
 

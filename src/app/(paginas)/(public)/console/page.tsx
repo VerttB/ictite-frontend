@@ -4,7 +4,7 @@ import CardEntidade from "@/components/card/CardEntidade";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SchoolData } from "@/core/interface/School";
-import { getSchools } from "@/core/service/School/SchoolService";
+import { getSchools } from "@/core/service/SchoolService";
 import { Book, BookOpen, ChevronLeft, ClipboardList, Cpu, File, FileText, Folder, Milestone, Newspaper, Save, School2, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";

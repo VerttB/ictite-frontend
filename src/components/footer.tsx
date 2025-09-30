@@ -1,3 +1,4 @@
+import { getAssetPrefix } from "@/core/utils/api"
 import Image from "next/image"
 export const Footer = () => {
     return(
@@ -9,28 +10,28 @@ export const Footer = () => {
 >
 
             <Image
-            src={"/ictite/v1/web/apoios/UnebLogo.svg"}
+            src={`${getAssetPrefix()}/apoios/UnebLogo.svg`}
             alt="Logo"
             width={96}
             height={96}
             className="inline-block object-contain"
                     />
             <Image
-            src={"/ictite/v1/web/apoios/fapesbLogo.jpg"}
+            src={`${getAssetPrefix()}/apoios/fapesbLogo.jpg`}
             alt="Logo"
             width={96}
             height={96}
             className="inline-block object-contain"
             />           
             <Image
-            src={"/ictite/v1/web/apoios/governoDoEstadoLogo.png"}
+            src={`${getAssetPrefix()}/apoios/governoDoEstadoLogo.png`}
             alt="Logo"
             width={96}
             height={96}
             className="inline-block object-contain"
             />   
              <Image
-            src={"/ictite/v1/web/apoios/fiocruzLogo.png"}
+            src={`${getAssetPrefix()}/apoios/fiocruzLogo.png`}
             alt="Logo"
             width={96}
             height={96}
