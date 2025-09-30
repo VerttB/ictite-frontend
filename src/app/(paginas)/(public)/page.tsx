@@ -7,6 +7,8 @@ import { Ictite } from "@/core/interface/IIctite";
 import { SearchBar } from "@/components/SearchBar";
 import Mapa from "@/components/Mapa";
 import { Spinner } from "@/components/LoadingSpin";
+import { ChevronRight, School } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ProjetoPage() {
   const { data: projeto, error } = useSWR<Ictite, Error>("ictite", GETictite);
@@ -41,6 +43,30 @@ export default function ProjetoPage() {
           <p className="border-l-2 pl-2">Total de projetos: XX</p>
         </div>
         <Mapa />
+      </div>
+
+      {/* |=======| LISTA DAS ESCOLAS |=======| */}
+      <div className="flex flex-col gap-2 mb-2 mt-3">
+        <div className="flex flex-row justify-between">
+          <h2 className="text-2xl font-semibold">Lista das Escolas</h2>
+          <span>Total: XX</span>
+        </div>
+        {/* |=======| FUTURO COMPONENTE DE CARD DA ESCOLA |=======| */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          {Array.from({length: 10}).map((_, i) => (
+            <div key={i} className="flex flex-row justify-between w-full h-14 border-2 rounded-md items-center px-3">
+              <div className="flex flex-row gap-4 ">
+                <School size={30} className="text-verde" />
+                <span className="text-xl">Nome da escola</span>
+              </div>
+              <div className="">
+                <Button size={"icon"} className="cursor-pointer">
+                  <ChevronRight />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
     </div>
