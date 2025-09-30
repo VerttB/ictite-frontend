@@ -7,6 +7,7 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 import {
+  Expand,
   House,
   MapPin,
   PanelsTopLeft,
@@ -27,6 +28,7 @@ import Masonry from "react-responsive-masonry";
 import useSWR from "swr";
 import { getResearcherById, getResearcherProjects } from "@/core/service/PesquisadorService";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface PesquisadorProps {
   isOpen: boolean;
@@ -61,7 +63,7 @@ export default function Pesquisador({
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
       <DrawerContent>
         <DrawerHeader className="shadow">
-          <div className="flex justify-start border-b items-center  pb-2.5 ">
+          <div className="flex justify-between border-b items-center  pb-2.5 ">
             <Button
               variant={"outline"}
               size={"icon"}
@@ -70,6 +72,9 @@ export default function Pesquisador({
             >
               <X />
             </Button>
+            <Link href={`/pesquisadores/${researcherId}`}>
+              <Button size={"icon"} className="cursor-pointer"><Expand /></Button>
+            </Link>
           </div>
           <div className="flex flex-row gap-2 items-center justify-center">
             <div>
