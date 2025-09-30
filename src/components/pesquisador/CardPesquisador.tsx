@@ -24,7 +24,11 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                      bg-cover bg-center 
                     opacity-70 group-hover:opacity-45 transition-opacity duration-300
 `}>
-            <Image fill alt="Imagem do pesquisador" className="rounded-t-lg object-cover" src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}/>
+            <Image
+                fill
+                alt="Imagem do pesquisador"
+                className="rounded-t-lg object-cover"
+                src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}/>
           </div>
 
             <div className="relative p-2 flex flex-col h-full justify-end gap-2">
@@ -41,7 +45,7 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
                     <p className="mb-1">{researcher.type}</p>
                 </div>
             </div>
-            {openDrawer && <Pesquisador isOpen={openDrawer} researcherId={researcher.id}  onClose={() => {setOpenDrawer(false)}}/>}
+            {openDrawer && <Pesquisador isOpen={openDrawer} researcherId={researcher.id}  onClose={() =>  setOpenDrawer(false)}/>}
 
         </div>
     );

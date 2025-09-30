@@ -7,25 +7,18 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 import {
-  House,
+  GraduationCap,
   MapPin,
-  PanelsTopLeft,
-  Printer,
+
+  School,
+
   X,
 } from "lucide-react";
-import { Button } from "../ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../ui/tabs";
-import { useState} from "react";
-import CardProjeto from "../projeto/CardProjeto";
-import CardArtigo from "../card/CardArtigos";
-import Masonry from "react-responsive-masonry";
+
 import useSWR from "swr";
-import { getResearcherById, getResearcherProjects } from "@/core/service/PesquisadorService";
+import { getResearcherById } from "@/core/service/PesquisadorService";
+import { PesquisadorTabs } from "./PesquisadorTabs";
+import { Spinner } from "../LoadingSpin";
 import { useRouter } from "next/navigation";
 
 interface PesquisadorProps {
@@ -39,164 +32,77 @@ export default function Pesquisador({
   onClose,
   researcherId,
 }: PesquisadorProps) {
-  const router = useRouter()
-  const [activePesquisadorTab, setActivePesquisadorTab] = useState("artigos");
-
+  const router = useRouter();
   const { data: researcher, isLoading } = useSWR(
     researcherId ? `simcc-researcher-${researcherId}` : null,
     () => getResearcherById(researcherId, true)
   ); 
   
-  const { data: projects } = useSWR(
-    researcherId ? `researcher-projects-${researcherId}` : null,
-    () => getResearcherProjects(researcherId)
 
-  );  if (!researcherId) return null;
 
+  if (!researcherId) return null;
   if(!researcher) return null;
-  if(researcher.articles)
-    researcher.articles.sort( (a,b) => b.year - a.year)
- 
+
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
       <DrawerContent>
         <DrawerHeader className="shadow">
           <div className="flex justify-start border-b items-center  pb-2.5 ">
-            <Button
-              variant={"outline"}
-              size={"icon"}
-              onClick={onClose}
-              className="cursor-pointer"
-            >
+            {/* <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={onClose}
+                className="cursor-pointer"
+              >
               <X />
-            </Button>
+            </Button> */}
           </div>
-          <div className="flex flex-row gap-2 items-center justify-center">
-            <div>
+          <div className="flex  flex-row w-full h-72 gap-2 p-2 shadow-xs items-center ">
+            <div className="w-1/3 h-full  relative cursor-pointer"
+                onClick={() => router.push(`/pesquisadores/${researcher.id}`)}>
               <Image
-                width={100}
-                height={100}
-                src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}
-                alt="pesquisador"
-                className="rounded-md border border-cinza"
-              />
+                  fill
+                  src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}
+                  alt="pesquisador"
+                  className="rounded-md border border-cinza object-cover"
+                />
             </div>
-            <div className="items-center">
-              <DrawerTitle>{researcher.name}</DrawerTitle>
-              <div className="flex flex-row gap-1 items-center">
-                <MapPin size={15} />
-                <DrawerDescription className="font-semibold text-black">
-                  {researcher.schoolcity}
+            <div className="flex px-2 flex-col gap-1 w-full h-full justify-start items-start">
+              <DrawerTitle className="text-2xl">{researcher.name}</DrawerTitle>
+                <span className="flex items-center gap-1 text-lg text-gray-500">
+                  <MapPin size={15} />
+                  <p>{researcher.simcc.city ?? "Cidade não disponível"}</p>
+                </span>
+                <span className="flex items-center gap-1 text-lg text-gray-500">
+                  <GraduationCap size={15} />
+                  <p>{researcher.simcc.graduation ?? "Graduação não disponível"}</p>
+                </span>
+                <span className="flex items-center gap-1 text-lg text-gray-500">
+                  <School size={15} />
+                  <p>{researcher.school ?? "Instituição não disponível"}</p>
+                </span>
+                  <DrawerDescription className="font-semibold text-black">
+
+                    <p className="text-sm pr-4 py-2  font-normal text-justify text-gray-500   overflow-y-auto h-48">
+                      {researcher.simcc?.abstract ?? "Descrição não disponível."}
+                    </p>
+
                 </DrawerDescription>
-              </div>
             </div>
           </div>
         </DrawerHeader>
 
-        <div className="flex-1 flex flex-col px-6 py-2 overflow-hidden overflow-y-auto">
+        <div className="flex-1 flex flex-col px-6 py-2 overflow-y-auto">
           {isLoading ? (
             <div className="flex flex-col justify-center items-center h-full gap-2">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-verde" />
-              <p className="text-sm text-gray-500">Carregando dados do pesquisador...</p>
+              <Spinner size="medium">Carregando...</Spinner>
             </div>
           ) : (
             <>
-              <div className="text-sm text-justify text-gray-500 mb-4">
-                <p className="line-clamp-4 hover:line-clamp-none">
-                 {researcher.simcc?.abstract ?? "Descrição não disponível."}
-                </p>
-              </div>
-
-              <Tabs
-                value={activePesquisadorTab}
-                onValueChange={setActivePesquisadorTab}
-              >
-                <TabsList className="flex flex-row gap-5 w-full py-2 px-4 h-12 rounded-sm bg-blue-100">
-                  <TabsTrigger value="artigos" asChild>
-                    <Button
-                      variant={
-                        activePesquisadorTab === "artigos"
-                          ? "default"
-                          : "outline"
-                      }
-                      className="px-3 py-1 text-zinc-700 rounded-sm hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
-                    >
-                      <House />
-                      <p>Artigos</p>
-                    </Button>
-                  </TabsTrigger>
-
-                  <TabsTrigger value="participacaoEventos" asChild>
-                    <Button
-                      variant={
-                        activePesquisadorTab === "participacaoEventos"
-                          ? "default"
-                          : "outline"
-                      }
-                      className="px-3 py-1 text-zinc-700  hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
-                    >
-                      <Printer />
-                      <p>Participação Eventos</p>
-                    </Button>
-                  </TabsTrigger>
-
-                  <TabsTrigger value="projetos" asChild>
-                    <Button
-                      variant={
-                        activePesquisadorTab === "projetos"
-                          ? "default"
-                          : "outline"
-                      }
-                      className="px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
-                    >
-                      <PanelsTopLeft />
-                      <p>Projetos</p>
-                    </Button>
-                  </TabsTrigger>
-
-                  <TabsTrigger value="livros_capitulos" asChild>
-                    <Button
-                      variant={
-                        activePesquisadorTab === "livros_capitulos"
-                          ? "default"
-                          : "outline"
-                      }
-                      className="px-3 py-1 text-zinc-700 hover:bg-verde hover:text-branco data-[state=active]:bg-verde data-[state=active]:text-branco"
-                    >
-                      <PanelsTopLeft />
-                      <p>Livros e Capítulos</p>
-                    </Button>
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="artigos" className="mt-4 ">
-                  <Masonry 
-                        columnsCount={3}
-                        gutter="10px" >
-                      {researcher.articles && researcher.articles.map((a,i) => 
-                        <CardArtigo key={i} article={a}/>
-                      )}
-                  </Masonry>
-                </TabsContent>
-
-                <TabsContent value="participacaoEventos" className="mt-4">
-                  <p>Participação Eventos</p>
-                </TabsContent>
-
-                <TabsContent value="projetos" className="mt-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    {projects && projects?.map((projeto, i) => (
-                      <CardProjeto 
-                                  key={i}
-                                  project={projeto}
-                                  onClick={() => router.push(`/projetos/${projeto.id}`)} />
-                    ))}
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="livros_capitulos" className="mt-4">
-                  <p>Livros e Capítulos</p>
-                </TabsContent>
-              </Tabs>
+              
+              <PesquisadorTabs researcher={researcher}  />
+              
             </>
           )}
         </div>
