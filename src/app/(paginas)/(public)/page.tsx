@@ -46,13 +46,13 @@ export default function ProjetoPage() {
       </div>
 
       {/* |=======| LISTA DAS ESCOLAS |=======| */}
-      <div className="flex flex-col gap-2 mb-2 mt-3">
+      <div className="flex flex-col gap-2 mb-5 mt-3">
         <div className="flex flex-row justify-between">
           <h2 className="text-2xl font-semibold">Lista das Escolas</h2>
           <span>Total: XX</span>
         </div>
         {/* |=======| FUTURO COMPONENTE DE CARD DA ESCOLA |=======| */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-72 overflow-y-auto">
           {Array.from({length: 10}).map((_, i) => (
             <div key={i} className="flex flex-row justify-between w-full h-14 border-2 rounded-md items-center px-3">
               <div className="flex flex-row gap-4 ">
