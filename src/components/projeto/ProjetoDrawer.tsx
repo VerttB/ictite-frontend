@@ -1,5 +1,5 @@
 "use client"
-import { School, X } from "lucide-react";
+import { Expand, School, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Project } from "@/core/interface/Project";
 import { capitalize } from "@/core/utils/capitalize";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface ProjetoProps {
     isOpen: boolean;
@@ -24,8 +25,11 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
         <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
             <DrawerContent className="w-full">
                 <DrawerHeader className="shadow">
-                    <div className="flex justify-start border-b items-center pb-2.5 ">
+                    <div className="flex justify-between border-b items-center pb-2.5 ">
                         <Button variant={"outline"} size={"icon"} onClick={() => onClose(false)} className="cursor-pointer"><X/></Button>
+                        <Link href={`/projetos/${project.id}`}>
+                            <Button size={"icon"} className="cursor-pointer"><Expand /></Button>
+                        </Link>
                     </div>
                     <DrawerTitle className="text-2xl">{project.name}</DrawerTitle>
                     <DrawerDescription>{project.description}</DrawerDescription>
