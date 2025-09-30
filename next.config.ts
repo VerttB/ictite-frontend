@@ -7,7 +7,10 @@ const nextConfig: NextConfig = {
     unoptimized: true
     
   },
-  output:'standalone'
+  output:'standalone',
+  basePath: '/ictite/v1/web',
+   
+
 };
 
 export default nextConfig;

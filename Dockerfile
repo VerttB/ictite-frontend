@@ -1,27 +1,23 @@
-FROM node:alpine as BUILD_IMAGE
+FROM node:alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
-
 RUN npm run build
-
 RUN npm prune --production
 
-FROM node:alpine
-
+FROM node:alpine AS runner
 WORKDIR /app
 
-COPY --from=BUILD_IMAGE /app/package.json ./package.json
-COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
-COPY --from=BUILD_IMAGE /app/.next ./.next
-COPY --from=BUILD_IMAGE /app/public ./public
+COPY --from=builder /app/.next/standalone ./
 
-EXPOSE 3030
-CMD ["npm", "start", "--", "-p", "8010"] 
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
+ENV PORT=8010
+EXPOSE 8010
 
+CMD ["node", "server.js"]
