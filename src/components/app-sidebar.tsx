@@ -66,10 +66,16 @@ export function AppSidebar() {
                 <SidebarGroupContent>
                     <SidebarMenu className="flex gap-2" >
                         {items.map(item => 
-                            <SidebarMenuItem className={`rounded-sm flex transition-all duration-200 ${open ? "w-full" : "justify-center"}  ${path !== item.url ? "bg-gray-200 hover:bg-verde/50" : "bg-verde text-branco hover:bg-verde hover:text-branco"} `} key={item.title}>
+                            <SidebarMenuItem
+                                title={item.title} 
+                                className={`rounded-sm flex transition-all duration-200
+                                ${open ? "w-full" : "justify-center"}
+                                ${path !== item.url.slice(0,item.url.length ) ? "bg-gray-200 hover:bg-verde/70" : "bg-verde text-branco hover:bg-verde hover:text-branco"} `}
+                                key={item.title}
+                                aria-label={item.url}>
                                 <SidebarMenuButton className={`rounded-sm `}  asChild>
                                     <Link className="flex"  href={item.url}>
-                                    <item.icon size={item.size}/>
+                                    <item.icon size={item.size} />
                                     <span>{item.title}</span>
                                     </Link>
                                 </SidebarMenuButton>
