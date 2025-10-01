@@ -6,8 +6,7 @@ export interface Researcher{
     sex: string,
     race: string,
     type: string,
-    schoolname: string,
-    schoolcity:string,
+    school:string,
     image?: string,
 }
 
