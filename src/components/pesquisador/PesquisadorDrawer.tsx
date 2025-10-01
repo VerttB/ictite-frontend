@@ -22,6 +22,7 @@ import { PesquisadorTabs } from "./PesquisadorTabs";
 import { Spinner } from "../LoadingSpin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 interface PesquisadorProps {
   isOpen: boolean;
