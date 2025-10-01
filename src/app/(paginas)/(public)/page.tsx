@@ -9,6 +9,7 @@ import Mapa from "@/components/Mapa";
 import { Spinner } from "@/components/LoadingSpin";
 import { ChevronRight, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import EscolaList from "@/components/escola/EscolaList";
 
 export default function ProjetoPage() {
   const { data: projeto, error } = useSWR<Ictite, Error>("ictite", GETictite);
@@ -52,21 +53,7 @@ export default function ProjetoPage() {
           <span>Total: XX</span>
         </div>
         {/* |=======| FUTURO COMPONENTE DE CARD DA ESCOLA |=======| */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-72 overflow-y-auto">
-          {Array.from({length: 10}).map((_, i) => (
-            <div key={i} className="flex flex-row justify-between w-full h-14 border-2 rounded-md items-center px-3">
-              <div className="flex flex-row gap-4 ">
-                <School size={30} className="text-verde" />
-                <span className="text-xl">Nome da escola</span>
-              </div>
-              <div className="">
-                <Button size={"icon"} className="cursor-pointer">
-                  <ChevronRight />
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <EscolaList />
       </div>
 
     </div>
