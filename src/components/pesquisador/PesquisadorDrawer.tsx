@@ -22,6 +22,7 @@ import { PesquisadorTabs } from "./PesquisadorTabs";
 import { Spinner } from "../LoadingSpin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 interface PesquisadorProps {
   isOpen: boolean;
@@ -86,11 +87,10 @@ export default function Pesquisador({
                   <School size={15} />
                   <p>{researcher.school ?? "Instituição não disponível"}</p>
                 </span>
-                  <DrawerDescription className="font-semibold text-black">
+                  <DrawerDescription className="text-sm pr-4 py-2  font-normal text-justify text-gray-500   overflow-y-auto h-48">
 
-                    <p className="text-sm pr-4 py-2  font-normal text-justify text-gray-500   overflow-y-auto h-48">
+                  
                       {researcher.simcc?.abstract ?? "Descrição não disponível."}
-                    </p>
 
                 </DrawerDescription>
             </div>

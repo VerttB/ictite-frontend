@@ -49,5 +49,6 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
             {openDrawer && <Pesquisador isOpen={openDrawer} researcherId={researcher.id}  onClose={() =>  setOpenDrawer(false)}/>}
 
         </div>
+    </>
     );
 }
