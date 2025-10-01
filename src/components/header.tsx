@@ -18,7 +18,7 @@ export const Header = () => {
                     inline-block 
                 "
             />
-                <p className="text-sm text-gray-500 flex items-end">beta β 1.0</p>
+                <p className="text-sm text-gray-500 flex items-end">beta β 1.1</p>
 
         
             </div>

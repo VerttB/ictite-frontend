@@ -87,7 +87,7 @@ export default function Pesquisador({
                   <School size={15} />
                   <p>{researcher.school ?? "Instituição não disponível"}</p>
                 </span>
-                  <DrawerDescription className="text-sm pr-4 py-2  font-normal text-justify text-gray-500   overflow-y-auto h-48">
+                  <DrawerDescription className="text-sm pr-4 py-2  font-normal text-justify text-gray-500 overflow-hidden hover:overflow-y-scroll transition-all h-48">
 
                   
                       {researcher.simcc?.abstract ?? "Descrição não disponível."}

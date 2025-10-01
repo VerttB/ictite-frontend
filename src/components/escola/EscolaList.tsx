@@ -36,15 +36,15 @@ export default function EscolaList () {
     return(
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-72 overflow-y-auto">
           {schools.map((school) => (
-            <div key={school.id} className="flex flex-row justify-between w-full h-14 border-2 rounded-md items-center px-3">
-              <div className="flex flex-row gap-4 ">
-                <School size={30} className="text-verde" />
-                <span className="text-xl line-clamp-1">{school.name}</span>
+            <div key={school.id} className="flex flex-row justify-between w-full h-12 border-2 rounded-md items-center px-3 py-3">
+              <div className="flex flex-row gap-4 items-center">
+                <School size={24} className="text-verde" />
+                <span className="text-lg line-clamp-1">{school.name}</span>
               </div>
               <div className="">
                 <Link href={`/escolas/${school.id}`}>
                     <Button size={"icon"} className="cursor-pointer">
-                      <ChevronRight />
+                        <ChevronRight />
                     </Button>
                 </Link>
               </div>
