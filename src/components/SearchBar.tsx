@@ -68,13 +68,13 @@ export const SearchBar = () => {
         <Button
             variant={"ghost"}
             size={"icon"}
-            className="absolute right-1 top-1/2 mr-0.25 transform -translate-y-1/2 h-8 w-8 cursor-pointer bg-verde text-white
+            className="absolute right-1 top-1/2 mr-0.25 transform -translate-y-1/2 h-8 w-8 cursor-pointer bg-primary text-white
                       hover:bg-lime-600 hover:text-white transition-colors">
             <Search/>
         </Button>
       </div>
             {value.length >= 2  && (
-        <div className="flex  bg-cinza-light rounded-2xl shadow-2xl max-h-64 py-4 px-8 overflow-auto">
+        <div className="flex  bg-foreground rounded-2xl shadow-2xl max-h-64 py-4 px-8 overflow-auto">
             <SugestionList data={sugestions}/>
             </div>
             )}

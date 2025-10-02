@@ -143,7 +143,7 @@ export default function MapaRender() {
                   <li onClick={() => {
                     setPopoverOpen(false);
                     router.push(`escolas/${school.id}`)
-                  }} key={school.id} className="text-sm border-b rounded-md p-2 hover:bg-verde hover:text-white cursor-pointer">
+                  }} key={school.id} className="text-sm border-b rounded-md p-2 hover:bg-primary hover:text-white cursor-pointer">
                     {school.name}
                   </li>
                 ))}

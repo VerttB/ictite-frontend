@@ -70,7 +70,7 @@ export default function Pesquisador({
                   fill
                   src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}
                   alt="pesquisador"
-                  className="rounded-md border border-cinza object-cover"
+                  className="rounded-md border border-border object-cover"
                 />
             </div>
             <div className="flex px-2 flex-col gap-1 w-full h-full justify-start items-start">
@@ -100,7 +100,7 @@ export default function Pesquisador({
         <div className="flex-1 flex flex-col px-6 py-2 overflow-y-auto">
           {isLoading ? (
             <div className="flex flex-col justify-center items-center h-full gap-2">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-verde" />
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
               <Spinner size="medium">Carregando...</Spinner>
             </div>
           ) : (

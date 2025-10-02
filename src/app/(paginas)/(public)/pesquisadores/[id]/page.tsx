@@ -29,7 +29,7 @@ export default function Page(){
               fill
               src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}
               alt="pesquisador"
-              className="rounded-md border border-cinza"
+              className="rounded-md border border-border"
             />
           </div>
           <div className="items-center w-full ">

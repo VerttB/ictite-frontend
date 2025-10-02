@@ -155,7 +155,7 @@ export default function Console () {
                             style={{ boxShadow: "0 0 3px rgba(0,0,0,.5)" }}
                             className={`
                                 flex rounded-md gap-2 items-center px-4 py-2
-                                bg-verde text-white
+                                bg-primary text-white
                                 hover:cursor-pointer
                             `}
                         >
@@ -166,7 +166,7 @@ export default function Console () {
                             style={{ boxShadow: "0 0 3px rgba(0,0,0,.5)" }}
                             className={`
                                 flex rounded-md gap-2 items-center px-4 py-2
-                                bg-verde text-white
+                                bg-primary text-white
                                 hover:cursor-pointer
                             `}
                         >
@@ -178,7 +178,7 @@ export default function Console () {
             </div>
 
             {/* |=======| FILTRO (SELECT) |=======| */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-cinza-light rounded-sm p-4 border-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-foreground rounded-sm p-4 border-2">
                 <div className="flex flex-row gap-2 items-center">
                     <p className="font-semibold">Entidade: </p>
                     <Select
@@ -242,7 +242,7 @@ export default function Console () {
             {!arquivo && (
                 <div className="flex items-center justify-center p-11 border-4 border-dashed rounded-md">
                     <div className="flex flex-col gap-2 items-center">
-                        <File size={35} className="text-verde"/>
+                        <File size={35} className="text-primary"/>
                         <div className="relative">
                             <h4 className="text-lg truncate">Nenhum arquivo foi selecionado ainda</h4>
                             <p className="absolute top-5 text-sm text-gray-400">Selecione um arquivo .csv ou .xml</p>
@@ -255,7 +255,7 @@ export default function Console () {
             {arquivo && (
                 <div className="flex flex-row items-center justify-between bg-white border rounded-md shadow-sm px-4 py-3">
                     <div className="flex items-center gap-3">
-                        <FileText size={22} className="text-verde" />
+                        <FileText size={22} className="text-primary" />
                         <div>
                             <p className="text-sm font-medium">{arquivo.name}</p>
                             <p className="text-xs text-gray-500">{(arquivo.size / 1024).toFixed(1)} KB</p>

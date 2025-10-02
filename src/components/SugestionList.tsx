@@ -33,7 +33,7 @@ export const SugestionList = ({data}: SugestionListProps) => {
                     <Link
                       href={`${key}/${e.id}`}
                       key={e.id}
-                      className="w-full hover:bg-verde py-1 px-4 rounded-md hover:text-white"
+                      className="w-full hover:bg-primary py-1 px-4 rounded-md hover:text-white"
                     >
                       {e.name ?? e.title ?? "Sem título"}
                     </Link>

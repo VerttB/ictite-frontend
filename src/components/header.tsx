@@ -7,7 +7,7 @@ const isProd = process.env.NODE_ENV === "production";
 
 export const Header = () => {
     return(
-        <header className="w-full p-3 bg-cinza-light flex justify-between items-center">
+        <header className="w-full p-3 bg-foreground flex justify-between items-center">
             <div className="flex justify-between gap-4">
                 <Image
                 src={`${getAssetPrefix()}/logoImagem.png`}

@@ -109,10 +109,10 @@ export default function Revistas () {
             </div>
             {/* |=======| REVISTAS DA FECIBA |=======| */}
             <div className="relative">
-                <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-verde h-[230px] rounded-md"></div>
+                <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-primary h-[230px] rounded-md"></div>
                 <div className="relative">
                     <div className="flex flex-col gap-4 p-4">
-                        <h2 className="text-xl font-semibold text-branco">FECIBA</h2>
+                        <h2 className="text-xl font-semibold text-font-secondary">FECIBA</h2>
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 justify-items-center">
                             {revistasFecibaMock.map((revista) => (
                                 <CardRevista key={revista.id} revista={revista} />
@@ -124,10 +124,10 @@ export default function Revistas () {
 
             {/* |=======| OUTRAS REVISTAS |=======| */}
             <div className="relative">
-                <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-vermelho h-[230px] rounded-md"></div>
+                <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-secondary h-[230px] rounded-md"></div>
                 <div className="relative">
                     <div className="flex flex-col gap-4 p-4">
-                        <h2 className="text-xl font-semibold text-branco">OUTRAS REVISTAS</h2>
+                        <h2 className="text-xl font-semibold text-font-secondary">OUTRAS REVISTAS</h2>
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 justify-items-center">
                             {revistasOutrasMock.map((revista) => (
                                 <CardRevista key={revista.id} revista={revista} />

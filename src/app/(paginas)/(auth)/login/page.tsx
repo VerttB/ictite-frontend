@@ -36,7 +36,7 @@ export default function Login(){
         <div className="flex items-center bg-gray-100 h-full justify-center">
             <div className="w-3/4 2xl:w-1/2 flex flex-col gap-4 2xl:gap-6">
             <div >
-                <h2 className="text-cinza text-4xl self-baseline font-bold mb-2">Fazer Login</h2>
+                <h2 className="text-border text-4xl self-baseline font-bold mb-2">Fazer Login</h2>
                 <p className="text-xl">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
             </div>
 
@@ -56,7 +56,7 @@ export default function Login(){
                     <Input 
                         {...register("email")}
                         type="text" 
-                        className="bg-branco rounded-md #b5b5b5 border-gray-300 border-1 py-2 px-2"/>
+                        className="bg-background rounded-md #b5b5b5 border-gray-300 border-1 py-2 px-2"/>
                     <span className="text-red-500 text-sm">
                             {errors && errors.email?.message}
                         </span>
@@ -67,7 +67,7 @@ export default function Login(){
                     <Input 
                         {...register("password")}
                         type="password"
-                        className="bg-branco rounded-md border-gray-300 border-1 py-2 px-2" />
+                        className="bg-background rounded-md border-gray-300 border-1 py-2 px-2" />
                         <span className="text-red-500 text-sm">
                             {errors && errors.password?.message}
                         </span>

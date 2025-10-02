@@ -48,7 +48,7 @@ export default function Page(){
 
       <div className="flex flex-row w-full gap-8 h-24 justify-between">
         {schoolStatistics && Object.entries(schoolStatistics).map(([key, value]) => (
-          <div key={key} className="bg-cinza-light rounded-md w-full p-4 flex items-center justify-center text-2xl">
+          <div key={key} className="bg-foreground rounded-md w-full p-4 flex items-center justify-center text-2xl">
             {capitalize(key)}: {String(value)}
           </div>
         ))}

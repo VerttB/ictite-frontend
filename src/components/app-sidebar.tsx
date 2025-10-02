@@ -76,7 +76,7 @@ export function AppSidebar() {
                                 title={item.title} 
                                 className={`rounded-sm flex transition-all duration-200
                                 ${open ? "w-full" : "justify-center"}
-                                ${path !== item.url.slice(0,item.url.length ) ? "bg-gray-200 hover:bg-verde/70" : "bg-verde text-branco hover:bg-verde hover:text-branco"} `}
+                                ${path !== item.url.slice(0,item.url.length ) ? "bg-gray-200 hover:bg-primary/70 hover:text-font-secondary" : "bg-primary  hover:bg-primary text-font-secondary"} `}
                                 key={item.title}
                                 aria-label={item.url}>
                                 <SidebarMenuButton className={`rounded-sm `}  asChild>

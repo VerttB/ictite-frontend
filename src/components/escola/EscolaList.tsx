@@ -38,7 +38,7 @@ export default function EscolaList () {
           {schools.map((school) => (
             <div key={school.id} className="flex flex-row justify-between w-full h-12 border-2 rounded-md items-center px-3 py-3">
               <div className="flex flex-row gap-4 items-center">
-                <School size={24} className="text-verde" />
+                <School size={24} className="text-primary" />
                 <span className="text-lg line-clamp-1">{school.name}</span>
               </div>
               <div className="">

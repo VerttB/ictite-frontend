@@ -28,7 +28,7 @@ export default function ProjetoPage() {
         <div 
           className="
             sm:text-sm md:text-xl text-justify
-            rounded-md w-full bg-cinza-light
+            rounded-md w-full bg-foreground
             px-4 py-6 border-2 indent-4
           "
         >
@@ -37,7 +37,7 @@ export default function ProjetoPage() {
       </div>
       <SearchBar/>
       <div className="flex flex-col gap-1 h-full w-full p-2 mt-5 
-        border-2 bg-cinza-light rounded-md">
+        border-2 bg-foreground rounded-md">
         <div className="flex flex-row gap-2 justify-end items-center text-sm">
           <p className="border-l-2 pl-2">Total de escolas: XX</p>
           <p className="border-l-2 pl-2">Total de pesquisadores: XX</p>

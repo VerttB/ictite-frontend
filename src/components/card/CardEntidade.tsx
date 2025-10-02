@@ -21,8 +21,8 @@ export default function CardEntidade ({ entidade }: CardEntidadeProps) {
     return(
         <>
             <div onClick={() => setIsDialogCamposEntidadeOpen(true)}
-                className="flex flex-col items-center justify-center h-28 w-28 bg-cinza-light rounded-sm
-                            hover:shadow-sm hover:shadow-verde hover:border-2 hover:border-verde transition-all cursor-pointer">
+                className="flex flex-col items-center justify-center h-28 w-28 bg-foreground rounded-sm
+                            hover:shadow-sm hover:shadow-primary hover:border-2 hover:border-primary transition-all cursor-pointer">
                 <entidade.icon size={50}/>
                 <span className="font-semibold">{entidade.nome}</span>
             </div>

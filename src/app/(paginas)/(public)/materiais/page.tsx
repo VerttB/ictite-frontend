@@ -15,7 +15,7 @@ export default function Materiais () {
             </div>
 
             {/* |=======| DESCRIÇÃO DA PÁGINA |=======| */}
-            <div className=" flex flex-col gap-3 bg-verde text-white
+            <div className=" flex flex-col gap-3 bg-primary text-white
                      p-4 mx-4 mt-4 rounded-md shadow-sm border border-blue-100
             ">
                 <div className="flex flex-col gap-0">
