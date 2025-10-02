@@ -5,8 +5,8 @@ import useSWR from "swr";
 import { getSchoolById, getSchoolStatistics } from "@/core/service/SchoolService"
 import Image from "next/image"
 import { EscolaTabs } from "@/components/escola/EscolaTabs"
-import { capitalize } from "@/core/utils/capitalize";
 import { useParams } from "next/navigation";
+import InfoBar from "@/components/InfoBar";
 
 export default function Page(){
   const { id } = useParams<{ id: string }>();
@@ -15,7 +15,9 @@ export default function Page(){
 
   const loading = (!school && !schoolError) || (!schoolStatistics && !statsError)
   const error = schoolError || statsError
-
+  let stats: { titulo: string; valor: number }[] = []
+  if(schoolStatistics)
+     stats = Object.entries(schoolStatistics).map(([key, value]) => ({titulo: key, valor: value}));
   if (loading) return (
     <div className="px-10 py-6">Carregando...</div>
   )
@@ -46,13 +48,7 @@ export default function Page(){
         </div>
       </div>
 
-      <div className="flex flex-row w-full gap-8 h-24 justify-between">
-        {schoolStatistics && Object.entries(schoolStatistics).map(([key, value]) => (
-          <div key={key} className="bg-foreground rounded-md w-full p-4 flex items-center justify-center text-2xl">
-            {capitalize(key)}: {String(value)}
-          </div>
-        ))}
-      </div>
+      <InfoBar data={stats}/>
 
       <EscolaTabs schoolId={school.id}/>
     </div>
