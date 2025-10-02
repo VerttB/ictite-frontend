@@ -4,7 +4,7 @@ import { Calendar } from "lucide-react";
 export default function CardArtigo ({article}:{article: Article}) {
     return(
         <div className=" p-2 flex flex-col gap-4 border shadow-md
-            border-l-lime-500 h-fit border-l-8 w-full rounded-md bg-slate-50
+            border-l-lime-500 h-fit border-l-8 w-full rounded-md bg-background
             ">
             <h2 className="text-md hyphens-auto text-wrap">{article.title}</h2>
             <p className="text-sm text-gray-500 text-justify max-h-28 overflow-y-auto line-clamp-1">{article.abstract}</p>

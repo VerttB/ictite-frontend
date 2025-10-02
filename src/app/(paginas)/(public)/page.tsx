@@ -29,7 +29,7 @@ export default function ProjetoPage() {
           className="
             sm:text-sm md:text-xl text-justify
             rounded-md w-full bg-foreground
-            px-4 py-6 border-2 indent-4
+            px-4 py-6 border-2 indent-4 border-border
           "
         >
           <h1 className="">{projeto?.objective}</h1>
