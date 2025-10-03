@@ -61,9 +61,9 @@ export default function ProjetoPage() {
 
       {/* |=======| LISTA DAS ESCOLAS |=======| */}
       <div className="flex flex-col gap-2 mb-5 mt-3">
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between items-center">
           <h2 className="text-2xl font-semibold">Lista das Escolas</h2>
-          <span>Total: XX</span>
+          <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">Total: {resultadosBusca.escolas.length}</span>
         </div>
         {/* |=======| COMPONENTE DE CARD DA ESCOLA |=======| */}
         <EscolaList />
@@ -73,12 +73,14 @@ export default function ProjetoPage() {
       <div className="flex flex-col gap-2 mb-5 mt-3">
         <div className="flex flex-row justify-between">
           <h2 className="text-2xl font-semibold">Lista dos Pesquisadores</h2>
-          <span>Total: XX</span>
+          <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">
+            Total: {resultadosBusca.pesquisadores.length}
+          </span>
         </div>
         {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
-        {resultadosBusca.pesquisadores.map((p) => (
-          <div key={p.id}>
-            {p.name}
+        {resultadosBusca.pesquisadores.map((pesquisador) => (
+          <div key={pesquisador.id}>
+            {pesquisador.name}
           </div>
         ))}
       </div>
@@ -87,12 +89,14 @@ export default function ProjetoPage() {
       <div className="flex flex-col gap-2 mb-5 mt-3">
         <div className="flex flex-row justify-between">
           <h2 className="text-2xl font-semibold">Lista dos Pesquisadores</h2>
-          <span>Total: XX</span>
+          <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">
+            Total: {resultadosBusca.projetos.length}
+          </span>
         </div>
         {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
-        {resultadosBusca.projetos.map((p) => (
-          <div key={p.id}>
-            {p.name}
+        {resultadosBusca.projetos.map((projeto) => (
+          <div key={projeto.id}>
+            {projeto.name}
           </div>
         ))}
       </div>
