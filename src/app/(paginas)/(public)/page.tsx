@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import { GETictite } from "@/core/service/ICTITEService";
 import { Ictite } from "@/core/interface/IIctite";
@@ -10,8 +10,21 @@ import { Spinner } from "@/components/LoadingSpin";
 import { ChevronRight, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EscolaList from "@/components/escola/EscolaList";
+import { SugestionBase } from "@/core/interface/SugestionBase";
 
 export default function ProjetoPage() {
+
+  const [resultadosBusca, setResultadosBusca] = useState<Record<string, SugestionBase[]>>({
+    pesquisadores: [], 
+    escolas: [], 
+    projetos: []
+  });
+
+  const handleSugestoesChange = (novasSugestoes: Record<string, SugestionBase[]>) => {
+    console.log("Resultados da busca recebidos no pai:", novasSugestoes);
+    setResultadosBusca(novasSugestoes);
+  };
+
   const { data: projeto, error } = useSWR<Ictite, Error>("ictite", GETictite);
 
   if (!projeto && !error) return (
@@ -35,7 +48,7 @@ export default function ProjetoPage() {
           <h1 className="">{projeto?.objective}</h1>
         </div>
       </div>
-      <SearchBar/>
+      <SearchBar onSugestoesChange={handleSugestoesChange}/>
       <div className="flex flex-col gap-1 h-full w-full p-2 mt-5 
         border-2 bg-foreground rounded-md">
         <div className="flex flex-row gap-2 justify-end items-center text-sm">
@@ -52,8 +65,36 @@ export default function ProjetoPage() {
           <h2 className="text-2xl font-semibold">Lista das Escolas</h2>
           <span>Total: XX</span>
         </div>
-        {/* |=======| FUTURO COMPONENTE DE CARD DA ESCOLA |=======| */}
+        {/* |=======| COMPONENTE DE CARD DA ESCOLA |=======| */}
         <EscolaList />
+      </div>
+
+      {/* |=======| LISTA DOS PESQUISADORES |=======| */}
+      <div className="flex flex-col gap-2 mb-5 mt-3">
+        <div className="flex flex-row justify-between">
+          <h2 className="text-2xl font-semibold">Lista dos Pesquisadores</h2>
+          <span>Total: XX</span>
+        </div>
+        {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
+        {resultadosBusca.pesquisadores.map((p) => (
+          <div key={p.id}>
+            {p.name}
+          </div>
+        ))}
+      </div>
+
+      {/* |=======| LISTA DOS PESQUISADORES |=======| */}
+      <div className="flex flex-col gap-2 mb-5 mt-3">
+        <div className="flex flex-row justify-between">
+          <h2 className="text-2xl font-semibold">Lista dos Pesquisadores</h2>
+          <span>Total: XX</span>
+        </div>
+        {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
+        {resultadosBusca.projetos.map((p) => (
+          <div key={p.id}>
+            {p.name}
+          </div>
+        ))}
       </div>
 
     </div>
