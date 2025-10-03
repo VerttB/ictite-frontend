@@ -9,9 +9,11 @@ import { SugestionList } from "./SugestionList"
 import { SugestionBase } from "@/core/interface/SugestionBase"
 import { getProjects } from "@/core/service/ProjetoService"
 
+interface SearchBarProps {
+  onSugestoesChange?: (sugestoes: Record<string, SugestionBase[]>) => void;
+}
 
-
-export const SearchBar = () => {
+export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
     const [value, setValue ] = useState("")
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [sugestions,setSugestions] = useState<Record<string, SugestionBase[]>>({pesquisadores:[], escolas: [], projetos: []})
@@ -40,7 +42,13 @@ export const SearchBar = () => {
             pesquisadores: researchers || [],
             projetos : projects || []
         })
+
+        if (onSugestoesChange) {
+            onSugestoesChange(sugestions)
+        }
     }
+
+
     useEffect(() => {
         if(value.length >= 2){
             const debounce = setTimeout(() => {
@@ -50,9 +58,19 @@ export const SearchBar = () => {
         }
         else{
             setSugestions({ escolas: [], pesquisadores: [], projetos: [] });
+
+            if (onSugestoesChange) {
+                onSugestoesChange(sugestions)
+            }
         }
 
     },[value])
+
+
+    const handleSearchClick = () => {
+        getData(value)
+    }
+
     return (
         <div className="flex flex-col gap-0"> 
 
@@ -66,6 +84,7 @@ export const SearchBar = () => {
             className="px-4 pr-10 py-2 w-full rounded-lg border-2"
          />
         <Button
+            onClick={handleSearchClick}
             variant={"ghost"}
             size={"icon"}
             className="absolute right-1 top-1/2 mr-0.25 transform -translate-y-1/2 h-8 w-8 cursor-pointer bg-primary text-white
