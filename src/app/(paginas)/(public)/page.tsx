@@ -11,6 +11,7 @@ import { ChevronRight, School } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EscolaList from "@/components/escola/EscolaList";
 import { SugestionBase } from "@/core/interface/SugestionBase";
+import PesquisadorLoader from "@/components/pesquisador/PesquisadorLoader";
 
 export default function ProjetoPage() {
 
@@ -79,7 +80,7 @@ export default function ProjetoPage() {
         {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
         {resultadosBusca.pesquisadores.map((pesquisador) => (
           <div key={pesquisador.id}>
-            {pesquisador.name}
+            <PesquisadorLoader suggestion={pesquisador}/>
           </div>
         ))}
       </div>

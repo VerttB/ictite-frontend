@@ -6,7 +6,7 @@ import { useState } from "react";
 import Pesquisador from "../pesquisador/PesquisadorDrawer";
 
 interface CardPesquisadorProps {
-    onClick?: () => void; // Adicione esta prop
+    onClick?: () => void; 
     researcher: Researcher
    
 }
