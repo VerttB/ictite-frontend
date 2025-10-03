@@ -66,7 +66,7 @@ export default function ProjetoPage() {
           <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">Total: {resultadosBusca.escolas.length}</span>
         </div>
         {/* |=======| COMPONENTE DE CARD DA ESCOLA |=======| */}
-        <EscolaList />
+        <EscolaList escolasBusca={resultadosBusca.escolas} />
       </div>
 
       {/* |=======| LISTA DOS PESQUISADORES |=======| */}
@@ -85,15 +85,15 @@ export default function ProjetoPage() {
         ))}
       </div>
 
-      {/* |=======| LISTA DOS PESQUISADORES |=======| */}
+      {/* |=======| LISTA DOS PROJETOS |=======| */}
       <div className="flex flex-col gap-2 mb-5 mt-3">
         <div className="flex flex-row justify-between">
-          <h2 className="text-2xl font-semibold">Lista dos Pesquisadores</h2>
+          <h2 className="text-2xl font-semibold">Lista dos Projetos</h2>
           <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">
             Total: {resultadosBusca.projetos.length}
           </span>
         </div>
-        {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
+        {/* |=======| COMPONENTE DE CARD DOS PROJETOS |=======| */}
         {resultadosBusca.projetos.map((projeto) => (
           <div key={projeto.id}>
             {projeto.name}
