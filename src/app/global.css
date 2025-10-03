@@ -3,6 +3,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
 @layer base{
   [data-theme="light"]{
     --primary: #088077;
@@ -29,8 +31,6 @@
 }
 
 @theme inline {
-
-
 
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
@@ -139,5 +139,19 @@
   }
   body {
     @apply bg-background text-font-primary;
+  }
+}
+
+@layer utilities {
+  .scroll-thin {
+    scrollbar-width: thin;
+
+  }
+  .scroll-both{
+    scrollbar-gutter: stable ;
+  }
+
+  .scroll-color {
+    scrollbar-color: var(--color-font-secondary) var(--color-background);
   }
 }

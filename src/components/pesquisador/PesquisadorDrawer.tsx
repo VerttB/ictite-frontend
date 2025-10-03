@@ -10,7 +10,7 @@ import {
   Expand,
   GraduationCap,
   MapPin,
-
+  ExternalLink,
   School,
 
   X,
@@ -44,7 +44,6 @@ export default function Pesquisador({
 
 
   if (!researcherId) return null;
-  if(!researcher) return null;
 
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
@@ -59,38 +58,51 @@ export default function Pesquisador({
             >
               <X />
             </Button>
-            <Link href={`/pesquisadores/${researcherId}`}>
+            <Link href={`/pesquisadores/${researcherId}/`}>
               <Button size={"icon"} className="cursor-pointer"><Expand /></Button>
             </Link>
           </div>
           <div className="flex  flex-row w-full h-72 gap-2 p-2 shadow-xs items-center ">
             <div className="w-1/3 h-full  relative cursor-pointer"
-                onClick={() => router.push(`/pesquisadores/${researcher.id}`)}>
+                onClick={() => router.push(`/pesquisadores/${researcherId}/`)}>
               <Image
                   fill
-                  src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}
+                  src={researcher?.image ? `${researcher?.image}` : "https://picsum.photos/100/100"}
                   alt="pesquisador"
                   className="rounded-md border border-border object-cover"
                 />
             </div>
             <div className="flex px-2 flex-col gap-1 w-full h-full justify-start items-start">
-              <DrawerTitle className="text-2xl">{researcher.name}</DrawerTitle>
-                <span className="flex items-center gap-1 text-lg text-gray-500">
+              <DrawerTitle className="text-2xl text-font-primary">
+                {researcher?.name}
+                {researcher?.simcc && 
+                <Link href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`} 
+                  target="_blank"
+                  title="Ver no SIMCC"
+                  className="cursor-pointer">
+                  <ExternalLink
+                    className="inline ml-1 mb-2" 
+                    size={20} />
+                </Link>}
+              </DrawerTitle>
+              <div className="flex justify-between w-full">
+                <span className="flex items-center gap-1 text-lg text-font-primary/80">
                   <MapPin size={15} />
-                  <p>{researcher.simcc.city ?? "Cidade não disponível"}</p>
+                  <p>{researcher?.simcc.city ?? "Cidade não disponível"}</p>
                 </span>
-                <span className="flex items-center gap-1 text-lg text-gray-500">
+                <span className="flex items-center gap-1 text-lg text-font-primary/80">
                   <GraduationCap size={15} />
-                  <p>{researcher.simcc.graduation ?? "Graduação não disponível"}</p>
+                  <p>{researcher?.simcc.graduation ?? "Graduação não disponível"}</p>
                 </span>
-                <span className="flex items-center gap-1 text-lg text-gray-500">
+                <span className="flex items-center gap-1 text-lg text-font-primary/80">
                   <School size={15} />
-                  <p>{researcher.school ?? "Instituição não disponível"}</p>
+                  <p>{researcher?.school ?? "Instituição não disponível"}</p>
                 </span>
-                  <DrawerDescription className="text-sm pr-4 py-2  font-normal text-justify text-gray-500 overflow-hidden hover:overflow-y-scroll transition-all h-48">
+                </div>
+                  <DrawerDescription className="text-sm py-2 pr-2 w-full font-normal text-justify scroll-thin scroll-both scroll-color text-font-primary/80 overflow-hidden hover:overflow-y-scroll transition-all h-48">
 
-                  
-                      {researcher.simcc?.abstract ?? "Descrição não disponível."}
+
+                      {researcher?.simcc?.abstract ?? "Descrição não disponível."}
 
                 </DrawerDescription>
             </div>
@@ -98,17 +110,15 @@ export default function Pesquisador({
         </DrawerHeader>
 
         <div className="flex-1 flex flex-col px-6 py-2 overflow-y-auto">
-          {isLoading ? (
+           {isLoading ?  (
             <div className="flex flex-col justify-center items-center h-full gap-2">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
               <Spinner size="medium">Carregando...</Spinner>
             </div>
+          ) : researcher ? (
+            <PesquisadorTabs researcher={researcher} />
           ) : (
-            <>
-              
-              <PesquisadorTabs researcher={researcher}  />
-              
-            </>
+            <div className="text-sm text-gray-500">Nenhum dado disponível para este pesquisador.</div>
           )}
         </div>
       </DrawerContent>
