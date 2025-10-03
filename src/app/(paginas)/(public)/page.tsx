@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import EscolaList from "@/components/escola/EscolaList";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import PesquisadorLoader from "@/components/pesquisador/PesquisadorLoader";
+import ProjetoLoader from "@/components/projeto/ProjetoLoader";
 
 export default function ProjetoPage() {
 
@@ -78,11 +79,19 @@ export default function ProjetoPage() {
           </span>
         </div>
         {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
-        {resultadosBusca.pesquisadores.map((pesquisador) => (
-          <div key={pesquisador.id}>
-            <PesquisadorLoader suggestion={pesquisador}/>
+        { resultadosBusca.pesquisadores.length !== 0 ? (
+          <div className="grid grid-cols-5 gap-4 w-full">
+            {resultadosBusca.pesquisadores.map((pesquisador) => (
+              <div key={pesquisador.id} >
+                <PesquisadorLoader suggestion={pesquisador}/>
+              </div>
+            ))}
           </div>
-        ))}
+        ) : (
+          <div>
+              <span>Nenhum resultado encontrado</span>
+          </div>
+        )}
       </div>
 
       {/* |=======| LISTA DOS PROJETOS |=======| */}
@@ -96,7 +105,7 @@ export default function ProjetoPage() {
         {/* |=======| COMPONENTE DE CARD DOS PROJETOS |=======| */}
         {resultadosBusca.projetos.map((projeto) => (
           <div key={projeto.id}>
-            {projeto.name}
+            <ProjetoLoader sugestion={projeto} />
           </div>
         ))}
       </div>
