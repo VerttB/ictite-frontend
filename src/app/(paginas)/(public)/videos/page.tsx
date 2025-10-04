@@ -37,7 +37,7 @@ export default function Videos () {
     ]
 
     return(
-        <div className="w-full px-8 py-4 flex flex-col gap-8">
+        <div className="w-full  sm:px-8 py-4 flex flex-col gap-8">
             {/* |=======| SUPERIOR DOS VÍDEOS |=======| */}
             <div className="flex flex-row gap-4 items-center">
                 <Link href={"/"}>
@@ -59,13 +59,13 @@ export default function Videos () {
                     </h2>
                     <p className="text-xs text-gray-300">Versão beta β 1.0 do site ICTITE</p>
                 </div>
-                <p>Bem-vindo à nossa aba de vídeos! Nesta seção, você encontrará um acervo dinâmico de conteúdos 
+                <p className="text-sm sm:text-base">Bem-vindo à nossa aba de vídeos! Nesta seção, você encontrará um acervo dinâmico de conteúdos 
                     audiovisuais produzidos para apoiar sua jornada no mundo da pesquisa e inovação educacional.
                     Aqui você acessa tutoriais, registros de eventos científicos, depoimentos e materiais</p>
             </div>
 
             {/* |=======| VÍDEOS |=======|*/}
-            <div className="mx-28 flex flex-col gap-2">
+            <div className="mx-2 sm:mx-28 flex flex-col gap-2">
                 <Accordion type="multiple">
                     {videosMock.map((video) => (
                         <AccordionItem key={video.id} value={video.id}>
