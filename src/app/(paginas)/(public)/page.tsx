@@ -64,7 +64,9 @@ export default function ProjetoPage() {
       <div id="escolas" className="flex flex-col gap-2 mb-5 mt-3">
         <div className="flex flex-row justify-between items-center">
           <h2 className="text-2xl font-semibold">Lista das Escolas</h2>
-          <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">Total: {resultadosBusca.escolas.length}</span>
+          <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">
+            Total: {resultadosBusca.escolas.length !== 0 ? (resultadosBusca.escolas.length) : ("XX")}
+          </span>
         </div>
         {/* |=======| COMPONENTE DE CARD DA ESCOLA |=======| */}
         <EscolaList escolasBusca={resultadosBusca.escolas} />
