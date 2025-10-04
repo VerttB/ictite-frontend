@@ -23,7 +23,7 @@ const items = [
         size: 10,
     },
     {
-        title: "Projeto",
+        title: "Documento ICTITE",
         url:"/projeto",
         icon: SquareChartGantt,
         size: 10,
