@@ -80,7 +80,7 @@ export default function ProjetoPage() {
         </div>
         {/* |=======| COMPONENTE DE CARD DOS PESQUISADORES |=======| */}
         { resultadosBusca.pesquisadores.length !== 0 ? (
-          <div className="grid grid-cols-5 gap-4 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 w-full">
             {resultadosBusca.pesquisadores.map((pesquisador) => (
               <div key={pesquisador.id} >
                 <PesquisadorLoader suggestion={pesquisador}/>
@@ -103,11 +103,19 @@ export default function ProjetoPage() {
           </span>
         </div>
         {/* |=======| COMPONENTE DE CARD DOS PROJETOS |=======| */}
-        {resultadosBusca.projetos.map((projeto) => (
-          <div key={projeto.id}>
-            <ProjetoLoader sugestion={projeto} />
+        {resultadosBusca.projetos.length !== 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+            {resultadosBusca.projetos.map((projeto) => (
+              <div key={projeto.id} className="">
+                <ProjetoLoader sugestion={projeto} />
+              </div>
+            ))}
           </div>
-        ))}
+        ) : (
+          <div>
+              <span>Nenhum resultado encontrado</span>
+          </div>
+        )}
       </div>
 
     </div>
