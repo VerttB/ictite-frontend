@@ -14,11 +14,12 @@ import useSWR from "swr";
 import {  getResearcherProjects } from "@/core/service/PesquisadorService";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../projeto/CardProjeto";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) => {
     const [activeTab, setActiveTab] = useState("artigos")
     const {data: projects} = useSWR(`researcher-projects-${researcher.id}`, () => getResearcherProjects(researcher.id))
-
+    const isMobile = useIsMobile()
 
     if(!researcher) return null
     researcher.articles.sort( (a,b) => b.year - a.year)
@@ -29,6 +30,7 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
          <Tabs
                 value={activeTab}
                 onValueChange={setActiveTab}
+                className="flex flex-col h-full min-h-0"
               >
                 <TabsList className="flex flex-row gap-5 w-full py-2 px-4 h-12 rounded-sm bg-accent">
                   <TabsTrigger value="artigos" asChild>
@@ -87,14 +89,16 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                     </Button>
                   </TabsTrigger>
                 </TabsList>
-                <TabsContent value="artigos" className="mt-4 ">
-                  <Masonry 
-                        columnsCount={3}
+                <TabsContent value="artigos" className="flex-1 min-h-0 flex flex-col">
+                  <div className="flex-1 min-h-0 scroll-thin scroll-both scroll-color text-font-primary/80 overflow-hidden hover:overflow-y-scroll px-4 pb-6">
+                  <Masonry
+                        columnsCount={isMobile ? 2 : 3}
                         gutter="10px" >
                       {researcher.articles.map((a,i) => 
                         <CardArtigo key={i} article={a}/>
                       )}
                   </Masonry>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="participacaoEventos" className="mt-4">
