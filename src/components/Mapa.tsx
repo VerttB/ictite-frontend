@@ -108,12 +108,7 @@ export default function MapaRender() {
     return () => { map.remove() };
   }, [geojsonData, brazilBounds, router]);
 
-  if (loading) return <div className="h-64 w-full flex flex-col items-center justify-center">
-    <Spinner />
-    <h2>Carregando Mapa....</h2>
-  </div>
-
-  useEffect(() => {
+   useEffect(() => {
     if (open) {
       mapRef.current?.resize();}
     else {
@@ -122,6 +117,13 @@ export default function MapaRender() {
       }, 250);
     }
   }, [mapRef, open]);
+  
+  if (loading) return <div className="h-64 w-full flex flex-col items-center justify-center">
+    <Spinner />
+    <h2>Carregando Mapa....</h2>
+  </div>
+
+ 
 
   return (
     <div className="relative w-full">
