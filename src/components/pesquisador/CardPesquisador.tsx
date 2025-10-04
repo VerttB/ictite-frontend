@@ -16,10 +16,10 @@ export default function CardPesquisador ({ onClick, researcher }: CardPesquisado
     
     return(
         <>
-            <div  onClick={onClick ?  onClick : () => setOpenDrawer(true)}
-                className="relative border-2 h-[250px] w-[200px] rounded-md p-2
-                        cursor-pointer overflow-hidden bg-black group
-                ">
+            <div
+                className="relative border-2 rounded-md p-2 cursor-pointer overflow-hidden bg-black group flex flex-col h-full min-h-[300px]"
+                onClick={onClick ? onClick : () => setOpenDrawer(true)}
+            >
             
             <div className={`absolute inset-0 
                      bg-cover bg-center 
