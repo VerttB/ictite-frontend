@@ -4,7 +4,7 @@ import React from "react";
 import useSWR from "swr";
 import { PesquisadorTabs } from "@/components/pesquisador/PesquisadorTabs";
 import { getResearcherById } from "@/core/service/PesquisadorService";
-import { GraduationCap, MapPin} from "lucide-react";
+import { GraduationCap, MapPin, School} from "lucide-react";
 import Image from "next/image";
 import { Spinner } from "@/components/LoadingSpin";
 import { useParams } from "next/navigation";
@@ -22,24 +22,36 @@ export default function Page(){
   if (!researcher) return <div className="px-10 py-6">Pesquisador não encontrado</div>
 
   return(
-      <div className="w-full flex flex-col gap-4  p-8 ">
-        <div className="flex  gap-4 justify-center">
-          <div className="flex  w-1/4 min-h-64 h-full justify-center rounded-lg relative">
+      <div className="w-full flex flex-col gap-4 overflow-x-hidden p-4 ">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="w-full sm:w-1/2 xl:w-2/7 h-72  relative cursor-pointer">
             <Image
               fill
               src={researcher.image ? `${researcher.image}` : "https://picsum.photos/100/100"}
               alt="pesquisador"
-              className="rounded-md border border-border"
+              className="rounded-md border border-border object-cover"
             />
           </div>
           <div className="items-center w-full ">
             <h1 className="text-3xl">{researcher.name}</h1>
             {researcher.simcc && (
               <>
-                <p className="text-xl flex gap-2"><GraduationCap size={24} />{researcher.simcc.graduation}</p>
-                <p className="text-xl flex gap-2"><MapPin size={24}/> {researcher.simcc.city}</p>
+               <div className="flex gap-4 w-full">
+                <span className="flex items-center gap-1 text-xs sm:text-lg text-font-primary/80">
+                  <MapPin size={15} />
+                  <p>{researcher?.simcc.city ?? "Cidade não disponível"}</p>
+                </span>
+                <span className="flex items-center gap-1 text-xs sm:text-lg text-font-primary/80">
+                  <GraduationCap size={15} />
+                  <p>{researcher?.simcc.graduation ?? "Graduação não disponível"}</p>
+                </span>
+                <span className="flex items-center gap-1 text-xs sm:text-lg text-font-primary/80">
+                  <School size={15} />
+                  <p>{researcher?.school ?? "Instituição não disponível"}</p>
+                </span>
+                </div>
                 <div className="text-justify text-gray-500 ">
-                  <p className="text-sm ">
+                  <p className="text-sm overflow-y-scroll h-24 p-2  sm:h-40 md:h-52 scroll-thin scroll-color sm:overflow-hidden sm:hover:overflow-y-auto scroll-both  sm:scroll-color">
                     {researcher.simcc?.abstract ?? "Descrição não disponível."}
                   </p>
                 </div>
