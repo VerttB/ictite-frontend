@@ -26,11 +26,11 @@ export default function CamposEntidades ( { isOpen, onClose, entidade }:CamposEn
             <DialogContent>
                 <DialogHeader className="flex flex-row gap-3 items-center">
                     <entidade.icon size={35} />
-                    <div>
+                    <div className="flex flex-col gap-0.5">
                         <DialogTitle>{entidade.nome}</DialogTitle>
                         <div className="flex gap-1">
                             {entidade.campos.map((campo) => (
-                                <div key={campo} className="text-gray-500">{campo}</div>
+                                <div key={campo} className="text-gray-500 text-center bg-foreground p-1 rounded-sm">{campo}</div>
                             ))}
                         </div>
                     </div>
