@@ -21,11 +21,19 @@ export default function Console () {
     const [schoolsError, setSchoolsError] = useState<string | null>(null);
 
     const entidades = [
-        { nome: "Escola", icon: School2, campos: ["name", "city", "descriprion", "cep"] },
+        { nome: "Escola", icon: School2, campos: ["name", "city", "descriprion", "cep"], 
+            abas: [
+                { nome: "Pesquisador", campos: ["name", "lattes_id", "type", "sex", "race"] },
+                { nome: "Projeto", campos: ["name", "descrition"] },
+                { nome: "Equipamento", campos: ["name"] },
+            ] },
         { nome: "Revista", icon: Newspaper, campos: ["title", "link", "description"] },
         { nome: "Material", icon: BookOpen, campos: ["title", "link", "description"] },
         { nome: "Pesquisador", icon: Book, campos: ["name", "lattes_id", "type", "sex", "race"] },
-        { nome: "Projeto", icon: Folder, campos: ["name", "descrition"] },
+        { nome: "Projeto", icon: Folder, campos: ["name", "descrition"], 
+            abas: [
+                { nome: "Pesquisador", campos: ["name", "lattes_id", "type", "sex", "race"] }    
+            ] },
         { nome: "Equipamento", icon: Cpu, campos: ["name"] },
     ]
     //Entidade[] = ["escola", "revista", "material", "pesquisador", "projeto", "equipamento"];
