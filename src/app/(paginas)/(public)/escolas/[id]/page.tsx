@@ -17,7 +17,13 @@ export default function Page(){
   const error = schoolError || statsError
   let stats: { titulo: string; valor: number }[] = []
   if(schoolStatistics)
-     stats = Object.entries(schoolStatistics).map(([key, value]) => ({titulo: key, valor: value}));
+    stats =[{
+      titulo: "Pesquisadores", valor: schoolStatistics.researchers
+    },{
+      titulo: "Projetos", valor: schoolStatistics.projects
+    },{
+      titulo: "Equipamentos", valor: schoolStatistics.equipments
+    }]
   if (loading) return (
     <div className="px-10 py-6">Carregando...</div>
   )
@@ -31,21 +37,19 @@ export default function Page(){
   )
 
   return(
-    <div className="flex flex-col gap-8  px-10"> 
-      <div className="flex flex-col gap-12 mb-5">
+    <div className="flex flex-col gap-8 px-4 sm:px-8"> 
+      <div className="flex flex-col gap-2 sm:flex-row  ">
         {/* IMAGEM */}
-        <div className="flex gap-4 items-center">
-          <div className="flex max-w-92 w-4/5 min-h-64 justify-center rounded-lg relative">
+          <div className="flex w-full max-w-92 sm:w-4/5 min-h-64 justify-center rounded-lg relative">
             <Image fill src={"https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="escola"
               className="rounded-lg p-2 border-3 shadow-lg border-white" />
           </div>
 
-          <div className="flex flex-col gap-2 text-center">
-            <div className="text-4xl">{school.name}</div>
-            <p className="text-2xl font-semibold text-gray-400">{school.city}</p>
-            <p className="text-2xl font-semibold text-gray-400" >{school.description}</p>
+          <div className="flex flex-col gap-2 text-justify sm:text-left sm:w-2/3">
+            <div className="text-2xl">{school.name}</div>
+            <p className="text-lg font-semibold text-font-primary/60">{school.city}</p>
+            <p className="text-lg font-semibold text-font-primary/50">{school.description}</p>
           </div>
-        </div>
       </div>
 
       <InfoBar data={stats}/>

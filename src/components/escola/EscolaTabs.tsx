@@ -40,15 +40,16 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="pesquisadores" className="mt-4 flex flex-wrap gap-4">
-        {loadingRes ? <Spinner/> :
-        researchers?.map((r) => (<CardPesquisador
-                                                
-                                                key={r.name}
-                                                researcher={r}/>))}
+      <TabsContent
+        value="pesquisadores"
+        className="mt-4 grid w-full gap-4 [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))]"
+      >
+        {loadingRes ? <Spinner /> : researchers?.map(r =>
+          <CardPesquisador key={r.id ?? r.name} researcher={r} />
+        )}
       </TabsContent>
 
-      <TabsContent value="equipamentos" className="mt-4 flex flex-wrap gap-4">
+      <TabsContent value="equipamentos" className="mt-4 grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
         {loadingEq ? <Spinner/> : 
         equipments?.map((e,i) => (<CardEquipamento 
                                                   
@@ -56,7 +57,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                                                   equipment={e}/> ))}
       </TabsContent>
 
-      <TabsContent value="projetos" className="mt-4 flex flex-wrap gap-4">
+      <TabsContent value="projetos" className="mt-4  grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
         {loadingPr ? <Spinner/>:
          projects?.map((p,i) =><CardProjeto 
                                           key={i}

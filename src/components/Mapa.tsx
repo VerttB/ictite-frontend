@@ -13,6 +13,7 @@ import { Spinner } from "./LoadingSpin"
 import { useRouter } from "next/navigation"
 import useSWR from "swr"
 import { getSchoolGeoData } from "@/core/service/SchoolService"
+import { useSidebar } from "./ui/sidebar"
 
 type LngLatBoundsLike =
   | [[number, number], [number, number]]
@@ -28,8 +29,9 @@ export default function MapaRender() {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);
+  const { open } = useSidebar()
   const brazilBounds = useMemo<LngLatBoundsLike>(() => [
-    [-74.0, -34.0],
+    [-84.0, -34.0],
     [-34.0, 5.5]
   ], []);
 
@@ -41,6 +43,7 @@ export default function MapaRender() {
       style: "mapbox://styles/mapbox/navigation-night-v1",
       center: [-41.5, -12.9],
       zoom: 5,
+      trackResize: true,
       maxBounds: brazilBounds
     })
 
@@ -85,13 +88,13 @@ export default function MapaRender() {
         });
       });
 
+
       map.on("click", "unclustered-point", (e) => {
         setPopoverOpen(false); 
         const feat = e.features?.[0];
         if (!feat || feat.geometry.type !== "Point") return;
-           if(feat.properties && feat.properties.id) router.push(`escolas/${feat.properties.id}`)
+        if(feat.properties && feat.properties.id) router.push(`escolas/${feat.properties.id}`)
       });
-
 
       map.on('move', () => setPopoverOpen(false));
       map.on('click', (e) => {
@@ -105,15 +108,28 @@ export default function MapaRender() {
     return () => { map.remove() };
   }, [geojsonData, brazilBounds, router]);
 
+   useEffect(() => {
+    if (open) {
+      mapRef.current?.resize();}
+    else {
+      setTimeout(() => {
+        mapRef.current?.resize();
+      }, 250);
+    }
+  }, [mapRef, open]);
+  
   if (loading) return <div className="h-64 w-full flex flex-col items-center justify-center">
     <Spinner />
     <h2>Carregando Mapa....</h2>
   </div>
+
+ 
+
   return (
     <div className="relative w-full">
       <div
         ref={mapContainerRef}
-        className="w-full h-128 rounded-sm border-gray-600 border-style"
+        className="w-full relative h-128 rounded-sm border-gray-600 border-style"
         style={{
           boxShadow: '3px 3px 3px rgba(0, 0, 0, .3)'
         }}

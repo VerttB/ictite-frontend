@@ -23,6 +23,7 @@ import { Spinner } from "../LoadingSpin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface PesquisadorProps {
   isOpen: boolean;
@@ -40,20 +41,27 @@ export default function Pesquisador({
     researcherId ? `simcc-researcher-${researcherId}` : null,
     () => getResearcherById(researcherId, true)
   ); 
-  
+  const isMobile = useIsMobile()
 
 
   if (!researcherId) return null;
 
   return (
-    <Drawer open={isOpen} onOpenChange={onClose} direction="right">
-      <DrawerContent>
+    <Drawer open={isOpen} onOpenChange={onClose} direction={`${isMobile ? "bottom" : "right"}`}>
+      <DrawerContent
+        className={`flex flex-col p-0 ${
+          isMobile ? "h-[90vh] max-h-[90vh]" : "h-full w-[520px] max-w-full"
+        }`}
+      >
         <DrawerHeader className="shadow">
           <div className="flex justify-between border-b items-center  pb-2.5 ">
             <Button
               variant={"outline"}
               size={"icon"}
-              onClick={onClose}
+              onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
               className="cursor-pointer"
             >
               <X />
@@ -62,8 +70,8 @@ export default function Pesquisador({
               <Button size={"icon"} className="cursor-pointer"><Expand /></Button>
             </Link>
           </div>
-          <div className="flex  flex-row w-full h-72 gap-2 p-2 shadow-xs items-center ">
-            <div className="w-1/3 h-full  relative cursor-pointer"
+          <div className="flex flex-col sm:flex-row w-full  gap-2 p-2 shadow-xs items-center ">
+            <div className="w-full sm:w-1/2 h-72  relative cursor-pointer"
                 onClick={() => router.push(`/pesquisadores/${researcherId}/`)}>
               <Image
                   fill
@@ -99,9 +107,7 @@ export default function Pesquisador({
                   <p>{researcher?.school ?? "Instituição não disponível"}</p>
                 </span>
                 </div>
-                  <DrawerDescription className="text-sm py-2 pr-2 w-full font-normal text-justify scroll-thin scroll-both scroll-color text-font-primary/80 overflow-hidden hover:overflow-y-scroll transition-all h-48">
-
-
+                  <DrawerDescription className={`text-sm py-2 pr-2 w-full font-normal text-justify scroll-thin scroll-both scroll-color text-font-primary/80 overflow-hidden hover:overflow-y-scroll transition-all h-40`}>
                       {researcher?.simcc?.abstract ?? "Descrição não disponível."}
 
                 </DrawerDescription>
@@ -109,14 +115,16 @@ export default function Pesquisador({
           </div>
         </DrawerHeader>
 
-        <div className="flex-1 flex flex-col px-6 py-2 overflow-y-auto">
+        <div className="flex-1 min-h-0 flex flex-col px-6 py-2 overflow-hidden ">
            {isLoading ?  (
             <div className="flex flex-col justify-center items-center h-full gap-2">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
               <Spinner size="medium">Carregando...</Spinner>
             </div>
           ) : researcher ? (
-            <PesquisadorTabs researcher={researcher} />
+            <div className="min-h-0 flex-1">
+              <PesquisadorTabs researcher={researcher} />
+            </div>
           ) : (
             <div className="text-sm text-gray-500">Nenhum dado disponível para este pesquisador.</div>
           )}

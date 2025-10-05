@@ -10,14 +10,17 @@ interface ThemeContextProps {
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export const ThemeProvider = ({children}: { children: ReactNode }) => { 
-    const [theme, setTheme] = useState<Theme>(() => {
+   const [theme, setTheme] = useState<Theme>("light"); 
+
+  useEffect(() => {
     try {
-        const localTheme = localStorage.getItem("theme");
-            return localTheme === "dark" ? "dark" : "light";
-    } catch  {
-        return "light";
-    }
-});
+      const localTheme = localStorage.getItem("theme") as Theme | null;
+      if (localTheme === "dark" || localTheme === "light") {
+        setTheme(localTheme);
+        document.documentElement.setAttribute("data-theme", localTheme);
+      }
+    } catch {}
+  }, []);
 
     useEffect(() => {
         const root = document.documentElement;
