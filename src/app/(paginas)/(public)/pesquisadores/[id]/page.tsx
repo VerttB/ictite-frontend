@@ -8,6 +8,7 @@ import { GraduationCap, MapPin, School} from "lucide-react";
 import Image from "next/image";
 import { Spinner } from "@/components/LoadingSpin";
 import { useParams } from "next/navigation";
+import { ScrollArea } from "@/components/ScrollArea";
 
 export default function Page(){
 
@@ -32,30 +33,30 @@ export default function Page(){
               className="rounded-md border border-border object-cover"
             />
           </div>
-          <div className="items-center w-full ">
+          <div className="w-full ">
             <h1 className="text-3xl">{researcher.name}</h1>
             {researcher.simcc && (
-              <>
-               <div className="flex gap-4 w-full">
-                <span className="flex items-center gap-1 text-xs sm:text-lg text-font-primary/80">
+              <div className="flex flex-col gap-4 w-full">
+               <div className="flex flex-wrap justify-between sm:justify-normal gap-4 w-full">
+                <span className="flex items-center gap-1 text-xs lg:text-lg text-font-primary/80">
                   <MapPin size={15} />
                   <p>{researcher?.simcc.city ?? "Cidade não disponível"}</p>
                 </span>
-                <span className="flex items-center gap-1 text-xs sm:text-lg text-font-primary/80">
+                <span className="flex items-center gap-1 text-xs lg:text-lg text-font-primary/80">
                   <GraduationCap size={15} />
                   <p>{researcher?.simcc.graduation ?? "Graduação não disponível"}</p>
                 </span>
-                <span className="flex items-center gap-1 text-xs sm:text-lg text-font-primary/80">
+                <span className="flex items-center gap-1 text-xs lg:text-lg text-font-primary/80">
                   <School size={15} />
                   <p>{researcher?.school ?? "Instituição não disponível"}</p>
                 </span>
                 </div>
                 <div className="text-justify text-gray-500 ">
-                  <p className="text-sm overflow-y-scroll h-24 p-2  sm:h-40 md:h-52 scroll-thin scroll-color sm:overflow-hidden sm:hover:overflow-y-auto scroll-both  sm:scroll-color">
-                    {researcher.simcc?.abstract ?? "Descrição não disponível."}
-                  </p>
+                    <ScrollArea className="md:h-52">
+                      {researcher.simcc?.abstract ?? "Descrição não disponível."}
+                    </ScrollArea>
                 </div>
-              </>
+                </div>
             )}
           </div>
         </div>

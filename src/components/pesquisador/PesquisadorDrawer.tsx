@@ -23,7 +23,8 @@ import { Spinner } from "../LoadingSpin";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useViewPort } from "@/hooks/useViewPort";
+import { ScrollArea } from "../ScrollArea";
 
 interface PesquisadorProps {
   isOpen: boolean;
@@ -41,8 +42,7 @@ export default function Pesquisador({
     researcherId ? `simcc-researcher-${researcherId}` : null,
     () => getResearcherById(researcherId, true)
   ); 
-  const isMobile = useIsMobile()
-
+  const { isMobile } = useViewPort();
 
   if (!researcherId) return null;
 
@@ -93,7 +93,7 @@ export default function Pesquisador({
                     size={20} />
                 </Link>}
               </DrawerTitle>
-              <div className="flex justify-between w-full">
+              <div className="flex gap-4 w-full">
                 <span className="flex items-center gap-1 text-lg text-font-primary/80">
                   <MapPin size={15} />
                   <p>{researcher?.simcc.city ?? "Cidade não disponível"}</p>
@@ -107,8 +107,10 @@ export default function Pesquisador({
                   <p>{researcher?.school ?? "Instituição não disponível"}</p>
                 </span>
                 </div>
-                  <DrawerDescription className={`text-sm py-2 pr-2 w-full font-normal text-justify scroll-thin scroll-both scroll-color text-font-primary/80 overflow-hidden hover:overflow-y-scroll transition-all h-40`}>
+                  <DrawerDescription className={`text-sm py-2 pr-2`}>
+                    <ScrollArea>
                       {researcher?.simcc?.abstract ?? "Descrição não disponível."}
+                    </ScrollArea>
 
                 </DrawerDescription>
             </div>
