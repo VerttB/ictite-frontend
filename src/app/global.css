@@ -149,9 +149,13 @@
   }
   .scroll-both{
     scrollbar-gutter: stable ;
+    -webkit-overflow-scrolling: touch;
   }
 
   .scroll-color {
     scrollbar-color: var(--color-font-secondary) var(--color-background);
   }
+  .scroll-thumb::-webkit-scrollbar-thumb {
+  background: black;
+}
 }
