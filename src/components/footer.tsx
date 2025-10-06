@@ -4,8 +4,8 @@ export const Footer = () => {
     return(
     <footer 
         className="
-                w-[600px] px-4 py-2 h-16 gap-4 mt-3 p-2 rounded-sm
-                bg-white flex items-center ml-4 justify-between relative
+                w-full px-4 py-2 h-16 gap-4 mt-3 p-2 rounded-sm
+                bg-white flex flex-wrap items-center ml-4  relative
         "
 >
 
