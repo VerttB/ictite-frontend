@@ -6,12 +6,12 @@ import Link from "next/link"
 import { getAssetPrefix } from "@/core/utils/api";
 import { useTheme } from "@/core/providers/ThemeProvider";
 import { MoonIcon, SunIcon } from "lucide-react"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useViewPort } from "@/hooks/useViewPort"
 const isProd = process.env.NODE_ENV === "production";
 
 export const Header = () => {
     const { theme, toggleTheme } = useTheme()
-    const isMobile = useIsMobile();
+    const { isMobile } = useViewPort();
     return(
         <header className="w-full p-3 bg-foreground flex justify-between items-center">
             <div className="flex flex-col sm:flex-row   w-full h-full sm:gap-2">

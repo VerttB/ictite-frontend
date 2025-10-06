@@ -14,12 +14,12 @@ import useSWR from "swr";
 import {  getResearcherProjects } from "@/core/service/PesquisadorService";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../projeto/CardProjeto";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useViewPort } from "@/hooks/useViewPort";
 
 export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) => {
     const [activeTab, setActiveTab] = useState("artigos")
     const {data: projects} = useSWR(`researcher-projects-${researcher.id}`, () => getResearcherProjects(researcher.id))
-    const isMobile = useIsMobile()
+    const { isMobile , isTablet} = useViewPort()
 
     if(!researcher) return null
     researcher.articles.sort( (a,b) => b.year - a.year)
@@ -90,15 +90,14 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="artigos" className="flex-1 min-h-0 flex flex-col">
-                  <div className="flex-1 min-h-0 scroll-thin scroll-both scroll-color text-font-primary/80 overflow-hidden hover:overflow-y-scroll px-4 pb-6">
                   <Masonry
-                        columnsCount={isMobile ? 2 : 3}
+                        columnsCount={isMobile ? 1 : isTablet ? 2 : 3}
                         gutter="10px" >
                       {researcher.articles.map((a,i) => 
                         <CardArtigo key={i} article={a}/>
                       )}
                   </Masonry>
-                  </div>
+              
                 </TabsContent>
 
                 <TabsContent value="participacaoEventos" className="mt-4">
@@ -106,12 +105,14 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                 </TabsContent>
 
                 <TabsContent value="projetos" className="mt-4">
-                  <div className="grid grid-cols-2 gap-4">
-                      {projects &&
-                                   projects?.map((projeto, i) => (
+                    <Masonry
+                        columnsCount={isMobile ? 1 : isTablet ? 2 : 3}
+                        gutter="10px" >
+              
+                      {projects?.map((projeto, i) => (
                                   <CardProjeto key={i} project={projeto} />
                                 ))}
-                  </div>
+                    </Masonry>
                 </TabsContent>
 
                 <TabsContent value="livros_capitulos" className="mt-4">
