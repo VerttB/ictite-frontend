@@ -13,7 +13,7 @@
     --border: oklch(0.92 0.004 286.32);
     --background: #FFFFFF;
     --foreground: #F5F5F5;
-    --font-secondary: #FFFFFF;
+    --font-secondary: #6b6b6b;
     --font-primary: #111827;
   }
   
@@ -25,7 +25,7 @@
     --background: #121212;
     --foreground: #1C1C1C;
     --font-primary: #F5F5F5;
-    --font-secondary: #D1D5DB;
+    --font-secondary: #bec1c5;
   }
 
 }
@@ -149,9 +149,13 @@
   }
   .scroll-both{
     scrollbar-gutter: stable ;
+    -webkit-overflow-scrolling: touch;
   }
 
   .scroll-color {
     scrollbar-color: var(--color-font-secondary) var(--color-background);
   }
+  .scroll-thumb::-webkit-scrollbar-thumb {
+  background: black;
+}
 }

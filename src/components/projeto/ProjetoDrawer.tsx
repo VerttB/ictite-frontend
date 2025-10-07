@@ -10,6 +10,7 @@ import { Project } from "@/core/interface/Project";
 import { capitalize } from "@/core/utils/capitalize";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useViewPort } from "@/hooks/useViewPort";
 
 interface ProjetoProps {
     isOpen: boolean;
@@ -20,9 +21,9 @@ interface ProjetoProps {
 export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
     const router = useRouter();
     const {data : pesquisadores} = useSWR(`project-${project.id}`, () => getProjectResearchers(project.id))
-    
+    const { isMobile } = useViewPort();
     return(
-        <Drawer open={isOpen} onOpenChange={onClose} direction="right" >
+        <Drawer open={isOpen} onOpenChange={onClose} direction={isMobile ? "bottom" : "right"} >
             <DrawerContent className="w-full">
                 <DrawerHeader className="shadow">
                     <div className="flex justify-between border-b items-center pb-2.5 ">
@@ -31,10 +32,13 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
                             <Button size={"icon"} className="cursor-pointer"><Expand /></Button>
                         </Link>
                     </div>
-                    <DrawerTitle className="text-2xl">{project.name}</DrawerTitle>
-                    <DrawerDescription>{project.description}</DrawerDescription>
+                    <DrawerTitle className="text-2xl text-font-primary">{project.name}</DrawerTitle>
+                    <DrawerDescription 
+                                    className="text-font-secondary">
+                                    {project.description}
+                                    </DrawerDescription>
                     {/* NOME DA ESCOLA */}
-                    <div className="flex flex-row gap-0.5 items-center text-gray-500 mt-2">
+                    <div className="flex flex-row gap-0.5 items-center text-font-secondary mt-2">
                         <School size={16} />
                         <span className="text-sm">{project.school}</span>
                     </div>
@@ -43,7 +47,7 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
                 {/* BODY DOS PESQUISADORES */}
                 <div className="pl-5 pt-2 overflow-y-auto">
                     {/* IMAGENS DO PROJETO */}
-                    <div className="flex flex-row gap-5 py-7 border-b">
+                    <div className="w-full grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(100px,1fr))]">
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
                         <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
@@ -55,12 +59,15 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
                             return(
                                 <div key={key} className="flex flex-col gap-2 border-b pb-7 pt-3">
                                 <h2 className="text-2xl font-semibold">{capitalize(key)}</h2>
-                                <div className="flex flex-row gap-5 ">
+                                <div className="grid w-full gap-4 [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))]">
                                 {items && items.map((p,i) => 
+                                        <Link  key={i} href={`/pesquisadores/${p.id}`} className="no-underline">
                                         <CardPesquisador 
                                                         key={i}
                                                         researcher={p}
-                                                        onClick={() => router.push(`/pesquisadores/${p.id}`)} />
+                                                        onClick={() => {}}
+                                                         />
+                                        </Link>
                             
                             
                                 )}
