@@ -107,12 +107,12 @@ export default function Pesquisador({
                   <p>{researcher?.school ?? "Instituição não disponível"}</p>
                 </span>
                 </div>
-                  <DrawerDescription className={`text-sm py-2 pr-2`}>
                     <ScrollArea>
+                  <DrawerDescription className={`text-sm py-2 pr-2`}>
                       {researcher?.simcc?.abstract ?? "Descrição não disponível."}
-                    </ScrollArea>
 
                 </DrawerDescription>
+                    </ScrollArea>
             </div>
           </div>
         </DrawerHeader>
