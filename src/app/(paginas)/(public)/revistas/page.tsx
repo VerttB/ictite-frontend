@@ -112,7 +112,7 @@ export default function Revistas () {
                 <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-primary h-[230px] rounded-md"></div>
                 <div className="relative">
                     <div className="flex flex-col gap-4 p-4">
-                        <h2 className="text-xl font-semibold text-font-secondary">FECIBA</h2>
+                        <h2 className="text-xl font-semibold text-font-primary">FECIBA</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 justify-items-center">
                             {revistasFecibaMock.map((revista) => (
                                 <CardRevista key={revista.id} revista={revista} />
@@ -127,7 +127,7 @@ export default function Revistas () {
                 <div className="absolute inset-x-0 top-0 bg-cover bg-center bg-secondary h-[230px] rounded-md"></div>
                 <div className="relative">
                     <div className="flex flex-col gap-4 p-4">
-                        <h2 className="text-xl font-semibold text-font-secondary">OUTRAS REVISTAS</h2>
+                        <h2 className="text-xl font-semibold text-font-primary">OUTRAS REVISTAS</h2>
                         <div className="grid grid-cols-1  sm:grid-cols-2  xl:grid-cols-4 gap-4 justify-items-center">
                             {revistasOutrasMock.map((revista) => (
                                 <CardRevista key={revista.id} revista={revista} />

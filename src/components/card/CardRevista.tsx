@@ -23,7 +23,7 @@ export default function CardRevista ({ revista }: CardRevistaProps) {
     }
 
     return(
-        <div className="flex flex-col justify-between p-4 border rounded-md w-[250px] h-[200px] bg-gray-50">
+        <div className="flex flex-col justify-between p-4 border rounded-md w-[250px] h-[200px] bg-foreground">
             <div>
                 <h2 className="text-xl font-semibold">{revista.title}</h2>
                 <p className="text-gray-500 line-clamp-3">{revista.description}</p>
