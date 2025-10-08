@@ -13,7 +13,7 @@ export const PesquisadoresLista = ({projectId}:{projectId:string}) => {
                                     return(
                                         <div key={key} className="flex flex-col gap-2 border-b pb-7 pt-3">
                                         <h2 className="text-2xl font-semibold">{capitalize(key)}</h2>
-                                        <div className="flex flex-row gap-5 ">
+                                        <div className="grid w-full gap-4 [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] ">
                                         {items && items.map((p,i) => 
                                                 <CardPesquisador 
                                                                 key={i}
