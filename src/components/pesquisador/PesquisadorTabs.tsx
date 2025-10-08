@@ -10,6 +10,7 @@ import {  getResearcherProjects } from "@/core/service/PesquisadorService";
 import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
 import CardProjeto from "../projeto/CardProjeto";
 import { useViewPort } from "@/hooks/useViewPort";
+import { ScrollArea } from "../ScrollArea"
 
 export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) => {
     const [activeTab, setActiveTab] = useState("artigos")
@@ -80,6 +81,7 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="artigos" className="flex-1 min-h-0 flex flex-col">
+                  <ScrollArea className="flex-1 min-h-0  mt-3">
                   <Masonry
                         columnsCount={isMobile ? 1 : isTablet ? 2 : 3}
                         gutter="10px" >
@@ -87,7 +89,7 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                         <CardArtigo key={i} article={a}/>
                       )}
                   </Masonry>
-              
+                </ScrollArea>
                 </TabsContent>
 
                 <TabsContent value="participacaoEventos" className="mt-4">
