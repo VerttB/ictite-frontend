@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Spinner } from "@/components/LoadingSpin";
 import { useParams } from "next/navigation";
 import { ScrollArea } from "@/components/ScrollArea";
+import { Downloader } from "@/components/Downloader";
 
 export default function Page(){
 
@@ -34,7 +35,10 @@ export default function Page(){
             />
           </div>
           <div className="w-full ">
-            <h1 className="text-3xl">{researcher.name}</h1>
+            <div className="flex justify-between items-start sm:items-center gap-2 mb-2">
+              <h1 className="text-3xl">{researcher.name}</h1>
+              <Downloader path="researchers" id={researcher.id}/>
+            </div>
             {researcher.simcc && (
               <div className="flex flex-col gap-4 w-full">
                <div className="flex flex-wrap justify-between sm:justify-normal gap-4 w-full">
