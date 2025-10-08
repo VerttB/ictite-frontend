@@ -26,7 +26,7 @@ export const SugestionList = ({data}: SugestionListProps) => {
           return (
             <div className="flex flex-wrap  gap-4" key={key}>
               <div className="flex flex-col gap-2 w-full">
-                <h3 className="py-2 px-8 rounded-md w-fit bg-accent">{capitalize(key)}</h3>
+                <h3 className="py-2 px-8 text-font-primary rounded-md w-fit bg-accent">{capitalize(key)}</h3>
 
                 <div className="grid grid-cols-2 items-start gap-1 w-full">
                   {items.map((e) => (

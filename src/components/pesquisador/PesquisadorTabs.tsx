@@ -2,12 +2,7 @@
 import { House, PanelsTopLeft, Printer } from "lucide-react"
 import {  useState } from "react"
 import { Button } from "../ui/button"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs"
 import Masonry from "react-responsive-masonry";
 import CardArtigo from "../card/CardArtigos";
 import useSWR from "swr";
@@ -36,12 +31,7 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                   <TabsTrigger value="artigos" asChild>
                     <Button
                       variant={
-                        activeTab === "artigos"
-                          ? "default"
-                          : "outline"
-                      }
-                      className="px-3 py-1 text-zinc-700 rounded-sm hover:bg-primary hover:text-font-secondary data-[state=active]:bg-primary data-[state=active]:text-font-secondary"
-                    >
+                        activeTab === "artigos" ? "default": "outline"}>
                       <House />
                       <p>Artigos</p>
                     </Button>
@@ -54,7 +44,7 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                           ? "default"
                           : "outline"
                       }
-                      className="px-3 py-1 text-zinc-700  hover:bg-primary hover:text-font-secondary data-[state=active]:bg-primary data-[state=active]:text-font-secondary"
+                      className=""
                     >
                       <Printer />
                       <p>Participação Eventos</p>
