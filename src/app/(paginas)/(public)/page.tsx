@@ -7,8 +7,6 @@ import { Ictite } from "@/core/interface/IIctite";
 import { SearchBar } from "@/components/SearchBar";
 import Mapa from "@/components/Mapa";
 import { Spinner } from "@/components/LoadingSpin";
-import { ChevronRight, School } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import EscolaList from "@/components/escola/EscolaList";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import PesquisadorLoader from "@/components/pesquisador/PesquisadorLoader";

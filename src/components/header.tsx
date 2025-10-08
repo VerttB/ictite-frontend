@@ -7,7 +7,6 @@ import { getAssetPrefix } from "@/core/utils/api";
 import { useTheme } from "@/core/providers/ThemeProvider";
 import { MoonIcon, SunIcon } from "lucide-react"
 import { useViewPort } from "@/hooks/useViewPort"
-const isProd = process.env.NODE_ENV === "production";
 
 export const Header = () => {
     const { theme, toggleTheme } = useTheme()

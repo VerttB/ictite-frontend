@@ -3,7 +3,6 @@
 import { ChevronRight, School } from "lucide-react";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import { SchoolData } from "@/core/interface/School";
 import { getSchools } from "@/core/service/SchoolService";
 import Link from "next/link";
 import { SugestionBase } from "@/core/interface/SugestionBase";
@@ -15,14 +14,12 @@ interface EscolaListProps {
 export default function EscolaList ({escolasBusca}: EscolaListProps) {
 
     const [schools, setSchools] = useState<SugestionBase[]>([]);
-    const [schoolsLoading, setSchoolsLoading] = useState(false);
-    const [schoolsError, setSchoolsError] = useState<string | null>(null);
+
 
     useEffect(() => {
         // CARREGANDO AS ESCOLAS:  
         const loadSchools = async () => {
-            setSchoolsLoading(true);
-            setSchoolsError(null);
+           
             try {
                 if(escolasBusca && escolasBusca.length !== 0){
                     setSchools(escolasBusca);
@@ -32,10 +29,8 @@ export default function EscolaList ({escolasBusca}: EscolaListProps) {
                 }
             } catch (err: unknown) {
                 console.error("Erro ao buscar escolas:", err);
-                setSchoolsError("Não foi possível carregar as escolas.");
                 setSchools([]);
             } finally {
-                setSchoolsLoading(false);
             }
         };
 

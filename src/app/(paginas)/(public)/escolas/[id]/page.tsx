@@ -11,8 +11,6 @@ import { EscolaTabs } from "@/components/escola/EscolaTabs";
 import { useParams } from "next/navigation";
 import InfoBar from "@/components/InfoBar";
 import { Book, LucideIcon, MapPin, Table, Table2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Downloader } from "@/components/Downloader";
 
 export default function Page() {

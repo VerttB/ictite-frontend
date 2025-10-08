@@ -2,7 +2,7 @@
 import { Search } from "lucide-react"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState, useCallback } from "react"
 import { getSchools } from "@/core/service/SchoolService"
 import { getResearchers } from "@/core/service/PesquisadorService"
 import { SugestionList } from "./SugestionList"
@@ -28,7 +28,11 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
 //     return Promise.all(urlArr.map(f));
     
 // }
-    const getData = async (val: string) => {
+
+
+
+
+    const getData = useCallback(async (val: string) => {
         const [schools, researchers, projects] = await Promise.all([
             getSchools(val),
             getResearchers(val),
@@ -46,7 +50,7 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
         if (onSugestoesChange) {
             onSugestoesChange(sugestions)
         }
-    }
+    },[ onSugestoesChange, sugestions])
 
 
     useEffect(() => {
@@ -64,7 +68,7 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
             }
         }
 
-    },[value])
+    },[value, onSugestoesChange, sugestions, getData])
 
 
     // |=======| FUNÇÃO QUE ATUALIZA OS VALORES QUANDO CLICA NO BOTÃO |=======|

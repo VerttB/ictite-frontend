@@ -8,7 +8,6 @@ import useSWR from "swr";
 import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Project } from "@/core/interface/Project";
 import { capitalize } from "@/core/utils/capitalize";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useViewPort } from "@/hooks/useViewPort";
 
@@ -19,7 +18,6 @@ interface ProjetoProps {
 }
 
 export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
-    const router = useRouter();
     const {data : pesquisadores} = useSWR(`project-${project.id}`, () => getProjectResearchers(project.id))
     const { isMobile } = useViewPort();
     return(

@@ -123,7 +123,7 @@ function SidebarProvider({
       setOpenMobile,
       toggleSidebar,
     }),
-    [state, open, setOpen, (isMobile || isTablet), openMobile, setOpenMobile, toggleSidebar]
+    [state, open, setOpen, isMobile,isTablet, openMobile, setOpenMobile, toggleSidebar]
   )
     if(!isReady) return <div className="transparent"></div>
 
