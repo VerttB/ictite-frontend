@@ -78,6 +78,19 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
         }
     }
 
+    // |=======| FUNÇÃO PARA CAPTURAR O ENTER |=======|
+    const handleSearchEnter = (event: React.KeyboardEvent<HTMLInputElement>, id = "escolas") => {
+        if(event.key === "Enter"){
+            getData(value)
+
+            //  ROLAGEM SUAVE ATÉ A BUSCA
+            const section = document.getElementById(id);
+            if (section) {
+                section.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    }
+
     return (
         <div className="flex flex-col gap-0"> 
 
@@ -85,6 +98,7 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
         <Input
             ref={inputRef}
             onChange={handleValueChange}
+            onKeyDown={handleSearchEnter}
             value={value}
             type={"search"}
             placeholder="Busca por escola, pesquisador ou projetos" 
