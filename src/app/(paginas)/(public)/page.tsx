@@ -47,10 +47,10 @@ export default function ProjetoPage() {
           <h1 className="sm:text-sm md:text-xl">{projeto?.objective}</h1>
         </div>
       </div>
-      <SearchBar onSugestoesChange={handleSugestoesChange}/>
       
        
         <Mapa />
+      <SearchBar onSugestoesChange={handleSugestoesChange}/>
 
 
       {/* |=======| LISTA DAS ESCOLAS |=======| */}
