@@ -7,7 +7,7 @@ import { getBaseUrl } from "@/core/utils/api";
 
 export const getSchoolGeoData =  async () => {
     try{
-        const res  = await fetch(`${getBaseUrl()}/schools/geojson/`)
+        const res  = await fetch(`${getBaseUrl()}/schools/geojson`)
         
         if (!res.ok) {
             throw new Error(`Erro na buca: ${res.status} ${res.statusText}`);
