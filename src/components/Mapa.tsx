@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation"
 import useSWR from "swr"
 import { getSchoolGeoData } from "@/core/service/SchoolService"
 import { useSidebar } from "./ui/sidebar"
+import { useTheme } from "@/core/providers/ThemeProvider"
 
 type LngLatBoundsLike =
   | [[number, number], [number, number]]
@@ -30,6 +31,7 @@ export default function MapaRender() {
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);
   const { open } = useSidebar()
+  const { theme } = useTheme()
   const brazilBounds = useMemo<LngLatBoundsLike>(() => [
     [-84.0, -34.0],
     [-34.0, 5.5]
@@ -40,7 +42,7 @@ export default function MapaRender() {
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "mapbox://styles/mapbox/navigation-night-v1",
+      style: 'mapbox://styles/mapbox/' + (theme === 'dark' ? 'dark-v10' : 'light-v10'),
       center: [-41.5, -12.9],
       zoom: 5,
       trackResize: true,
@@ -106,7 +108,7 @@ export default function MapaRender() {
     });
 
     return () => { map.remove() };
-  }, [geojsonData, brazilBounds, router]);
+  }, [geojsonData, brazilBounds, router, theme]);
 
    useEffect(() => {
     if (open) {
@@ -117,7 +119,8 @@ export default function MapaRender() {
       }, 250);
     }
   }, [mapRef, open]);
-  
+
+
   if (loading) return <div className="h-64 w-full flex flex-col items-center justify-center">
     <Spinner />
     <h2>Carregando Mapa....</h2>
