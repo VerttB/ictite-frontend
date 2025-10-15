@@ -90,7 +90,6 @@ export default function Console () {
 
     // |=======| UPLOAD DO ARQUIVO |=======|
     const handleUpload = async () => {
-        console.log(escolaSelecionada);
 
         if (!arquivo) {
             toast.error("Selecione um arquivo primeiro.");

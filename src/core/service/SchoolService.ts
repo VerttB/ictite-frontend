@@ -8,7 +8,6 @@ import { getBaseUrl } from "@/core/utils/api";
 const url_base = process.env.NEXT_PUBLIC_BASE_URL
 
 export const getSchoolGeoData =  async () => {
-    console.log(url_base)
     try{
         const res  = await fetch(`${getBaseUrl()}/schools/geojson/`)
         

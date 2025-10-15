@@ -17,9 +17,7 @@ const exporter = async (path: string ,id?: string, file?: string) => {
     const blob = await res.blob();
     const url = window.URL.createObjectURL(new Blob([blob]));
     const link = document.createElement('a');
-       res.headers.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-    });
+     
     const header = res.headers.get('Content-Disposition');
  
     if (header) {
