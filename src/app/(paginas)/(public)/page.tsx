@@ -49,7 +49,6 @@ export default function ProjetoPage() {
       </div>
       
        
-        <Mapa />
       <SearchBar onSugestoesChange={handleSugestoesChange}/>
 
 
@@ -112,6 +111,7 @@ export default function ProjetoPage() {
           </div>
         )}
       </div>
+                <Mapa />
 
     </div>
   );
