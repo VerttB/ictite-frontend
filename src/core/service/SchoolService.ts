@@ -5,8 +5,6 @@ import { SchoolData } from "@/core/interface/School";
 import { SchoolStatistics } from "@/core/interface/School/SchoolStatistics";
 import { getBaseUrl } from "@/core/utils/api";
 
-const url_base = process.env.NEXT_PUBLIC_BASE_URL
-
 export const getSchoolGeoData =  async () => {
     try{
         const res  = await fetch(`${getBaseUrl()}/schools/geojson/`)
