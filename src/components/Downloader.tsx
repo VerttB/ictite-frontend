@@ -1,4 +1,4 @@
-
+'use client'
 import { Button } from "@/components/ui/button"
 import { getBaseUrl } from "@/core/utils/api"
 import { useState } from "react"
