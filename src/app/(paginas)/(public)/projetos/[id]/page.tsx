@@ -11,13 +11,14 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-export default function Page(){
-  const { id } = useParams<{ id: string }>();
-  const { data: project, error } = useSWR(id ? ["project", id] : null, () => getProjectById(id))
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
 
-  if (!id) return <div className="px-10 py-6">ID inválido</div>
-  if (!project && !error) return <div className="px-10 py-6"><Spinner size="large">Carregando...</Spinner></div>
-  if (error) return <div className="px-10 py-6 text-red-600">{(error as Error)?.message || 'Erro desconhecido'}</div>
+}) {
+  const { id } = await params;
+  const project = await getProjectById(id);
   if (!project) return <div className="px-10 py-6">Projeto não encontrado</div>
 
   return(

@@ -1,33 +1,25 @@
-"use client";
 
-import React from "react";
-import useSWR from "swr";
 import {
   getSchoolById,
   getSchoolStatistics,
 } from "@/core/service/SchoolService";
 import Image from "next/image";
 import { EscolaTabs } from "@/components/escola/EscolaTabs";
-import { useParams } from "next/navigation";
 import InfoBar from "@/components/InfoBar";
 import { Book, LucideIcon, MapPin, Table, Table2 } from "lucide-react";
 import { Downloader } from "@/components/Downloader";
 
-export default function Page() {
-  const { id } = useParams<{ id: string }>();
-  const { data: school, error: schoolError } = useSWR(
-    id ? ["school", id] : null,
-    () => getSchoolById(id)
-  );
-  const { data: schoolStatistics, error: statsError } = useSWR(
-    id ? ["schoolStatistics", id] : null,
-    () => getSchoolStatistics(id)
-  );
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
 
-  const loading =
-    (!school && !schoolError) || (!schoolStatistics && !statsError);
-  const error = schoolError || statsError;
+}) {
+  const { id } = await params;
+  const school = await getSchoolById(id);
+  const schoolStatistics = await getSchoolStatistics(id);
   let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
+
   if (schoolStatistics)
     stats = [
       {
@@ -46,14 +38,7 @@ export default function Page() {
         Icon: Table,
       },
     ];
-  if (loading) return <div className="px-10 py-6">Carregando...</div>;
 
-  if (error)
-    return (
-      <div className="px-10 py-6 text-red-600">
-        {(error as Error).message || "Erro desconhecido"}
-      </div>
-    );
 
   if (!school) return <div className="px-10 py-6">Escola não encontrada</div>;
 
