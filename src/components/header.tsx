@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image"
 import {Button} from "../components/ui/button"
-import { Bolt, CircleUserRound } from "lucide-react"
+import { Bolt, ChevronRight, CircleUserRound } from "lucide-react"
 import Link from "next/link"
 import { getAssetPrefix } from "@/core/utils/api";
 import { useTheme } from "@/core/providers/ThemeProvider";
@@ -14,19 +14,27 @@ export const Header = () => {
     return(
         <header className="w-full p-3 bg-foreground flex justify-between items-center">
             <div className="flex flex-col sm:flex-row   w-full h-full sm:gap-2">
-            <div className="relative w-32  sm:w-48 h-16">
-                <Image
-                src={`${getAssetPrefix()}/logoImagem.png`}
-                alt="Logo"
-                fill
-                className="
-                    object-contain"/>
-            </div>
+                <div className="relative w-32  sm:w-48 h-16">
+                    <Image
+                    src={`${getAssetPrefix()}/logoImagem.png`}
+                    alt="Logo"
+                    fill
+                    className="
+                        object-contain"/>
+                </div>
                 <p className="text-sm text-gray-500 flex items-end">beta β 1.1</p>
 
         
             </div>
             <div className="flex flex-row items-center gap-2 sm:gap-4">
+                <Link href={"https://simcc.uesc.br/"}>
+                    <Button
+                        size={isMobile ? "icon" : "default"}
+                        className="text-xl cursor-pointer "
+                    >
+                        {isMobile ? <ChevronRight /> : "Observatório"}
+                    </Button>
+                </Link>
                 <Button 
                     size={"icon"}
                     variant="outline"
@@ -43,7 +51,7 @@ export const Header = () => {
                 </Link>
                 <Button  className="text-xl  py-1  px-10">
                     <CircleUserRound />
-                    {isMobile ? "Login" : "Fazer Login"}
+                    {isMobile ? "" : "Fazer Login"}
                 </Button>
             </div>
         </header>
