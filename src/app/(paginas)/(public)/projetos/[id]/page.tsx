@@ -1,13 +1,8 @@
-'use client'
-
 import React from 'react'
-import useSWR from 'swr'
 import { PesquisadoresLista } from "@/components/pesquisador/PesquisadoresLista";
 import { getProjectById } from "@/core/service/ProjetoService";
 import { Book, ChevronLeft, GraduationCap, Handshake, School } from "lucide-react";
 import Image from "next/image";
-import { Spinner } from "@/components/LoadingSpin";
-import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
