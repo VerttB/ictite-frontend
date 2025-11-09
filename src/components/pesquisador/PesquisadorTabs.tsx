@@ -18,7 +18,7 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
     const { isMobile , isTablet} = useViewPort()
 
     if(!researcher) return null
-    researcher.articles.sort( (a,b) => b.year - a.year)
+    if(researcher.articles) researcher.articles.sort( (a,b) => b.year - a.year)
 
     return(
         <>
@@ -59,7 +59,6 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                           ? "default"
                           : "outline"
                       }
-                      className="px-3 py-1 text-zinc-700 hover:bg-primary hover:text-font-secondary data-[state=active]:bg-primary data-[state=active]:text-font-secondary"
                     >
                       <PanelsTopLeft />
                       <p>Projetos</p>
@@ -73,7 +72,6 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                           ? "default"
                           : "outline"
                       }
-                      className="px-3 py-1 text-zinc-700 hover:bg-primary hover:text-font-secondary data-[state=active]:bg-primary data-[state=active]:text-font-secondary"
                     >
                       <PanelsTopLeft />
                       <p>Livros e Capítulos</p>
@@ -82,13 +80,18 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                 </TabsList>
                 <TabsContent value="artigos" className="flex-1 min-h-0 flex flex-col">
                   <ScrollArea className="flex-1 min-h-0  mt-3">
+                  { researcher.articles && researcher.articles.length > 0 ? (
                   <Masonry
                         columnsCount={isMobile ? 1 : isTablet ? 2 : 3}
                         gutter="10px" >
-                      {researcher.articles.map((a,i) => 
+                      { researcher.articles.map((a,i) => 
                         <CardArtigo key={i} article={a}/>
                       )}
-                  </Masonry>
+                  </Masonry>) : (
+                    <div className="flex justify-center items-center h-full p-10">
+                      <p>Nenhum artigo encontrado.</p>
+                    </div>
+                  )}
                 </ScrollArea>
                 </TabsContent>
 
@@ -96,15 +99,21 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                   <p>Participação Eventos</p>
                 </TabsContent>
 
-                <TabsContent value="projetos" className="mt-4">
+                <TabsContent value="projetos" className="flex-1 min-h-0 flex flex-col">
+                  {projects && projects.length > 0  ? (
                     <Masonry
-                        columnsCount={isMobile ? 1 : isTablet ? 2 : 3}
-                        gutter="10px" >
-              
+                      columnsCount={isMobile ? 1 : isTablet ? 2 : 3}
+                      gutter="10px"
+                    >
                       {projects?.map((projeto, i) => (
                                   <CardProjeto key={i} project={projeto} />
                                 ))}
-                    </Masonry>
+                    </Masonry>) 
+                    : (
+                      <div className="flex justify-center items-center h-full p-10">
+                        <p>Nenhum projeto encontrado.</p>
+                      </div>
+                    )}
                 </TabsContent>
 
                 <TabsContent value="livros_capitulos" className="mt-4">

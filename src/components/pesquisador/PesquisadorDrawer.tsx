@@ -94,18 +94,22 @@ export default function Pesquisador({
                 </Link>}
               </DrawerTitle>
               <div className="flex gap-4 w-full">
-                <span className="flex items-center gap-1 text-lg text-font-primary/80">
-                  <MapPin size={15} />
-                  <p>{researcher?.simcc.city ?? "Cidade não disponível"}</p>
-                </span>
-                <span className="flex items-center gap-1 text-lg text-font-primary/80">
-                  <GraduationCap size={15} />
-                  <p>{researcher?.simcc.graduation ?? "Graduação não disponível"}</p>
-                </span>
-                <span className="flex items-center gap-1 text-lg text-font-primary/80">
-                  <School size={15} />
-                  <p>{researcher?.school ?? "Instituição não disponível"}</p>
-                </span>
+                {researcher?.simcc ? (
+                <> 
+                  <span className="flex items-center gap-1 text-lg text-font-primary/80">
+                    <MapPin size={15} />
+                    <p>{researcher?.simcc.city ?? "Cidade não disponível"}</p>
+                  </span>
+                  <span className="flex items-center gap-1 text-lg text-font-primary/80">
+                    <GraduationCap size={15} />
+                    <p>{researcher?.simcc.graduation ?? "Graduação não disponível"}</p>
+                  </span>
+                  <span className="flex items-center gap-1 text-lg text-font-primary/80">
+                    <School size={15} />
+                    <p>{researcher?.school ?? "Instituição não disponível"}</p>
+                  </span>
+                 </>
+                ) : <p>Nenhuma informação disponível</p>}
                 </div>
                     <ScrollArea>
                   <DrawerDescription className={`text-sm py-2 pr-2`}>

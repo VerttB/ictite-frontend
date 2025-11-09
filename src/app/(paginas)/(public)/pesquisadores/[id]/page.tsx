@@ -1,27 +1,29 @@
-'use client'
-
 import React from "react";
-import useSWR from "swr";
 import { PesquisadorTabs } from "@/components/pesquisador/PesquisadorTabs";
 import { getResearcherById } from "@/core/service/PesquisadorService";
 import { GraduationCap, MapPin, School} from "lucide-react";
 import Image from "next/image";
-import { Spinner } from "@/components/LoadingSpin";
-import { useParams } from "next/navigation";
+
 import { ScrollArea } from "@/components/ScrollArea";
 import { Downloader } from "@/components/Downloader";
 
-export default function Page(){
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
 
-  const { id } = useParams<{ id: string }>();
-  const { data: researcher, error } = useSWR(id ? ["researcher", id] : null, () => getResearcherById(id, true))
+}) {
 
-  if (!id) return <div className="px-10 py-6">ID inválido</div>
-  if (!researcher && !error) return (
-    <div className="px-10 py-6"><Spinner size="large">Carregando...</Spinner></div>
-  )
-  if (error) return <div className="px-10 py-6 text-red-600">{(error as Error)?.message || 'Erro desconhecido'}</div>
-  if (!researcher) return <div className="px-10 py-6">Pesquisador não encontrado</div>
+  const { id } = await params;
+  const researcher = await getResearcherById(id, true);
+
+  if (!researcher) {
+    return (
+      <div className="w-full flex flex-col gap-4 overflow-x-hidden p-4 ">
+        <h2 className="text-2xl font-semibold">Pesquisador não encontrado</h2>
+      </div>
+    );
+  }
 
   return(
       <div className="w-full flex flex-col gap-4 overflow-x-hidden p-4 ">
