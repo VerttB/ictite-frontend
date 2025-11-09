@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image"
-import {Button} from "../components/ui/button"
+import {Button} from "./ui/button"
 import { Bolt, ChevronRight, CircleUserRound } from "lucide-react"
 import Link from "next/link"
 import { getAssetPrefix } from "@/core/utils/api";

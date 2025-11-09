@@ -3,7 +3,7 @@ import { SugestionBase } from "@/core/interface/SugestionBase";
 import { getProjectById } from "@/core/service/ProjetoService";
 import { useEffect, useState } from "react";
 import { Spinner } from "../LoadingSpin";
-import CardProjeto from "./CardProjeto";
+import CardProjeto from "./ProjetoCard";
 
 interface ProjetoLoaderProps {
     sugestion: SugestionBase;
