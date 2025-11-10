@@ -9,8 +9,8 @@ import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/
 import { Spinner } from "../LoadingSpin"
 import CardProjeto from "../projeto/ProjetoCard"
 import CardEquipamento from "../card/CardEquipamento"
-import CardPesquisador from "../pesquisador/CardPesquisador"
 import ClubeCienciaTabs from "../clubeCiencia/ClubeCienciaTabs"
+import CardPesquisador from "../pesquisador/PesquisadorCard"
 
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {

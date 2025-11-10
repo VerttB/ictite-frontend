@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import CardPesquisador from "./CardPesquisador";
+import CardPesquisador from "./PesquisadorCard";
 import { getResearcherById } from "@/core/service/PesquisadorService";
 import { Spinner } from "../LoadingSpin";
 
