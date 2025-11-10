@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs"
 import { Button } from "@/components/ui/button"
-import { House, Printer, PanelsTopLeft } from "lucide-react"
+import { House, Printer, PanelsTopLeft, Brain } from "lucide-react"
 
 import { useState } from "react"
 import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/hooks/useSchools"
@@ -10,6 +10,7 @@ import { Spinner } from "../LoadingSpin"
 import CardProjeto from "../projeto/ProjetoCard"
 import CardEquipamento from "../card/CardEquipamento"
 import CardPesquisador from "../pesquisador/CardPesquisador"
+import ClubeCienciaTabs from "../clubeCiencia/ClubeCienciaTabs"
 
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
@@ -39,6 +40,11 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
             <PanelsTopLeft /> Projetos
           </Button>
         </TabsTrigger>
+        <TabsTrigger value="clube de ciência" asChild>
+          <Button variant={activeTab === "clube de ciência" ? "default" : "outline"}>
+            <Brain /> Clube de Ciênica
+          </Button>
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent
@@ -63,6 +69,10 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
          projects?.map((p,i) =><CardProjeto 
                                           key={i}
                                           project={p}/> )}
+      </TabsContent>
+
+      <TabsContent value="clube de ciência">
+          { projects ? <ClubeCienciaTabs projetosClubeCiencia={projects}/> : "Não passou projetos" }
       </TabsContent>
     </Tabs>
     </>

@@ -13,6 +13,7 @@ import {
 import { BookOpen, ChartSpline, Handshake, Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { title } from "process"
 
 
 const items = [
