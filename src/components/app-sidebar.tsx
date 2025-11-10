@@ -10,9 +10,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { BookOpen, ChartSpline, Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
+import { BookOpen, ChartSpline, Home ,  Newspaper,  SquareChartGantt, Video, Brain} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { title } from "process"
 
 
 const items = [
@@ -50,6 +51,12 @@ const items = [
         title: "Gráficos Estatísticos",
         url: "/materiais",
         icon: ChartSpline,
+        size: 10,
+    },
+    {
+        title: "Clubes de Ciência",
+        url: "/artigos",
+        icon: Brain,
         size: 10,
     }
 ]
