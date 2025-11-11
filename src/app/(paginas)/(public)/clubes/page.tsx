@@ -1,0 +1,30 @@
+import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, Goal } from "lucide-react";
+
+export default function Clubes() {
+    return (
+        <div className="flex flex-col gap-8 w-full  sm:px-8 py-4">
+            {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
+            <div className="flex flex-row gap-5 items-center">
+                <Button size={"icon"} variant={"outline"} className="cursor-pointer"><ChevronLeft /></Button>
+                <p className="text-2xl font-semibold">Clubes de Ciência</p>
+            </div>
+
+            {/* |=======| OBJETIVOS DOS CLUBES DE CIÊNCIA |=======| */}
+            <div className="flex flex-col gap-5">
+                <div className="flex gap-2 items-center">
+                    <Goal />
+                    <h2 className="text-2xl font-semibold">Objetivos dos Clubes de Ciência</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center">
+                    <ObjetivoClubeCard />
+                    <ObjetivoClubeCard />
+                    <ObjetivoClubeCard />
+                </div>
+            </div>
+            
+        </div>
+    )
+}
