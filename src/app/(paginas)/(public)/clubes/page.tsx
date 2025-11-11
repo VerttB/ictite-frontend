@@ -1,9 +1,46 @@
 import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
+import InfoBar from "@/components/InfoBar";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, Goal } from "lucide-react";
+import { BookA, BookOpenText, BrainCircuit, ChartBar, ChartSpline, ChevronLeft, Goal, HeartHandshake, LucideIcon } from "lucide-react";
 
 export default function Clubes() {
+
+    let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
+
+    stats = [
+        {
+            titulo: "Clubes de Ciência",
+            valor: 34,
+            Icon: BrainCircuit,
+        },
+        {
+            titulo: "Alunos",
+            valor: 100,
+            Icon: BookA,
+        },
+        {
+            titulo: "Professores",
+            valor: 41,
+            Icon: BookOpenText,
+        },
+        {
+            titulo: "Facilitadores",
+            valor: 28,
+            Icon: HeartHandshake,
+        },
+        {
+            titulo: "Média de alunos por clube",
+            valor: 4.1,
+            Icon: ChartBar,
+        },
+        {
+            titulo: "Média de projetos por clube",
+            valor: 1.2,
+            Icon: ChartSpline,
+        },
+    ];
+
     return (
         <div className="flex flex-col gap-8 w-full  sm:px-8 py-4">
 
@@ -25,6 +62,11 @@ export default function Clubes() {
                     <ObjetivoClubeCard />
                     <ObjetivoClubeCard />
                 </div>
+            </div>
+
+            {/* |=======| ESTATÍSTICAS DOS CLUBES DE CIÊNCIA |=======| */}
+            <div className="w-full">
+                <InfoBar data={stats} />
             </div>
 
             {/* |=======| LISTAGEM DOS CLUBES DE CIÊNCIA |=======| */}
