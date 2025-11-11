@@ -28,7 +28,7 @@ export const PesquisadorTabs = ({researcher}: { researcher: ResearcherFinal}) =>
                 onValueChange={setActiveTab}
                 className="flex flex-col h-full min-h-0"
               >
-                <TabsList className="flex flex-row gap-5 w-full py-2 px-4 h-12 rounded-sm bg-accent">
+                <TabsList className="flex flex-row gap-5 w-full py-2 px-4 h-12 rounded-sm bg-accent overflow-hidden overflow-x-auto">
                   <TabsTrigger value="artigos" asChild>
                     <Button
                       variant={

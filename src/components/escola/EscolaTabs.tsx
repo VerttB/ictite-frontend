@@ -23,7 +23,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   return (
     <>
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-accent">
+      <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-accent overflow-hidden overflow-x-auto">
         <TabsTrigger value="pesquisadores" asChild>
           <Button 
                 variant={activeTab === "pesquisadores" ? "default" : "outline"}>
