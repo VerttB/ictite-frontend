@@ -1,9 +1,9 @@
 import { getBaseUrl } from "../utils/api";
 
 // |=======| GET DE TODOS OS CLUBES DE CIÊNCIA |=======|
-export const getClubesCiencia = async () => {
+export const getClubesCiencia = async (title: string = "") => {
     try {
-        const res: Response = await fetch(`${getBaseUrl()}/clubeCiencia`);
+        const res: Response = await fetch(`${getBaseUrl()}/clubeCiencia/?title=${title}`);
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
         return data;
