@@ -1,8 +1,14 @@
+"use client"
+
 import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
 import { Button } from "@/components/ui/button";
+import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
+import { getClubesCiencia } from "@/core/service/ClubeCienciaService";
 import { BookA, BookOpenText, BrainCircuit, ChartBar, ChartSpline, ChevronLeft, Goal, HeartHandshake, LucideIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { set } from "react-hook-form";
 
 export default function Clubes() {
 
@@ -41,6 +47,17 @@ export default function Clubes() {
         },
     ];
 
+    const [clubesCiencia, setClubesCiencia] = useState<ClubeCiencia[]>([]);
+
+    useEffect(() => {
+        const carreharClubes = async () => {
+            const clubes = await getClubesCiencia();
+            setClubesCiencia(clubes);
+        }
+
+        carreharClubes();
+    }, []);
+
     return (
         <div className="flex flex-col gap-8 w-full  sm:px-8 py-4">
 
@@ -75,9 +92,15 @@ export default function Clubes() {
                     <h2 className="text-2xl font-semibold">Clubes de Ciência:</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 justify-items-center">
-                    {Array.from({ length: 12 }).map((_, i) => (
-                        <ClubeCienciaCard key={i} />
-                    ))}
+                    { clubesCiencia ? (
+                        clubesCiencia.map((clubeCiencia) => (
+                            <ClubeCienciaCard key={clubeCiencia.id} clubeCiencia={clubeCiencia} />
+                        ))
+                    ) : (
+                       <div>
+                           <p>Carregando...</p>
+                       </div> 
+                    )}
                 </div>
             </div>
             
