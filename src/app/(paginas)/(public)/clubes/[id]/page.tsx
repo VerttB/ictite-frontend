@@ -2,7 +2,7 @@
 import InfoBar from "@/components/InfoBar";
 import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
 import { getClubeCienciaById } from "@/core/service/ClubeCienciaService";
-import { BookA, BookOpenText, Instagram, PanelsTopLeft, School } from "lucide-react";
+import { BookA, BookOpenText, Instagram, LucideIcon, PanelsTopLeft, School } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { set } from "react-hook-form";
