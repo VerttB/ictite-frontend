@@ -4,12 +4,13 @@ import { login, me, logout } from "@/core/service/AuthService";
 import { useRouter } from "next/navigation";
 import { createContext , useState, useContext, useEffect } from "react";
 import { User } from "@/core/interface/User";
+import { LoginRequest } from "@/core/interface/Login";
 
 type UserContextType = {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  loginUser: (user: Pick<User, "username" | "password">) => Promise<boolean>;
+  loginUser: (loginRequest: LoginRequest) => Promise<boolean>;
   logoutUser: () => void;
   error: string | null;
 
@@ -54,10 +55,10 @@ export default function UserProvider({
     loadUser();
   }, []);
 
-  const loginUser = async (user: Pick<User, "username" | "password">): Promise<boolean> => {
+  const loginUser = async (loginRequest: LoginRequest): Promise<boolean> => {
     setIsLoading(true);
     try {
-      await login(user);
+      await login(loginRequest);
       const userData = await me();
       setUser(userData);
       router.push("/");
