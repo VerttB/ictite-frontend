@@ -74,7 +74,7 @@ export default function Clubes() {
                     <h2 className="text-2xl font-semibold">Objetivos dos Clubes de Ciência</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center my-5">
                     <ObjetivoClubeCard />
                     <ObjetivoClubeCard />
                     <ObjetivoClubeCard />

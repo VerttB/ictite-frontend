@@ -9,10 +9,13 @@ import { useEffect, useState } from "react";
 import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
 import { getClubesCienciaBySchool } from "@/core/service/ClubeCienciaService";
 import Link from "next/link";
+import { getProjectbyClube } from "@/core/service/ProjetoService";
+import { getResearchersByClube } from "@/core/service/PesquisadorService";
 
-interface ClubeCienciaBase {
-    title: string;
-    description: string;
+interface ClubeCienciaTotal {
+    clubeCiencia: ClubeCiencia;
+    projetosClubeCiencia: Project[];
+    pesquisadoresClubeCiencia: string[];
 }
 
 interface ClubeCienciaTabsProps {
@@ -23,16 +26,20 @@ interface ClubeCienciaTabsProps {
 
 export default function ClubeCienciaTabs({ projetosClubeCiencia, school_id }: ClubeCienciaTabsProps) {
 
-    const clubeCienciaMock : ClubeCienciaBase = {
-        title:"Clube de Ciência de exemplo", description: "O clube de ciência focado em biologia desde o ensino fundamental até o ensimo superior Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, error cumque non aut atque, nobis est molestiae eaque deserunt dicta ipsum, placeat culpa repellendus quam totam sequi incidunt debitis voluptates." 
-    };
-
     const [clubesCiencia, setClubesCiencia] = useState<ClubeCiencia[]>([]);
+    const [clubeCienciaTotal, setClubeCienciaTotal] = useState<ClubeCienciaTotal[]>([]);
 
     useEffect(() => {
         const carregarClubes = async () => {
             const clubes = await getClubesCienciaBySchool(school_id);
             setClubesCiencia(clubes);
+        }
+
+        const carregarProjetosClube = async () => {
+            while(clubeCienciaTotal.length < clubesCiencia.length) {
+                const projetos = await getProjectbyClube(clubesCiencia[clubeCienciaTotal.length].id);
+                const researchers = await getResearchersByClube(clubesCiencia[clubeCienciaTotal.length].id)
+            }
         }
 
         carregarClubes();

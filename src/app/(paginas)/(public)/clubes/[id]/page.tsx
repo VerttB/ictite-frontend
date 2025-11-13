@@ -1,17 +1,26 @@
 
+import ClubeProjetoPesquisador from "@/components/clubeCiencia/ClubeProjetoPesquisador";
 import InfoBar from "@/components/InfoBar";
+import CardProjeto from "@/components/projeto/ProjetoCard";
 import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
+import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import { Project } from "@/core/interface/Project";
 import { getClubeCienciaById } from "@/core/service/ClubeCienciaService";
-import { BookA, BookOpenText, Instagram, LucideIcon, PanelsTopLeft, School } from "lucide-react";
+import { getResearchersByClube } from "@/core/service/PesquisadorService";
+import { getProjectbyClube } from "@/core/service/ProjetoService";
+import { get } from "http";
+import { BookA, BookOpenText, Goal, Instagram, LucideIcon, PanelsTopLeft, School } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 
 export default async function OneClubeCiencia ( { params }: { params: Promise<{ id: string }> } ) {
 
     const { id } = await params;
 
     const clubeCiencia : ClubeCiencia = await getClubeCienciaById(id);
+
+    const researchers : Researcher[] = (await getResearchersByClube(clubeCiencia.id)) ?? [];
+
+    const projects : Project[] = await (getProjectbyClube(clubeCiencia.id)) ?? [];
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
@@ -32,6 +41,8 @@ export default async function OneClubeCiencia ( { params }: { params: Promise<{ 
             Icon: PanelsTopLeft,
         }
     ];
+
+    
 
     return(
         <div className="flex flex-col gap-8 p-8">
@@ -75,6 +86,11 @@ export default async function OneClubeCiencia ( { params }: { params: Promise<{ 
             {/* |=======| ESTATÍSTICAS DO CLUBE DE CIÊNCIA |=======| */}
             <div>
                 <InfoBar  data={stats}/>
+            </div>
+
+            {/* |=======| PROJETOS DO CLUBE DE CIÊNCIA |=======| */}
+            <div>
+                <ClubeProjetoPesquisador projects={projects} pesquisador={researchers} />
             </div>
 
             
