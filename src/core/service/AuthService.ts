@@ -1,6 +1,7 @@
+import { LoginRequest } from "../interface/Login";
 import { User } from "../interface/User";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-export const login =  async (user: Pick<User, "username" | "password">) => {
+export const login =  async (loginRequest: LoginRequest) => {
     try{
         const response = await fetch(`${baseUrl}/auth/login`, {
             method: "POST",
@@ -8,7 +9,7 @@ export const login =  async (user: Pick<User, "username" | "password">) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(loginRequest),
         });
 
         if(!response.ok){
