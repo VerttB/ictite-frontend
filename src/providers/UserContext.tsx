@@ -58,6 +58,8 @@ export default function UserProvider({
     setIsLoading(true);
     try {
       await login(user);
+      const userData = await me();
+      setUser(userData);
       router.push("/");
       return true;
     } catch (error) {
