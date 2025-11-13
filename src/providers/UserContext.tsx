@@ -1,6 +1,6 @@
 "use client";
 
-import { login, me } from "@/core/service/AuthService";
+import { login, me, logout } from "@/core/service/AuthService";
 import { useRouter } from "next/navigation";
 import { createContext , useState, useContext, useEffect } from "react";
 import { User } from "@/core/interface/User";
@@ -10,6 +10,7 @@ type UserContextType = {
   isLoading: boolean;
   isAuthenticated: boolean;
   loginUser: (user: Pick<User, "username" | "password">) => Promise<boolean>;
+  logoutUser: () => void;
   error: string | null;
 
 };
@@ -56,8 +57,7 @@ export default function UserProvider({
   const loginUser = async (user: Pick<User, "username" | "password">): Promise<boolean> => {
     setIsLoading(true);
     try {
-      const token = await login(user);
-      localStorage.setItem("token", token.accessToken);
+      await login(user);
       router.push("/");
       return true;
     } catch (error) {
@@ -69,13 +69,28 @@ export default function UserProvider({
       setIsLoading(false);
     }
   };
-  
+
+  const logoutUser = async () => {
+    setIsLoading(true);
+    try{
+      await logout();
+      setUser(null);
+      router.push("/");
+    }
+    catch(error){
+      console.error("Erro no logout:", error);
+      setError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const contextValue = {
     user,
     isLoading,
     isAuthenticated,
     loginUser,
+    logoutUser,
     error,
   };
 

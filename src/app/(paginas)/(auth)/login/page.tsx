@@ -54,7 +54,11 @@ export default function Login(){
                             {errors && errors.password?.message}
                         </span>
                 </label>
-
+                {error && (
+                    <p className="text-red-500 text-sm">
+                        {error}
+                    </p>
+                )}
                 <Button  type="submit" >Fazer Login</Button>
               
             </form>
