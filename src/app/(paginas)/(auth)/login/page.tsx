@@ -6,18 +6,10 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { userLoginSchema } from "@/schemas/LoginSchema";
+import { useUserContext } from "@/providers/UserContext";
 export default function Login(){
-
-    const userLoginSchema = z.object({
-        email: z.string({
-            required_error: "O email deve ser preenchido"
-        })
-        .email("Formato inválido de email"),
-        password: z.string({
-            required_error: "O campo da senha não deve estar vazio"
-        }).nonempty("O campo da senha não deve estar vazio")
-    })
-
+    const { loginUser, error } = useUserContext();
     type userLoginData = z.infer<typeof userLoginSchema>;
 
     const {
@@ -28,37 +20,27 @@ export default function Login(){
     resolver: zodResolver(userLoginSchema)
   });
 
-  const onSubmit = (data: userLoginData) => {
-    console.log(data)
+  const onSubmit = async (data: userLoginData) => {
+    const success = await loginUser(data);
+    if(success){
+      console.log("Login successful");
+    } else {
+      console.log(error);
+    }
   }
 
     return(
         <div className="flex items-center bg-gray-100 h-full justify-center">
-            <div className="w-3/4 2xl:w-1/2 flex flex-col gap-4 2xl:gap-6">
-            <div >
-                <h2 className="text-border text-4xl self-baseline font-bold mb-2">Fazer Login</h2>
-                <p className="text-xl">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            </div>
-
-            <div className="flex flex-col gap-6 text-xl font-medium">
-                <Button variant={"outline"} className=" cursor-pointer">Login com Microsoft</Button>
-                <Button variant={"outline"} className=" cursor-pointer">Login com Google</Button>
-            </div>
-
-            <div className="flex flex-row items-center gap-4">
-                <hr className="bg-gray-800 w-1/2" />
-                <p>Ou</p>
-                <hr className="bg-gray-800  w-1/2" />
-            </div>
+          
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 font-medium text-lg 2xl:text-xl">
-                <label htmlFor="email" className="flex flex-col gap-2">
-                    Email
+                <label htmlFor="username" className="flex flex-col gap-2">
+                    Nome
                     <Input 
-                        {...register("email")}
+                        {...register("username")}
                         type="text" 
                         className="bg-background rounded-md #b5b5b5 border-gray-300 border-1 py-2 px-2"/>
                     <span className="text-red-500 text-sm">
-                            {errors && errors.email?.message}
+                            {errors && errors.username?.message}
                         </span>
 
                 </label>
@@ -72,15 +54,15 @@ export default function Login(){
                             {errors && errors.password?.message}
                         </span>
                 </label>
-
+                {error && (
+                    <p className="text-red-500 text-sm">
+                        {error}
+                    </p>
+                )}
                 <Button  type="submit" >Fazer Login</Button>
-                <div className="flex justify-between">
-                    <p>Esqueci a senha</p>
-                   <Link href={"/cadastro"} className="cursor-pointer hover:font-bold">Criar conta</Link>
-                </div>
+              
             </form>
 
-        </div>
         </div>
     )
   

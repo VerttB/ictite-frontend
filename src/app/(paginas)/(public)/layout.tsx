@@ -11,7 +11,6 @@ export default function layout({
 }>) {
   return (
 
-    <ThemeProvider>
     <SidebarProvider>
       <AppSidebar />
       <div className="w-full flex flex-col bg-foreground pb-4 pr-4">
@@ -31,6 +30,5 @@ export default function layout({
         <Footer />
       </div>
     </SidebarProvider>
-</ThemeProvider>
   )
 }

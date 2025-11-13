@@ -7,9 +7,11 @@ import { getAssetPrefix } from "@/core/utils/api";
 import { useTheme } from "@/core/providers/ThemeProvider";
 import { MoonIcon, SunIcon } from "lucide-react"
 import { useViewPort } from "@/hooks/useViewPort"
+import { useUserContext } from "@/providers/UserContext"
 
 export const Header = () => {
     const { theme, toggleTheme } = useTheme()
+    const { isAuthenticated } = useUserContext();
     const { isMobile } = useViewPort();
     return(
         <header className="w-full p-3 bg-foreground flex justify-between items-center">
@@ -43,16 +45,24 @@ export const Header = () => {
                     title={theme === 'light' ? 'Mudar para tema escuro' : 'Mudar para tema claro'}>
                     {theme === 'light' ? <MoonIcon /> : <SunIcon />}
                 </Button>
+                {isAuthenticated ? (
                 <Link href={"/console"}>
                     <Button variant={"outline"}  className="text-xl cursor-pointer py-1 px-10">
                         <Bolt />
                         {isMobile ? "" : "Console"}
                     </Button>
                 </Link>
-                <Button  className="text-xl  py-1  px-10">
-                    <CircleUserRound />
-                    {isMobile ? "" : "Fazer Login"}
-                </Button>
+                
+                ) : (
+                
+                <Link href={"/login"}>
+                    <Button  className="text-xl  py-1  px-10">
+                        <CircleUserRound />
+                        {isMobile ? "" : "Fazer Login"}
+                    </Button>
+                </Link>
+                )}
+                
             </div>
         </header>
     )
