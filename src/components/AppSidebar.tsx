@@ -18,9 +18,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { DropdownMenuTrigger, DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuLabel } from "./ui/dropdown-menu"
 import {  } from "@radix-ui/react-dropdown-menu"
-import { log } from "console"
-
-
 const items = [
     {
         title: "Página Inicial",
