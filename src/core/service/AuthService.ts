@@ -1,4 +1,3 @@
-import { Token } from "../interface/Token";
 import { User } from "../interface/User";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const login =  async (user: Pick<User, "username" | "password">) => {
