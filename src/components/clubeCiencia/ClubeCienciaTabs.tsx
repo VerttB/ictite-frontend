@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { Expand } from "lucide-react";
 import { Project } from "@/core/interface/Project";
-import CardProjeto from "../projeto/CardProjeto";
+import CardProjeto from "../projeto/ProjetoCard";
 
 interface ClubeCienciaBase {
     title: string;

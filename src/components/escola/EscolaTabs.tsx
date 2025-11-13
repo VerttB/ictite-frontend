@@ -7,10 +7,10 @@ import { House, Printer, PanelsTopLeft, Brain } from "lucide-react"
 import { useState } from "react"
 import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/hooks/useSchools"
 import { Spinner } from "../LoadingSpin"
-import CardProjeto from "../projeto/CardProjeto"
+import CardProjeto from "../projeto/ProjetoCard"
 import CardEquipamento from "../card/CardEquipamento"
-import CardPesquisador from "../pesquisador/CardPesquisador"
 import ClubeCienciaTabs from "../clubeCiencia/ClubeCienciaTabs"
+import CardPesquisador from "../pesquisador/PesquisadorCard"
 
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
@@ -23,7 +23,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
   return (
     <>
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-accent">
+      <TabsList className="flex flex-row gap-5 w-full py-2 px-4 rounded-md bg-accent overflow-hidden overflow-x-auto">
         <TabsTrigger value="pesquisadores" asChild>
           <Button 
                 variant={activeTab === "pesquisadores" ? "default" : "outline"}>

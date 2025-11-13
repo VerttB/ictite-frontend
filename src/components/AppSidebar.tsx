@@ -2,18 +2,23 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { BookOpen, ChartSpline, Home ,  Newspaper,  SquareChartGantt, Video, Brain} from "lucide-react"
+import { useUserContext } from "@/providers/UserContext"
+import { BookOpen, ChartSpline, Handshake, Home ,  Newspaper,  SquareChartGantt, Video} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { title } from "process"
+import { DropdownMenuTrigger, DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuLabel } from "./ui/dropdown-menu"
+import {  } from "@radix-ui/react-dropdown-menu"
+import { log } from "console"
 
 
 const items = [
@@ -52,11 +57,10 @@ const items = [
         url: "/materiais",
         icon: ChartSpline,
         size: 10,
-    },
-    {
-        title: "Clubes de Ciência",
-        url: "/artigos",
-        icon: Brain,
+    },{
+        title: "CCTIC",
+        url: "/clubes",
+        icon: Handshake,
         size: 10,
     }
 ]
@@ -66,7 +70,7 @@ export function AppSidebar() {
     
     const path = usePathname();
     const { open } = useSidebar()
-  
+    const { isAuthenticated, user, logoutUser} = useUserContext();
 
     return (
     <Sidebar collapsible="icon">
@@ -99,6 +103,38 @@ export function AppSidebar() {
                 </SidebarGroupContent>
             </SidebarGroup>
       </SidebarContent>
+            <SidebarFooter className="py-8">
+                <SidebarGroup>
+                {isAuthenticated && user ? (
+                    <DropdownMenu>
+                    <DropdownMenuTrigger>
+                    
+                    <div className={`flex items-center gap-3 min-w-8 min-h-8`}>
+                        <div className="rounded-md flex items-center justify-center bg-gray-300 w-8 h-8">
+                            {user.username.charAt(0).toUpperCase()}
+                        </div>
+                        {
+                        open &&
+                        <p className="text-sm font-medium">{user.username}</p>
+                        }       
+                    </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="top" className="w-full" >
+                        <DropdownMenuLabel className="font-medium text-sm p-2">
+                            {"Opções"}
+                        </DropdownMenuLabel>
+                        <DropdownMenuItem onClick={logoutUser} className="cursor-pointer hover:bg-red-500 hover:text-white">
+                            Deslogar
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                    </DropdownMenu>
+                ) : null}
+                </SidebarGroup>
+                <SidebarSeparator />
+                <SidebarGroup>
+                    <p className={`text-xs text-gray-500  ${open ? "block" : "hidden"}`}>© 2025 ICTITE</p>
+                </SidebarGroup>
+            </SidebarFooter>
     </Sidebar>
   )
 }

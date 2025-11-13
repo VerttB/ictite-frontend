@@ -3,7 +3,7 @@ import { Expand, School, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import Image from "next/image";
-import CardPesquisador from "../pesquisador/CardPesquisador";
+import CardPesquisador from "../pesquisador/PesquisadorCard";
 import useSWR from "swr";
 import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Project } from "@/core/interface/Project";

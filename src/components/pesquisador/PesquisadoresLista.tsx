@@ -1,5 +1,5 @@
 "use client"
-import CardPesquisador from "./CardPesquisador"
+import CardPesquisador from "./PesquisadorCard"
 import { capitalize } from "@/core/utils/capitalize"
 import useSWR from "swr"
 import { getProjectResearchers } from "@/core/service/ProjetoService"

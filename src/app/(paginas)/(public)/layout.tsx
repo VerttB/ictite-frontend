@@ -1,9 +1,9 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { Header } from "@/components/header";
+import { AppSidebar } from "@/components/AppSidebar"
 import { Toaster } from "@/components/ui/sonner";
-import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/core/providers/ThemeProvider";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 export default function layout({
   children,
 }: Readonly<{
@@ -11,7 +11,6 @@ export default function layout({
 }>) {
   return (
 
-    <ThemeProvider>
     <SidebarProvider>
       <AppSidebar />
       <div className="w-full flex flex-col bg-foreground pb-4 pr-4">
@@ -31,6 +30,5 @@ export default function layout({
         <Footer />
       </div>
     </SidebarProvider>
-</ThemeProvider>
   )
 }
