@@ -47,3 +47,15 @@ export const getClubeCienciaStats = async (id: string) => {
         console.error(e);
     }
 };
+
+// |=======| GET ESTATÍSTICAS DE TODOS OS CLUBES DE CIÊNCIAS |=======|
+export const getClubesCienciaStats = async () => {
+    try {
+        const res: Response = await fetch(`${getBaseUrl()}/clubeCiencia/statistics`);
+        if (!res) throw new Error(`Erro: ${res}`);
+        const data = await res.json();
+        return data;
+    } catch (e: unknown) {
+        console.error(e);
+    }
+};
