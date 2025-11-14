@@ -4,7 +4,7 @@ import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
 import { Button } from "@/components/ui/button";
-import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
+import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import { getClubesCiencia } from "@/core/service/ClubeCienciaService";
 import { BookA, BookOpenText, BrainCircuit, ChartBar, ChartSpline, ChevronLeft, Goal, HeartHandshake, LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";

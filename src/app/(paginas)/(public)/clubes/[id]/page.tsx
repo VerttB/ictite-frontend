@@ -2,14 +2,15 @@
 import ClubeProjetoPesquisador from "@/components/clubeCiencia/ClubeProjetoPesquisador";
 import InfoBar from "@/components/InfoBar";
 import CardProjeto from "@/components/projeto/ProjetoCard";
-import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
+import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
+import { OneClubeCienciaStatstics } from "@/core/interface/Clube/OneClubeCienciaStatstics";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
-import { getClubeCienciaById } from "@/core/service/ClubeCienciaService";
+import { getClubeCienciaById, getClubeCienciaStats } from "@/core/service/ClubeCienciaService";
 import { getResearchersByClube } from "@/core/service/PesquisadorService";
 import { getProjectbyClube } from "@/core/service/ProjetoService";
 import { get } from "http";
-import { BookA, BookOpenText, Goal, Instagram, LucideIcon, PanelsTopLeft, School } from "lucide-react";
+import { BookA, BookOpenText, Goal, HeartHandshake, Instagram, LucideIcon, PanelsTopLeft, School } from "lucide-react";
 import Image from "next/image";
 
 export default async function OneClubeCiencia ( { params }: { params: Promise<{ id: string }> } ) {
@@ -22,22 +23,29 @@ export default async function OneClubeCiencia ( { params }: { params: Promise<{ 
 
     const projects : Project[] = await (getProjectbyClube(clubeCiencia.id)) ?? [];
 
+    const statistics : OneClubeCienciaStatstics = await getClubeCienciaStats(id);
+
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
     stats = [
         {
             titulo: "Alunos",
-            valor: 100,
+            valor: statistics.total_alunos,
             Icon: BookA,
         },
         {
             titulo: "Professores",
-            valor: 41,
+            valor: statistics.total_professores,
             Icon: BookOpenText,
         },
         {
+            titulo: "Facilitadores",
+            valor: statistics.total_facilitadores,
+            Icon: HeartHandshake,
+        },
+        {
             titulo: "Projetos",
-            valor: 28,
+            valor: statistics.total_projetos,
             Icon: PanelsTopLeft,
         }
     ];

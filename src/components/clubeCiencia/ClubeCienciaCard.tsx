@@ -1,4 +1,4 @@
-import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
+import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import { School } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

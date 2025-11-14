@@ -6,7 +6,7 @@ import { Expand } from "lucide-react";
 import { Project } from "@/core/interface/Project";
 import CardProjeto from "../projeto/ProjetoCard";
 import { useEffect, useState } from "react";
-import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
+import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import { getClubesCienciaBySchool } from "@/core/service/ClubeCienciaService";
 import Link from "next/link";
 import { getProjectbyClube } from "@/core/service/ProjetoService";

@@ -1,6 +1,6 @@
 "use client"
 
-import { ClubeCiencia } from "@/core/interface/ClubeCiencia";
+import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import { getClubeCienciaById } from "@/core/service/ClubeCienciaService";
 import { useEffect, useState } from "react";
