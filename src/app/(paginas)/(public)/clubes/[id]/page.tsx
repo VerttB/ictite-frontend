@@ -88,7 +88,7 @@ export default async function OneClubeCiencia ( { params }: { params: Promise<{ 
                 <InfoBar  data={stats}/>
             </div>
 
-            {/* |=======| PROJETOS DO CLUBE DE CIÊNCIA |=======| */}
+            {/* |=======| PROJETOS  E PESQUISADORES DO CLUBE DE CIÊNCIA |=======| */}
             <div>
                 <ClubeProjetoPesquisador projects={projects} pesquisador={researchers} />
             </div>

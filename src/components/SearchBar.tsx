@@ -106,7 +106,7 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
             onKeyDown={handleSearchEnter}
             value={value}
             type={"search"}
-            placeholder="Busca por escola, pesquisador ou projetos" 
+            placeholder="Busca por escola, clube, pesquisador ou projetos" 
             className="px-4 pr-10 py-2 w-full rounded-lg border-2"
          />
         <Button

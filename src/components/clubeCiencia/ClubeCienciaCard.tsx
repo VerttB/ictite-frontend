@@ -17,9 +17,9 @@ export default function ClubeCienciaCard ( { clubeCiencia }: ClubeCienciaCardPro
                 </div>
                 <div className="p-3">
                     <h1 className="text-xl font-semibold line-clamp-1">{clubeCiencia.title}</h1>
-                    <div className=" flex gap-2 items-center text-primary">
+                    <div className=" flex gap-2 items-center text-primary ">
                         <School  size={20}/>
-                        <p>{clubeCiencia.school}</p>
+                        <p className="line-clamp-1">{clubeCiencia.school}</p>
                     </div>
                 </div>
             </div>
