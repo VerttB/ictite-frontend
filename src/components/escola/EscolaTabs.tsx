@@ -72,7 +72,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
       </TabsContent>
 
       <TabsContent value="clube de ciência">
-          { projects ? <ClubeCienciaTabs projetosClubeCiencia={projects}/> : "Não passou projetos" }
+          { projects ? <ClubeCienciaTabs projetosClubeCiencia={projects} school_id={schoolId}/> : "Não passou projetos" }
       </TabsContent>
     </Tabs>
     </>

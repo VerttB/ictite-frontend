@@ -8,7 +8,7 @@ interface InfoBarProps{
 
 export default function InfoBar(props: { data: InfoBarProps[] }){
     return(
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-foreground rounded-md shadow-sm border  ">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-foreground rounded-md shadow-sm border  ">
 
             {props.data.map(({titulo, valor, Icon}) => (
                <div key={titulo} className="flex flex-col items-center text-center p-3 rounded-md bg-primary transition-all duration-300 hover:scale-95 border text-white">

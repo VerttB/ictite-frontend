@@ -8,6 +8,7 @@ import { getResearchers } from "@/core/service/PesquisadorService"
 import { SugestionList } from "./SugestionList"
 import { SugestionBase } from "@/core/interface/SugestionBase"
 import { getProjects } from "@/core/service/ProjetoService"
+import { getClubesCiencia } from "@/core/service/ClubeCienciaService"
 
 interface SearchBarProps {
   onSugestoesChange?: (sugestoes: Record<string, SugestionBase[]>) => void;
@@ -16,7 +17,7 @@ interface SearchBarProps {
 export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
     const [value, setValue ] = useState("")
     const inputRef = useRef<HTMLInputElement | null>(null)
-    const [sugestions,setSugestions] = useState<Record<string, SugestionBase[]>>({pesquisadores:[], escolas: [], projetos: []})
+    const [sugestions,setSugestions] = useState<Record<string, SugestionBase[]>>({pesquisadores:[], escolas: [], projetos: [], clubes: []})
     
     const handleValueChange = (e:ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
@@ -33,18 +34,19 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
 
 
     const getData = async (val: string) => {
-        const [schools, researchers, projects] = await Promise.all([
+        const [schools, researchers, projects, clubes] = await Promise.all([
             getSchools(val),
             getResearchers(val),
-            getProjects(val)
-            
+            getProjects(val),
+            getClubesCiencia(val)
     ])
 
 
         setSugestions({
             escolas: schools || [],
             pesquisadores: researchers || [],
-            projetos : projects || []
+            projetos : projects || [],
+            clubes : clubes || []
         })
 
         if (onSugestoesChange) {
@@ -60,7 +62,7 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
           return () => clearTimeout(debounce)  
         }
         else{
-            setSugestions({ escolas: [], pesquisadores: [], projetos: [] });
+            setSugestions({ escolas: [], pesquisadores: [], projetos: [], clubes: [] });
 
             if (onSugestoesChange) {
                 onSugestoesChange(sugestions)
@@ -104,7 +106,7 @@ export const SearchBar = ({ onSugestoesChange }: SearchBarProps) => {
             onKeyDown={handleSearchEnter}
             value={value}
             type={"search"}
-            placeholder="Busca por escola, pesquisador ou projetos" 
+            placeholder="Busca por escola, clube, pesquisador ou projetos" 
             className="px-4 pr-10 py-2 w-full rounded-lg border-2"
          />
         <Button

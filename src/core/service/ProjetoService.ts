@@ -38,3 +38,16 @@ export const  getProjectResearchers= async (projectId : string): Promise<Project
         return null
     }
 }
+
+export const getProjectbyClube = async (clubeId : string): Promise<Project[] | null> => {
+    try{
+        const res: Response = await fetch(`${getBaseUrl()}/projects/${clubeId}/clube`);
+        if(!res) throw new Error(`Erro: ${res}`)
+        const data = await res.json();
+        return data;
+
+    }catch(e: unknown){
+        console.error(e);
+        return null
+    }
+}
