@@ -11,13 +11,15 @@ import EscolaList from "@/components/escola/EscolaList";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import PesquisadorLoader from "@/components/pesquisador/PesquisadorLoader";
 import ProjetoLoader from "@/components/projeto/ProjetoLoader";
+import ClubeCienciaLoader from "@/components/clubeCiencia/ClubeCienciaLoader";
 
 export default function ProjetoPage() {
 
   const [resultadosBusca, setResultadosBusca] = useState<Record<string, SugestionBase[]>>({
     pesquisadores: [], 
     escolas: [], 
-    projetos: []
+    projetos: [],
+    clubes: []
   });
 
   const handleSugestoesChange = (novasSugestoes: Record<string, SugestionBase[]>) => {
@@ -110,6 +112,36 @@ export default function ProjetoPage() {
               <span>Nenhum resultado encontrado</span>
           </div>
         )}
+
+
+        
+      </div>
+
+      {/* |=======| LISTA DOS CLUBES |=======| */}
+      <div className="flex flex-col gap-2 mb-5 mt-3">
+        <div className="flex flex-row justify-between">
+          <h2 className="text-2xl font-semibold">Lista dos Clubes</h2>
+          <span className="p-1 bg-foreground rounded-full shadow-sm hover:scale-105 transition-all cursor-default">
+            Total: {resultadosBusca.clubes.length}
+          </span>
+        </div>
+        {/* |=======| COMPONENTE DE CARD DOS clubes |=======| */}
+        {resultadosBusca.clubes.length !== 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+            {resultadosBusca.clubes.map((clube) => (
+              <div key={clube.id} className="">
+                <ClubeCienciaLoader sugestion={clube} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>
+              <span>Nenhum resultado encontrado</span>
+          </div>
+        )}
+
+
+        
       </div>
                 <Mapa />
 
