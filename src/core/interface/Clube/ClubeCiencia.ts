@@ -5,3 +5,10 @@ export interface ClubeCiencia {
     school: string;
     images?: string[];
 }
+
+export interface ClubeCienciaPOST {
+    title: string;
+    description: string;
+    school_id: string;
+    images?: string[];
+}

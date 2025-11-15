@@ -1,4 +1,4 @@
-import { ClubeCiencia } from "../interface/Clube/ClubeCiencia";
+import { ClubeCiencia, ClubeCienciaPOST } from "../interface/Clube/ClubeCiencia";
 import { getBaseUrl } from "../utils/api";
 
 // |=======| GET DE TODOS OS CLUBES DE CIÊNCIA |=======|
@@ -62,16 +62,20 @@ export const getClubesCienciaStats = async () => {
     }
 };
 
-export const createClubeCiencias = async (newClube : Omit<ClubeCiencia, "id">) => {
+export const createClubeCiencias = async (newClube : ClubeCienciaPOST) => {
+    console.log("Criando clube no service", newClube)
     try{
         const res = await fetch(`${getBaseUrl()}/clubeCiencia`, {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(newClube)
         })
 
         const data = await res.json()
         return data
     }catch(e : unknown){
-        
+        console.warn(e)
     }
 }

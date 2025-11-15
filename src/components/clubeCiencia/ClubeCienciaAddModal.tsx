@@ -89,7 +89,7 @@ export function ClubeAddModal({ open, onClose, onSubmit, escolas }: ClubeModalPr
 
   <Controller
     control={control}
-    name="school"
+    name="school_id"
     render={({ field }) => (
       <Select
         onValueChange={field.onChange}
@@ -112,8 +112,8 @@ export function ClubeAddModal({ open, onClose, onSubmit, escolas }: ClubeModalPr
     )}
   />
 
-  {errors.school && (
-    <p className="text-red-500 text-sm mt-1">{errors.school.message}</p>
+  {errors.school_id && (
+    <p className="text-red-500 text-sm mt-1">{errors.school_id.message}</p>
   )}
 </div>
 
