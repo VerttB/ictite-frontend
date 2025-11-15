@@ -1,7 +1,7 @@
 import { CardGenerico } from "./card/CardGenerico";
 type SectionProps = {
   title: string;
-  items: { title: string; image: string }[];
+  items: { title: string; images: string[] }[];
   icon?: React.ReactNode;
   onAdd?: () => void;
 };
@@ -18,7 +18,7 @@ export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
       </div>
       <div className="flex flex-wrap items-center gap-3">
         {items.map((item, i) => (
-          <CardGenerico key={i} title={item.title} image={item.image} />
+          <CardGenerico key={i} title={item.title} image={item.images?.[0] ?? ""} />
         ))}
         <CardGenerico isAddButton onClick={onAdd} />
       </div>
