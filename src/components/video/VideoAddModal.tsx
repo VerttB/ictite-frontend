@@ -6,19 +6,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GenericItemFormData, genericItemSchema } from "@/schemas/GenericItemSchema";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { VideoSchema, VideoType } from "@/schemas/VideoSchema";
 
 interface VideoModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: GenericItemFormData) => void;
+  onSubmit: (data: VideoType) => void;
 }
 
 export function VideoAddModal({ open, onClose, onSubmit }: VideoModalProps) {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<GenericItemFormData>({
-    resolver: zodResolver(genericItemSchema),
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<VideoType>({
+    resolver: zodResolver(VideoSchema),
   });
 
-  const submitHandler = (data: GenericItemFormData) => {
+  const submitHandler = (data: VideoType) => {
     onSubmit(data);
     reset();
     onClose();
@@ -35,11 +36,11 @@ export function VideoAddModal({ open, onClose, onSubmit }: VideoModalProps) {
           <div>
             <label className="block text-sm font-medium mb-1">Título</label>
             <input
-              {...register("titulo")}
+              {...register("title")}
               className="w-full border rounded-md px-3 py-2"
               placeholder="Título do video"
             />
-            {errors.titulo && <p className="text-red-500 text-sm">{errors.titulo.message}</p>}
+            {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
           </div>
 
           <div>
@@ -55,12 +56,12 @@ export function VideoAddModal({ open, onClose, onSubmit }: VideoModalProps) {
           <div>
             <label className="block text-sm font-medium mb-1">Descrição</label>
             <textarea
-              {...register("descricao")}
+              {...register("description")}
               rows={3}
               className="w-full border rounded-md px-3 py-2"
               placeholder="Descrição do video"
             />
-            {errors.descricao && <p className="text-red-500 text-sm">{errors.descricao.message}</p>}
+            {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
           </div>
 
           <div className="flex justify-end gap-2 pt-2">

@@ -3,17 +3,17 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GenericItemFormData, genericItemSchema } from "@/schemas/GenericItemSchema";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { MaterialSchema, MaterialType } from "@/schemas/MaterialSchema";
 
 interface MaterialModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: GenericItemFormData) => void;
+  onSubmit: (data: MaterialType) => void;
 }
 
 export function MaterialModal({ open, onClose, onSubmit }: MaterialModalProps) {
@@ -22,11 +22,11 @@ export function MaterialModal({ open, onClose, onSubmit }: MaterialModalProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<GenericItemFormData>({
-    resolver: zodResolver(genericItemSchema),
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<MaterialType>({
+    resolver: zodResolver(MaterialSchema),
   });
 
-   const handleManualSubmit = (data: GenericItemFormData) => {
+   const handleManualSubmit = (data: MaterialType) => {
     onSubmit(data);
     reset();
     onClose();
@@ -73,11 +73,11 @@ export function MaterialModal({ open, onClose, onSubmit }: MaterialModalProps) {
               <div>
                 <label className="block text-sm font-medium mb-1">Título</label>
                 <Input
-                  {...register("titulo")}
+                  {...register("title")}
                   className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-400"
                 />
-                {errors.titulo && (
-                  <p className="text-red-500 text-sm mt-1">{errors.titulo.message}</p>
+                {errors.title && (
+                  <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
                 )}
               </div>
 
@@ -95,11 +95,11 @@ export function MaterialModal({ open, onClose, onSubmit }: MaterialModalProps) {
               <div>
                 <label className="block text-sm font-medium mb-1">Descrição</label>
                 <textarea
-                  {...register("descricao")}
+                  {...register("description")}
                   className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-400"
                 />
-                {errors.descricao && (
-                  <p className="text-red-500 text-sm mt-1">{errors.descricao.message}</p>
+                {errors.description && (
+                  <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
                 )}
               </div>
 
@@ -130,7 +130,7 @@ export function MaterialModal({ open, onClose, onSubmit }: MaterialModalProps) {
               <p className="text-sm mb-3 text-gray-600">
                 Faça upload de um arquivo <strong>.csv</strong> ou <strong>.xlsx</strong>
               </p>
-              <input
+              <Input
                 type="file"
                 accept=".csv, .xlsx"
                 onChange={handleFileSelect}

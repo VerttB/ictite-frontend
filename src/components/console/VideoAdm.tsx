@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 import { Section } from "../Section"
-import { VideoAddModal } from "../videeo/VideoAddModal"
+import { VideoAddModal } from "../video/VideoAddModal"
 
 export const VideoAdm = () => {
     const [open, setOpen] = useState(false);
