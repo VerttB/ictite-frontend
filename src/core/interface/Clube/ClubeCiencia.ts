@@ -3,5 +3,5 @@ export interface ClubeCiencia {
     title: string;
     description: string;
     school: string;
-    photo?: string;
+    images?: string[];
 }
