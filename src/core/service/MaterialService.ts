@@ -23,14 +23,12 @@ export const getMaterials = async (): Promise<Required<Material>[]> => {
     }
 }
 
-export const createMaterial = async (materialData: Omit<Material, "id">) => {
+export const createMaterial = async (newMaterial: FormData) => {
     try{
         const response = await fetch(`${baseUrl}/material`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(materialData),
+          
+            body: newMaterial,
         });
         if(!response.ok){
             throw new Error('Failed to create material');

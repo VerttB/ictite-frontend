@@ -1,10 +1,14 @@
 import { Image } from "@/core/interface/Image";
 import { CardGenerico } from "./card/CardGenerico";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenuLabel, DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 type SectionProps = {
   title: string;
   items: { title: string; images: Image[] }[];
   icon?: React.ReactNode;
   onAdd?: () => void;
+  onUpdate?: (item: any) => void;
+  onDelete?: (item: any) => void;
 };
 
 export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
@@ -20,7 +24,18 @@ export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
       </div>
       <div className="flex flex-wrap items-center gap-3">
         {items.map((item, i) => (
-          <CardGenerico key={i} title={item.title} image={item.images?.[0]?.path ?? ""} />
+          <DropdownMenu key={item.title + i}>
+            <DropdownMenuTrigger>
+              <CardGenerico  title={item.title} image={item.images?.[0]?.path ?? ""} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="bottom" sideOffset={4}>
+            <DropdownMenuLabel>Opções</DropdownMenuLabel>
+            <DropdownMenuSeparator/>
+            <DropdownMenuItem>Editar</DropdownMenuItem>
+            <DropdownMenuItem>Excluir</DropdownMenuItem>
+
+          </DropdownMenuContent>
+          </DropdownMenu>
         ))}
         <CardGenerico isAddButton onClick={onAdd} />
       </div>

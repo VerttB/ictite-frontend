@@ -83,7 +83,6 @@ export const ImageUploadInput = forwardRef<
           {...rest}
         />
 
-        {/* preview */}
         {previews.length > 0 ? (
           <div className="grid grid-cols-3 gap-3 w-full">
             {previews.map((src, i) => (

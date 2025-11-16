@@ -23,7 +23,12 @@ export const MaterialAdm = () => {
     const {data: materials, isLoading, mutate} = useSWR("materials", getMaterials)
     const [open, setOpen] = useState(false);
 
-    const onSubmit = async (newMaterial: MaterialType) => {
+    const onSubmit = async (data: MaterialType) => {
+        const newMaterial = new FormData()
+        newMaterial.append("title", data.title);
+        newMaterial.append("description", data.description);
+        newMaterial.append("link", data.link);
+        data.images.forEach((file) => newMaterial.append("images", file));
         await createMaterial(newMaterial);
         mutate();
     }

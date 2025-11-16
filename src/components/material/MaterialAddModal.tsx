@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { MaterialSchema, MaterialType } from "@/schemas/MaterialSchema";
+import { ImageUploadInput } from "../ImageInput";
 
 interface MaterialModalProps {
   open: boolean;
@@ -22,8 +23,11 @@ export function MaterialModal({ open, onClose, onSubmit }: MaterialModalProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<MaterialType>({
+  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<MaterialType>({
     resolver: zodResolver(MaterialSchema),
+    defaultValues: {
+      images: [],
+    },
   });
 
    const handleManualSubmit = (data: MaterialType) => {
@@ -102,7 +106,19 @@ export function MaterialModal({ open, onClose, onSubmit }: MaterialModalProps) {
                   <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
                 )}
               </div>
-
+                  <Controller
+                      control={control}
+                      name="images"
+                      render={({field}) => (
+                    <ImageUploadInput 
+                                    label="Imagens"
+                                    errors={errors.images?.message}
+                                    multiple={false}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                     />
+                                     )}
+                                    />
               <div className="flex justify-end gap-2 pt-2">
                 <Button
                   type="button"
