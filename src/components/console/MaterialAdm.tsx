@@ -27,6 +27,7 @@ export const MaterialAdm = () => {
         await createMaterial(newMaterial);
         mutate();
     }
+    console.log("Materiais:", materials);
     return (
         <>
         <Section 

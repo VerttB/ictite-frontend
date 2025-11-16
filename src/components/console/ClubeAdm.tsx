@@ -20,14 +20,18 @@ export const ClubeAdm = () => {
   const [open, setOpen] = useState(false);
 
   const onSubmit = async (data: ClubeType) => {
-    console.log("Criando clube", data)
-    await createClubeCiencias(data);
+    const form = new FormData()
+    form.append("title", data.title);
+    form.append("description", data.description);
+    form.append("school_id", data.school_id);
+   data.images.forEach((file) => form.append("images", file));
+
+    await createClubeCiencias(form);
     mutate();      
     setOpen(false); 
   };
 
   if (!clubes) return null;
-
   return (
     <>
       <Section

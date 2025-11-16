@@ -15,7 +15,7 @@ export const RevistaAdm = () => {
         await createRevista(newRevista);
         mutate();
     }
-    
+    console.log("Revistas:", revistas);
     return (
         <>
         <Section 

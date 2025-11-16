@@ -12,6 +12,7 @@ import { ClubeSchema, ClubeType } from "@/schemas/ClubeSchema";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { SelectLabel } from "@radix-ui/react-select";
 import { SchoolData } from "@/core/interface/School";
+import { ImageUploadInput } from "../ImageInput";
 
 interface ClubeModalProps {
   open: boolean;
@@ -21,42 +22,45 @@ interface ClubeModalProps {
 }
 
 export function ClubeAddModal({ open, onClose, onSubmit, escolas }: ClubeModalProps) {
-    const [tab, setTab] = useState("manual");
-    const [arquivo, setArquivo] = useState<File | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+  const [tab, setTab] = useState("manual");
+  const [arquivo, setArquivo] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { register, handleSubmit, formState: { errors }, reset , control} = useForm<ClubeType>({
+  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<ClubeType>({
     resolver: zodResolver(ClubeSchema),
+    defaultValues:{
+      images: []
+    }
   });
 
-   const handleManualSubmit = (data: ClubeType) => {
+  const handleManualSubmit = (data: ClubeType) => {
     onSubmit(data);
     reset();
     onClose();
   };
 
-   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (!files || files.length === 0) return;
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
-        const file = files[0];
-        const extension = file.name.split('.').pop()?.toLowerCase();
+    const file = files[0];
+    const extension = file.name.split('.').pop()?.toLowerCase();
 
-        if (extension !== 'csv' && extension !== 'xlsx') {
-            toast.error("Formato não suportado. Use CSV ou XLSX.");
-            return;
-        }
+    if (extension !== 'csv' && extension !== 'xlsx') {
+      toast.error("Formato não suportado. Use CSV ou XLSX.");
+      return;
+    }
 
-        setArquivo(file);
-        
-    };
+    setArquivo(file);
 
-    const handleRemoveFile = () => {
-        setArquivo(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = ""; 
-        }
-    };
+  };
+
+  const handleRemoveFile = () => {
+    setArquivo(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
@@ -84,38 +88,38 @@ export function ClubeAddModal({ open, onClose, onSubmit, escolas }: ClubeModalPr
                 )}
               </div>
 
-            <div>
-  <label className="block text-sm font-medium mb-1">Escola</label>
+              <div>
+                <label className="block text-sm font-medium mb-1">Escola</label>
 
-  <Controller
-    control={control}
-    name="school_id"
-    render={({ field }) => (
-      <Select
-        onValueChange={field.onChange}
-        defaultValue={field.value}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Selecione a escola" />
-        </SelectTrigger>
+                <Controller
+                  control={control}
+                  name="school_id"
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione a escola" />
+                      </SelectTrigger>
 
-        <SelectContent>
-          <SelectGroup>
-            {escolas.map((escola) => (
-              <SelectItem key={escola.id} value={escola.id}>
-                {escola.name}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    )}
-  />
+                      <SelectContent>
+                        <SelectGroup>
+                          {escolas.map((escola) => (
+                            <SelectItem key={escola.id} value={escola.id}>
+                              {escola.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
 
-  {errors.school_id && (
-    <p className="text-red-500 text-sm mt-1">{errors.school_id.message}</p>
-  )}
-</div>
+                {errors.school_id && (
+                  <p className="text-red-500 text-sm mt-1">{errors.school_id.message}</p>
+                )}
+              </div>
 
               <div>
                 <label className="block text-sm font-medium mb-1">Descrição</label>
@@ -127,6 +131,19 @@ export function ClubeAddModal({ open, onClose, onSubmit, escolas }: ClubeModalPr
                   <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
                 )}
               </div>
+                <Controller
+                      control={control}
+                      name="images"
+                      render={({field}) => (
+                    <ImageUploadInput 
+                                    label="Imagens"
+                                    errors={errors.images?.message}
+                                    multiple={false}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                     />
+                                     )}
+                                    />
 
               <div className="flex justify-end gap-2 pt-2">
                 <Button

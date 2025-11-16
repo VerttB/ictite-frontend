@@ -1,14 +1,13 @@
+import { Image } from "../Image";
+
 export interface ClubeCiencia {
     id: string;
     title: string;
     description: string;
     school: string;
-    images?: string[];
+    images?: Image[];
 }
 
-export interface ClubeCienciaPOST {
-    title: string;
-    description: string;
+export interface ClubeCienciaPOST extends Omit<ClubeCiencia, 'id' | 'school'> {
     school_id: string;
-    images?: string[];
 }

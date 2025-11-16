@@ -62,15 +62,12 @@ export const getClubesCienciaStats = async () => {
     }
 };
 
-export const createClubeCiencias = async (newClube : ClubeCienciaPOST) => {
-    console.log("Criando clube no service", newClube)
+export const createClubeCiencias = async (form: FormData) => {
+    console.log("Criando clube no service", form)
     try{
         const res = await fetch(`${getBaseUrl()}/clubeCiencia`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newClube)
+            body: form
         })
 
         const data = await res.json()

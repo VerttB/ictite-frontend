@@ -1,12 +1,14 @@
+import { Image } from "@/core/interface/Image";
 import { CardGenerico } from "./card/CardGenerico";
 type SectionProps = {
   title: string;
-  items: { title: string; images: string[] }[];
+  items: { title: string; images: Image[] }[];
   icon?: React.ReactNode;
   onAdd?: () => void;
 };
 
 export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
+  console.log(items);
   return (
     <section className="mb-10">
       <div className="flex items-center border-b-2 h-8 mb-4 border-gray-300">
@@ -18,7 +20,7 @@ export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
       </div>
       <div className="flex flex-wrap items-center gap-3">
         {items.map((item, i) => (
-          <CardGenerico key={i} title={item.title} image={item.images?.[0] ?? ""} />
+          <CardGenerico key={i} title={item.title} image={item.images?.[0]?.path ?? ""} />
         ))}
         <CardGenerico isAddButton onClick={onAdd} />
       </div>
