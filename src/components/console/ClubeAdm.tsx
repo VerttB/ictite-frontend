@@ -16,7 +16,6 @@ export const ClubeAdm = () => {
   );
 
   const { data: escolas } = useSWR("escolas", () => getSchools());
-  console.log(escolas)
   const [open, setOpen] = useState(false);
 
   const onSubmit = async (data: ClubeType) => {
