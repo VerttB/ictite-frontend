@@ -1,3 +1,4 @@
+import { Image } from "./Image";
 import { Researcher } from "./Pesquisador/Researcher";
 
 export interface Project{
@@ -5,6 +6,7 @@ export interface Project{
     name: string,
     description: string,
     school: string
+    images?: Image[];
 }
 
 export interface ProjectResearchers{

@@ -58,7 +58,7 @@ export default async function OneClubeCiencia ( { params }: { params: Promise<{ 
             {/* |=======| CABEÇALHO DO CLUBE DE CIÊNCIA |=======| */}
             <div className="flex gap-5 items-center">
                 <div className="rounded-full border">
-                    <Image src={"https://picsum.photos/100/100"} alt={"Logo Clube de Ciência"} width={100} height={100}
+                    <Image src={ clubeCiencia.images?.[0].path ?? "https://picsum.photos/100/100"} alt={"Logo Clube de Ciência"} width={100} height={100}
                     className="object-cover rounded-full"></Image>
                 </div>
                 <div className="flex flex-col gap-2">

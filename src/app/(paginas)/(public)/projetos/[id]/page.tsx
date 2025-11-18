@@ -40,10 +40,9 @@ export default async function Page({
       {/* |=======| IMAGENS DO PROJETO |=======| */}
       <div className="pl-5 pt-2 overflow-y-auto">
         <div className="flex flex-row gap-5 py-7 border-b">
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
+          {project.images && project.images.map((image, i) => (
+              <Image key={i} src={image.path} alt={"Projeto"} width={164} height={164} />
+          ))}
         </div>
       </div>
 

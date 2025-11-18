@@ -5,7 +5,7 @@ export interface ClubeCiencia {
     title: string;
     description: string;
     school: string;
-    images?: Image[];
+    images: Image[];
 }
 
 export interface ClubeCienciaPOST extends Omit<ClubeCiencia, 'id' | 'school'> {

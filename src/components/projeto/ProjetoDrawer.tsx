@@ -46,10 +46,9 @@ export default function Projeto ({ isOpen, onClose, project } : ProjetoProps) {
                 <div className="pl-5 pt-2 overflow-y-auto">
                     {/* IMAGENS DO PROJETO */}
                     <div className="w-full grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(100px,1fr))]">
-                        <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
-                        <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
-                        <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
-                        <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={100} height={100}></Image>
+                        {project.images && project.images.map((image, i) => (
+                            <Image key={i} src={image.path} alt={"Projeto"} width={164} height={164} />
+                        ))}
                     </div>
 
                         {pesquisadores && Object.keys(pesquisadores).map((key:string )=> {
