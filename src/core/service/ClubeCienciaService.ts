@@ -1,4 +1,4 @@
-import { ClubeCiencia, ClubeCienciaPOST } from "../interface/Clube/ClubeCiencia";
+import { ClubeCiencia } from "../interface/Clube/ClubeCiencia";
 import { getBaseUrl } from "../utils/api";
 
 // |=======| GET DE TODOS OS CLUBES DE CIÊNCIA |=======|
@@ -69,7 +69,7 @@ export const createClubeCiencias = async (form: FormData) => {
             method: "POST",
             body: form
         })
-
+        if(!res.ok) throw new Error(`Erro: ${res.statusText}`)
         const data = await res.json()
         return data
     }catch(e : unknown){

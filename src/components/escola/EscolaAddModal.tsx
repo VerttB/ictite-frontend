@@ -13,13 +13,13 @@ import { ImageUploadInput } from "../ImageInput";
 import { EscolaSchema, EscolaType } from "@/schemas/EscolaSchema";
 
 
-interface ClubeModalProps {
+interface EscolaAddModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: EscolaType) => void;
 }
 
-export function EscolaAddModal({ open, onClose, onSubmit }: ClubeModalProps) {
+export function EscolaAddModal({ open, onClose, onSubmit }: EscolaAddModalProps) {
   const [tab, setTab] = useState("manual");
   const [arquivo, setArquivo] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
