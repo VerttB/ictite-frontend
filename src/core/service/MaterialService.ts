@@ -1,12 +1,10 @@
-import { MaterialType } from "@/schemas/MaterialSchema";
 import { Material } from "../interface/Material";
+import { getBaseUrl } from "../utils/api";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 export const getMaterials = async (): Promise<Required<Material>[]> => {
-    console.log("Base URL:", baseUrl);
     try{
-        const response = await fetch(`${baseUrl}/material`, {
+        const response = await fetch(`${getBaseUrl()}/material`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,7 +23,7 @@ export const getMaterials = async (): Promise<Required<Material>[]> => {
 
 export const createMaterial = async (newMaterial: FormData) => {
     try{
-        const response = await fetch(`${baseUrl}/material`, {
+        const response = await fetch(`${getBaseUrl()}/material`, {
             method: 'POST',
           
             body: newMaterial,
