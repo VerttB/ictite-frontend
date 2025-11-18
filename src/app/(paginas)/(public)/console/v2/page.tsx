@@ -1,5 +1,8 @@
 import { ClubeAdm } from "@/components/console/ClubeAdm";
+import { EquipamentoAdm } from "@/components/console/EquipamentoAdm";
+import { EscolaAdm } from "@/components/console/EscolaAdm";
 import { MaterialAdm } from "@/components/console/MaterialAdm";
+import { PesquisadorAdm } from "@/components/console/PesquisadorAdm";
 import { RevistaAdm } from "@/components/console/RevistaAdm";
 import { VideoAdm } from "@/components/console/VideoAdm";
 import { Button } from "@/components/ui/button";
@@ -19,6 +22,12 @@ export default function Page() {
               <MaterialAdm />
               <VideoAdm />
               <RevistaAdm />  
+               <EscolaAdm/>
+               
+              <PesquisadorAdm/> 
+              {/*
+              <ProjetoAdm/> */}
+              <EquipamentoAdm/>
             </div>
             </div>;
 }

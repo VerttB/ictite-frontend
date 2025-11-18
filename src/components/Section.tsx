@@ -2,6 +2,7 @@ import { Image } from "@/core/interface/Image";
 import { CardGenerico } from "./card/CardGenerico";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { DropdownMenuLabel, DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { ItemText } from "@radix-ui/react-select";
 
 type ItemTitle = { 
   title: string;
@@ -12,7 +13,8 @@ type ItemName = {
    title?: never
    };
 type ItemType = (ItemTitle | ItemName) & {
-  images: Image[]
+  images?: Image[]
+  image?: string
 };
 
 type SectionProps = {
@@ -23,6 +25,19 @@ type SectionProps = {
   onUpdate?: (item: any) => void;
   onDelete?: (item: any) => void;
 };
+
+const resolveImage = (item: ItemType) => {
+  if (item.image) return item.image;
+
+  if (typeof item.images === "string") return item.images;
+
+  if (Array.isArray(item.images) && item.images.length > 0) {
+    return item.images[0].path;
+  }
+
+  return undefined;
+};
+
 
 export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
   console.log(items);
@@ -39,7 +54,7 @@ export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
         {items.map((item, i) => (
           <DropdownMenu key={(item.title ?? item.name) + i}>
             <DropdownMenuTrigger>
-              <CardGenerico  title={item.title ?? item.name} image={item.images?.[0]?.path ?? ""} />
+              <CardGenerico  title={item.title ?? item.name} image={resolveImage(item)} />
           </DropdownMenuTrigger>
           <DropdownMenuContent side="bottom" sideOffset={4}>
             <DropdownMenuLabel>Opções</DropdownMenuLabel>
