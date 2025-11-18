@@ -51,3 +51,19 @@ export const getProjectbyClube = async (clubeId : string): Promise<Project[] | n
         return null
     }
 }
+
+export const createProject = async (data: FormData) => { 
+    console.log("Creating project with data:", data);
+    try{
+        const res: Response = await fetch(`${getBaseUrl()}/projects/`, {
+            method: "POST",
+            body: data
+        });
+        if(!res) throw new Error(`Erro: ${res}`)
+        const responseData = await res.json();
+        return responseData;
+    }catch(e: unknown){
+        console.error(e);
+        return null;
+    }
+}

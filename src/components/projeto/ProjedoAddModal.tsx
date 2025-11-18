@@ -8,29 +8,32 @@ import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { SchoolData } from "@/core/interface/School";
 import { ImageUploadInput } from "../ImageInput";
-import { EscolaSchema, EscolaType } from "@/schemas/EscolaSchema";
+import { EquipmentSchema, EquipmentType } from "@/schemas/EquipmentSchema";
+import { TypeEquipment } from "@/core/interface/TypeEquipment";
+import { ProjetoSchema, ProjetoType } from "@/schemas/ProjetoSchema";
 
-
-interface EscolaAddModalProps {
+interface ProjetoModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (data: EscolaType) => void;
+  onSubmit: (data: ProjetoType) => void;
+  escolas: Pick<SchoolData, "id" | "name">[];
 }
 
-export function EscolaAddModal({ open, onClose, onSubmit }: EscolaAddModalProps) {
+export function ProjetoAddModal({ open, onClose, onSubmit, escolas }: ProjetoModalProps) {
   const [tab, setTab] = useState("manual");
   const [arquivo, setArquivo] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<EscolaType>({
-    resolver: zodResolver(EscolaSchema),
+  const { register, handleSubmit, formState: { errors }, reset, control } = useForm<ProjetoType>({
+    resolver: zodResolver(ProjetoSchema),
     defaultValues:{
       images: []
     }
   });
-  const handleManualSubmit = (data: EscolaType) => {
+  const handleManualSubmit = (data: ProjetoType) => {
     onSubmit(data);
     reset();
     onClose();
@@ -63,7 +66,7 @@ export function EscolaAddModal({ open, onClose, onSubmit }: EscolaAddModalProps)
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Adicionar Material</DialogTitle>
+          <DialogTitle>Adicionar Equipamento</DialogTitle>
         </DialogHeader>
 
         <Tabs value={tab} onValueChange={setTab}>
@@ -75,7 +78,7 @@ export function EscolaAddModal({ open, onClose, onSubmit }: EscolaAddModalProps)
           <TabsContent value="manual">
             <form onSubmit={handleSubmit(handleManualSubmit)} className="space-y-4 mt-2">
               <div>
-                <label className="block text-sm font-medium mb-1">Título</label>
+                <label className="block text-sm font-medium mb-1">Nome</label>
                 <Input
                   {...register("name")}
                   className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-400"
@@ -84,17 +87,8 @@ export function EscolaAddModal({ open, onClose, onSubmit }: EscolaAddModalProps)
                   <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
                 )}
               </div>
-             <div>
-                <label className="block text-sm font-medium mb-1">CEP</label>
-                <Input
-                  {...register("cep")}
-                  className="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-400"
-                />
-                {errors.cep && (
-                  <p className="text-red-500 text-sm mt-1">{errors.cep.message}</p>
-                )}
-              </div>
-               <div>
+
+                 <div>
                 <label className="block text-sm font-medium mb-1">Descrição</label>
                 <textarea
                   {...register("description")}
@@ -105,6 +99,40 @@ export function EscolaAddModal({ open, onClose, onSubmit }: EscolaAddModalProps)
                 )}
               </div>
 
+              <div>
+                <label className="block text-sm font-medium mb-1">Escola</label>
+
+
+                <Controller
+                  control={control}
+                  name="school_id"
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione a escola" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectGroup>
+                          {escolas.map((escola) => (
+                            <SelectItem key={escola.id} value={escola.id}>
+                              {escola.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+
+                {errors.school_id && (
+                  <p className="text-red-500 text-sm mt-1">{errors.school_id.message}</p>
+                )}
+              </div>
+              
               
                 <Controller
                       control={control}

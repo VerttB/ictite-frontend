@@ -5,4 +5,4 @@ export const RaceTypes ={
     AMARELA: "Amarela",
     INDIGENA: "Indígena",
     PREFIRO_NAO_INFORMAR: "Prefiro não informar"
-}
+} as const

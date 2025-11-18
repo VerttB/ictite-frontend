@@ -8,16 +8,13 @@ import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { ClubeSchema, ClubeType } from "@/schemas/ClubeSchema";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { SelectLabel } from "@radix-ui/react-select";
 import { SchoolData } from "@/core/interface/School";
 import { ImageUploadInput } from "../ImageInput";
-import { Equipment } from "@/core/interface/Equipment";
 import { EquipmentSchema, EquipmentType } from "@/schemas/EquipmentSchema";
 import { TypeEquipment } from "@/core/interface/TypeEquipment";
 
-interface ClubeModalProps {
+interface EquipamentoModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: EquipmentType) => void;
@@ -25,7 +22,7 @@ interface ClubeModalProps {
   equipamentosTipos: Pick<TypeEquipment, "id" | "name">[];
 }
 
-export function EquipamentoAddModal({ open, onClose, onSubmit, escolas, equipamentosTipos }: ClubeModalProps) {
+export function EquipamentoAddModal({ open, onClose, onSubmit, escolas, equipamentosTipos }: EquipamentoModalProps) {
   const [tab, setTab] = useState("manual");
   const [arquivo, setArquivo] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -69,7 +66,7 @@ export function EquipamentoAddModal({ open, onClose, onSubmit, escolas, equipame
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Adicionar Material</DialogTitle>
+          <DialogTitle>Adicionar Equipamento</DialogTitle>
         </DialogHeader>
 
         <Tabs value={tab} onValueChange={setTab}>
