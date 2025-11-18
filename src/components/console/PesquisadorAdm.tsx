@@ -23,7 +23,7 @@ export const PesquisadorAdm = () => {
     mutate();      
     setOpen(false); 
   };
-
+  console.log("pesquisadores", pesquisadores);
   if (!pesquisadores) return null;
   return (
     <>
