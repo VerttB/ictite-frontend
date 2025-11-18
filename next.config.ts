@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   assetPrefix: isProd ? '/ictite/v1/web' : '',
   trailingSlash: true,
   images: {
-    domains: ["picsum.photos", "200.128.66.226", "images.unsplash.com", "plus.unsplash.com"],
+    domains: ["picsum.photos", "200.128.66.226", "images.unsplash.com", "plus.unsplash.com", "localhost"],
     unoptimized: isProd ? true : false,
   },
 };

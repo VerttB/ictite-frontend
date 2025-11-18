@@ -125,4 +125,21 @@ export const getSchoolStatistics = async (id:string):Promise<SchoolStatistics | 
     }
 }
 
+export const createSchool = async (formData: FormData) => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools`, {
+            method: "POST",
+            body: formData
+        });
+        if (!res.ok) {
+            throw new Error(`Erro ao criar escola: ${res.status} ${res.statusText}`);
+        }
+        const data = await res.json();
+        return data;
+    } catch (e) {
+        console.error("Falha ao criar escola:", e);
+        throw e;
+    }
+}
+
 

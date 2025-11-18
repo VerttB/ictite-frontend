@@ -1,7 +1,8 @@
+import { ClubeCiencia, ClubeCienciaPOST } from "../interface/Clube/ClubeCiencia";
 import { getBaseUrl } from "../utils/api";
 
 // |=======| GET DE TODOS OS CLUBES DE CIÊNCIA |=======|
-export const getClubesCiencia = async (title: string = "") => {
+export const getClubesCiencia = async (title: string = ""): Promise<Required<ClubeCiencia>[]> => {
     try {
         const res: Response = await fetch(`${getBaseUrl()}/clubeCiencia/?title=${title}`);
         if (!res) throw new Error(`Erro: ${res}`);
@@ -9,6 +10,7 @@ export const getClubesCiencia = async (title: string = "") => {
         return data;
     } catch (e: unknown) {
         console.error(e);
+        return []
     }
 };
 
@@ -59,3 +61,18 @@ export const getClubesCienciaStats = async () => {
         console.error(e);
     }
 };
+
+export const createClubeCiencias = async (form: FormData) => {
+    console.log("Criando clube no service", form)
+    try{
+        const res = await fetch(`${getBaseUrl()}/clubeCiencia`, {
+            method: "POST",
+            body: form
+        })
+
+        const data = await res.json()
+        return data
+    }catch(e : unknown){
+        console.warn(e)
+    }
+}
