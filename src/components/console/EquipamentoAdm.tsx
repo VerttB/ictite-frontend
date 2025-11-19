@@ -4,13 +4,10 @@ import { Section } from "../Section";
 import useSWR from "swr";
 import { getSchools } from "@/core/service/SchoolService";
 import { useState } from "react";
-import { EquipmentType , EquipmentSchema} from "@/schemas/EquipmentSchema";
+import { EquipmentType } from "@/schemas/EquipmentSchema";
 import { createEquipament, getEquipaments } from "@/core/service/EquipamentoService";
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
-import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../ui/FormInputField";
-import { ControlledSelect } from "../ui/ControlledSelect";
-import { ControlledImageUpload } from "../ui/ControlledImageInput";
+import { EquipamentoAddModal } from "../equipamento/EquipamentoAddModal";
 
 export const EquipamentoAdm = () => {
 
@@ -34,7 +31,7 @@ export const EquipamentoAdm = () => {
     setOpen(false); 
   };
 
-  if (!equipamentos || !equipamentosTipos || !escolas) return null;
+  if (!equipamentos) return null;
   return (
     <>
       <Section
@@ -42,31 +39,15 @@ export const EquipamentoAdm = () => {
         items={equipamentos}
         icon={null}
         onAdd={() => setOpen(true)}
-        
       />
 
-      <BaseFormModal<typeof EquipmentSchema, EquipmentType>
+      <EquipamentoAddModal
         open={open}
         onClose={() => setOpen(false)}
+        escolas={escolas ?? []}
+        equipamentosTipos={equipamentosTipos ?? []}
         onSubmit={onSubmit}
-        title="Adicionar Equipamento"
-        schema={EquipmentSchema}
-        props={{ defaultValues: {images: []}}}
-        >
-        <InputField name="name" label="Nome do Equipamento" />
-        <ControlledSelect
-          name="type_equipment_id"
-          label="Tipo de Equipamento"
-          options={equipamentosTipos}/>
-        <ControlledSelect
-          name="school_id"
-          label="Escola"
-          options={escolas}/>
-        <ControlledImageUpload name="images" />
-          
-        </BaseFormModal>
-        
-     
+      />
     </>
   );
 };
