@@ -12,18 +12,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm, type UseFormProps } from "react-hook-form";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { ReactNode } from "react";
 import * as z from "zod";
 
-interface BaseFormModalProps<T> {
+interface BaseFormModalProps<T extends z.ZodType<FieldValues, FieldValues>, TContext> {
   open: boolean;
   onClose: () => void;
   title: string;
   schema: T;
-  defaultValues: z.infer<T>;
+  props?: Omit<UseFormProps<z.input<T>, TContext, z.output<T>>, 'resolver'>
   onSubmit: (data: z.infer<T>) => void;
   children: ReactNode;
 }
@@ -33,25 +33,26 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
   onClose,
   title,
   schema,
-  defaultValues,
+  props,
   onSubmit,
   children,
-}: BaseFormModalProps<T>) {
+}: BaseFormModalProps<T, TContext>) {
   const [tab, setTab] = useState("manual");
   const [arquivo, setArquivo] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
 
   const methods = useForm({
     resolver: zodResolver(schema),
-    defaultValues: {...defaultValues},
+    ...props
   });
-
   const {
     handleSubmit,
     reset,
   } = methods;
 
   const handleManualSubmit = (data: z.infer<T>) => {
+    console.log(data)
     onSubmit(data);
     reset();
     onClose();

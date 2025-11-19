@@ -4,9 +4,11 @@ import { Section } from "../Section";
 import useSWR from "swr";
 import { createSchool, getSchools } from "@/core/service/SchoolService";
 import { useState } from "react";
-import { EscolaType } from "@/schemas/EscolaSchema";
-import { EscolaAddModal } from "../escola/EscolaAddModal";
+import { EscolaSchema, EscolaType } from "@/schemas/EscolaSchema";
 import { School } from "lucide-react";
+import { BaseFormModal } from "../BaseFormAddModal";
+import { ControlledImageUpload } from "../ui/ControlledImageInput";
+import { InputField } from "../ui/FormInputField";
 
 export const EscolaAdm = () => {
 
@@ -34,11 +36,22 @@ export const EscolaAdm = () => {
         onAdd={() => setOpen(true)}
       />
 
-      <EscolaAddModal
+    <BaseFormModal<typeof EscolaSchema, EscolaType>
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={onSubmit}
-      />
+        title="Adicionar Escola"
+        schema={EscolaSchema}
+        props={{ defaultValues: {images: []}}}
+        >
+        <InputField name="name" label="Nome da Escola" />
+        <InputField name="description" label="Descrição" />
+        <InputField name="cep" label="CEP" />
+
+        <ControlledImageUpload name="images" />
+        
+        </BaseFormModal>
+      
     </>
   );
 };
