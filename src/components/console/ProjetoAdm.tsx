@@ -14,7 +14,6 @@ import { ControlledImageUpload } from "../ui/ControlledImageInput";
 export const ProjetoAdm = () => {
     const {
         data: projetos,
-        isLoading,
         mutate,
     } = useSWR("projetos", () => getProjects());
 

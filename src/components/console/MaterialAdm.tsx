@@ -13,7 +13,6 @@ import { InputField } from "../ui/FormInputField";
 export const MaterialAdm = () => {
     const {
         data: materials,
-        isLoading,
         mutate,
     } = useSWR("materials", getMaterials);
     const [open, setOpen] = useState(false);

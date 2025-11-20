@@ -12,7 +12,6 @@ import { ControlledImageUpload } from "../ui/ControlledImageInput";
 export const RevistaAdm = () => {
     const {
         data: revistas,
-        isLoading,
         mutate,
     } = useSWR("revistas", getRevistas);
     const [open, setOpen] = useState(false);

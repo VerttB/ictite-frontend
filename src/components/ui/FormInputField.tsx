@@ -11,7 +11,6 @@ export const InputField = ({ name, label, mask }: InputFieldProps) => {
     const {
         register,
         formState: { errors },
-        getValues,
     } = useFormContext();
 
     return (

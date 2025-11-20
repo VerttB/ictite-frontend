@@ -10,7 +10,6 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from "@radix-ui/react-dropdown-menu";
-import { ItemText } from "@radix-ui/react-select";
 
 type ItemTitle = {
     title: string;

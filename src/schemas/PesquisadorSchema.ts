@@ -2,7 +2,6 @@ import { RaceTypes } from "@/core/constants/race";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { SexTypes } from "@/core/constants/sex";
 import z from "zod";
-import { ImageSchema } from "./ImageSchema";
 
 export const PesquisadorSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio"),

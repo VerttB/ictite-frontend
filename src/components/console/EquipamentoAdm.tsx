@@ -18,7 +18,6 @@ import { ControlledImageUpload } from "../ui/ControlledImageInput";
 export const EquipamentoAdm = () => {
     const {
         data: equipamentos,
-        isLoading,
         mutate,
     } = useSWR("equipamentos", () => getEquipaments());
 

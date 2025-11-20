@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { Section } from "../Section";
-import { VideoAddModal } from "../video/VideoAddModal";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { VideoSchema } from "@/schemas/VideoSchema";
 

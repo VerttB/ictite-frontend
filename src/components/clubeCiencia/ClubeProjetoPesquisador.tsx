@@ -4,7 +4,6 @@ import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
 import { BookOpen, PanelsTopLeft } from "lucide-react";
 import CardProjeto from "../projeto/ProjetoCard";
-import { useState } from "react";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
 
 interface ClubeProjetoPesquisadorProps {

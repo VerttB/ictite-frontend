@@ -1,7 +1,6 @@
 import z from "zod";
 import { ImageSchema } from "./ImageSchema";
 import { mask } from "@/lib/maskBuilder";
-import { only } from "node:test";
 
 export const EscolaSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio"),

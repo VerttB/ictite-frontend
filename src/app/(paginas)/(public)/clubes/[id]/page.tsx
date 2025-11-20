@@ -1,6 +1,5 @@
 import ClubeProjetoPesquisador from "@/components/clubeCiencia/ClubeProjetoPesquisador";
 import InfoBar from "@/components/InfoBar";
-import CardProjeto from "@/components/projeto/ProjetoCard";
 import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import { OneClubeCienciaStatstics } from "@/core/interface/Clube/OneClubeCienciaStatstics";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
@@ -11,11 +10,9 @@ import {
 } from "@/core/service/ClubeCienciaService";
 import { getResearchersByClube } from "@/core/service/PesquisadorService";
 import { getProjectbyClube } from "@/core/service/ProjetoService";
-import { get } from "http";
 import {
     BookA,
     BookOpenText,
-    Goal,
     HeartHandshake,
     Instagram,
     LucideIcon,

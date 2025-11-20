@@ -22,7 +22,6 @@ import {
     LucideIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 
 export default function Clubes() {
     const [clubeCienciaStats, setClubeCienciaStats] =

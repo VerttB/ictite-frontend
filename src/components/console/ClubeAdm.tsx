@@ -17,7 +17,6 @@ import { ControlledSelect } from "../ui/ControlledSelect";
 export const ClubeAdm = () => {
     const {
         data: clubes,
-        isLoading,
         mutate,
     } = useSWR("clubes", () => getClubesCiencia());
 

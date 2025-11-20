@@ -1,4 +1,3 @@
-import { MaterialType } from "@/schemas/MaterialSchema";
 import { Material } from "../interface/Material";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;

@@ -22,7 +22,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { ReactNode } from "react";
 import * as z from "zod";
-import { LoaderCircle, LucideLoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 interface BaseFormModalProps<
     T extends z.ZodType<FieldValues, FieldValues>,
@@ -60,8 +60,8 @@ export function BaseFormModal<
     const {
         handleSubmit,
         reset,
-        clearErrors,
-        formState: { errors, isSubmitting },
+        
+        formState: { isSubmitting },
     } = methods;
 
     const handleManualSubmit = async (data: z.infer<T>) => {
