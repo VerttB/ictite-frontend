@@ -1,69 +1,79 @@
 import { Project, ProjectResearchers } from "../interface/Project";
 import { getBaseUrl } from "../utils/api";
 
-export const  getProjects = async (name: string = "") => {
-    try{
-        const res: Response = await fetch(`${getBaseUrl()}/projects/?name=${name}`);
-        if(!res) throw new Error(`Erro: ${res}`)
+export const getProjects = async (name: string = "") => {
+    try {
+        const res: Response = await fetch(
+            `${getBaseUrl()}/projects/?name=${name}`
+        );
+        if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
         return data;
-
-    }catch(e: unknown){
+    } catch (e: unknown) {
         console.error(e);
     }
-}
+};
 
-export const  getProjectById = async (projectId:string): Promise<Project | null> => {
-    try{
-        const res: Response = await fetch(`${getBaseUrl()}/projects/${projectId}`);
-        if(!res) throw new Error(`Erro: ${res}`)
+export const getProjectById = async (
+    projectId: string
+): Promise<Project | null> => {
+    try {
+        const res: Response = await fetch(
+            `${getBaseUrl()}/projects/${projectId}`
+        );
+        if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
         return data;
-
-    }catch(e: unknown){
+    } catch (e: unknown) {
         console.error(e);
         return null;
     }
-}
+};
 
-export const  getProjectResearchers= async (projectId : string): Promise<ProjectResearchers | null> => {
-    try{
-        const res: Response = await fetch(`${getBaseUrl()}/projects/${projectId}/researchers`);
-        if(!res) throw new Error(`Erro: ${res}`)
+export const getProjectResearchers = async (
+    projectId: string
+): Promise<ProjectResearchers | null> => {
+    try {
+        const res: Response = await fetch(
+            `${getBaseUrl()}/projects/${projectId}/researchers`
+        );
+        if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
         return data;
-
-    }catch(e: unknown){
+    } catch (e: unknown) {
         console.error(e);
-        return null
+        return null;
     }
-}
+};
 
-export const getProjectbyClube = async (clubeId : string): Promise<Project[] | null> => {
-    try{
-        const res: Response = await fetch(`${getBaseUrl()}/projects/${clubeId}/clube`);
-        if(!res) throw new Error(`Erro: ${res}`)
+export const getProjectbyClube = async (
+    clubeId: string
+): Promise<Project[] | null> => {
+    try {
+        const res: Response = await fetch(
+            `${getBaseUrl()}/projects/${clubeId}/clube`
+        );
+        if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
         return data;
-
-    }catch(e: unknown){
+    } catch (e: unknown) {
         console.error(e);
-        return null
+        return null;
     }
-}
+};
 
-export const createProject = async (data: FormData) => { 
+export const createProject = async (data: FormData) => {
     console.log("Creating project with data:", data);
-    try{
+    try {
         const res: Response = await fetch(`${getBaseUrl()}/projects/`, {
             method: "POST",
-            body: data
+            body: data,
         });
-        if(!res) throw new Error(`Erro: ${res}`)
+        if (!res) throw new Error(`Erro: ${res}`);
         const responseData = await res.json();
         return responseData;
-    }catch(e: unknown){
+    } catch (e: unknown) {
         console.error(e);
         return null;
     }
-}
+};

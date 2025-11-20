@@ -1,32 +1,36 @@
-"use client"
+"use client";
 
 import { LucideIcon } from "lucide-react";
 import CamposEntidades from "../console/CamposEntidades";
 import { useState } from "react";
 
 interface EntidadeProps {
-    nome  : string;
-    icon  : LucideIcon;
-    campos: string[]
+    nome: string;
+    icon: LucideIcon;
+    campos: string[];
 }
 
 interface CardEntidadeProps {
-    entidade: EntidadeProps
+    entidade: EntidadeProps;
 }
 
-export default function CardEntidade ({ entidade }: CardEntidadeProps) { 
+export default function CardEntidade({ entidade }: CardEntidadeProps) {
+    const [isDialogCamposEntidadeOpen, setIsDialogCamposEntidadeOpen] =
+        useState(false);
 
-    const [isDialogCamposEntidadeOpen, setIsDialogCamposEntidadeOpen] = useState(false);
-
-    return(
+    return (
         <>
-            <div onClick={() => setIsDialogCamposEntidadeOpen(true)}
-                className="flex flex-col items-center justify-center h-28 w-28 bg-foreground rounded-sm
-                            hover:shadow-sm hover:shadow-primary hover:border-2 hover:border-primary transition-all cursor-pointer">
-                <entidade.icon size={50}/>
+            <div
+                onClick={() => setIsDialogCamposEntidadeOpen(true)}
+                className="bg-foreground hover:shadow-primary hover:border-primary flex h-28 w-28 cursor-pointer flex-col items-center justify-center rounded-sm transition-all hover:border-2 hover:shadow-sm">
+                <entidade.icon size={50} />
                 <span className="font-semibold">{entidade.nome}</span>
             </div>
-            <CamposEntidades isOpen={isDialogCamposEntidadeOpen} onClose={setIsDialogCamposEntidadeOpen} entidade={entidade} />
+            <CamposEntidades
+                isOpen={isDialogCamposEntidadeOpen}
+                onClose={setIsDialogCamposEntidadeOpen}
+                entidade={entidade}
+            />
         </>
     );
 }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
@@ -6,33 +6,44 @@ import InfoBar from "@/components/InfoBar";
 import { Button } from "@/components/ui/button";
 import { AllClubeCienciaStatistics } from "@/core/interface/Clube/AllClubeCienciaStatistics";
 import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
-import { getClubesCiencia, getClubesCienciaStats } from "@/core/service/ClubeCienciaService";
-import { BookA, BookOpenText, BrainCircuit, ChartBar, ChartSpline, ChevronLeft, Goal, HeartHandshake, LucideIcon } from "lucide-react";
+import {
+    getClubesCiencia,
+    getClubesCienciaStats,
+} from "@/core/service/ClubeCienciaService";
+import {
+    BookA,
+    BookOpenText,
+    BrainCircuit,
+    ChartBar,
+    ChartSpline,
+    ChevronLeft,
+    Goal,
+    HeartHandshake,
+    LucideIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { set } from "react-hook-form";
 
 export default function Clubes() {
-
-    const [clubeCienciaStats, setClubeCienciaStats] = useState<AllClubeCienciaStatistics>();
+    const [clubeCienciaStats, setClubeCienciaStats] =
+        useState<AllClubeCienciaStatistics>();
 
     useEffect(() => {
         const carreharClubes = async () => {
             const clubes = await getClubesCiencia();
             setClubesCiencia(clubes);
-        }
+        };
 
         const carregarEstatisticasClubes = async () => {
             const estatisticas = await getClubesCienciaStats();
             setClubeCienciaStats(estatisticas);
-        }
+        };
 
         carreharClubes();
         carregarEstatisticasClubes();
     }, []);
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
-
-
 
     stats = [
         {
@@ -79,25 +90,29 @@ export default function Clubes() {
 
     const [clubesCiencia, setClubesCiencia] = useState<ClubeCiencia[]>([]);
 
-    
-
     return (
-        <div className="flex flex-col gap-8 w-full  sm:px-8 py-4">
-
+        <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
-            <div className="flex flex-row gap-5 items-center">
-                <Button size={"icon"} variant={"outline"} className="cursor-pointer"><ChevronLeft /></Button>
+            <div className="flex flex-row items-center gap-5">
+                <Button
+                    size={"icon"}
+                    variant={"outline"}
+                    className="cursor-pointer">
+                    <ChevronLeft />
+                </Button>
                 <p className="text-2xl font-semibold">Clubes de Ciência</p>
             </div>
 
             {/* |=======| OBJETIVOS DOS CLUBES DE CIÊNCIA |=======| */}
             <div className="flex flex-col gap-5">
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                     <Goal />
-                    <h2 className="text-2xl font-semibold">Objetivos dos Clubes de Ciência</h2>
+                    <h2 className="text-2xl font-semibold">
+                        Objetivos dos Clubes de Ciência
+                    </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center my-5">
+                <div className="my-5 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
                     <ObjetivoClubeCard />
                     <ObjetivoClubeCard />
                     <ObjetivoClubeCard />
@@ -112,21 +127,25 @@ export default function Clubes() {
             {/* |=======| LISTAGEM DOS CLUBES DE CIÊNCIA |=======| */}
             <div className="flex flex-col gap-4">
                 <div>
-                    <h2 className="text-2xl font-semibold">Clubes de Ciência:</h2>
+                    <h2 className="text-2xl font-semibold">
+                        Clubes de Ciência:
+                    </h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 justify-items-center">
-                    { clubesCiencia ? (
+                <div className="grid grid-cols-1 justify-items-center gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {clubesCiencia ? (
                         clubesCiencia.map((clubeCiencia) => (
-                            <ClubeCienciaCard key={clubeCiencia.id} clubeCiencia={clubeCiencia} />
+                            <ClubeCienciaCard
+                                key={clubeCiencia.id}
+                                clubeCiencia={clubeCiencia}
+                            />
                         ))
                     ) : (
-                       <div>
-                           <p>Carregando...</p>
-                       </div> 
+                        <div>
+                            <p>Carregando...</p>
+                        </div>
                     )}
                 </div>
             </div>
-            
         </div>
-    )
+    );
 }

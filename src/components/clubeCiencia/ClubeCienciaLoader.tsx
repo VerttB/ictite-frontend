@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import { SugestionBase } from "@/core/interface/SugestionBase";
@@ -11,8 +11,9 @@ interface ClubeCienciaLoaderProps {
     sugestion: SugestionBase;
 }
 
-export default function ClubeCienciaLoader({  sugestion }: ClubeCienciaLoaderProps) {
-
+export default function ClubeCienciaLoader({
+    sugestion,
+}: ClubeCienciaLoaderProps) {
     const [clube, setClube] = useState<ClubeCiencia | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -20,25 +21,32 @@ export default function ClubeCienciaLoader({  sugestion }: ClubeCienciaLoaderPro
         let mounted = true;
         const loadClube = async () => {
             setLoading(true);
-            try{
+            try {
                 const data = await getClubeCienciaById(sugestion.id);
-                if(!mounted) return;
+                if (!mounted) return;
                 setClube(data);
             } catch (e) {
                 console.error("Erro ao carregar Clube", e);
             } finally {
-                if(mounted) setLoading(false);
+                if (mounted) setLoading(false);
             }
-        }
+        };
 
         loadClube();
 
-        return () => { mounted = false; };
+        return () => {
+            mounted = false;
+        };
     }, [sugestion.id]);
 
-    if(loading) return <div className="h-[250px] w-[200px] border rounded flex text-primary items-center justify-center"><Spinner /></div>;
+    if (loading)
+        return (
+            <div className="text-primary flex h-[250px] w-[200px] items-center justify-center rounded border">
+                <Spinner />
+            </div>
+        );
 
-    if(!clube) return <div>Nenhum clube encontrado ou buscado</div>
+    if (!clube) return <div>Nenhum clube encontrado ou buscado</div>;
 
-    return <ClubeCienciaCard clubeCiencia={clube} />
+    return <ClubeCienciaCard clubeCiencia={clube} />;
 }

@@ -1,5 +1,5 @@
-export interface SchoolStatistics{
-    researchers : number,
-    projects:number,
-    equipments:number
+export interface SchoolStatistics {
+    researchers: number;
+    projects: number;
+    equipments: number;
 }

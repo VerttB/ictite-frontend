@@ -1,19 +1,19 @@
 import { MaterialType } from "@/schemas/MaterialSchema";
 import { Material } from "../interface/Material";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const getVideos = async (): Promise<Required<Material>[]> => {
     console.log("Base URL:", baseUrl);
-    try{
+    try {
         const response = await fetch(`${baseUrl}/material`, {
-            method: 'GET',
+            method: "GET",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         });
-        if(!response.ok){
-            throw new Error('Failed to fetch materials');
+        if (!response.ok) {
+            throw new Error("Failed to fetch materials");
         }
         const data = await response.json();
         return data || [];
@@ -21,19 +21,19 @@ export const getVideos = async (): Promise<Required<Material>[]> => {
         console.error(error);
         throw error;
     }
-}
+};
 
 export const createVideo = async (materialData: Omit<Material, "id">) => {
-    try{
+    try {
         const response = await fetch(`${baseUrl}/material`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(materialData),
         });
-        if(!response.ok){
-            throw new Error('Failed to create material');
+        if (!response.ok) {
+            throw new Error("Failed to create material");
         }
         const data = await response.json();
         return data;
@@ -41,4 +41,4 @@ export const createVideo = async (materialData: Omit<Material, "id">) => {
         console.error(error);
         throw error;
     }
-}
+};

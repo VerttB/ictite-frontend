@@ -6,8 +6,6 @@ export const RevistaSchema = z.object({
     description: z.string().min(1, "A descrição não deve estar vazia"),
     link: z.url("Deve ser uma URL válida"),
     images: z.any().pipe(ImageSchema),
-
-    
 });
 
 export type RevistaType = z.infer<typeof RevistaSchema>;

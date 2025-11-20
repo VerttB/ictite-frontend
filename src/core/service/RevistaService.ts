@@ -1,19 +1,18 @@
-
 import { Revista } from "../interface/Revista";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const getRevistas = async (): Promise<Required<Revista>[]> => {
     console.log("Base URL:", baseUrl);
-    try{
+    try {
         const response = await fetch(`${baseUrl}/magazine`, {
-            method: 'GET',
+            method: "GET",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         });
-        if(!response.ok){
-            throw new Error('Failed to fetch revistas');
+        if (!response.ok) {
+            throw new Error("Failed to fetch revistas");
         }
         const data = await response.json();
         return data || [];
@@ -21,17 +20,17 @@ export const getRevistas = async (): Promise<Required<Revista>[]> => {
         console.error(error);
         throw error;
     }
-}
+};
 
 export const createRevista = async (newRevista: FormData) => {
-    try{
+    try {
         const response = await fetch(`${baseUrl}/magazine`, {
-            method: 'POST',
-            
+            method: "POST",
+
             body: newRevista,
         });
-        if(!response.ok){
-            throw new Error('Failed to create material');
+        if (!response.ok) {
+            throw new Error("Failed to create material");
         }
         const data = await response.json();
         return data;
@@ -39,4 +38,4 @@ export const createRevista = async (newRevista: FormData) => {
         console.error(error);
         throw error;
     }
-}
+};
