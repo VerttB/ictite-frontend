@@ -17,6 +17,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { ReactNode } from "react";
 import * as z from "zod";
+import { LoaderCircle, LucideLoaderCircle } from "lucide-react";
 
 interface BaseFormModalProps<T extends z.ZodType<FieldValues, FieldValues>, TContext> {
   open: boolean;
@@ -24,7 +25,7 @@ interface BaseFormModalProps<T extends z.ZodType<FieldValues, FieldValues>, TCon
   title: string;
   schema: T;
   props?: Omit<UseFormProps<z.input<T>, TContext, z.output<T>>, 'resolver'>
-  onSubmit: (data: z.infer<T>) => void;
+  onSubmit: (data: z.infer<T>) => Promise<void>;
   children: ReactNode;
 }
 
@@ -49,15 +50,21 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
   const {
     handleSubmit,
     reset,
+    clearErrors,
+    formState: { errors, isSubmitting,  },
+    
+    
   } = methods;
 
-  const handleManualSubmit = (data: z.infer<T>) => {
-    console.log(data)
-    onSubmit(data);
+  
+
+  const handleManualSubmit = async (data: z.infer<T>) => {
+    await onSubmit(data);
     reset();
     onClose();
   };
-
+  
+  
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files?.length) return;
@@ -86,7 +93,6 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
             <TabsTrigger value="importar">Importar arquivo</TabsTrigger>
           </TabsList>
 
-          {/* ----------- FORM TAB ----------- */}
           <TabsContent value="manual">
             <FormProvider {...methods}>
               <form
@@ -107,7 +113,7 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
                     Cancelar
                   </Button>
 
-                  <Button type="submit">Salvar</Button>
+                  <Button className="w-20" type="submit">{isSubmitting ? <LoaderCircle className="animate-spin" /> : "Salvar"}</Button>
                 </div>
               </form>
             </FormProvider>
@@ -125,6 +131,7 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
                 accept=".csv, .xlsx"
                 ref={fileInputRef}
                 onChange={handleFileSelect}
+                
               />
 
               {arquivo && (
