@@ -5,134 +5,147 @@ import { SchoolData } from "@/core/interface/School";
 import { SchoolStatistics } from "@/core/interface/School/SchoolStatistics";
 import { getBaseUrl } from "@/core/utils/api";
 
-export const getSchoolGeoData =  async () => {
-    try{
-        const res  = await fetch(`${getBaseUrl()}/schools/geojson`)
-        
+export const getSchoolGeoData = async () => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools/geojson`);
+
         if (!res.ok) {
             throw new Error(`Erro na buca: ${res.status} ${res.statusText}`);
         }
 
-        const  data = await res.json()
+        const data = await res.json();
 
-        return data
+        return data;
     } catch (e) {
         console.error("Falha ao buscar dados de escolas:", e);
-        return null; 
+        return null;
     }
-}
+};
 
-export const getSchoolById =  async (id: string, full:boolean=false):Promise<SchoolData | null> => {
-    try{
-        const res  = await fetch(`${getBaseUrl()}/schools/${id}?full=${full}`)
-        
+export const getSchoolById = async (
+    id: string,
+    full: boolean = false
+): Promise<SchoolData | null> => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools/${id}?full=${full}`);
+
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
         }
 
-        const  data = await res.json()
+        const data = await res.json();
 
-        return data
+        return data;
     } catch (e) {
         console.error("Falha ao buscar dados de escolas:", e);
-        return null; 
+        return null;
     }
-}
+};
 
-export const getSchools = async (name:string = "", city:string = ""): Promise<SchoolData[]> => {
-     try{
-        const res  = await fetch(`${getBaseUrl()}/schools/?name=${name}&city=${city}`)
-        
+export const getSchools = async (
+    name: string = "",
+    city: string = ""
+): Promise<SchoolData[]> => {
+    try {
+        const res = await fetch(
+            `${getBaseUrl()}/schools/?name=${name}&city=${city}`
+        );
+
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
         }
 
-        const  data = await res.json()
+        const data = await res.json();
 
-        return data
+        return data;
     } catch (e) {
         console.error("Falha ao buscar dados de escolas:", e);
-        return []; 
+        return [];
     }
-}
+};
 
-export const getSchoolResearchers = async (id:string): Promise<Researcher[]> => {
-     try{
-        const res  = await fetch(`${getBaseUrl()}/schools/${id}/researchers`)
-        
+export const getSchoolResearchers = async (
+    id: string
+): Promise<Researcher[]> => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools/${id}/researchers`);
+
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
         }
 
-        const data:Researcher[] = await res.json()
+        const data: Researcher[] = await res.json();
 
-        return data
+        return data;
     } catch (e) {
         console.error("Falha ao buscar dados de escolas:", e);
-        return []; 
+        return [];
     }
-}
+};
 
-export const getSchoolProjects = async (id:string):Promise<Project[]> => {
-     try{
-        const res  = await fetch(`${getBaseUrl()}/schools/${id}/projects`)
-        
+export const getSchoolProjects = async (id: string): Promise<Project[]> => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools/${id}/projects`);
+
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
         }
 
-        const  data = res.json()
+        const data = res.json();
 
-        return data
+        return data;
     } catch (e) {
         console.error("Falha ao buscar projetos de escolas:", e);
-        return []; 
+        return [];
     }
-}
+};
 
-export const getSchoolEquiments = async (id:string):Promise<Equipment[]> => {
-     try{
-        const res  = await fetch(`${getBaseUrl()}/schools/${id}/equipments`)
-        
+export const getSchoolEquiments = async (id: string): Promise<Equipment[]> => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools/${id}/equipments`);
+
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
         }
 
-        const  data = res.json()
+        const data = res.json();
 
-        return data
+        return data;
     } catch (e) {
         console.error("Falha ao buscar equipamentos de escolas:", e);
-        return []; 
+        return [];
     }
-}
+};
 
+export const getSchoolStatistics = async (
+    id: string
+): Promise<SchoolStatistics | null> => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools/${id}/statistics`);
 
-export const getSchoolStatistics = async (id:string):Promise<SchoolStatistics | null> => {
-     try{
-        const res  = await fetch(`${getBaseUrl()}/schools/${id}/statistics`)
-        
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
         }
 
-        const  data = res.json()
+        const data = res.json();
 
-        return data
+        return data;
     } catch (e) {
         console.error("Falha ao buscar equipamentos de escolas:", e);
-        return null; 
+        return null;
     }
-}
+};
 
 export const createSchool = async (formData: FormData) => {
     try {
         const res = await fetch(`${getBaseUrl()}/schools`, {
             method: "POST",
-            body: formData
+            body: formData,
         });
         if (!res.ok) {
-            throw new Error(`Erro ao criar escola: ${res.status} ${res.statusText}`);
+            throw new Error(
+                `Erro ao criar escola: ${res.status} ${res.statusText}`
+            );
         }
         const data = await res.json();
         return data;
@@ -140,6 +153,4 @@ export const createSchool = async (formData: FormData) => {
         console.error("Falha ao criar escola:", e);
         throw e;
     }
-}
-
-
+};

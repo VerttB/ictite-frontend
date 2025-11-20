@@ -1,17 +1,16 @@
 import { Material } from "../interface/Material";
 import { getBaseUrl } from "../utils/api";
 
-
 export const getMaterials = async (): Promise<Required<Material>[]> => {
-    try{
+    try {
         const response = await fetch(`${getBaseUrl()}/material`, {
-            method: 'GET',
+            method: "GET",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
         });
-        if(!response.ok){
-            throw new Error('Failed to fetch materials');
+        if (!response.ok) {
+            throw new Error("Failed to fetch materials");
         }
         const data = await response.json();
         return data || [];
@@ -19,17 +18,17 @@ export const getMaterials = async (): Promise<Required<Material>[]> => {
         console.error(error);
         throw error;
     }
-}
+};
 
 export const createMaterial = async (newMaterial: FormData) => {
-    try{
+    try {
         const response = await fetch(`${getBaseUrl()}/material`, {
-            method: 'POST',
-          
+            method: "POST",
+
             body: newMaterial,
         });
-        if(!response.ok){
-            throw new Error('Failed to create material');
+        if (!response.ok) {
+            throw new Error("Failed to create material");
         }
         const data = await response.json();
         return data;
@@ -37,4 +36,4 @@ export const createMaterial = async (newMaterial: FormData) => {
         console.error(error);
         throw error;
     }
-}
+};

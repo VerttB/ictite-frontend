@@ -1,42 +1,36 @@
-import { getAssetPrefix } from "@/core/utils/api"
-import Image from "next/image"
+import { getAssetPrefix } from "@/core/utils/api";
+import Image from "next/image";
 export const Footer = () => {
-    return(
-    <footer 
-        className="
-                w-full px-4 py-2 h-16 gap-4 mt-3 p-2 rounded-sm
-                bg-foreground flex flex-wrap items-center ml-4  relative
-        "
->
-
+    return (
+        <footer className="bg-foreground relative mt-3 ml-4 flex h-16 w-full flex-wrap items-center gap-4 rounded-sm p-2 px-4 py-2">
             <Image
-            src={`${getAssetPrefix()}/apoios/UnebLogo.svg`}
-            alt="Logo"
-            width={96}
-            height={96}
-            className="inline-block object-contain"
-                    />
+                src={`${getAssetPrefix()}/apoios/UnebLogo.svg`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
             <Image
-            src={`${getAssetPrefix()}/apoios/fapesbLogo.jpg`}
-            alt="Logo"
-            width={96}
-            height={96}
-            className="inline-block object-contain"
-            />           
+                src={`${getAssetPrefix()}/apoios/fapesbLogo.jpg`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
             <Image
-            src={`${getAssetPrefix()}/apoios/governoDoEstadoLogo.png`}
-            alt="Logo"
-            width={96}
-            height={96}
-            className="inline-block object-contain"
-            />   
-             <Image
-            src={`${getAssetPrefix()}/apoios/fiocruzLogo.png`}
-            alt="Logo"
-            width={96}
-            height={96}
-            className="inline-block object-contain"
-            /> 
-
-    </footer>)
-}
+                src={`${getAssetPrefix()}/apoios/governoDoEstadoLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+            <Image
+                src={`${getAssetPrefix()}/apoios/fiocruzLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+        </footer>
+    );
+};

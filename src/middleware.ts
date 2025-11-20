@@ -2,21 +2,21 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  const token = req.cookies.get("access_token");
+    const token = req.cookies.get("access_token");
 
-  const protectedRoutes = ["/console", "/console/v2"];
-  const isProtected = protectedRoutes.some((path) =>
-    req.nextUrl.pathname.startsWith(path)
-  );
+    const protectedRoutes = ["/console", "/console/v2"];
+    const isProtected = protectedRoutes.some((path) =>
+        req.nextUrl.pathname.startsWith(path)
+    );
 
-  if (isProtected && !token) {
-    const loginUrl = new URL("/login", req.url);
-    return NextResponse.redirect(loginUrl);
-  }
+    if (isProtected && !token) {
+        const loginUrl = new URL("/login", req.url);
+        return NextResponse.redirect(loginUrl);
+    }
 
-  return NextResponse.next();
+    return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/console", "/console/v2"],
+    matcher: ["/console", "/console/v2"],
 };

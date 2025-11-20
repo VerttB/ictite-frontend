@@ -17,25 +17,32 @@ export default function ProjetoLoader({ sugestion }: ProjetoLoaderProps) {
         let mounted = true;
         const load = async () => {
             setLoading(true);
-            try{
+            try {
                 const data = await getProjectById(sugestion.id);
-                if(!mounted) return;
+                if (!mounted) return;
                 setProject(data);
             } catch (e) {
                 console.error("Erro ao carregar Projeto", e);
             } finally {
-                if(mounted) setLoading(false);
+                if (mounted) setLoading(false);
             }
-        }
+        };
 
         load();
 
-        return () => { mounted = false; };
-    }, [sugestion.id])
+        return () => {
+            mounted = false;
+        };
+    }, [sugestion.id]);
 
-    if(loading) return <div className="h-[250px] w-[200px] border rounded flex text-primary items-center justify-center"><Spinner /></div>;
+    if (loading)
+        return (
+            <div className="text-primary flex h-[250px] w-[200px] items-center justify-center rounded border">
+                <Spinner />
+            </div>
+        );
 
-    if(!project) return <div>Nenhum pesquisador encontrado ou buscado</div>
+    if (!project) return <div>Nenhum pesquisador encontrado ou buscado</div>;
 
-    return <CardProjeto project={project} />
+    return <CardProjeto project={project} />;
 }

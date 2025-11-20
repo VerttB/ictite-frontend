@@ -1,5 +1,5 @@
 export const ResearcherTypes = {
     ALUNO: "Aluno",
     PROFESSOR: "Professor",
-    FACILITADOR: "Facilitador"
+    FACILITADOR: "Facilitador",
 } as const;

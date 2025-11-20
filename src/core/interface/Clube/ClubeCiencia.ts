@@ -8,6 +8,6 @@ export interface ClubeCiencia {
     images: Image[];
 }
 
-export interface ClubeCienciaPOST extends Omit<ClubeCiencia, 'id' | 'school'> {
+export interface ClubeCienciaPOST extends Omit<ClubeCiencia, "id" | "school"> {
     school_id: string;
 }

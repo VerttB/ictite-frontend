@@ -6,4 +6,4 @@ export interface Material {
     description: string;
     link: string;
     images?: Image[];
-}   
+}
