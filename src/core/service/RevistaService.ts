@@ -23,15 +23,12 @@ export const getRevistas = async (): Promise<Required<Revista>[]> => {
     }
 }
 
-export const createRevista = async (materialData: Omit<Revista, "id">) => {
-    console.log("Creating revista with data:", materialData);
+export const createRevista = async (newRevista: FormData) => {
     try{
         const response = await fetch(`${baseUrl}/magazine`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(materialData),
+            
+            body: newRevista,
         });
         if(!response.ok){
             throw new Error('Failed to create material');
