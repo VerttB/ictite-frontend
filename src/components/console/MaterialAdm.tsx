@@ -1,7 +1,6 @@
 'use client'
 import { useState } from "react";
 import { Section } from "../Section"
-import { MaterialModal } from "../material/MaterialAddModal";
 import { BookOpenCheck } from "lucide-react";
 import useSWR from "swr";
 
@@ -10,17 +9,7 @@ import { MaterialSchema, MaterialType } from "@/schemas/MaterialSchema";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { ControlledImageUpload } from "../ui/ControlledImageInput";
 import { InputField } from "../ui/FormInputField";
-const initialMaterialData = [{
-  title: "Teste 1",
-  image: "https://images.unsplash.com/photo-1761838816945-021a4ebd67bc?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-},
-{
-  title: "Teste 2",
-  image: "https://images.unsplash.com/photo-1761838816945-021a4ebd67bc?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-}, {
-    title: "Teste 3",
-    image: "https://images.unsplash.com/photo-1761838816945-021a4ebd67bc?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-}];
+
 
 export const MaterialAdm = () => {
     const {data: materials, isLoading, mutate} = useSWR("materials", getMaterials)
@@ -34,8 +23,8 @@ export const MaterialAdm = () => {
         data.images.forEach((file) => newMaterial.append("images", file));
         await createMaterial(newMaterial);
         mutate();
+        setOpen(false);
     }
-    console.log("Materiais:", materials);
     return (
         <>
         <Section 

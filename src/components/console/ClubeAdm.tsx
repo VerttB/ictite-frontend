@@ -4,9 +4,12 @@ import { Section } from "../Section";
 import useSWR from "swr";
 import { getSchools } from "@/core/service/SchoolService";
 import { getClubesCiencia, createClubeCiencias } from "@/core/service/ClubeCienciaService";
-import { ClubeAddModal } from "../clubeCiencia/ClubeCienciaAddModal";
 import { useState } from "react";
-import { ClubeType } from "@/schemas/ClubeSchema";
+import { ClubeSchema, ClubeType } from "@/schemas/ClubeSchema";
+import { BaseFormModal } from "../BaseFormAddModal";
+import { ControlledImageUpload } from "../ui/ControlledImageInput";
+import { InputField } from "../ui/FormInputField";
+import { ControlledSelect } from "../ui/ControlledSelect";
 
 export const ClubeAdm = () => {
 
@@ -40,12 +43,19 @@ export const ClubeAdm = () => {
         onAdd={() => setOpen(true)}
       />
 
-      <ClubeAddModal
+      <BaseFormModal<typeof ClubeSchema, ClubeType>
         open={open}
         onClose={() => setOpen(false)}
-        escolas={escolas ?? []}
+        title="Adicionar Clube de Ciências"
+        schema={ClubeSchema}
+        props={{ defaultValues: { images: [] } }}
         onSubmit={onSubmit}
-      />
+      >
+          <InputField name="title" label="Nome do Clube de Ciências" />
+          <InputField name="description" label="Descrição" />
+          <ControlledSelect className="w-full" name="school_id" label="Escola" options={escolas || []} />
+          <ControlledImageUpload  name="images" />
+        </BaseFormModal>
     </>
   );
 };

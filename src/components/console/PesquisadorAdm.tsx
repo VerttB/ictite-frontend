@@ -7,7 +7,6 @@ import { useState } from "react";
 import { PersonStanding } from "lucide-react";
 import { createResearcher, getResearchers } from "@/core/service/PesquisadorService";
 import { PesquisadorSchema, PesquisadorType } from "@/schemas/PesquisadorSchema";
-import { PesquisadorAddModal } from "../pesquisador/PesquisadorAddModal";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { InputField } from "../ui/FormInputField";
 import { ControlledSelect } from "../ui/ControlledSelect";
@@ -16,7 +15,7 @@ import { RaceTypes } from "@/core/constants/race";
 import { SexTypes } from "@/core/constants/sex";
 export const PesquisadorAdm = () => {
 
-  const { data: pesquisadores, isLoading, mutate } = useSWR(
+  const { data: pesquisadores, mutate } = useSWR(
     "pesquisadores",
     () => getResearchers("")
   );

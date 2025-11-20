@@ -4,9 +4,12 @@ import { Section } from "../Section";
 import useSWR from "swr";
 import { getSchools } from "@/core/service/SchoolService";
 import { useState } from "react";
-import { ProjetoAddModal } from "../projeto/ProjedoAddModal";
 import { getProjects , createProject} from "@/core/service/ProjetoService";
-import { ProjetoType } from "@/schemas/ProjetoSchema";
+import { ProjetoSchema, ProjetoType } from "@/schemas/ProjetoSchema";
+import { BaseFormModal } from "../BaseFormAddModal";
+import { InputField } from "../ui/FormInputField";
+import { ControlledSelect } from "../ui/ControlledSelect";
+import { ControlledImageUpload } from "../ui/ControlledImageInput";
 
 export const ProjetoAdm = () => {
 
@@ -39,12 +42,20 @@ export const ProjetoAdm = () => {
         onAdd={() => setOpen(true)}
       />
 
-      <ProjetoAddModal
+      <BaseFormModal<typeof ProjetoSchema, ProjetoType>
         open={open}
         onClose={() => setOpen(false)}
-        escolas={escolas ?? []}
         onSubmit={onSubmit}
-      />
+        title="Adicionar Projeto"
+        schema={ProjetoSchema}
+        props={{ defaultValues: { images: [] } }}>
+
+          <InputField name="name" label="Nome do Projeto" />
+          <InputField name="description" label="Descrição" />
+          <ControlledSelect className="w-full" name="school_id" label="Escola" options={escolas || []} />
+          <ControlledImageUpload  name="images" />
+      </BaseFormModal>
+          
     </>
   );
 };
