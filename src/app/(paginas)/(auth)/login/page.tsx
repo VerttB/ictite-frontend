@@ -8,23 +8,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userLoginSchema } from "@/schemas/LoginSchema";
 import { useUserContext } from "@/providers/UserContext";
 export default function Login() {
-    const { loginUser, error } = useUserContext();
+    const { loginUser } = useUserContext();
+
     type userLoginData = z.infer<typeof userLoginSchema>;
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, },
+        setError,
     } = useForm<userLoginData>({
         resolver: zodResolver(userLoginSchema),
     });
 
     const onSubmit = async (data: userLoginData) => {
         const success = await loginUser(data);
-        if (success) {
-            console.log("Login successful");
-        } else {
-            console.log(error);
+        if (!success) {  
+           setError("root", { type: "manual", message: "Falha no login. Verifique suas credenciais." });
         }
     };
 
@@ -55,7 +55,7 @@ export default function Login() {
                         {errors && errors.password?.message}
                     </span>
                 </label>
-                {error && <p className="text-sm text-red-500">{error}</p>}
+                {errors && <p className="text-sm text-red-500">{errors.root?.message}</p>}
                 <Button type="submit">Fazer Login</Button>
             </form>
         </div>
