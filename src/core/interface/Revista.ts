@@ -2,7 +2,7 @@ import { Image } from "./Image";
 
 export interface Revista {
     id: string;
-    title: string;
+    name: string;
     description: string;
     link: string;
     images?: Image[];

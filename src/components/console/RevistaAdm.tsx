@@ -18,7 +18,7 @@ export const RevistaAdm = () => {
 
     const onSubmit = async (newRevista: RevistaType) => {
         const form = new FormData();
-        form.append("title", newRevista.title);
+        form.append("name", newRevista.name);
         form.append("description", newRevista.description);
         form.append("link", newRevista.link);
         for (const file of newRevista.images) {

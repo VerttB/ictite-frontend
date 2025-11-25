@@ -25,7 +25,7 @@ export const ClubeAdm = () => {
 
     const onSubmit = async (data: ClubeType) => {
         const form = new FormData();
-        form.append("title", data.title);
+        form.append("name", data.name);
         form.append("description", data.description);
         form.append("school_id", data.school_id);
         data.images.forEach((file) => form.append("images", file));
@@ -52,7 +52,7 @@ export const ClubeAdm = () => {
                 schema={ClubeSchema}
                 props={{ defaultValues: { images: [] } }}
                 onSubmit={onSubmit}>
-                <InputField name="title" label="Nome do Clube de Ciências" />
+                <InputField name="name" label="Nome do Clube de Ciências" />
                 <InputField name="description" label="Descrição" />
                 <ControlledSelect
                     className="w-full"

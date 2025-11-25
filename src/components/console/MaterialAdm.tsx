@@ -19,7 +19,7 @@ export const MaterialAdm = () => {
 
     const onSubmit = async (data: MaterialType) => {
         const newMaterial = new FormData();
-        newMaterial.append("title", data.title);
+        newMaterial.append("name", data.name);
         newMaterial.append("description", data.description);
         newMaterial.append("link", data.link);
         data.images.forEach((file) => newMaterial.append("images", file));
@@ -42,7 +42,7 @@ export const MaterialAdm = () => {
                 title="Adicionar Material"
                 schema={MaterialSchema}
                 props={{ defaultValues: { images: [] } }}>
-                <InputField name="title" label="Título do Material" />
+                <InputField name="name" label="Nome do Material" />
                 <InputField name="description" label="Descrição" />
                 <InputField name="link" label="Link" />
                 <ControlledImageUpload name="images" />
