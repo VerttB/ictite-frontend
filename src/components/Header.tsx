@@ -29,7 +29,7 @@ export const Header = () => {
                 </p>
             </div>
             <div className="flex flex-row items-center gap-2 sm:gap-4">
-                <Link href={"https://simcc.uesc.br/"}>
+                <Link href={"https://simcc.uesc.br/observatorio"}>
                     <Button
                         size={isMobile ? "icon" : "default"}
                         className="cursor-pointer text-xl">

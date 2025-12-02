@@ -1,4 +1,4 @@
-import { Maximize2 } from "lucide-react";
+import { BrainCircuit, Maximize2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Projeto from "./ProjetoDrawer";
@@ -37,6 +37,13 @@ export default function CardProjeto({ project, onClick }: ProjectProps) {
                 <p className="text-font-secondary max-h-28 overflow-y-auto text-justify text-sm">
                     {project.description}
                 </p>
+
+                <div>
+                    <span className="text-font-secondary flex items-center gap-2 text-sm">
+                        <BrainCircuit size={16} />
+                        Nome do Clube de Ciência
+                    </span>
+                </div>
 
                 {/* |=======| DRAWER DO PROJETO |=======| */}
             </div>
