@@ -74,6 +74,30 @@ export default function ProjetoPage() {
                 <EscolaList escolasBusca={resultadosBusca.escolas} />
             </div>
 
+            {/* |=======| LISTA DOS CLUBES |=======| */}
+            <div className="mt-3 mb-5 flex flex-col gap-2">
+                <div className="flex flex-row justify-between">
+                    <h2 className="text-2xl font-semibold">Lista dos Clubes</h2>
+                    <span className="bg-foreground cursor-default rounded-full p-1 shadow-sm transition-all hover:scale-105">
+                        Total: {resultadosBusca.clubes.length}
+                    </span>
+                </div>
+                {/* |=======| COMPONENTE DE CARD DOS clubes |=======| */}
+                {resultadosBusca.clubes.length !== 0 ? (
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                        {resultadosBusca.clubes.map((clube) => (
+                            <div key={clube.id} className="">
+                                <ClubeCienciaLoader sugestion={clube} />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div>
+                        <span>Nenhum resultado encontrado</span>
+                    </div>
+                )}
+            </div>
+
             {/* |=======| LISTA DOS PESQUISADORES |=======| */}
             <div className="mt-3 mb-5 flex flex-col gap-2">
                 <div className="flex flex-row justify-between">
@@ -126,29 +150,7 @@ export default function ProjetoPage() {
                 )}
             </div>
 
-            {/* |=======| LISTA DOS CLUBES |=======| */}
-            <div className="mt-3 mb-5 flex flex-col gap-2">
-                <div className="flex flex-row justify-between">
-                    <h2 className="text-2xl font-semibold">Lista dos Clubes</h2>
-                    <span className="bg-foreground cursor-default rounded-full p-1 shadow-sm transition-all hover:scale-105">
-                        Total: {resultadosBusca.clubes.length}
-                    </span>
-                </div>
-                {/* |=======| COMPONENTE DE CARD DOS clubes |=======| */}
-                {resultadosBusca.clubes.length !== 0 ? (
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-                        {resultadosBusca.clubes.map((clube) => (
-                            <div key={clube.id} className="">
-                                <ClubeCienciaLoader sugestion={clube} />
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div>
-                        <span>Nenhum resultado encontrado</span>
-                    </div>
-                )}
-            </div>
+            
             <Mapa />
         </div>
     );
