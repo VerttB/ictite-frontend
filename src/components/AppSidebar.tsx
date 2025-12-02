@@ -40,6 +40,12 @@ const items = [
         size: 10,
     },
     {
+        title: "Clubes de Ciências",
+        url: "/clubes",
+        icon: Handshake,
+        size: 10,
+    },
+    {
         title: "Documento ICTITE",
         url: "/projeto",
         icon: SquareChartGantt,
@@ -67,12 +73,6 @@ const items = [
         title: "Gráficos Estatísticos",
         url: "/materiais",
         icon: ChartSpline,
-        size: 10,
-    },
-    {
-        title: "CCTIC",
-        url: "/clubes",
-        icon: Handshake,
         size: 10,
     },
 ];

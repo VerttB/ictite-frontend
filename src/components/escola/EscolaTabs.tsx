@@ -17,7 +17,7 @@ import ClubeCienciaTabs from "../clubeCiencia/ClubeCienciaTabs";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
 
 export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
-    const [activeTab, setActiveTab] = useState("pesquisadores");
+    const [activeTab, setActiveTab] = useState("clube de ciência");
 
     const { researchers, isLoading: loadingRes } =
         useSchoolResearchers(schoolId);
@@ -31,6 +31,18 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                 onValueChange={setActiveTab}
                 className="w-full">
                 <TabsList className="bg-accent flex w-full flex-row gap-5 overflow-hidden overflow-x-auto rounded-md px-4 py-2">
+                    
+                    <TabsTrigger value="clube de ciência" asChild>
+                        <Button
+                            variant={
+                                activeTab === "clube de ciência"
+                                    ? "default"
+                                    : "outline"
+                            }>
+                            <Brain /> Clube de Ciênica
+                        </Button>
+                    </TabsTrigger>
+                    
                     <TabsTrigger value="pesquisadores" asChild>
                         <Button
                             variant={
@@ -59,16 +71,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                             <PanelsTopLeft /> Projetos
                         </Button>
                     </TabsTrigger>
-                    <TabsTrigger value="clube de ciência" asChild>
-                        <Button
-                            variant={
-                                activeTab === "clube de ciência"
-                                    ? "default"
-                                    : "outline"
-                            }>
-                            <Brain /> Clube de Ciênica
-                        </Button>
-                    </TabsTrigger>
+                    
                 </TabsList>
 
                 <TabsContent
