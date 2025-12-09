@@ -24,10 +24,9 @@ export const getSchoolGeoData = async () => {
 
 export const getSchoolById = async (
     id: string,
-    full: boolean = false
 ): Promise<SchoolData | null> => {
     try {
-        const res = await fetch(`${getBaseUrl()}/schools/${id}?full=${full}`);
+        const res = await fetch(`${getBaseUrl()}/schools/${id}`);
 
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);

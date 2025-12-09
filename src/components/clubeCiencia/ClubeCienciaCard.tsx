@@ -17,7 +17,7 @@ export default function ClubeCienciaCard({
                     <Image
                         src={
                             clubeCiencia.images.length > 0
-                                ? clubeCiencia.images[0].path
+                                ? clubeCiencia.images[0].url
                                 : "https://picsum.photos/300/190"
                         }
                         alt={"Clube Ciência"}

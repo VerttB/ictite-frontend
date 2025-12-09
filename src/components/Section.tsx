@@ -39,7 +39,7 @@ const resolveImage = (item: ItemType) => {
     if (typeof item.images === "string") return item.images;
 
     if (Array.isArray(item.images) && item.images.length > 0) {
-        return item.images[0].path;
+        return item.images[0].url;
     }
 
     return undefined;

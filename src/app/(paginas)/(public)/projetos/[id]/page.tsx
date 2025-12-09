@@ -50,7 +50,7 @@ export default async function Page({
                         project.images.map((image, i) => (
                             <Image
                                 key={i}
-                                src={image.path}
+                                src={image.url}
                                 alt={"Projeto"}
                                 width={164}
                                 height={164}

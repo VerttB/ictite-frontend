@@ -70,7 +70,7 @@ export default function Projeto({ isOpen, onClose, project }: ProjetoProps) {
                             project.images.map((image, i) => (
                                 <Image
                                     key={i}
-                                    src={image.path}
+                                    src={image.url}
                                     alt={"Projeto"}
                                     width={164}
                                     height={164}

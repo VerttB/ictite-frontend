@@ -20,6 +20,7 @@ import {
     School,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function OneClubeCiencia({
     params,
@@ -29,7 +30,7 @@ export default async function OneClubeCiencia({
     const { id } = await params;
 
     const clubeCiencia: ClubeCiencia = await getClubeCienciaById(id);
-
+    console.log(clubeCiencia);
     const researchers: Researcher[] =
         (await getResearchersByClube(clubeCiencia.id)) ?? [];
 
@@ -70,7 +71,7 @@ export default async function OneClubeCiencia({
                 <div className="rounded-full border">
                     <Image
                         src={
-                            clubeCiencia.images?.[0].path ??
+                            clubeCiencia.images?.[0].url ??
                             "https://picsum.photos/100/100"
                         }
                         alt={"Logo Clube de Ciência"}
@@ -85,7 +86,9 @@ export default async function OneClubeCiencia({
                     <div className="flex gap-2">
                         <div className="text-primary flex items-center gap-2 border-r pr-5">
                             <School size={20} />
-                            <p>{clubeCiencia.school}</p>
+                            <Link href={`/escolas/${clubeCiencia.school.id}`}>
+                                {clubeCiencia.school.name}
+                            </Link>
                         </div>
                         <div className="text-primary flex items-center gap-2 pl-5">
                             <Instagram size={20} />
@@ -98,10 +101,10 @@ export default async function OneClubeCiencia({
             {/* |=======| IMAGENS DO CLUBE DE CIÊNCIA |=======| */}
             <div className="flex">
                 <div className="flex flex-wrap gap-3 overflow-x-hidden">
-                    {Array.from({ length: 5 }).map((_, index) => (
+                    {clubeCiencia.images?.map((image, index) => (
                         <Image
                             key={index}
-                            src={"https://picsum.photos/200/200"}
+                            src={image.url}
                             alt="Clube de Ciência"
                             width={200}
                             height={200}></Image>
@@ -130,10 +133,10 @@ export default async function OneClubeCiencia({
 
             {/* |=======| PROJETOS  E PESQUISADORES DO CLUBE DE CIÊNCIA |=======| */}
             <div>
-                <ClubeProjetoPesquisador
+                {/* <ClubeProjetoPesquisador
                     projects={projects}
                     pesquisador={researchers}
-                />
+                /> */}
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ export const getClubesCiencia = async (
 ): Promise<Required<ClubeCiencia>[]> => {
     try {
         const res: Response = await fetch(
-            `${getBaseUrl()}/clubeCiencia/?title=${title}`
+            `${getBaseUrl()}/clubes-ciencia/?name=${title}`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -21,7 +21,7 @@ export const getClubesCiencia = async (
 // |=======| GET DE UM CLUBE DE CIÊNCIA PELO ID |=======|
 export const getClubeCienciaById = async (id: string) => {
     try {
-        const res: Response = await fetch(`${getBaseUrl()}/clubeCiencia/${id}`);
+        const res: Response = await fetch(`${getBaseUrl()}/clubes-ciencia/${id}`);
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
         return data;
@@ -34,7 +34,7 @@ export const getClubeCienciaById = async (id: string) => {
 export const getClubesCienciaBySchool = async (school_id: string) => {
     try {
         const res: Response = await fetch(
-            `${getBaseUrl()}/clubeCiencia/${school_id}/school`
+            `${getBaseUrl()}/clubes-ciencia/${school_id}/school`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -48,7 +48,7 @@ export const getClubesCienciaBySchool = async (school_id: string) => {
 export const getClubeCienciaStats = async (id: string) => {
     try {
         const res: Response = await fetch(
-            `${getBaseUrl()}/clubeCiencia/${id}/statistics`
+            `${getBaseUrl()}/clubes-ciencia/${id}/statistics`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -62,7 +62,7 @@ export const getClubeCienciaStats = async (id: string) => {
 export const getClubesCienciaStats = async () => {
     try {
         const res: Response = await fetch(
-            `${getBaseUrl()}/clubeCiencia/statistics`
+            `${getBaseUrl()}/clubes-ciencia/statistics`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -75,7 +75,7 @@ export const getClubesCienciaStats = async () => {
 export const createClubeCiencias = async (form: FormData) => {
     console.log("Criando clube no service", form);
     try {
-        const res = await fetch(`${getBaseUrl()}/clubeCiencia`, {
+        const res = await fetch(`${getBaseUrl()}/clubes-ciencia`, {
             method: "POST",
             body: form,
         });
