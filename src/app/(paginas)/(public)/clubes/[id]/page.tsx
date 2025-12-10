@@ -37,32 +37,32 @@ export default async function OneClubeCiencia({
     const projects: Project[] =
         (await getProjectbyClube(clubeCiencia.id)) ?? [];
 
-    const statistics: OneClubeCienciaStatstics = await getClubeCienciaStats(id);
+    // const statistics: OneClubeCienciaStatstics = await getClubeCienciaStats(id);
 
-    let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
+    // let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
-    stats = [
-        {
-            titulo: "Alunos",
-            valor: statistics.total_alunos,
-            Icon: BookA,
-        },
-        {
-            titulo: "Professores",
-            valor: statistics.total_professores,
-            Icon: BookOpenText,
-        },
-        {
-            titulo: "Facilitadores",
-            valor: statistics.total_facilitadores,
-            Icon: HeartHandshake,
-        },
-        {
-            titulo: "Projetos",
-            valor: statistics.total_projetos,
-            Icon: PanelsTopLeft,
-        },
-    ];
+    // stats = [
+    //     {
+    //         titulo: "Alunos",
+    //         valor: statistics.total_alunos,
+    //         Icon: BookA,
+    //     },
+    //     {
+    //         titulo: "Professores",
+    //         valor: statistics.total_professores,
+    //         Icon: BookOpenText,
+    //     },
+    //     {
+    //         titulo: "Facilitadores",
+    //         valor: statistics.total_facilitadores,
+    //         Icon: HeartHandshake,
+    //     },
+    //     {
+    //         titulo: "Projetos",
+    //         valor: statistics.total_projetos,
+    //         Icon: PanelsTopLeft,
+    //     },
+    // ];
 
     return (
         <div className="flex flex-col gap-8 p-8">
@@ -71,7 +71,7 @@ export default async function OneClubeCiencia({
                 <div className="rounded-full border">
                     <Image
                         src={
-                            clubeCiencia.images?.[0].url ??
+                            clubeCiencia.images?.[0]?.url ??
                             "https://picsum.photos/100/100"
                         }
                         alt={"Logo Clube de Ciência"}
@@ -81,7 +81,7 @@ export default async function OneClubeCiencia({
                 </div>
                 <div className="flex flex-col gap-2">
                     <h1 className="text-4xl font-semibold">
-                        {clubeCiencia.title}
+                        {clubeCiencia.name}
                     </h1>
                     <div className="flex gap-2">
                         <div className="text-primary flex items-center gap-2 border-r pr-5">
@@ -117,19 +117,13 @@ export default async function OneClubeCiencia({
                 <p className="border-b pb-2 text-xl font-semibold">
                     Descrição:
                 </p>
-                <p className="">
-                    {clubeCiencia.description} Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Et nisi tempore, error quidem
-                    debitis neque expedita aut dolores quae saepe accusantium
-                    quod cum, aperiam nobis sed magni nesciunt? Delectus,
-                    pariatur.
-                </p>
+                <p className="">{clubeCiencia.description}</p>
             </div>
 
             {/* |=======| ESTATÍSTICAS DO CLUBE DE CIÊNCIA |=======| */}
-            <div>
+            {/* <div>
                 <InfoBar data={stats} />
-            </div>
+            </div> */}
 
             {/* |=======| PROJETOS  E PESQUISADORES DO CLUBE DE CIÊNCIA |=======| */}
             <div>

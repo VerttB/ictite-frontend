@@ -1,11 +1,7 @@
-import {
-    getSchoolById,
-    getSchoolStatistics,
-} from "@/core/service/SchoolService";
+import { getSchoolById } from "@/core/service/SchoolService";
 import Image from "next/image";
 import { EscolaTabs } from "@/components/escola/EscolaTabs";
-import InfoBar from "@/components/InfoBar";
-import { Book, LucideIcon, MapPin, Table, Table2 } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Downloader } from "@/components/Downloader";
 
 export default async function Page({
@@ -15,27 +11,6 @@ export default async function Page({
 }) {
     const { id } = await params;
     const school = await getSchoolById(id);
-    //const schoolStatistics = await getSchoolStatistics(id);
-    let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
-
-    // if (schoolStatistics)
-    //     stats = [
-    //         {
-    //             titulo: "Pesquisadores",
-    //             valor: schoolStatistics.researchers,
-    //             Icon: Book,
-    //         },
-    //         {
-    //             titulo: "Projetos",
-    //             valor: schoolStatistics.projects,
-    //             Icon: Table2,
-    //         },
-    //         {
-    //             titulo: "Equipamentos",
-    //             valor: schoolStatistics.equipments,
-    //             Icon: Table,
-    //         },
-    //     ];
 
     if (!school) return <div className="px-10 py-6">Escola não encontrada</div>;
 
@@ -47,7 +22,7 @@ export default async function Page({
                     <Image
                         fill
                         src={
-                            school.images?.[0].url ||
+                            school.images?.[0]?.url ||
                             "https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         }
                         alt="escola"
@@ -76,7 +51,7 @@ export default async function Page({
 
             {/* //<InfoBar data={stats} /> */}
 
-            <EscolaTabs schoolId={school.id} />
+            <EscolaTabs school={school} />
         </div>
     );
 }

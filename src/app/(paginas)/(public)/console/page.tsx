@@ -11,7 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { SchoolData } from "@/core/interface/School";
+import { School } from "@/core/interface/School";
 import { getSchools } from "@/core/service/SchoolService";
 import {
     Book,
@@ -47,7 +47,7 @@ export default function Console() {
         null
     );
     const [arquivo, setArquivo] = useState<File | null>(null);
-    const [schools, setSchools] = useState<SchoolData[]>([]);
+    const [schools, setSchools] = useState<School[]>([]);
     const [schoolsLoading, setSchoolsLoading] = useState(false);
     const [schoolsError, setSchoolsError] = useState<string | null>(null);
 

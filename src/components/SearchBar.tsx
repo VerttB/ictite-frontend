@@ -17,7 +17,7 @@ export function SearchBar({ onChange }: { onChange: (value: string) => void }) {
             return () => clearTimeout(t);
         }
 
-        onChange(""); 
+        onChange("");
     };
 
     return (
@@ -31,8 +31,7 @@ export function SearchBar({ onChange }: { onChange: (value: string) => void }) {
             <Button
                 variant="ghost"
                 size="icon"
-                className="bg-primary absolute top-1/2 right-1 -translate-y-1/2"
-            >
+                className="bg-primary absolute top-1/2 right-1 -translate-y-1/2">
                 <Search className="text-white" />
             </Button>
         </div>

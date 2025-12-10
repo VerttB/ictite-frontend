@@ -8,7 +8,7 @@ import {
     PopoverContent,
     PopoverAnchor,
 } from "@/components/ui/popover";
-import { SchoolData } from "@/core/interface/School";
+import { School } from "@/core/interface/School";
 import { Spinner } from "./LoadingSpin";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
@@ -35,7 +35,7 @@ export default function MapaRender() {
         x: number;
         y: number;
     }>({ x: 0, y: 0 });
-    const [popoverContent, setPopoverContent] = useState<SchoolData[]>([]);
+    const [popoverContent, setPopoverContent] = useState<School[]>([]);
     const { open } = useSidebar();
     const { theme } = useTheme();
     const brazilBounds = useMemo<LngLatBoundsLike>(
@@ -161,10 +161,10 @@ export default function MapaRender() {
                         }
 
                         const position = map.project(coordinates);
-                        const schoolData = leaves.map(
-                            (leaf) => leaf.properties as SchoolData
+                        const School = leaves.map(
+                            (leaf) => leaf.properties as School
                         );
-                        setPopoverContent(schoolData);
+                        setPopoverContent(School);
                         setPopoverPosition(position);
                         setPopoverOpen(true);
                     }

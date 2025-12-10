@@ -40,28 +40,74 @@ export default function SearchClient() {
     };
 
     return (
-        <div className="flex flex-col gap-4">
-            <SearchBar onChange={setQuery} />
+        <>
+            <div className="flex flex-col gap-4">
+                <SearchBar onChange={setQuery} />
 
-            <SearchStats title="Escolas" count={resultados.escolas.length}>
-                <GenericList searchResult={resultados.escolas} path="escolas" icon={<School size={24} className="text-primary" />} />
-            </SearchStats>
+                {query ? (
+                    <>
+                        <SearchStats
+                            title="Escolas"
+                            count={resultados.escolas.length}>
+                            <GenericList
+                                searchResult={resultados.escolas}
+                                path="escolas"
+                                icon={
+                                    <School
+                                        size={24}
+                                        className="text-primary"
+                                    />
+                                }
+                            />
+                        </SearchStats>
 
-            <SearchStats title="Pesquisadores" count={resultados.pesquisadores.length}>
-               <GenericList searchResult={resultados.pesquisadores} path="pesquisadores" icon={<PersonStanding size={24} className="text-primary" />} />
-            </SearchStats>
+                        <SearchStats
+                            title="Pesquisadores"
+                            count={resultados.pesquisadores.length}>
+                            <GenericList
+                                searchResult={resultados.pesquisadores}
+                                path="pesquisadores"
+                                icon={
+                                    <PersonStanding
+                                        size={24}
+                                        className="text-primary"
+                                    />
+                                }
+                            />
+                        </SearchStats>
 
-            <SearchStats title="Projetos" count={resultados.projetos.length}>
-                <GenericList searchResult={resultados.projetos} path="projetos" icon={<Projector size={24} className="text-primary" />} />
-            </SearchStats>
+                        <SearchStats
+                            title="Projetos"
+                            count={resultados.projetos.length}>
+                            <GenericList
+                                searchResult={resultados.projetos}
+                                path="projetos"
+                                icon={
+                                    <Projector
+                                        size={24}
+                                        className="text-primary"
+                                    />
+                                }
+                            />
+                        </SearchStats>
 
-            <SearchStats title="Clubes" count={resultados.clubes.length}>
-                <GenericList searchResult={resultados.clubes} path="clubes" icon={<Club size={24} className="text-primary" />} />
-            </SearchStats>
-        </div>
+                        <SearchStats
+                            title="Clubes"
+                            count={resultados.clubes.length}>
+                            <GenericList
+                                searchResult={resultados.clubes}
+                                path="clubes"
+                                icon={
+                                    <Club size={24} className="text-primary" />
+                                }
+                            />
+                        </SearchStats>
+                    </>
+                ) : null}
+            </div>
+        </>
     );
 }
-
 
 interface SearchStatsProps {
     title: string;
@@ -69,12 +115,14 @@ interface SearchStatsProps {
     children: React.ReactNode;
 }
 
-function SearchStats({ title, count, children } : SearchStatsProps) {
+function SearchStats({ title, count, children }: SearchStatsProps) {
     return (
         <div className="mt-6">
-            <div className="flex justify-between mb-2">
+            <div className="mb-2 flex justify-between">
                 <h2 className="text-2xl font-semibold">{title}</h2>
-                <span className="bg-foreground rounded-full p-1">Total: {count}</span>
+                <span className="bg-foreground rounded-full p-1">
+                    Total: {count}
+                </span>
             </div>
             <div className="grid gap-4">{children}</div>
         </div>

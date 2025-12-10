@@ -27,11 +27,13 @@ export default function ClubeCienciaCard({
                 </div>
                 <div className="p-3">
                     <h1 className="line-clamp-1 text-xl font-semibold">
-                        {clubeCiencia.title}
+                        {clubeCiencia.name}
                     </h1>
                     <div className="text-primary flex items-center gap-2">
                         <School size={20} />
-                        <p className="line-clamp-1">{clubeCiencia.school}</p>
+                        <p className="line-clamp-1">
+                            {clubeCiencia.school.name}
+                        </p>
                     </div>
                 </div>
             </div>

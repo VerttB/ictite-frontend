@@ -2,7 +2,7 @@ import { Image } from "../Image";
 
 export interface ClubeCiencia {
     id: string;
-    title: string;
+    name: string;
     description: string;
     school: {
         id: string;

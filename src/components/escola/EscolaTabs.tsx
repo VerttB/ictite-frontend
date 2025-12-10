@@ -5,25 +5,28 @@ import { Button } from "@/components/ui/button";
 import { House, Printer, PanelsTopLeft, Brain } from "lucide-react";
 
 import { useState } from "react";
-import {
-    useSchoolEquipments,
-    useSchoolProjects,
-    useSchoolResearchers,
-} from "@/hooks/useSchools";
+import { useSchoolEquipments } from "@/hooks/useSchools";
 import { Spinner } from "../LoadingSpin";
 import CardProjeto from "../projeto/ProjetoCard";
 import CardEquipamento from "../card/CardEquipamento";
 import ClubeCienciaTabs from "../clubeCiencia/ClubeCienciaTabs";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
+import { School, SchoolWithClubes } from "@/core/interface/School";
+import useSWR from "swr";
+import ClubeCienciaCard from "../clubeCiencia/ClubeCienciaCard";
+import { getSchoolClubs } from "@/core/service/SchoolService";
 
-export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
+interface EscolaTabsProps {
+    school: SchoolWithClubes;
+}
+
+export const EscolaTabs = ({ school }: EscolaTabsProps) => {
     const [activeTab, setActiveTab] = useState("pesquisadores");
-
-    const { researchers, isLoading: loadingRes } =
-        useSchoolResearchers(schoolId);
-    const { equipments, isLoading: loadingEq } = useSchoolEquipments(schoolId);
-    const { projects, isLoading: loadingPr } = useSchoolProjects(schoolId);
-
+    const { equipments, isLoading: loadingEq } = useSchoolEquipments(school.id);
+    const { data: clubes, isLoading: loadingClube } = useSWR(
+        "clube-by-school-" + school.id,
+        () => getSchoolClubs(school.id)
+    );
     return (
         <>
             <Tabs
@@ -74,7 +77,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                 <TabsContent
                     value="pesquisadores"
                     className="mt-4 grid w-full [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                    {loadingRes ? (
+                    {/* {loadingRes ? (
                         <Spinner />
                     ) : (
                         researchers?.map((r) => (
@@ -83,7 +86,7 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                                 researcher={r}
                             />
                         ))
-                    )}
+                    )} */}
                 </TabsContent>
 
                 <TabsContent
@@ -101,23 +104,31 @@ export const EscolaTabs = ({ schoolId }: { schoolId: string }) => {
                 <TabsContent
                     value="projetos"
                     className="mt-4 grid [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))] gap-4">
-                    {loadingPr ? (
+                    {/* {loadingPr ? (
                         <Spinner />
                     ) : (
                         projects?.map((p, i) => (
                             <CardProjeto key={i} project={p} />
                         ))
-                    )}
+                    )} */}
                 </TabsContent>
 
                 <TabsContent value="clube de ciência">
-                    {projects ? (
-                        <ClubeCienciaTabs
-                            projetosClubeCiencia={projects}
-                            school_id={schoolId}
-                        />
+                    {loadingClube ? (
+                        <Spinner />
+                    ) : clubes && clubes.length > 0 ? (
+                        <div className="mt-4 grid [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))] gap-4">
+                            {clubes.map((clube) => (
+                                <ClubeCienciaCard
+                                    key={clube.id}
+                                    clubeCiencia={clube}
+                                />
+                            ))}
+                        </div>
                     ) : (
-                        "Não passou projetos"
+                        <p className="mt-4 text-center text-lg">
+                            Nenhum clube de ciência encontrado para esta escola.
+                        </p>
                     )}
                 </TabsContent>
             </Tabs>
