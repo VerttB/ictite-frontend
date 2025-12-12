@@ -11,23 +11,30 @@ import {
 import Image from "next/image";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
 import useSWR from "swr";
-import { getProjectResearchers } from "@/core/service/ProjetoService";
+import {
+    getProjectById,
+    getProjectResearchers,
+} from "@/core/service/ProjetoService";
 import { Project } from "@/core/interface/Project";
 import { capitalize } from "@/core/utils/capitalize";
 import Link from "next/link";
 import { useViewPort } from "@/hooks/useViewPort";
+import { Spinner } from "../LoadingSpin";
 
 interface ProjetoProps {
     isOpen: boolean;
     onClose: (open: boolean) => void;
-    project: Project;
+    project_id: string;
 }
 
-export default function Projeto({ isOpen, onClose, project }: ProjetoProps) {
-    const { data: pesquisadores } = useSWR(`project-${project.id}`, () =>
-        getProjectResearchers(project.id)
+export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
+    const { data: project, isLoading } = useSWR(
+        `project-data-${project_id}`,
+        () => getProjectById(project_id)
     );
     const { isMobile } = useViewPort();
+    if (isLoading) return <Spinner />;
+    if (!project) return null;
     return (
         <Drawer
             open={isOpen}
@@ -78,7 +85,7 @@ export default function Projeto({ isOpen, onClose, project }: ProjetoProps) {
                             ))}
                     </div>
 
-                    {pesquisadores &&
+                    {/* {pesquisadores &&
                         Object.keys(pesquisadores).map((key: string) => {
                             const items =
                                 pesquisadores[
@@ -108,7 +115,7 @@ export default function Projeto({ isOpen, onClose, project }: ProjetoProps) {
                                     </div>
                                 </div>
                             );
-                        })}
+                        })} */}
                 </div>
             </DrawerContent>
         </Drawer>

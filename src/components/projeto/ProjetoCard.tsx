@@ -6,7 +6,7 @@ import { Project } from "@/core/interface/Project";
 
 interface ProjectProps {
     onClick?: () => void;
-    project: Project;
+    project: Pick<Project, "id" | "name" | "description">;
 }
 
 export default function CardProjeto({ project, onClick }: ProjectProps) {
@@ -34,15 +34,13 @@ export default function CardProjeto({ project, onClick }: ProjectProps) {
                         <Maximize2 />
                     </Button>
                 </div>
-                <p className="text-font-secondary max-h-28 overflow-y-auto text-justify text-sm">
-                    {project.description}
-                </p>
+                <p>{project.description}</p>
 
                 {/* |=======| DRAWER DO PROJETO |=======| */}
             </div>
             <Projeto
                 isOpen={isProjetoDrawerOpen}
-                project={project}
+                project_id={project.id}
                 onClose={() => setIsProjetoDrawerOpen(false)}
             />
         </>

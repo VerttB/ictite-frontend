@@ -18,10 +18,6 @@ export const PesquisadorTabs = ({
     researcher: ResearcherFinal;
 }) => {
     const [activeTab, setActiveTab] = useState("artigos");
-    const { data: projects } = useSWR(
-        `researcher-projects-${researcher.id}`,
-        () => getResearcherProjects(researcher.id)
-    );
     const { isMobile, isTablet } = useViewPort();
 
     if (!researcher) return null;
@@ -108,19 +104,19 @@ export const PesquisadorTabs = ({
                 <TabsContent
                     value="projetos"
                     className="flex min-h-0 flex-1 flex-col">
-                    {projects && projects.length > 0 ? (
-                        <Masonry
-                            columnsCount={isMobile ? 1 : isTablet ? 2 : 3}
-                            gutter="10px">
-                            {projects?.map((projeto, i) => (
-                                <CardProjeto key={i} project={projeto} />
-                            ))}
-                        </Masonry>
-                    ) : (
-                        <div className="flex h-full items-center justify-center p-10">
-                            <p>Nenhum projeto encontrado.</p>
-                        </div>
-                    )}
+                    <Masonry
+                        columnsCount={isMobile ? 1 : isTablet ? 2 : 4}
+                        gutter="10px">
+                        {Object.entries(researcher.projects).map(
+                            ([year, projects]) =>
+                                projects.map((project) => (
+                                    <CardProjeto
+                                        key={project.id}
+                                        project={project}
+                                    />
+                                ))
+                        )}
+                    </Masonry>
                 </TabsContent>
 
                 <TabsContent value="livros_capitulos" className="mt-4">
