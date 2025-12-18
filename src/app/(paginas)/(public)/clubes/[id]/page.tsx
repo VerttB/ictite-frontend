@@ -3,9 +3,12 @@ import InfoBar from "@/components/InfoBar";
 import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import { OneClubeCienciaStatstics } from "@/core/interface/Clube/OneClubeCienciaStatstics";
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import { ResearcherByType } from "@/core/interface/Pesquisador/ResearcherByType";
 import { Project } from "@/core/interface/Project";
 import {
     getClubeCienciaById,
+    getClubeCienciaProjects,
+    getClubeCienciaResearchers,
     getClubeCienciaStats,
 } from "@/core/service/ClubeCienciaService";
 import { getResearchersByClube } from "@/core/service/PesquisadorService";
@@ -30,12 +33,15 @@ export default async function OneClubeCiencia({
     const { id } = await params;
 
     const clubeCiencia: ClubeCiencia = await getClubeCienciaById(id);
+    const projects: Project[] = await getClubeCienciaProjects(id);
+    const researchers: ResearcherByType = await getClubeCienciaResearchers(id);
+
     console.log(clubeCiencia);
-    const researchers: Researcher[] =
+    /*const researchers: Researcher[] =
         (await getResearchersByClube(clubeCiencia.id)) ?? [];
 
     const projects: Project[] =
-        (await getProjectbyClube(clubeCiencia.id)) ?? [];
+        (await getProjectbyClube(clubeCiencia.id)) ?? [];*/
 
     // const statistics: OneClubeCienciaStatstics = await getClubeCienciaStats(id);
 
@@ -127,11 +133,12 @@ export default async function OneClubeCiencia({
 
             {/* |=======| PROJETOS  E PESQUISADORES DO CLUBE DE CIÊNCIA |=======| */}
             <div>
-                {/* <ClubeProjetoPesquisador
+                { <ClubeProjetoPesquisador
                     projects={projects}
                     pesquisador={researchers}
-                /> */}
+                /> }
             </div>
+
         </div>
     );
 }

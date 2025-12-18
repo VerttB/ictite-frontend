@@ -33,6 +33,35 @@ export const getClubeCienciaById = async (id: string) => {
 // |=======| GET TODOS OS CLUBES DE CIÊNCIA DE UMA ESCOLA |=======|
 
 
+// |=======| GET TODOS OS PESQUISADORES DE UM CLUBE DE CIÊNCIAS |=======|
+export const getClubeCienciaResearchers = async (id: string) => {
+    try {
+        const res: Response = await fetch(
+            `${getBaseUrl()}/clubes-ciencia/${id}/researchers`
+        );
+        if (!res) throw new Error(`Erro: ${res}`);
+        const data = await res.json();
+        return data;
+    } catch (e: unknown) {
+        console.error(e);
+    }
+}
+
+
+// |=======| GET TODOS OS PROJETOS DE UM CLUBE DE CIÊNCIAS |=======|
+export const getClubeCienciaProjects = async (id: string) => {
+    try {
+        const res: Response = await fetch(
+            `${getBaseUrl()}/clubes-ciencia/${id}/projects`
+        );
+        if (!res) throw new Error(`Erro: ${res}`);
+        const data = await res.json();
+        return data;
+    } catch (e: unknown) {
+        console.error(e);
+    }
+}
+
 // |=======| GET ESTATÍSTICAS DE UM CLUBE DE CIÊNCIAS |=======|
 export const getClubeCienciaStats = async (id: string) => {
     try {
