@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { House, Printer, PanelsTopLeft, Brain } from "lucide-react";
 
 import { useState } from "react";
-import { useSchoolEquipments } from "@/hooks/useSchools";
+import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/hooks/useSchools";
 import { Spinner } from "../LoadingSpin";
 import CardProjeto from "../projeto/ProjetoCard";
 import CardEquipamento from "../card/CardEquipamento";
@@ -23,6 +23,9 @@ interface EscolaTabsProps {
 export const EscolaTabs = ({ school }: EscolaTabsProps) => {
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const { equipments, isLoading: loadingEq } = useSchoolEquipments(school.id);
+    const { projects, isLoading: loadingProj } = useSchoolProjects(school.id);
+    const { researchers, isLoading: loadingRes } = useSchoolResearchers(school.id);
+
     const { data: clubes, isLoading: loadingClube } = useSWR(
         "clube-by-school-" + school.id,
         () => getSchoolClubs(school.id)
@@ -77,7 +80,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
                 <TabsContent
                     value="pesquisadores"
                     className="mt-4 grid w-full [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                    {/* {loadingRes ? (
+                    {loadingRes ? (
                         <Spinner />
                     ) : (
                         researchers?.map((r) => (
@@ -86,7 +89,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
                                 researcher={r}
                             />
                         ))
-                    )} */}
+                    )} 
                 </TabsContent>
 
                 <TabsContent
@@ -104,13 +107,13 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
                 <TabsContent
                     value="projetos"
                     className="mt-4 grid [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))] gap-4">
-                    {/* {loadingPr ? (
+                    {loadingProj ? (
                         <Spinner />
                     ) : (
                         projects?.map((p, i) => (
                             <CardProjeto key={i} project={p} />
                         ))
-                    )} */}
+                    )} 
                 </TabsContent>
 
                 <TabsContent value="clube de ciência">
