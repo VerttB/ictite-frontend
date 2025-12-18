@@ -74,29 +74,28 @@ export default async function OneClubeCiencia({
         <div className="flex flex-col gap-8 p-8">
             {/* |=======| CABEÇALHO DO CLUBE DE CIÊNCIA |=======| */}
             <div className="flex items-center gap-5">
-                <div className="rounded-full border">
+                <div className="relative h-[100px] w-[100px] overflow-hidden rounded-full border-2 border-primary shadow-md">
                     <Image
                         src={
                             clubeCiencia.images?.[0]?.url ??
                             "https://picsum.photos/100/100"
                         }
                         alt={"Logo Clube de Ciência"}
-                        width={100}
-                        height={100}
-                        className="rounded-full object-cover"></Image>
+                        fill
+                        className="object-cover"></Image>
                 </div>
                 <div className="flex flex-col gap-2">
                     <h1 className="text-4xl font-semibold">
                         {clubeCiencia.name}
                     </h1>
                     <div className="flex gap-2">
-                        <div className="text-primary flex items-center gap-2 border-r pr-5">
+                        <div className="text-primary flex items-center gap-2 border-r pr-5 hover:cursor-pointer hover:underline  ">
                             <School size={20} />
                             <Link href={`/escolas/${clubeCiencia.school.id}`}>
                                 {clubeCiencia.school.name}
                             </Link>
                         </div>
-                        <div className="text-primary flex items-center gap-2 pl-5">
+                        <div className="text-primary flex items-center gap-2 pl-5 hover:cursor-pointer hover:underline">
                             <Instagram size={20} />
                             <p>@instagram_clube</p>
                         </div>
@@ -105,7 +104,7 @@ export default async function OneClubeCiencia({
             </div>
 
             {/* |=======| IMAGENS DO CLUBE DE CIÊNCIA |=======| */}
-            <div className="flex">
+            <div className="flex pt-4 border-t">
                 <div className="flex flex-wrap gap-3 overflow-x-hidden">
                     {clubeCiencia.images?.map((image, index) => (
                         <Image

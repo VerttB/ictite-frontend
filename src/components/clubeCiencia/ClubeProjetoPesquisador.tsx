@@ -34,6 +34,7 @@ export default function ClubeProjetoPesquisador({
             </div>
 
             <div className="flex flex-col gap-2">
+                
                 {/* PROFESSORES */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <h2 className="text-xl font-semibold">Professor</h2>
