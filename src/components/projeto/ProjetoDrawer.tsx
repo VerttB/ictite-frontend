@@ -20,6 +20,7 @@ import { capitalize } from "@/core/utils/capitalize";
 import Link from "next/link";
 import { useViewPort } from "@/hooks/useViewPort";
 import { Spinner } from "../LoadingSpin";
+import { PesquisadoresLista } from "../pesquisador/PesquisadoresLista";
 
 interface ProjetoProps {
     isOpen: boolean;
@@ -72,19 +73,30 @@ export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
                 {/* BODY DOS PESQUISADORES */}
                 <div className="overflow-y-auto pt-2 pl-5">
                     {/* IMAGENS DO PROJETO */}
-                    <div className="grid w-full [grid-template-columns:repeat(auto-fill,minmax(100px,1fr))] gap-4">
-                        {project.images &&
-                            project.images.map((image, i) => (
-                                <Image
-                                    key={i}
-                                    src={image.url}
-                                    alt={"Projeto"}
-                                    width={164}
-                                    height={164}
-                                />
-                            ))}
+                    {/* |=======| IMAGENS DO PROJETO |=======| */}
+                    <div className="overflow-y-auto pt-2 mb-4">
+                        
+                        { project.images?.length ? (
+                            <div className="flex flex-row gap-5 border-b py-7">
+                                {project.images &&
+                                    project.images.map((image, i) => (
+                                        <Image
+                                            key={i}
+                                            src={image.url}
+                                            alt={"Projeto"}
+                                            width={164}
+                                            height={164}
+                                        />
+                                    ))}
+                            </div>
+                        ) : (
+                            <div className="border-b pb-7 pt-5">
+                                <p>Nenhuma imagem de projeto cadastrada</p>
+                            </div>
+                        )}
                     </div>
-
+                    
+                    <PesquisadoresLista projectId={project_id} />
                     {/* {pesquisadores &&
                         Object.keys(pesquisadores).map((key: string) => {
                             const items =

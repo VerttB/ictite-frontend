@@ -23,7 +23,7 @@ export default async function Page({
         return <div className="px-10 py-6">Projeto não encontrado</div>;
 
     return (
-        <div className="w-full p-8 shadow">
+        <div className="w-full p-8 ">
             {/* |=======| MENU SUPERIOR DE PROJETO |=======| */}
             <div className="flex flex-col gap-3 border-b pb-3">
                 <div className="flex flex-row items-center gap-4">
@@ -44,23 +44,30 @@ export default async function Page({
             </div>
 
             {/* |=======| IMAGENS DO PROJETO |=======| */}
-            <div className="overflow-y-auto pt-2 pl-5">
-                <div className="flex flex-row gap-5 border-b py-7">
-                    {project.images &&
-                        project.images.map((image, i) => (
-                            <Image
-                                key={i}
-                                src={image.url}
-                                alt={"Projeto"}
-                                width={164}
-                                height={164}
-                            />
-                        ))}
-                </div>
+            <div className="overflow-y-auto pt-2 ">
+                
+                { project.images?.length ? (
+                    <div className="flex flex-row gap-5 border-b py-7">
+                        {project.images &&
+                            project.images.map((image, i) => (
+                                <Image
+                                    key={i}
+                                    src={image.url}
+                                    alt={"Projeto"}
+                                    width={164}
+                                    height={164}
+                                />
+                            ))}
+                    </div>
+                ) : (
+                    <div className="border-b pb-7 pt-5">
+                        <p>Nenhuma imagem de projeto cadastrada</p>
+                    </div>
+                )}
             </div>
 
             {/* |=======| FUTURA DESCRIÇÃO LONGA + ESTATÍSTICAS |=======| */}
-            <div className="mt-4 flex flex-col gap-5 lg:flex-row">
+            <div className="mt-4 flex flex-col gap-5 lg:flex-row mb-8">
                 {/* DESCRIÇÃO LONGA */}
                 <div className="bg-foreground flex flex-3/4 flex-col gap-1 rounded-md border p-3">
                     <h2 className="border-b pb-2 text-xl font-semibold">

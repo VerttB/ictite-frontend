@@ -1,3 +1,4 @@
+import { ResearcherByType } from "../interface/Pesquisador/ResearcherByType";
 import { Project, ProjectResearchers } from "../interface/Project";
 import { getBaseUrl } from "../utils/api";
 
@@ -30,9 +31,7 @@ export const getProjectById = async (
     }
 };
 
-export const getProjectResearchers = async (
-    projectId: string
-): Promise<ProjectResearchers | null> => {
+export const getProjectResearchers = async ( projectId: string ) => {
     try {
         const res: Response = await fetch(
             `${getBaseUrl()}/projects/${projectId}/researchers`
@@ -42,7 +41,6 @@ export const getProjectResearchers = async (
         return data;
     } catch (e: unknown) {
         console.error(e);
-        return null;
     }
 };
 
