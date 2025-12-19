@@ -61,29 +61,14 @@ export default function Clubes() {
             Icon: BookOpenText,
         },
         {
-            titulo: "Facilitadores",
-            valor: clubeCienciaStats?.total_facilitadores ?? 0,
+            titulo: "Coordenadores",
+            valor: clubeCienciaStats?.total_coordenadores ?? 0,
             Icon: HeartHandshake,
         },
         {
-            titulo: "Média de alunos por clube",
-            valor: clubeCienciaStats?.media_alunos ?? 0,
+            titulo: "Projetos",
+            valor: clubeCienciaStats?.total_projetos ?? 0,
             Icon: ChartBar,
-        },
-        {
-            titulo: "Média de professores por clube",
-            valor: clubeCienciaStats?.media_professores ?? 0,
-            Icon: ChartSpline,
-        },
-        {
-            titulo: "Média de facilitadores por clube",
-            valor: clubeCienciaStats?.media_facilitadores ?? 0,
-            Icon: ChartSpline,
-        },
-        {
-            titulo: "Média de projetos por clube",
-            valor: clubeCienciaStats?.media_projetos ?? 0,
-            Icon: ChartSpline,
         },
     ];
 
