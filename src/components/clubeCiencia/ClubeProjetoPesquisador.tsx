@@ -23,9 +23,13 @@ export default function ClubeProjetoPesquisador({
                 <h1 className="text-2xl font-semibold">Projetos:</h1>
             </div>
             <div className="grid [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))] gap-4">
-                {projects.map((project) => (
-                    <CardProjeto key={project.id} project={project} />
-                ))}
+                {Array.isArray(projects) && projects.length > 0 ? (
+                    projects.map((project) => (
+                        <CardProjeto key={project.id} project={project} />
+                    ))
+                ) : (
+                    <p>Não há projetos cadastrados neste clube.</p>
+                )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -38,7 +42,7 @@ export default function ClubeProjetoPesquisador({
                 {/* PROFESSORES */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <h2 className="text-xl font-semibold">Professor</h2>
-                    {pesquisador.Professor.length > 0 ? (
+                    {Array.isArray(pesquisador.Professor) && pesquisador.Professor.length > 0 ? (
                         <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
                             {pesquisador.Professor.map((professor) => (
                                 <CardPesquisador
@@ -57,7 +61,7 @@ export default function ClubeProjetoPesquisador({
                 {/* ALUNOS */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <h2 className="text-xl font-semibold">Aluno</h2>
-                    {pesquisador.Aluno.length > 0 ? (
+                    {Array.isArray(pesquisador.Aluno) && pesquisador.Aluno.length > 0 ? (
                         <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
                             {pesquisador.Aluno.map((aluno) => (
                                 <CardPesquisador
@@ -76,7 +80,7 @@ export default function ClubeProjetoPesquisador({
                 {/* COORDENADORES */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <h2 className="text-xl font-semibold">Coordenador</h2>
-                    { pesquisador.Coordenador.length > 0 ? (
+                    { Array.isArray(pesquisador.Coordenador) &&  pesquisador.Coordenador.length > 0 ? (
                         <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
                             {pesquisador.Coordenador.map((coordenador) => (
                                 <CardPesquisador

@@ -33,8 +33,12 @@ export default async function OneClubeCiencia({
     const { id } = await params;
 
     const clubeCiencia: ClubeCiencia = await getClubeCienciaById(id);
-    const projects: Project[] = await getClubeCienciaProjects(id);
-    const researchers: ResearcherByType = await getClubeCienciaResearchers(id);
+    const projects: Project[] = (await getClubeCienciaProjects(id)) ?? [];
+    const researchers: ResearcherByType = (await getClubeCienciaResearchers(id)) ?? {
+        Professor: [],
+        Aluno: [],
+        Coordenador: [],
+    };
 
     console.log(clubeCiencia);
     /*const researchers: Researcher[] =
