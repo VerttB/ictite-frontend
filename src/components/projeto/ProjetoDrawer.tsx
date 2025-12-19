@@ -1,5 +1,5 @@
 "use client";
-import { Expand, School, X } from "lucide-react";
+import { BrainCircuit, Expand, School, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
     Drawer,
@@ -36,6 +36,7 @@ export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
     const { isMobile } = useViewPort();
     if (isLoading) return <Spinner />;
     if (!project) return null;
+
     return (
         <Drawer
             open={isOpen}
@@ -64,9 +65,9 @@ export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
                         {project.description}
                     </DrawerDescription>
                     {/* NOME DA ESCOLA */}
-                    <div className="text-font-secondary mt-2 flex flex-row items-center gap-0.5">
-                        <School size={16} />
-                        <span className="text-sm">{project.school}</span>
+                    <div className="text-font-secondary mt-2 flex flex-row items-center gap-2">
+                        <BrainCircuit size={16} />
+                        <span className="text-sm">{project.clube.name}</span>
                     </div>
                 </DrawerHeader>
 

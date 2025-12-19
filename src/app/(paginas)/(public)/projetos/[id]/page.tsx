@@ -3,6 +3,7 @@ import { PesquisadoresLista } from "@/components/pesquisador/PesquisadoresLista"
 import { getProjectById } from "@/core/service/ProjetoService";
 import {
     Book,
+    BrainCircuit,
     ChevronLeft,
     GraduationCap,
     Handshake,
@@ -36,9 +37,9 @@ export default async function Page({
                 </div>
                 <div>
                     <div className="">{project.description}</div>
-                    <div className="mt-2 flex flex-row items-center gap-0.5 text-gray-500">
-                        <School size={16} />
-                        <span className="text-sm">{project.school}</span>
+                    <div className="mt-2 flex flex-row items-center gap-2 text-gray-500">
+                        <BrainCircuit size={16} />
+                        <span className="text-sm">{project.clube.name}</span>
                     </div>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { SimpleIdName } from "./Commom";
 import { Image } from "./Image";
 import { Researcher } from "./Pesquisador/Researcher";
 
@@ -5,7 +6,7 @@ export interface Project {
     id: string;
     name: string;
     description: string;
-    school: string;
+    clube: SimpleIdName;
     images?: Image[];
 }
 
