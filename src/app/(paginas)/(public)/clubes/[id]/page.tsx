@@ -77,7 +77,7 @@ export default async function OneClubeCiencia({
     return (
         <div className="flex flex-col gap-8 p-8">
             {/* |=======| CABEÇALHO DO CLUBE DE CIÊNCIA |=======| */}
-            <div className="flex items-center gap-5">
+            <div className="flex flex-col md:flex-row items-center gap-5">
                 <div className="relative h-[100px] w-[100px] overflow-hidden rounded-full border-2 border-primary shadow-md">
                     <Image
                         src={
@@ -89,17 +89,17 @@ export default async function OneClubeCiencia({
                         className="object-cover"></Image>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-4xl font-semibold">
+                    <h1 className="text-4xl font-semibold text-center md:text-start">
                         {clubeCiencia.name}
                     </h1>
-                    <div className="flex gap-2">
-                        <div className="text-primary flex items-center gap-2 border-r pr-5 hover:cursor-pointer hover:underline  ">
+                    <div className="flex flex-col md:flex-row gap-2 ">
+                        <div className="text-primary flex items-center gap-2 md:border-r pr-5 hover:cursor-pointer hover:underline  ">
                             <School size={20} />
                             <Link href={`/escolas/${clubeCiencia.school.id}`}>
                                 {clubeCiencia.school.name}
                             </Link>
                         </div>
-                        <div className="text-primary flex items-center gap-2 pl-5 hover:cursor-pointer hover:underline">
+                        <div className="text-primary flex items-center gap-2 md:pl-5 hover:cursor-pointer hover:underline">
                             <Instagram size={20} />
                             <p>@instagram_clube</p>
                         </div>
