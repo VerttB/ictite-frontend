@@ -1,8 +1,10 @@
-import { getSchoolById } from "@/core/service/SchoolService";
+import { getSchoolById, getSchoolStatistics } from "@/core/service/SchoolService";
 import Image from "next/image";
 import { EscolaTabs } from "@/components/escola/EscolaTabs";
-import { MapPin } from "lucide-react";
+import { BrainCircuit, LucideIcon, MapPin } from "lucide-react";
 import { Downloader } from "@/components/Downloader";
+import { SchoolStatistic } from "@/core/interface/SchoolStatistic";
+import InfoBar from "@/components/InfoBar";
 
 export default async function Page({
     params,
@@ -11,6 +13,35 @@ export default async function Page({
 }) {
     const { id } = await params;
     const school = await getSchoolById(id);
+
+    const schoolStatstics : SchoolStatistic = await getSchoolStatistics(id);
+
+    let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
+
+    stats = [
+        {
+            titulo: "Pesquisadores",
+            valor: schoolStatstics.total_pesquisadores ?? 0,
+            Icon: BrainCircuit,
+        },
+        {
+            titulo: "Projetos",
+            valor: schoolStatstics.total_projetos ?? 0,
+            Icon: BrainCircuit,
+        },
+        {
+            titulo: "Equipamentos",
+            valor: schoolStatstics.total_equipamentos ?? 0,
+            Icon: BrainCircuit,
+        },
+        {
+            titulo: "Clubes de Ciência",
+            valor: schoolStatstics.total_clubes ?? 0,
+            Icon: BrainCircuit,
+        },
+    ];
+
+
 
     if (!school) return <div className="px-10 py-6">Escola não encontrada</div>;
 
@@ -49,7 +80,7 @@ export default async function Page({
                 </div>
             </div>
 
-            {/* //<InfoBar data={stats} /> */}
+            <InfoBar data={stats} /> 
 
             <EscolaTabs school={school} />
         </div>
