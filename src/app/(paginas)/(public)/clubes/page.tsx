@@ -17,9 +17,12 @@ import {
     ChartBar,
     ChartSpline,
     ChevronLeft,
+    Cpu,
+    FlaskConical,
     Goal,
     HeartHandshake,
     LucideIcon,
+    Users2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -41,6 +44,27 @@ export default function Clubes() {
         carreharClubes();
         carregarEstatisticasClubes();
     }, []);
+
+    const objetivos : {titulo: string; descricao: string; Icon: LucideIcon}[] = [
+        {
+            titulo: "Integração entre Alunos e Professores",
+            descricao:
+                "Promover a colaboração e o trabalho em equipe entre estudantes e professores, estimulando a troca de ideias e a curiosidade científica dentro e fora da sala de aula.",
+            Icon: Users2,
+        },
+        {
+            titulo: "Fomento à Ciência e Tecnologia",
+            descricao:
+                "Estimular o interesse pela investigação científica e pelo uso da tecnologia como ferramenta para compreender e transformar a realidade.",
+            Icon: FlaskConical,
+        },
+        {
+            titulo: "Desenvolvimento de Projetos Inovadores",
+            descricao:
+                "Incentivar a criação de projetos que unam criatividade, método científico e impacto social, preparando os jovens para os desafios do futuro.",
+            Icon: Cpu,
+        },
+    ]
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
@@ -97,9 +121,14 @@ export default function Clubes() {
                 </div>
 
                 <div className="my-5 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    <ObjetivoClubeCard />
-                    <ObjetivoClubeCard />
-                    <ObjetivoClubeCard />
+                    {objetivos.map((objetivo) => (
+                        <ObjetivoClubeCard
+                            key={objetivo.titulo}
+                            titulo={objetivo.titulo}
+                            descricao={objetivo.descricao}
+                            Icon={objetivo.Icon}
+                        />
+                    ))}
                 </div>
             </div>
 
