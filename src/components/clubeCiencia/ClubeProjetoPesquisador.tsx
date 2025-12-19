@@ -2,7 +2,7 @@
 
 import { Researcher } from "@/core/interface/Pesquisador/Researcher";
 import { Project } from "@/core/interface/Project";
-import { BookOpen, PanelsTopLeft } from "lucide-react";
+import { BookA, BookOpen, BookOpenText, HeartHandshake, PanelsTopLeft } from "lucide-react";
 import CardProjeto from "../projeto/ProjetoCard";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
 import { ResearcherByType } from "@/core/interface/Pesquisador/ResearcherByType";
@@ -22,14 +22,24 @@ export default function ClubeProjetoPesquisador({
                 <PanelsTopLeft />
                 <h1 className="text-2xl font-semibold">Projetos:</h1>
             </div>
-            <div className="grid [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))] gap-4">
-                {Array.isArray(projects) && projects.length > 0 ? (
-                    projects.map((project) => (
-                        <CardProjeto key={project.id} project={project} />
-                    ))
-                ) : (
-                    <p>Não há projetos cadastrados neste clube.</p>
-                )}
+            <div>
+
+            
+                    {Array.isArray(projects) && projects.length > 0 ? (
+                        <div className="grid [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))] gap-4">
+                            {
+                            projects.map((project) => (
+                                <CardProjeto key={project.id} project={project} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                            <PanelsTopLeft className="h-8 w-8 opacity-50" />
+                            <p className="text-center text-sm font-medium">
+                                Nenhum projeto cadastrado neste clube.
+                            </p>
+                        </div>
+                    )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -52,8 +62,11 @@ export default function ClubeProjetoPesquisador({
                             ))}
                         </div>
                     ) : (
-                        <div>
-                            <p>Não há professores cadastrados no clube</p>
+                        <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground w-full">
+                            <BookOpenText className="h-8 w-8 opacity-50" />
+                            <p className="text-center text-sm font-medium">
+                                Nenhum Professor cadastrado neste clube.
+                            </p>
                         </div>
                     )}
                 </div>
@@ -71,8 +84,11 @@ export default function ClubeProjetoPesquisador({
                             ))}
                         </div>
                     ) : (
-                        <div>
-                            <p>Não há alunos cadastrados no clube</p>
+                        <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                            <BookA className="h-8 w-8 opacity-50" />
+                            <p className="text-center text-sm font-medium">
+                                Nenhum Alunos cadastrado neste clube.
+                            </p>
                         </div>
                     )}
                 </div>
@@ -90,8 +106,11 @@ export default function ClubeProjetoPesquisador({
                             ))}
                         </div>
                     ) : (
-                        <div>
-                            <p>Não há coordenadores cadastrados no clube</p>
+                        <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                            <HeartHandshake className="h-8 w-8 opacity-50" />
+                            <p className="text-center text-sm font-medium">
+                                Nenhum Coordenador cadastrado neste clube.
+                            </p>
                         </div>
                     )}
                     
