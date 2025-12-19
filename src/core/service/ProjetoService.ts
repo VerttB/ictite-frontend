@@ -60,6 +60,20 @@ export const getProjectbyClube = async (
     }
 };
 
+
+export const getProjectStatistics = async (projectId: string) => {
+    try {
+        const res: Response = await fetch(
+            `${getBaseUrl()}/projects/${projectId}/statistic`
+        );
+        if (!res) throw new Error(`Erro: ${res}`);
+        const data = await res.json();
+        return data;
+    } catch (e: unknown) {
+        console.error(e);
+    }
+}
+
 export const createProject = async (data: FormData) => {
     console.log("Creating project with data:", data);
     try {

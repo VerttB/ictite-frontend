@@ -1,6 +1,6 @@
 import React from "react";
 import { PesquisadoresLista } from "@/components/pesquisador/PesquisadoresLista";
-import { getProjectById } from "@/core/service/ProjetoService";
+import { getProjectById, getProjectStatistics } from "@/core/service/ProjetoService";
 import {
     Book,
     BrainCircuit,
@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ProjectStatistic } from "@/core/interface/ProjectStatistic";
 
 export default async function Page({
     params,
@@ -20,11 +21,18 @@ export default async function Page({
 }) {
     const { id } = await params;
     const project = await getProjectById(id);
+
+    const projectStatistics : ProjectStatistic = await getProjectStatistics(id);
+
+    console.log(projectStatistics);
+
     if (!project)
         return <div className="px-10 py-6">Projeto não encontrado</div>;
 
     return (
+        
         <div className="w-full p-8 ">
+            
             {/* |=======| MENU SUPERIOR DE PROJETO |=======| */}
             <div className="flex flex-col gap-3 border-b pb-3">
                 <div className="flex flex-row items-center gap-4">
@@ -98,15 +106,15 @@ export default async function Page({
                     <div className="mt-2 flex flex-col gap-4 md:flex-row lg:flex-col">
                         <div className="flex gap-2">
                             <Book />
-                            <span>Professores: XX</span>
+                            <span>Professores: {projectStatistics.total_professores}</span>
                         </div>
                         <div className="flex gap-2">
                             <GraduationCap />
-                            <span>Alunos: XX</span>
+                            <span>Alunos: {projectStatistics.total_alunos}</span>
                         </div>
                         <div className="flex gap-2">
                             <Handshake />
-                            <span>Facilitadores: XX</span>
+                            <span>Coordenadores: {projectStatistics.total_coordenadores}</span>
                         </div>
                     </div>
                 </div>
