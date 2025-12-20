@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
-import { House, Printer, PanelsTopLeft, Brain } from "lucide-react";
+import { House, Printer, PanelsTopLeft, Brain, BookOpen } from "lucide-react";
 
 import { useState } from "react";
 import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/hooks/useSchools";
@@ -44,7 +44,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
                                     ? "default"
                                     : "outline"
                             }>
-                            <House /> Pesquisadores
+                            <BookOpen /> Pesquisadores
                         </Button>
                     </TabsTrigger>
                     <TabsTrigger value="equipamentos" asChild>

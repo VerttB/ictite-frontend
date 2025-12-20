@@ -109,14 +109,14 @@ export default async function OneClubeCiencia({
 
             {/* |=======| IMAGENS DO CLUBE DE CIÊNCIA |=======| */}
             <div className="flex pt-4 border-t">
-                <div className="flex flex-wrap gap-3 overflow-x-hidden">
+                <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
                     {clubeCiencia.images?.map((image, index) => (
-                        <Image
-                            key={index}
-                            src={image.url}
-                            alt="Clube de Ciência"
-                            width={200}
-                            height={200}></Image>
+                        <div key={index} className="relative w-[200px] h-[200px] overflow-hidden">
+                            <Image
+                                src={image.url}
+                                alt="Clube de Ciência"
+                                fill></Image>
+                        </div>
                     ))}
                 </div>
             </div>

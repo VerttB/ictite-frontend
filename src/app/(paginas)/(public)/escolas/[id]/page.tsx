@@ -1,7 +1,7 @@
 import { getSchoolById, getSchoolStatistics } from "@/core/service/SchoolService";
 import Image from "next/image";
 import { EscolaTabs } from "@/components/escola/EscolaTabs";
-import { BrainCircuit, LucideIcon, MapPin } from "lucide-react";
+import { BookOpen, BrainCircuit, LucideIcon, MapPin, PanelsTopLeft, Printer } from "lucide-react";
 import { Downloader } from "@/components/Downloader";
 import { SchoolStatistic } from "@/core/interface/SchoolStatistic";
 import InfoBar from "@/components/InfoBar";
@@ -22,17 +22,17 @@ export default async function Page({
         {
             titulo: "Pesquisadores",
             valor: schoolStatstics.total_pesquisadores ?? 0,
-            Icon: BrainCircuit,
+            Icon: BookOpen,
         },
         {
             titulo: "Projetos",
             valor: schoolStatstics.total_projetos ?? 0,
-            Icon: BrainCircuit,
+            Icon: PanelsTopLeft,
         },
         {
             titulo: "Equipamentos",
             valor: schoolStatstics.total_equipamentos ?? 0,
-            Icon: BrainCircuit,
+            Icon: Printer,
         },
         {
             titulo: "Clubes de Ciência",

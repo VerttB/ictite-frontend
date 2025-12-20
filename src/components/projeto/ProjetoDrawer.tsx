@@ -78,16 +78,17 @@ export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
                     <div className="overflow-y-auto pt-2 mb-4">
                         
                         { project.images?.length ? (
-                            <div className="flex flex-row gap-5 border-b py-7">
-                                {project.images &&
-                                    project.images.map((image, i) => (
-                                        <Image
-                                            key={i}
-                                            src={image.url}
-                                            alt={"Projeto"}
-                                            width={164}
-                                            height={164}
-                                        />
+                            <div className="flex flex-wrap items-center justify-center md:items-start md:justify-start gap-3 overflow-x-hidden border-b py-7">
+                                {project.images?.map((image, i) => (
+                                        <div key={i} className="relative h-[200px] w-[200px] overflow-hidden">
+                                            <Image
+                                                
+                                                src={image.url}
+                                                alt={"Projeto"}
+                                                fill
+                                                className="object-cover object-center"
+                                            />
+                                        </div>
                                     ))}
                             </div>
                         ) : (

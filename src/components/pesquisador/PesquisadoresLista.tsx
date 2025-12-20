@@ -4,7 +4,7 @@ import { capitalize } from "@/core/utils/capitalize";
 import useSWR from "swr";
 import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Spinner } from "../LoadingSpin";
-import { BookOpen } from "lucide-react";
+import { BookA, BookOpen, BookOpenText, HeartHandshake } from "lucide-react";
 import { ResearcherByType } from "@/core/interface/Pesquisador/ResearcherByType";
 export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
     const { data: pesquisador, isLoading } = useSWR<ResearcherByType>(
@@ -37,8 +37,11 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <div>
-                                    <p>Não há professores cadastrados no clube</p>
+                                <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                                    <BookOpenText className="h-8 w-8 opacity-50" />
+                                    <p className="text-center text-sm font-medium">
+                                        Nenhum Professor cadastrado neste proejeto.
+                                    </p>
                                 </div>
                             )}
                         </div>
@@ -56,8 +59,11 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <div>
-                                    <p>Não há alunos cadastrados no clube</p>
+                                <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                                    <BookA className="h-8 w-8 opacity-50" />
+                                    <p className="text-center text-sm font-medium">
+                                        Nenhum Alunos cadastrado neste projeto.
+                                    </p>
                                 </div>
                             )}
                         </div>
@@ -75,8 +81,11 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <div>
-                                    <p>Não há coordenadores cadastrados no clube</p>
+                                <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                                    <HeartHandshake className="h-8 w-8 opacity-50" />
+                                    <p className="text-center text-sm font-medium">
+                                        Nenhum Coordenador cadastrado neste projeto.
+                                    </p>
                                 </div>
                             )}
                             
