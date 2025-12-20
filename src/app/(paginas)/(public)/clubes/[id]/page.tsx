@@ -115,7 +115,8 @@ export default async function OneClubeCiencia({
                             <Image
                                 src={image.url}
                                 alt="Clube de Ciência"
-                                fill></Image>
+                                fill
+                                className="object-cover object-center"></Image>
                         </div>
                     ))}
                 </div>
