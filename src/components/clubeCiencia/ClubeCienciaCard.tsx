@@ -13,7 +13,7 @@ export default function ClubeCienciaCard({
     return (
         <Link href={`/clubes/${clubeCiencia.id}`}>
             <div className="flex w-[300px] cursor-pointer flex-col gap-1 rounded-md border transition-all hover:scale-[102%] hover:shadow-md">
-                <div>
+                <div className="relative h-[200px] w-full overflow-hidden rounded-t-md">
                     <Image
                         src={
                             clubeCiencia.images.length > 0
@@ -21,8 +21,7 @@ export default function ClubeCienciaCard({
                                 : "https://picsum.photos/300/190"
                         }
                         alt={"Clube Ciência"}
-                        width={300}
-                        height={200}
+                        fill
                         className="rounded-t-md object-cover"></Image>
                 </div>
                 <div className="p-3">
