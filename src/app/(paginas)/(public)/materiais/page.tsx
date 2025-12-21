@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useMemo, useState } from "react";
 import CardMateriais from "@/components/card/CardMateriais";
 import { Button } from "@/components/ui/button";
 import { BookText, ChevronLeft } from "lucide-react";
@@ -6,7 +8,7 @@ import CardCategoriaMateriais from "@/components/card/CardCategoriaMateriais";
 
 export default function Materiais() {
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const [selectedType, setSelectedType] = useState<string | null>(null);
     
     const materiaisMock = [
         {
@@ -110,6 +112,21 @@ export default function Materiais() {
         },
     ];
 
+    // lista de categorias únicas com contagem
+    const categorias = useMemo(() => {
+        const map = new Map<string, number>();
+        materiaisMock.forEach((m) => map.set(m.type, (map.get(m.type) || 0) + 1));
+        return Array.from(map.entries()).map(([type, count]) => ({ name: type, type, count }));
+    }, [materiaisMock]);
+
+    // materiais filtrados (ou todos)
+    const materiaisFiltrados = selectedType
+        ? materiaisMock.filter((m) => m.type === selectedType)
+        : materiaisMock;
+
+    const handleFilter = (type: string) => {
+        setSelectedType((prev) => (prev === type ? null : type));
+    };
 
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
@@ -149,8 +166,8 @@ export default function Materiais() {
                     <h2>Categorias</h2>
                 </div>
                 <div className="flex flex-wrap gap-2 items-center justify-center">
-                    {Array.from({ length: 4 }).map((_, i) => (
-                        <CardCategoriaMateriais key={i} />
+                    {categorias.map((categoria, i) => (
+                        <CardCategoriaMateriais key={i} name={categoria.name} type={categoria.type} count={categoria.count} onFilter={handleFilter} active={selectedType === categoria.type} />
                     ))}
                 </div>
             </div>
@@ -161,7 +178,7 @@ export default function Materiais() {
                     <h2>Materiais</h2>
                 </div>
                 <div className="grid grid-cols-1 justify-items-center gap-2 py-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                    {materiaisMock.map((material) => (
+                    {materiaisFiltrados.map((material) => (
                         <CardMateriais material={material} key={material.id} />
                     ))}
                 </div>
