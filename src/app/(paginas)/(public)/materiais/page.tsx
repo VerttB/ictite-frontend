@@ -2,6 +2,7 @@ import React from "react";
 import CardMateriais from "@/components/card/CardMateriais";
 import { Button } from "@/components/ui/button";
 import { BookText, ChevronLeft } from "lucide-react";
+import CardCategoriaMateriais from "@/components/card/CardCategoriaMateriais";
 
 export default function Materiais() {
     return (
@@ -35,9 +36,23 @@ export default function Materiais() {
                     massa e abordagem investigativa.
                 </p>
             </div>
+
+            {/* |=======| CATEGORIAS DE MATERIAIS |=======| */}
             <div className="flex flex-col gap-2">
                 <div className="text-2xl font-semibold">
                     <h2>Categorias</h2>
+                </div>
+                <div className="flex flex-wrap gap-2 items-center justify-center">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                        <CardCategoriaMateriais key={i} />
+                    ))}
+                </div>
+            </div>
+
+            {/* |=======| CATEGORIAS DE MATERIAIS |=======| */}
+            <div className="flex flex-col gap-2">
+                <div className="text-2xl font-semibold">
+                    <h2>Materiais</h2>
                 </div>
                 <div className="grid grid-cols-1 justify-items-center gap-2 py-4 md:grid-cols-2 xl:grid-cols-4">
                     {Array.from({ length: 4 }).map((_, i) => (
