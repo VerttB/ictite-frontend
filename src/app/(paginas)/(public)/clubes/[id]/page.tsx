@@ -1,18 +1,20 @@
 import ClubeProjetoPesquisador from "@/components/clubeCiencia/ClubeProjetoPesquisador";
 import InfoBar from "@/components/InfoBar";
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
-import { OneClubeCienciaStatstics } from "@/core/interface/Clube/OneClubeCienciaStatstics";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { ResearcherByType } from "@/core/interface/Pesquisador/ResearcherByType";
-import { Project } from "@/core/interface/Project";
+import { ResearcherByType } from "@/core/domain/Researcher";
+import { Project } from "@/core/domain/Project";
+import {
+    ScienceClubStatisticsAll,
+    ScienceClubStatistics,
+    ScienceClub,
+} from "@/core/domain/Club";
+
 import {
     getClubeCienciaById,
     getClubeCienciaProjects,
     getClubeCienciaResearchers,
     getClubeCienciaStats,
 } from "@/core/service/ClubeCienciaService";
-import { getResearchersByClube } from "@/core/service/PesquisadorService";
-import { getProjectbyClube } from "@/core/service/ProjetoService";
+
 import {
     BookA,
     BookOpenText,
@@ -32,9 +34,11 @@ export default async function OneClubeCiencia({
 }) {
     const { id } = await params;
 
-    const clubeCiencia: ClubeCiencia = await getClubeCienciaById(id);
+    const clubeCiencia: ScienceClub = await getClubeCienciaById(id);
     const projects: Project[] = (await getClubeCienciaProjects(id)) ?? [];
-    const researchers: ResearcherByType = (await getClubeCienciaResearchers(id)) ?? {
+    const researchers: ResearcherByType = (await getClubeCienciaResearchers(
+        id
+    )) ?? {
         Professor: [],
         Aluno: [],
         Coordenador: [],
@@ -47,7 +51,7 @@ export default async function OneClubeCiencia({
     const projects: Project[] =
         (await getProjectbyClube(clubeCiencia.id)) ?? [];*/
 
-    const statistics: OneClubeCienciaStatstics = await getClubeCienciaStats(id);
+    const statistics: ScienceClubStatistics = await getClubeCienciaStats(id);
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
@@ -77,8 +81,8 @@ export default async function OneClubeCiencia({
     return (
         <div className="flex flex-col gap-8 p-8">
             {/* |=======| CABEÇALHO DO CLUBE DE CIÊNCIA |=======| */}
-            <div className="flex flex-col md:flex-row items-center gap-5">
-                <div className="relative h-[100px] w-[100px] overflow-hidden rounded-full border-2 border-primary shadow-md">
+            <div className="flex flex-col items-center gap-5 md:flex-row">
+                <div className="border-primary relative h-[100px] w-[100px] overflow-hidden rounded-full border-2 shadow-md">
                     <Image
                         src={
                             clubeCiencia.images?.[0]?.url ??
@@ -89,17 +93,17 @@ export default async function OneClubeCiencia({
                         className="object-cover"></Image>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-4xl font-semibold text-center md:text-start">
+                    <h1 className="text-center text-4xl font-semibold md:text-start">
                         {clubeCiencia.name}
                     </h1>
-                    <div className="flex flex-col md:flex-row gap-2 ">
-                        <div className="text-primary flex items-center gap-2 md:border-r pr-5 hover:cursor-pointer hover:underline  ">
+                    <div className="flex flex-col gap-2 md:flex-row">
+                        <div className="text-primary flex items-center gap-2 pr-5 hover:cursor-pointer hover:underline md:border-r">
                             <School size={20} />
                             <Link href={`/escolas/${clubeCiencia.school.id}`}>
                                 {clubeCiencia.school.name}
                             </Link>
                         </div>
-                        <div className="text-primary flex items-center gap-2 md:pl-5 hover:cursor-pointer hover:underline">
+                        <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:pl-5">
                             <Instagram size={20} />
                             <p>@instagram_clube</p>
                         </div>
@@ -108,10 +112,12 @@ export default async function OneClubeCiencia({
             </div>
 
             {/* |=======| IMAGENS DO CLUBE DE CIÊNCIA |=======| */}
-            <div className="flex pt-4 border-t">
+            <div className="flex border-t pt-4">
                 <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
                     {clubeCiencia.images?.map((image, index) => (
-                        <div key={index} className="relative w-[200px] h-[200px] overflow-hidden">
+                        <div
+                            key={index}
+                            className="relative h-[200px] w-[200px] overflow-hidden">
                             <Image
                                 src={image.url}
                                 alt="Clube de Ciência"
@@ -133,16 +139,17 @@ export default async function OneClubeCiencia({
             {/* |=======| ESTATÍSTICAS DO CLUBE DE CIÊNCIA |=======| */}
             <div>
                 <InfoBar data={stats} />
-            </div> 
+            </div>
 
             {/* |=======| PROJETOS  E PESQUISADORES DO CLUBE DE CIÊNCIA |=======| */}
             <div>
-                { <ClubeProjetoPesquisador
-                    projects={projects}
-                    pesquisador={researchers}
-                /> }
+                {
+                    <ClubeProjetoPesquisador
+                        projects={projects}
+                        pesquisador={researchers}
+                    />
+                }
             </div>
-
         </div>
     );
 }

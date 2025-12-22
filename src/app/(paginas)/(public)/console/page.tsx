@@ -11,7 +11,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { School } from "@/core/interface/School";
+import { School } from "@/core/domain/School";
 import { getSchools } from "@/core/service/SchoolService";
 import {
     Book,
