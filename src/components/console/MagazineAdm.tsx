@@ -1,30 +1,38 @@
 "use client";
 import { useState } from "react";
 import { Section } from "../Section";
-import { RevistaSchema, RevistaType } from "@/schemas/RevistaSchema";
-import { createRevista, getRevistas } from "@/core/service/RevistaService";
+import {
+    createRevista,
+    getRevistas,
+    uploadMagazineImage,
+} from "@/core/service/RevistaService";
 import { Book } from "lucide-react";
 import useSWR from "swr";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { InputField } from "../ui/FormInputField";
 import { ControlledImageUpload } from "../ui/ControlledImageInput";
+import {
+    MagazineCreate,
+    MagazineCreateSchema,
+    MagazineSearchParams,
+} from "@/core/domain/Magazine";
 
-export const RevistaAdm = () => {
-    const {
-        data: revistas,
-        mutate,
-    } = useSWR("revistas", getRevistas);
+interface MagazineAdmProps {
+    params?: MagazineSearchParams;
+}
+export const MagazineAdm = ({ params }: MagazineAdmProps) => {
+    const { data: revistas, mutate } = useSWR(["magazines", params], ([, p]) =>
+        getRevistas(p)
+    );
     const [open, setOpen] = useState(false);
 
-    const onSubmit = async (newRevista: RevistaType) => {
+    const onSubmit = async (data: MagazineCreate) => {
+        const { id } = await createRevista(data);
         const form = new FormData();
-        form.append("name", newRevista.name);
-        form.append("description", newRevista.description);
-        form.append("link", newRevista.link);
-        for (const file of newRevista.images) {
+        for (const file of data.images) {
             form.append("images", file);
         }
-        await createRevista(form);
+        await uploadMagazineImage(id, form);
         mutate();
         setOpen(false);
     };
@@ -36,11 +44,11 @@ export const RevistaAdm = () => {
                 onAdd={() => setOpen(true)}
                 icon={<Book />}
             />
-            <BaseFormModal<typeof RevistaSchema, RevistaType>
+            <BaseFormModal<typeof MagazineCreateSchema, MagazineCreate>
                 open={open}
                 onClose={() => setOpen(false)}
                 onSubmit={onSubmit}
-                schema={RevistaSchema}
+                schema={MagazineCreateSchema}
                 title="Adicionar Revista"
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="title" label="Título da Revista" />

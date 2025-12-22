@@ -2,31 +2,40 @@
 
 import { Section } from "../Section";
 import useSWR from "swr";
-import { getSchools } from "@/core/service/SchoolService";
 import { useState } from "react";
-import { getProjects, createProject } from "@/core/service/ProjetoService";
-import { ProjetoSchema, ProjetoType } from "@/schemas/ProjetoSchema";
+import {
+    getProjects,
+    createProject,
+    uploadProjectImages,
+} from "@/core/service/ProjetoService";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { InputField } from "../ui/FormInputField";
 import { ControlledSelect } from "../ui/ControlledSelect";
 import { ControlledImageUpload } from "../ui/ControlledImageInput";
+import {
+    ProjectCreate,
+    ProjectCreateSchema,
+    ProjectSearchParams,
+} from "@/core/domain/Project";
+import { getClubesCiencia } from "@/core/service/ClubeCienciaService";
 
-export const ProjetoAdm = () => {
-    const {
-        data: projetos,
-        mutate,
-    } = useSWR("projetos", () => getProjects());
+interface ProjectAdmProps {
+    params?: ProjectSearchParams;
+}
+export const ProjectAdm = ({ params }: ProjectAdmProps) => {
+    const { data: projetos, mutate } = useSWR(["projetos", params], ([, p]) =>
+        getProjects(p)
+    );
 
-    const { data: escolas } = useSWR("escolas", () => getSchools());
+    const { data: clubes } = useSWR("clubes", () => getClubesCiencia());
     const [open, setOpen] = useState(false);
-    const onSubmit = async (data: ProjetoType) => {
+    const onSubmit = async (data: ProjectCreate) => {
+        const { id } = await createProject(data);
         const form = new FormData();
-        form.append("name", data.name);
-        form.append("description", data.description);
-        form.append("school_id", data.school_id);
-        data.images.forEach((file) => form.append("images", file));
-        console.log("data project", data);
-        await createProject(form);
+        if (data.images) {
+            data.images.forEach((file) => form.append("images", file));
+            await uploadProjectImages(id, form);
+        }
         mutate();
         setOpen(false);
     };
@@ -41,20 +50,20 @@ export const ProjetoAdm = () => {
                 onAdd={() => setOpen(true)}
             />
 
-            <BaseFormModal<typeof ProjetoSchema, ProjetoType>
+            <BaseFormModal<typeof ProjectCreateSchema, ProjectCreate>
                 open={open}
                 onClose={() => setOpen(false)}
                 onSubmit={onSubmit}
                 title="Adicionar Projeto"
-                schema={ProjetoSchema}
+                schema={ProjectCreateSchema}
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Projeto" />
                 <InputField name="description" label="Descrição" />
                 <ControlledSelect
                     className="w-full"
-                    name="school_id"
-                    label="Escola"
-                    options={escolas || []}
+                    name="clube_ciencia_id"
+                    label="Clube"
+                    options={clubes || []}
                 />
                 <ControlledImageUpload name="images" />
             </BaseFormModal>

@@ -9,29 +9,33 @@ import {
     createResearcher,
     getResearchers,
 } from "@/core/service/PesquisadorService";
-import {
-    PesquisadorSchema,
-    PesquisadorType,
-} from "@/schemas/PesquisadorSchema";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { InputField } from "../ui/FormInputField";
 import { ControlledSelect } from "../ui/ControlledSelect";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { RaceTypes } from "@/core/constants/race";
 import { SexTypes } from "@/core/constants/sex";
-export const PesquisadorAdm = () => {
-    const { data: pesquisadores, mutate } = useSWR("pesquisadores", () =>
-        getResearchers("")
+import {
+    ResearcherSearchParams,
+    ResearcherCreate,
+    ResearcherCreateSchema,
+} from "@/core/domain/Researcher";
+interface ResearcherAdmProps {
+    params: ResearcherSearchParams;
+}
+export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
+    const { data: pesquisadores, mutate } = useSWR(
+        ["researcher", params],
+        ([, p]) => getResearchers(p)
     );
 
     const { data: escolas } = useSWR("escolas", () => getSchools());
     const [open, setOpen] = useState(false);
-    const onSubmit = async (data: PesquisadorType) => {
+    const onSubmit = async (data: ResearcherCreate) => {
         await createResearcher(data);
         mutate();
         setOpen(false);
     };
-    console.log("pesquisadores", pesquisadores);
     if (!pesquisadores) return null;
     return (
         <>
@@ -41,12 +45,12 @@ export const PesquisadorAdm = () => {
                 icon={<PersonStanding />}
                 onAdd={() => setOpen(true)}
             />
-            <BaseFormModal<typeof PesquisadorSchema, PesquisadorType>
+            <BaseFormModal<typeof ResearcherCreateSchema, ResearcherCreate>
                 open={open}
                 onClose={() => setOpen(false)}
                 onSubmit={onSubmit}
                 title="Adicionar Pesquisador"
-                schema={PesquisadorSchema}>
+                schema={ResearcherCreateSchema}>
                 <InputField name="name" label="Nome do Pesquisador" />
                 <InputField name="lattes" label="Link do Lattes" />
                 <div className="flex w-full gap-2">

@@ -8,32 +8,37 @@ import { EquipmentType, EquipmentSchema } from "@/schemas/EquipmentSchema";
 import {
     createEquipament,
     getEquipaments,
+    uploadEquipamentImages,
 } from "@/core/service/EquipamentoService";
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { InputField } from "../ui/FormInputField";
 import { ControlledSelect } from "../ui/ControlledSelect";
 import { ControlledImageUpload } from "../ui/ControlledImageInput";
-
-export const EquipamentoAdm = () => {
-    const {
-        data: equipamentos,
-        mutate,
-    } = useSWR("equipamentos", () => getEquipaments());
+import {
+    EquipmentCreateSchema,
+    EquipmentCreateType,
+    EquipmentSearchParams,
+} from "@/core/domain/Equipment";
+interface EquipmentAdmProps {
+    params?: EquipmentSearchParams;
+}
+export const EquipmentAdm = ({ params }: EquipmentAdmProps) => {
+    const { data: equipamentos, mutate } = useSWR(
+        ["equipaments", params],
+        ([, p]) => getEquipaments(p)
+    );
 
     const { data: escolas } = useSWR("escolas", () => getSchools());
-    const { data: equipamentosTipos } = useSWR("equipamentos_tipos", () =>
+    const { data: equipamentosTipos } = useSWR("equipaments-types", () =>
         getEquipamentTypes()
     );
     const [open, setOpen] = useState(false);
-    const onSubmit = async (data: EquipmentType) => {
+    const onSubmit = async (data: EquipmentCreateType) => {
+        const { id } = await createEquipament(data);
         const form = new FormData();
-        form.append("name", data.name);
-        form.append("type_equipment_id", data.type_equipment_id);
-        form.append("school_id", data.school_id);
         data.images.forEach((file) => form.append("images", file));
-
-        await createEquipament(form);
+        await uploadEquipamentImages(id, form);
         mutate();
         setOpen(false);
     };
@@ -48,12 +53,12 @@ export const EquipamentoAdm = () => {
                 onAdd={() => setOpen(true)}
             />
 
-            <BaseFormModal<typeof EquipmentSchema, EquipmentType>
+            <BaseFormModal<typeof EquipmentCreateSchema, EquipmentCreateType>
                 open={open}
                 onClose={() => setOpen(false)}
                 onSubmit={onSubmit}
                 title="Adicionar Equipamento"
-                schema={EquipmentSchema}
+                schema={EquipmentCreateSchema}
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Equipamento" />
                 <ControlledSelect
