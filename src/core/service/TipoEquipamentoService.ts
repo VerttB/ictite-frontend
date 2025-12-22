@@ -3,7 +3,7 @@ import { getBaseUrl } from "../utils/api";
 
 export const getEquipamentTypes = async (): Promise<TypeEquipment[]> => {
     try {
-        const res = await fetch(`${getBaseUrl()}/equipmentTypes`);
+        const res = await fetch(`${getBaseUrl()}/equipment-types`);
         if (!res.ok) {
             throw new Error("Failed to fetch equipment types");
         }

@@ -1,4 +1,4 @@
-import { Project } from "@/core/interface/Project";
+import { Project } from "@/core/domain/Project";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import { getProjectById } from "@/core/service/ProjetoService";
 import { useEffect, useState } from "react";

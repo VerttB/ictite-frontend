@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { SugestionBase } from "@/core/interface/SugestionBase";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import { Researcher } from "@/core/domain/Researcher";
 import CardPesquisador from "./PesquisadorCard";
 import { getResearcherById } from "@/core/service/PesquisadorService";
 import { Spinner } from "../LoadingSpin";
@@ -21,6 +21,7 @@ export default function PesquisadorLoader({ suggestion }: Props) {
             try {
                 const data = await getResearcherById(suggestion.id, true);
                 if (!mounted) return;
+
                 setResearcher(data);
             } catch (e) {
                 console.error("Erro ao carregar researcher", e);

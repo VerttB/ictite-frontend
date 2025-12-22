@@ -1,6 +1,10 @@
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { Project } from "@/core/interface/Project";
-import { getSchoolEquiments, getSchoolProjects, getSchoolResearchers } from "@/core/service/SchoolService";
+import { Researcher } from "@/core/domain/Researcher";
+import { Project } from "@/core/domain/Project";
+import {
+    getSchoolEquiments,
+    getSchoolProjects,
+    getSchoolResearchers,
+} from "@/core/service/SchoolService";
 import useSWR from "swr";
 
 export const useSchoolResearchers = (id: string) => {

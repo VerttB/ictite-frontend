@@ -1,6 +1,9 @@
 import React from "react";
 import { PesquisadoresLista } from "@/components/pesquisador/PesquisadoresLista";
-import { getProjectById, getProjectStatistics } from "@/core/service/ProjetoService";
+import {
+    getProjectById,
+    getProjectStatistics,
+} from "@/core/service/ProjetoService";
 import {
     Book,
     BrainCircuit,
@@ -13,7 +16,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ProjectStatistic } from "@/core/interface/ProjectStatistic";
+import { ProjectStatistic } from "@/core/domain/Project";
 
 export default async function Page({
     params,
@@ -23,7 +26,7 @@ export default async function Page({
     const { id } = await params;
     const project = await getProjectById(id);
 
-    const projectStatistics : ProjectStatistic = await getProjectStatistics(id);
+    const projectStatistics: ProjectStatistic = await getProjectStatistics(id);
 
     console.log(projectStatistics);
 
@@ -31,9 +34,7 @@ export default async function Page({
         return <div className="px-10 py-6">Projeto não encontrado</div>;
 
     return (
-        
-        <div className="w-full p-8 ">
-            
+        <div className="w-full p-8">
             {/* |=======| MENU SUPERIOR DE PROJETO |=======| */}
             <div className="flex flex-col gap-3 border-b pb-3">
                 <div className="flex flex-row items-center gap-4">
@@ -48,46 +49,47 @@ export default async function Page({
                     <div className="">{project.description}</div>
                     <div className="flex gap-4">
                         <Link href={`/clubes/${project.clube.id}`}>
-                            <div className="mt-2 flex flex-row items-center gap-2 text-gray-500 hover:text-primary hover:underline cursor-pointer transition-all">
+                            <div className="hover:text-primary mt-2 flex cursor-pointer flex-row items-center gap-2 text-gray-500 transition-all hover:underline">
                                 <BrainCircuit size={16} />
-                                <span className="text-sm">{project.clube.name}</span>
+                                <span className="text-sm">
+                                    {project.clube.name}
+                                </span>
                             </div>
                         </Link>
                         <div className="mt-2 flex flex-row items-center gap-2 text-gray-500">
                             <Calendar size={16} />
                             <span className="text-sm">2024</span>
                         </div>
-                        
                     </div>
                 </div>
             </div>
 
             {/* |=======| IMAGENS DO PROJETO |=======| */}
-            <div className="overflow-y-auto pt-2 ">
-                
-                { project.images?.length ? (
-                    <div className="flex flex-wrap items-center justify-center md:items-start md:justify-start gap-3 overflow-x-hidden border-b py-7">
+            <div className="overflow-y-auto pt-2">
+                {project.images?.length ? (
+                    <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden border-b py-7 md:items-start md:justify-start">
                         {project.images?.map((image, i) => (
-                                <div key={i} className="relative h-[200px] w-[200px] overflow-hidden">
-                                    <Image
-                                        
-                                        src={image.url}
-                                        alt={"Projeto"}
-                                        fill
-                                        className="object-cover object-center"
-                                    />
-                                </div>
-                            ))}
+                            <div
+                                key={i}
+                                className="relative h-[200px] w-[200px] overflow-hidden">
+                                <Image
+                                    src={image.url}
+                                    alt={"Projeto"}
+                                    fill
+                                    className="object-cover object-center"
+                                />
+                            </div>
+                        ))}
                     </div>
                 ) : (
-                    <div className="border-b pb-7 pt-5">
+                    <div className="border-b pt-5 pb-7">
                         <p>Nenhuma imagem de projeto cadastrada</p>
                     </div>
                 )}
             </div>
 
             {/* |=======| FUTURA DESCRIÇÃO LONGA + ESTATÍSTICAS |=======| */}
-            <div className="mt-4 flex flex-col gap-5 lg:flex-row mb-8">
+            <div className="mt-4 mb-8 flex flex-col gap-5 lg:flex-row">
                 {/* DESCRIÇÃO LONGA */}
                 <div className="bg-foreground flex flex-3/4 flex-col gap-1 rounded-md border p-3">
                     <h2 className="border-b pb-2 text-xl font-semibold">
@@ -117,15 +119,23 @@ export default async function Page({
                     <div className="mt-2 flex flex-col gap-4 md:flex-row lg:flex-col">
                         <div className="flex gap-2">
                             <Book />
-                            <span>Professores: {projectStatistics.total_professores}</span>
+                            <span>
+                                Professores:{" "}
+                                {projectStatistics.total_professores}
+                            </span>
                         </div>
                         <div className="flex gap-2">
                             <GraduationCap />
-                            <span>Alunos: {projectStatistics.total_alunos}</span>
+                            <span>
+                                Alunos: {projectStatistics.total_alunos}
+                            </span>
                         </div>
                         <div className="flex gap-2">
                             <Handshake />
-                            <span>Coordenadores: {projectStatistics.total_coordenadores}</span>
+                            <span>
+                                Coordenadores:{" "}
+                                {projectStatistics.total_coordenadores}
+                            </span>
                         </div>
                     </div>
                 </div>

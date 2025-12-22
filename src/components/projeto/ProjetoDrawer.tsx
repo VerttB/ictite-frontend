@@ -9,14 +9,12 @@ import {
     DrawerTitle,
 } from "../ui/drawer";
 import Image from "next/image";
-import CardPesquisador from "../pesquisador/PesquisadorCard";
 import useSWR from "swr";
 import {
     getProjectById,
     getProjectResearchers,
 } from "@/core/service/ProjetoService";
-import { Project } from "@/core/interface/Project";
-import { capitalize } from "@/core/utils/capitalize";
+
 import Link from "next/link";
 import { useViewPort } from "@/hooks/useViewPort";
 import { Spinner } from "../LoadingSpin";
@@ -75,29 +73,29 @@ export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
                 <div className="overflow-y-auto pt-2 pl-5">
                     {/* IMAGENS DO PROJETO */}
                     {/* |=======| IMAGENS DO PROJETO |=======| */}
-                    <div className="overflow-y-auto pt-2 mb-4">
-                        
-                        { project.images?.length ? (
-                            <div className="flex flex-wrap items-center justify-center md:items-start md:justify-start gap-3 overflow-x-hidden border-b py-7">
+                    <div className="mb-4 overflow-y-auto pt-2">
+                        {project.images?.length ? (
+                            <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden border-b py-7 md:items-start md:justify-start">
                                 {project.images?.map((image, i) => (
-                                        <div key={i} className="relative h-[200px] w-[200px] overflow-hidden">
-                                            <Image
-                                                
-                                                src={image.url}
-                                                alt={"Projeto"}
-                                                fill
-                                                className="object-cover object-center"
-                                            />
-                                        </div>
-                                    ))}
+                                    <div
+                                        key={i}
+                                        className="relative h-[200px] w-[200px] overflow-hidden">
+                                        <Image
+                                            src={image.url}
+                                            alt={"Projeto"}
+                                            fill
+                                            className="object-cover object-center"
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         ) : (
-                            <div className="border-b pb-7 pt-5">
+                            <div className="border-b pt-5 pb-7">
                                 <p>Nenhuma imagem de projeto cadastrada</p>
                             </div>
                         )}
                     </div>
-                    
+
                     <PesquisadoresLista projectId={project_id} />
                     {/* {pesquisadores &&
                         Object.keys(pesquisadores).map((key: string) => {

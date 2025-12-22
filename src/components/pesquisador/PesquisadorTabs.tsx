@@ -7,7 +7,7 @@ import Masonry from "react-responsive-masonry";
 import CardArtigo from "../card/CardArtigos";
 import useSWR from "swr";
 import { getResearcherProjects } from "@/core/service/PesquisadorService";
-import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
+import { ResearcherFinal } from "@/core/domain/Researcher";
 import CardProjeto from "../projeto/ProjetoCard";
 import { useViewPort } from "@/hooks/useViewPort";
 import { ScrollArea } from "../ScrollArea";

@@ -11,15 +11,8 @@ import {
     DropdownMenuSeparator,
 } from "@radix-ui/react-dropdown-menu";
 
-type ItemTitle = {
-    title: string;
-    name?: never;
-};
-type ItemName = {
+type ItemType = {
     name: string;
-    title?: never;
-};
-type ItemType = (ItemTitle | ItemName) & {
     images?: Image[];
     image?: string;
 };
@@ -60,10 +53,10 @@ export const Section = ({ title, items, icon, onAdd }: SectionProps) => {
             </div>
             <div className="flex flex-wrap items-center gap-3">
                 {items.map((item, i) => (
-                    <DropdownMenu key={(item.title ?? item.name) + i}>
+                    <DropdownMenu key={item.name + i}>
                         <DropdownMenuTrigger>
                             <CardGenerico
-                                title={item.title ?? item.name}
+                                title={item.name}
                                 image={resolveImage(item)}
                             />
                         </DropdownMenuTrigger>

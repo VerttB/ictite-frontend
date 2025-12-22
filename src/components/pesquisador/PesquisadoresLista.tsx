@@ -5,7 +5,7 @@ import useSWR from "swr";
 import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Spinner } from "../LoadingSpin";
 import { BookA, BookOpen, BookOpenText, HeartHandshake } from "lucide-react";
-import { ResearcherByType } from "@/core/interface/Pesquisador/ResearcherByType";
+import { ResearcherByType } from "@/core/domain/Researcher";
 export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
     const { data: pesquisador, isLoading } = useSWR<ResearcherByType>(
         `project-${projectId}`,
@@ -19,17 +19,18 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
                         <BookOpen />
-                        <h1 className="text-2xl font-semibold">Pesquisadores:</h1>
+                        <h1 className="text-2xl font-semibold">
+                            Pesquisadores:
+                        </h1>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        
                         {/* PROFESSORES */}
                         <div className="flex flex-col gap-2 border-b pb-4">
                             <h2 className="text-xl font-semibold">Professor</h2>
-                            {pesquisador?.Professor?.length  ? (
+                            {pesquisador?.professor?.length ? (
                                 <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                                    {pesquisador?.Professor.map((professor) => (
+                                    {pesquisador?.professor.map((professor) => (
                                         <CardPesquisador
                                             key={professor.id}
                                             researcher={professor}
@@ -37,10 +38,11 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                                <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
                                     <BookOpenText className="h-8 w-8 opacity-50" />
                                     <p className="text-center text-sm font-medium">
-                                        Nenhum Professor cadastrado neste proejeto.
+                                        Nenhum Professor cadastrado neste
+                                        proejeto.
                                     </p>
                                 </div>
                             )}
@@ -49,9 +51,9 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                         {/* ALUNOS */}
                         <div className="flex flex-col gap-2 border-b pb-4">
                             <h2 className="text-xl font-semibold">Aluno</h2>
-                            {pesquisador?.Aluno?.length  ? (
+                            {pesquisador?.aluno?.length ? (
                                 <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                                    {pesquisador?.Aluno.map((aluno) => (
+                                    {pesquisador?.aluno.map((aluno) => (
                                         <CardPesquisador
                                             key={aluno.id}
                                             researcher={aluno}
@@ -59,7 +61,7 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                                <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
                                     <BookA className="h-8 w-8 opacity-50" />
                                     <p className="text-center text-sm font-medium">
                                         Nenhum Alunos cadastrado neste projeto.
@@ -70,25 +72,29 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
 
                         {/* COORDENADORES */}
                         <div className="flex flex-col gap-2 border-b pb-4">
-                            <h2 className="text-xl font-semibold">Coordenador</h2>
-                            { pesquisador?.Coordenador?.length  ? (
+                            <h2 className="text-xl font-semibold">
+                                Coordenador
+                            </h2>
+                            {pesquisador?.coordenador?.length ? (
                                 <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                                    {pesquisador?.Coordenador.map((coordenador) => (
-                                        <CardPesquisador
-                                            key={coordenador.id}
-                                            researcher={coordenador}
-                                        />
-                                    ))}
+                                    {pesquisador?.coordenador.map(
+                                        (coordenador) => (
+                                            <CardPesquisador
+                                                key={coordenador.id}
+                                                researcher={coordenador}
+                                            />
+                                        )
+                                    )}
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-muted-foreground/40 bg-muted/10 py-10 text-muted-foreground">
+                                <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
                                     <HeartHandshake className="h-8 w-8 opacity-50" />
                                     <p className="text-center text-sm font-medium">
-                                        Nenhum Coordenador cadastrado neste projeto.
+                                        Nenhum Coordenador cadastrado neste
+                                        projeto.
                                     </p>
                                 </div>
                             )}
-                            
                         </div>
                     </div>
                 </div>
