@@ -1,9 +1,9 @@
-import { LoginRequest } from "../interface/Login";
-import { User } from "../interface/User";
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-export const login = async (loginRequest: LoginRequest) => {
+import { UserLogin } from "@/core/domain/User";
+import { User } from "@/core/domain/User";
+import { getBaseUrl } from "../utils/api";
+export const login = async (loginRequest: UserLogin) => {
     try {
-        const response = await fetch(`${baseUrl}/auth/login`, {
+        const response = await fetch(`${getBaseUrl()}/auth/login`, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -25,7 +25,7 @@ export const login = async (loginRequest: LoginRequest) => {
 };
 
 export const me = async (): Promise<User> => {
-    const response = await fetch(`${baseUrl}/auth/me`, {
+    const response = await fetch(`${getBaseUrl()}/auth/me`, {
         method: "GET",
         credentials: "include",
     });
@@ -41,7 +41,7 @@ export const me = async (): Promise<User> => {
 
 export const logout = async () => {
     try {
-        const response = await fetch(`${baseUrl}/auth/logout`, {
+        const response = await fetch(`${getBaseUrl()}/auth/logout`, {
             method: "POST",
             credentials: "include",
         });

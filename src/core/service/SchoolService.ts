@@ -1,8 +1,7 @@
-import { Equipment } from "@/core/interface/Equipment";
+import { Equipment } from "@/core/domain/Equipment";
 import { getBaseUrl } from "@/core/utils/api";
-import { School, SchoolCreate, SchoolSearchParams} from "../domain/School";
+import { School, SchoolCreate, SchoolSearchParams } from "../domain/School";
 import { ScienceClub } from "../domain/Club";
-
 
 export const getSchoolGeoData = async () => {
     try {
@@ -21,9 +20,7 @@ export const getSchoolGeoData = async () => {
     }
 };
 
-export const getSchoolById = async (
-    id: string,
-): Promise<School | null> => {
+export const getSchoolById = async (id: string): Promise<School | null> => {
     try {
         const res = await fetch(`${getBaseUrl()}/schools/${id}`);
 
@@ -40,16 +37,15 @@ export const getSchoolById = async (
     }
 };
 
-export const getSchools = async (params?: SchoolSearchParams
+export const getSchools = async (
+    params?: SchoolSearchParams
 ): Promise<School[]> => {
     try {
         const query = new URLSearchParams();
         if (params?.name) query.append("name", params.name);
         if (params?.city) query.append("city", params.city);
         if (params?.page) query.append("page", params.page.toString());
-        const res = await fetch(
-            `${getBaseUrl()}/schools/?${query.toString()}`
-        );
+        const res = await fetch(`${getBaseUrl()}/schools/?${query.toString()}`);
 
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
@@ -63,7 +59,6 @@ export const getSchools = async (params?: SchoolSearchParams
         return [];
     }
 };
-
 
 export const getSchoolEquiments = async (id: string): Promise<Equipment[]> => {
     try {
@@ -81,7 +76,9 @@ export const getSchoolEquiments = async (id: string): Promise<Equipment[]> => {
         return [];
     }
 };
-export const getSchoolClubs = async (school_id: string): Promise<ScienceClub[]> => {
+export const getSchoolClubs = async (
+    school_id: string
+): Promise<ScienceClub[]> => {
     try {
         const res: Response = await fetch(
             `${getBaseUrl()}/schools/${school_id}/clubs`
@@ -95,7 +92,6 @@ export const getSchoolClubs = async (school_id: string): Promise<ScienceClub[]> 
     }
 };
 
-
 export const getSchoolProjects = async (school_id: string) => {
     try {
         const res: Response = await fetch(
@@ -108,8 +104,7 @@ export const getSchoolProjects = async (school_id: string) => {
         console.error(e);
         return [];
     }
-}
-
+};
 
 export const getSchoolResearchers = async (school_id: string) => {
     try {
@@ -123,8 +118,7 @@ export const getSchoolResearchers = async (school_id: string) => {
         console.error(e);
         return [];
     }
-}
-
+};
 
 export const getSchoolStatistics = async (school_id: string) => {
     try {
@@ -138,8 +132,7 @@ export const getSchoolStatistics = async (school_id: string) => {
         console.error(e);
         return [];
     }
-}
-
+};
 
 export const createSchool = async (school: SchoolCreate) => {
     try {
@@ -148,8 +141,8 @@ export const createSchool = async (school: SchoolCreate) => {
             body: JSON.stringify(school),
             credentials: "include",
             headers: {
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         });
         if (!res.ok) {
             throw new Error(
@@ -190,7 +183,9 @@ export const uploadSchoolImage = async (school_id: string, form: FormData) => {
             credentials: "include",
         });
         if (!res.ok) {
-            throw new Error(`Erro ao enviar imagem: ${res.status} ${res.statusText}`);
+            throw new Error(
+                `Erro ao enviar imagem: ${res.status} ${res.statusText}`
+            );
         }
         const data = await res.json();
         return data;
@@ -198,4 +193,4 @@ export const uploadSchoolImage = async (school_id: string, form: FormData) => {
         console.error("Falha ao enviar imagem:", e);
         throw e;
     }
-}
+};

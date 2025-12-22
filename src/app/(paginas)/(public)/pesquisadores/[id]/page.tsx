@@ -62,13 +62,6 @@ export default async function Page({
                                             "Graduação não disponível"}
                                     </p>
                                 </span>
-                                <span className="text-font-primary/80 flex items-center gap-1 text-xs lg:text-lg">
-                                    <School size={15} />
-                                    <p>
-                                        {researcher?.school ??
-                                            "Instituição não disponível"}
-                                    </p>
-                                </span>
                             </div>
                             <div className="text-justify text-gray-500">
                                 <ScrollArea className="md:h-52">

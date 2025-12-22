@@ -1,7 +1,7 @@
-import { TypeEquipment } from "../interface/TypeEquipment";
+import { EquipmentType } from "../domain/EquipmentType";
 import { getBaseUrl } from "../utils/api";
 
-export const getEquipamentTypes = async (): Promise<TypeEquipment[]> => {
+export const getEquipamentTypes = async (): Promise<EquipmentType[]> => {
     try {
         const res = await fetch(`${getBaseUrl()}/equipment-types`);
         if (!res.ok) {

@@ -2,12 +2,12 @@
 
 import { Copy, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "../ui/button";
-import { Revista } from "@/core/interface/Revista";
+import { Magazine } from "@/core/domain/Magazine";
 import Link from "next/link";
 import { toast } from "sonner";
 
 interface CardRevistaProps {
-    revista: Revista;
+    revista: Magazine;
 }
 
 export default function CardRevista({ revista }: CardRevistaProps) {
@@ -24,7 +24,7 @@ export default function CardRevista({ revista }: CardRevistaProps) {
     return (
         <div className="bg-foreground flex h-[200px] w-[250px] flex-col justify-between rounded-md border p-4">
             <div>
-                <h2 className="text-xl font-semibold">{revista.title}</h2>
+                <h2 className="text-xl font-semibold">{revista.name}</h2>
                 <p className="line-clamp-3 text-gray-500">
                     {revista.description}
                 </p>

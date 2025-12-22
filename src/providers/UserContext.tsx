@@ -3,14 +3,14 @@
 import { login, me, logout } from "@/core/service/AuthService";
 import { useRouter } from "next/navigation";
 import { createContext, useState, useContext, useEffect } from "react";
-import { User } from "@/core/interface/User";
-import { LoginRequest } from "@/core/interface/Login";
+import { User } from "@/core/domain/User";
+import { UserLogin } from "@/core/domain/User";
 
 type UserContextType = {
     user: User | null;
     isLoading: boolean;
     isAuthenticated: boolean;
-    loginUser: (loginRequest: LoginRequest) => Promise<boolean>;
+    loginUser: (loginRequest: UserLogin) => Promise<boolean>;
     logoutUser: () => void;
     error: string | null;
 };
@@ -53,7 +53,7 @@ export default function UserProvider({
         loadUser();
     }, []);
 
-    const loginUser = async (loginRequest: LoginRequest): Promise<boolean> => {
+    const loginUser = async (loginRequest: UserLogin): Promise<boolean> => {
         setIsLoading(true);
         try {
             await login(loginRequest);

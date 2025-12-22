@@ -1,111 +1,125 @@
 import CardRevista from "@/components/card/CardRevista";
 import { Button } from "@/components/ui/button";
-import { Revista } from "@/core/interface/Revista";
+import { Magazine } from "@/core/domain/Magazine";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function Revistas() {
-    const revistasFecibaMock: Revista[] = [
+    const revistasFecibaMock: Magazine[] = [
         {
-            id: 1,
-            title: "Feciba revista 01",
+            id: "1",
+            name: "Feciba revista 01",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/secti/sites/site-secti/files/migracao_2024/arquivos/File/IV_CCTI/revista__1.pdf",
+            images: [],
         },
         {
-            id: 2,
-            title: "Site da Feciba",
+            id: "2",
+            name: "Site da Feciba",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/educacao/feira-de-ciencias-empreendedorismo-social-e-inovacao-da-bahia-feciba",
+            images: [],
         },
         {
-            id: 3,
-            title: "Site da Feciba",
+            id: "3",
+            name: "Site da Feciba",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/educacao/feira-de-ciencias-empreendedorismo-social-e-inovacao-da-bahia-feciba",
+            images: [],
         },
         {
-            id: 4,
-            title: "Site da Feciba",
+            id: "4",
+            name: "Site da Feciba",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/educacao/feira-de-ciencias-empreendedorismo-social-e-inovacao-da-bahia-feciba",
+            images: [],
         },
         {
-            id: 5,
-            title: "Site da Feciba",
+            id: "5",
+            name: "Site da Feciba",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/educacao/feira-de-ciencias-empreendedorismo-social-e-inovacao-da-bahia-feciba",
+            images: [],
         },
         {
-            id: 6,
-            title: "Site da Feciba",
+            id: "6",
+            name: "Site da Feciba",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/educacao/feira-de-ciencias-empreendedorismo-social-e-inovacao-da-bahia-feciba",
+            images: [],
         },
         {
-            id: 7,
-            title: "Site da Feciba",
+            id: "7",
+            name: "Site da Feciba",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/educacao/feira-de-ciencias-empreendedorismo-social-e-inovacao-da-bahia-feciba",
+            images: [],
         },
         {
-            id: 8,
-            title: "Site da Feciba",
+            id: "8",
+            name: "Site da Feciba",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "https://www.ba.gov.br/educacao/feira-de-ciencias-empreendedorismo-social-e-inovacao-da-bahia-feciba",
+            images: [],
         },
     ];
 
-    const revistasOutrasMock: Revista[] = [
+    const revistasOutrasMock: Magazine[] = [
         {
-            id: 1,
-            title: "Título da Revista",
+            id: "1",
+            name: "Título da Revista",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "/",
+            images: [],
         },
         {
-            id: 2,
-            title: "Título da Revista",
+            id: "2",
+            name: "Título da Revista",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "/",
+            images: [],
         },
         {
-            id: 3,
-            title: "Título da Revista",
+            id: "3",
+            name: "Título da Revista",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "/",
+            images: [],
         },
         {
-            id: 4,
-            title: "Título da Revista",
+            id: "4",
+            name: "Título da Revista",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "/",
+            images: [],
         },
         {
-            id: 5,
-            title: "Título da Revista",
+            id: "5",
+            name: "Título da Revista",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "/",
+            images: [],
         },
         {
-            id: 6,
-            title: "Título da Revista",
+            id: "6",
+            name: "Título da Revista",
             description:
                 "Descrição da revista: Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non sint magni quas nesciunt et, dignissimos doloribus repellat blanditiis modi, quae debitis neque nulla fuga optio eligendi ipsam amet numquam quisquam",
             link: "/",
+            images: [],
         },
     ];
 
