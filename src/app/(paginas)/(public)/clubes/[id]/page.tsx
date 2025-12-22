@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default async function OneClubeCiencia({
     params,
@@ -115,15 +116,21 @@ export default async function OneClubeCiencia({
             <div className="flex border-t pt-4">
                 <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
                     {clubeCiencia.images?.map((image, index) => (
-                        <div
-                            key={index}
-                            className="relative h-[200px] w-[200px] overflow-hidden">
-                            <Image
-                                src={image.url}
-                                alt="Clube de Ciência"
-                                fill
-                                className="object-cover object-center"></Image>
-                        </div>
+                        <Popover key={index}>
+                            <PopoverTrigger>
+                                <div
+                                    className="relative h-[200px] w-[200px] overflow-hidden cursor-pointer">
+                                    <Image
+                                        src={image.url}
+                                        alt="Clube de Ciência"
+                                        fill
+                                        className="object-cover object-center"></Image>
+                                </div>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <Image src={image.url} alt="Clube de Ciência" height={1000} width={1000}></Image>
+                            </PopoverContent>
+                        </Popover>
                     ))}
                 </div>
             </div>

@@ -17,6 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ProjectStatistic } from "@/core/domain/Project";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default async function Page({
     params,
@@ -69,16 +70,27 @@ export default async function Page({
                 {project.images?.length ? (
                     <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden border-b py-7 md:items-start md:justify-start">
                         {project.images?.map((image, i) => (
-                            <div
-                                key={i}
-                                className="relative h-[200px] w-[200px] overflow-hidden">
-                                <Image
-                                    src={image.url}
-                                    alt={"Projeto"}
-                                    fill
-                                    className="object-cover object-center"
-                                />
-                            </div>
+                            <Popover key={i}>
+                                <PopoverTrigger>
+                                    <div
+                                        className="relative h-[200px] w-[200px] overflow-hidden cursor-pointer ">
+                                        <Image
+                                            src={image.url}
+                                            alt={"Projeto"}
+                                            fill
+                                            className="object-cover object-center"
+                                        />
+                                    </div>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <Image
+                                        src={image.url}
+                                        alt={"Projeto"}
+                                        width={1000}
+                                        height={1000}
+                                    />
+                                </PopoverContent>
+                            </Popover>
                         ))}
                     </div>
                 ) : (
