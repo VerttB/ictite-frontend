@@ -18,7 +18,7 @@ export const Header = () => {
             <div className="flex h-full w-full flex-col sm:flex-row sm:gap-2">
                 <div className="relative h-16 w-32 sm:w-48">
                     <Image
-                        src={`${getAssetPrefix()}/nova_logo_ictite_04.png`}
+                        src={`${getAssetPrefix()}/nova_logo_ictite.png`}
                         alt="Logo"
                         fill
                         className="object-contain"

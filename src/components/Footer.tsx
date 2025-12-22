@@ -11,7 +11,7 @@ export const Footer = () => {
                 className="inline-block object-contain"
             />
             <Image
-                src={`${getAssetPrefix()}/apoios/fapesbLogo.jpg`}
+                src={`${getAssetPrefix()}/apoios/fapesbLogo_semFundo.png`}
                 alt="Logo"
                 width={96}
                 height={96}
@@ -26,6 +26,27 @@ export const Footer = () => {
             />
             <Image
                 src={`${getAssetPrefix()}/apoios/fiocruzLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+            <Image
+                src={`${getAssetPrefix()}/apoios/governoFederalLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+            <Image
+                src={`${getAssetPrefix()}/apoios/fndctLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+            <Image
+                src={`${getAssetPrefix()}/apoios/cnpqLogo.png`}
                 alt="Logo"
                 width={96}
                 height={96}
