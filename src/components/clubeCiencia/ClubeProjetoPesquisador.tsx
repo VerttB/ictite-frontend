@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import CardProjeto from "../projeto/ProjetoCard";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
-import { ResearcherByType } from "@/core/interface/Pesquisador/ResearcherByType";
+import { ResearcherByType } from "@/core/domain/Researcher";
 
 interface ClubeProjetoPesquisadorProps {
     projects: Project[];
@@ -53,10 +53,10 @@ export default function ClubeProjetoPesquisador({
                 {/* PROFESSORES */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <h2 className="text-xl font-semibold">Professor</h2>
-                    {Array.isArray(pesquisador.Professor) &&
-                    pesquisador.Professor.length > 0 ? (
+                    {Array.isArray(pesquisador.professor) &&
+                    pesquisador.professor.length > 0 ? (
                         <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                            {pesquisador.Professor.map((professor) => (
+                            {pesquisador.professor.map((professor) => (
                                 <CardPesquisador
                                     key={professor.id}
                                     researcher={professor}
@@ -76,10 +76,10 @@ export default function ClubeProjetoPesquisador({
                 {/* ALUNOS */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <h2 className="text-xl font-semibold">Aluno</h2>
-                    {Array.isArray(pesquisador.Aluno) &&
-                    pesquisador.Aluno.length > 0 ? (
+                    {Array.isArray(pesquisador.aluno) &&
+                    pesquisador.aluno.length > 0 ? (
                         <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                            {pesquisador.Aluno.map((aluno) => (
+                            {pesquisador.aluno.map((aluno) => (
                                 <CardPesquisador
                                     key={aluno.id}
                                     researcher={aluno}
@@ -99,10 +99,10 @@ export default function ClubeProjetoPesquisador({
                 {/* COORDENADORES */}
                 <div className="flex flex-col gap-2 border-b pb-4">
                     <h2 className="text-xl font-semibold">Coordenador</h2>
-                    {Array.isArray(pesquisador.Coordenador) &&
-                    pesquisador.Coordenador.length > 0 ? (
+                    {Array.isArray(pesquisador.coordenador) &&
+                    pesquisador.coordenador.length > 0 ? (
                         <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                            {pesquisador.Coordenador.map((coordenador) => (
+                            {pesquisador.coordenador.map((coordenador) => (
                                 <CardPesquisador
                                     key={coordenador.id}
                                     researcher={coordenador}

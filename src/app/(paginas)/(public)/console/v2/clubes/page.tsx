@@ -1,4 +1,4 @@
-import { ClubAdm } from "@/components/console/ClubeAdm";
+import { ClubAdm } from "@/components/console/ClubAdm";
 import { ScienceClubSearchParams } from "@/core/domain/Club";
 
 interface ClubsPageProps {
