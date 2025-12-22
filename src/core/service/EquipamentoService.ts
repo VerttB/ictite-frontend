@@ -1,5 +1,5 @@
 import { EquipmentCreateType, EquipmentSearchParams } from "../domain/Equipment";
-import { Equipment } from "../interface/Equipment";
+import { Equipment } from "@/core/domain/Equipment";
 import { getBaseUrl } from "../utils/api";
 
 export const getEquipaments = async (params: EquipmentSearchParams = {}): Promise<Equipment[]> => {

@@ -6,7 +6,7 @@ export const MagazineSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "Nome obrigatório"),
     description: z.string().min(1, "Descrição obrigatória"),
-    link: z.url("Link inválido").optional(),
+    link: z.url("Link inválido"),
     images: ImageSchema.array(),
 })
 

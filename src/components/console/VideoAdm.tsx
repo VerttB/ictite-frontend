@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import { Section } from "../Section";
-import { BaseFormModal } from "../BaseFormAddModal";
-import { VideoSchema } from "@/schemas/VideoSchema";
 
 export const VideoAdm = () => {
     const [open, setOpen] = useState(false);

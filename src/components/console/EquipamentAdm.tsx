@@ -4,7 +4,6 @@ import { Section } from "../Section";
 import useSWR from "swr";
 import { getSchools } from "@/core/service/SchoolService";
 import { useState } from "react";
-import { EquipmentType, EquipmentSchema } from "@/schemas/EquipmentSchema";
 import {
     createEquipament,
     getEquipaments,

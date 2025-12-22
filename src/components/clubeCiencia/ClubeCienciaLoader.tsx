@@ -1,6 +1,6 @@
 "use client";
 
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
+import { ScienceClub } from "@/core/domain/Club";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import { getClubeCienciaById } from "@/core/service/ClubeCienciaService";
 import { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ interface ClubeCienciaLoaderProps {
 export default function ClubeCienciaLoader({
     sugestion,
 }: ClubeCienciaLoaderProps) {
-    const [clube, setClube] = useState<ClubeCiencia | null>(null);
+    const [clube, setClube] = useState<ScienceClub | null>(null);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {

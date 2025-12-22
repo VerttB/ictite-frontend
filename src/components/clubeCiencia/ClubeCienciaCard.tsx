@@ -1,10 +1,10 @@
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
+import { ScienceClub } from "@/core/domain/Club";
 import { School } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ClubeCienciaCardProps {
-    clubeCiencia: ClubeCiencia;
+    clubeCiencia: ScienceClub;
 }
 
 export default function ClubeCienciaCard({

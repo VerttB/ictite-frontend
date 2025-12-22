@@ -1,4 +1,4 @@
-import { Image } from "@/core/interface/Image";
+import { Image } from "@/core/domain/Image";
 import { CardGenerico } from "./card/CardGenerico";
 import {
     DropdownMenu,
