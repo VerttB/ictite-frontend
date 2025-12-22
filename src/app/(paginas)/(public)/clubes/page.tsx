@@ -4,8 +4,7 @@ import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
 import { Button } from "@/components/ui/button";
-import { AllClubeCienciaStatistics } from "@/core/interface/Clube/AllClubeCienciaStatistics";
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
+import { ScienceClubStatisticsAll, ScienceClub } from "@/core/domain/Club";
 import {
     getClubesCiencia,
     getClubesCienciaStats,
@@ -28,7 +27,7 @@ import { useEffect, useState } from "react";
 
 export default function Clubes() {
     const [clubeCienciaStats, setClubeCienciaStats] =
-        useState<AllClubeCienciaStatistics>();
+        useState<ScienceClubStatisticsAll>();
 
     useEffect(() => {
         const carreharClubes = async () => {
@@ -45,26 +44,27 @@ export default function Clubes() {
         carregarEstatisticasClubes();
     }, []);
 
-    const objetivos : {titulo: string; descricao: string; Icon: LucideIcon}[] = [
-        {
-            titulo: "Integração entre Alunos e Professores",
-            descricao:
-                "Promover a colaboração e o trabalho em equipe entre estudantes e professores, estimulando a troca de ideias e a curiosidade científica dentro e fora da sala de aula.",
-            Icon: Users2,
-        },
-        {
-            titulo: "Fomento à Ciência e Tecnologia",
-            descricao:
-                "Estimular o interesse pela investigação científica e pelo uso da tecnologia como ferramenta para compreender e transformar a realidade.",
-            Icon: FlaskConical,
-        },
-        {
-            titulo: "Desenvolvimento de Projetos Inovadores",
-            descricao:
-                "Incentivar a criação de projetos que unam criatividade, método científico e impacto social, preparando os jovens para os desafios do futuro.",
-            Icon: Cpu,
-        },
-    ]
+    const objetivos: { titulo: string; descricao: string; Icon: LucideIcon }[] =
+        [
+            {
+                titulo: "Integração entre Alunos e Professores",
+                descricao:
+                    "Promover a colaboração e o trabalho em equipe entre estudantes e professores, estimulando a troca de ideias e a curiosidade científica dentro e fora da sala de aula.",
+                Icon: Users2,
+            },
+            {
+                titulo: "Fomento à Ciência e Tecnologia",
+                descricao:
+                    "Estimular o interesse pela investigação científica e pelo uso da tecnologia como ferramenta para compreender e transformar a realidade.",
+                Icon: FlaskConical,
+            },
+            {
+                titulo: "Desenvolvimento de Projetos Inovadores",
+                descricao:
+                    "Incentivar a criação de projetos que unam criatividade, método científico e impacto social, preparando os jovens para os desafios do futuro.",
+                Icon: Cpu,
+            },
+        ];
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
@@ -96,7 +96,7 @@ export default function Clubes() {
         },
     ];
 
-    const [clubesCiencia, setClubesCiencia] = useState<ClubeCiencia[]>([]);
+    const [clubesCiencia, setClubesCiencia] = useState<ScienceClub[]>([]);
 
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
