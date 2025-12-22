@@ -1,13 +1,16 @@
-import { ClubeCiencia } from "../interface/Clube/ClubeCiencia";
+import { ScienceClub, ScienceClubCreate, ScienceClubSearchParams } from "../domain/Club";
 import { getBaseUrl } from "../utils/api";
 
 // |=======| GET DE TODOS OS CLUBES DE CIÊNCIA |=======|
 export const getClubesCiencia = async (
-    title: string = ""
-): Promise<Required<ClubeCiencia>[]> => {
+    params?: ScienceClubSearchParams
+): Promise<Required<ScienceClub>[]> => {
     try {
+        const query = new URLSearchParams();
+        if (params?.name) query.append("name", params.name);
+        if (params?.school) query.append("school", params.school);
         const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/?name=${title}`
+            `${getBaseUrl()}/clubes-ciencia/?${query.toString()}`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -90,10 +93,26 @@ export const getClubesCienciaStats = async () => {
     }
 };
 
-export const createClubeCiencias = async (form: FormData) => {
-    console.log("Criando clube no service", form);
+export const createClubeCiencias = async (club: ScienceClubCreate) => {
     try {
         const res = await fetch(`${getBaseUrl()}/clubes-ciencia`, {
+            method: "POST",
+            body: JSON.stringify(club),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (!res.ok) throw new Error(`Erro: ${res.statusText}`);
+        const data = await res.json();
+        return data;
+    } catch (e: unknown) {
+        console.warn(e);
+    }
+};
+
+export const uploadClubImage = async (id: string, form: FormData) => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/clubes-ciencia/${id}/images`, {
             method: "POST",
             body: form,
         });
@@ -101,6 +120,6 @@ export const createClubeCiencias = async (form: FormData) => {
         const data = await res.json();
         return data;
     } catch (e: unknown) {
-        console.warn(e);
+        console.error(e);
     }
 };

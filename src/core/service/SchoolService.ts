@@ -1,8 +1,8 @@
 import { Equipment } from "@/core/interface/Equipment";
-
-import { School, SchoolCreate, SchoolWithClubes } from "@/core/interface/School";
 import { getBaseUrl } from "@/core/utils/api";
-import { ClubeCiencia } from "../interface/Clube/ClubeCiencia";
+import { School, SchoolCreate, SchoolSearchParams} from "../domain/School";
+import { ScienceClub } from "../domain/Club";
+
 
 export const getSchoolGeoData = async () => {
     try {
@@ -23,7 +23,7 @@ export const getSchoolGeoData = async () => {
 
 export const getSchoolById = async (
     id: string,
-): Promise<SchoolWithClubes | null> => {
+): Promise<School | null> => {
     try {
         const res = await fetch(`${getBaseUrl()}/schools/${id}`);
 
@@ -40,13 +40,15 @@ export const getSchoolById = async (
     }
 };
 
-export const getSchools = async (
-    name: string = "",
-    city: string = ""
+export const getSchools = async (params?: SchoolSearchParams
 ): Promise<School[]> => {
     try {
+        const query = new URLSearchParams();
+        if (params?.name) query.append("name", params.name);
+        if (params?.city) query.append("city", params.city);
+        if (params?.page) query.append("page", params.page.toString());
         const res = await fetch(
-            `${getBaseUrl()}/schools/?name=${name}&city=${city}`
+            `${getBaseUrl()}/schools/?${query.toString()}`
         );
 
         if (!res.ok) {
@@ -79,27 +81,7 @@ export const getSchoolEquiments = async (id: string): Promise<Equipment[]> => {
         return [];
     }
 };
-
-// export const getSchoolStatistics = async (
-//     id: string
-// ): Promise<SchoolStatistics | null> => {
-//     try {
-//         const res = await fetch(`${getBaseUrl()}/schools/${id}/statistics`);
-
-//         if (!res.ok) {
-//             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
-//         }
-
-//         const data = res.json();
-
-//         return data;
-//     } catch (e) {
-//         console.error("Falha ao buscar equipamentos de escolas:", e);
-//         return null;
-//     }
-// };
-
-export const getSchoolClubs = async (school_id: string): Promise<ClubeCiencia[]> => {
+export const getSchoolClubs = async (school_id: string): Promise<ScienceClub[]> => {
     try {
         const res: Response = await fetch(
             `${getBaseUrl()}/schools/${school_id}/clubs`
@@ -200,3 +182,20 @@ export const deleteSchool = async (id: string) => {
     }
 };
 
+export const uploadSchoolImage = async (school_id: string, form: FormData) => {
+    try {
+        const res = await fetch(`${getBaseUrl()}/schools/${school_id}/images`, {
+            method: "POST",
+            body: form,
+            credentials: "include",
+        });
+        if (!res.ok) {
+            throw new Error(`Erro ao enviar imagem: ${res.status} ${res.statusText}`);
+        }
+        const data = await res.json();
+        return data;
+    } catch (e) {
+        console.error("Falha ao enviar imagem:", e);
+        throw e;
+    }
+}
