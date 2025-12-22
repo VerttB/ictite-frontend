@@ -2,7 +2,7 @@ import { Maximize2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Projeto from "./ProjetoDrawer";
-import { Project } from "@/core/interface/Project";
+import { Project } from "@/core/domain/Project";
 
 interface ProjectProps {
     onClick?: () => void;

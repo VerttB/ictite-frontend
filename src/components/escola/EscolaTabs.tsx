@@ -5,26 +5,32 @@ import { Button } from "@/components/ui/button";
 import { House, Printer, PanelsTopLeft, Brain, BookOpen } from "lucide-react";
 
 import { useState } from "react";
-import { useSchoolEquipments, useSchoolProjects, useSchoolResearchers } from "@/hooks/useSchools";
+import {
+    useSchoolEquipments,
+    useSchoolProjects,
+    useSchoolResearchers,
+} from "@/hooks/useSchools";
 import { Spinner } from "../LoadingSpin";
 import CardProjeto from "../projeto/ProjetoCard";
 import CardEquipamento from "../card/CardEquipamento";
 import ClubeCienciaTabs from "../clubeCiencia/ClubeCienciaTabs";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
-import { School, SchoolWithClubes } from "@/core/interface/School";
+import { School } from "@/core/domain/School";
 import useSWR from "swr";
 import ClubeCienciaCard from "../clubeCiencia/ClubeCienciaCard";
 import { getSchoolClubs } from "@/core/service/SchoolService";
 
 interface EscolaTabsProps {
-    school: SchoolWithClubes;
+    school: School;
 }
 
 export const EscolaTabs = ({ school }: EscolaTabsProps) => {
     const [activeTab, setActiveTab] = useState("pesquisadores");
     const { equipments, isLoading: loadingEq } = useSchoolEquipments(school.id);
     const { projects, isLoading: loadingProj } = useSchoolProjects(school.id);
-    const { researchers, isLoading: loadingRes } = useSchoolResearchers(school.id);
+    const { researchers, isLoading: loadingRes } = useSchoolResearchers(
+        school.id
+    );
 
     const { data: clubes, isLoading: loadingClube } = useSWR(
         "clube-by-school-" + school.id,
@@ -89,7 +95,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
                                 researcher={r}
                             />
                         ))
-                    )} 
+                    )}
                 </TabsContent>
 
                 <TabsContent
@@ -113,7 +119,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
                         projects?.map((p, i) => (
                             <CardProjeto key={i} project={p} />
                         ))
-                    )} 
+                    )}
                 </TabsContent>
 
                 <TabsContent value="clube de ciência">
