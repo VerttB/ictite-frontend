@@ -12,17 +12,18 @@ export const InputField = ({ name, label, mask }: InputFieldProps) => {
         register,
         formState: { errors },
     } = useFormContext();
-
+    const { onChange, ...rest } = register(name);
     return (
         <div>
             <label className="mb-1 block text-sm">{label}</label>
             <Input
-                {...register(name)}
-                onChange={(e) =>
-                    (e.target.value = mask
-                        ? mask(e.target.value)
-                        : e.target.value)
-                }
+                {...rest}
+                onChange={(e) => {
+                    if (mask) {
+                        e.target.value = mask(e.target.value);
+                    }
+                    onChange(e);
+                }}
             />
             {errors[name] && (
                 <p className="text-sm text-red-500">

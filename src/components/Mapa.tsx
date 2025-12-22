@@ -8,7 +8,7 @@ import {
     PopoverContent,
     PopoverAnchor,
 } from "@/components/ui/popover";
-import { School } from "@/core/interface/School";
+import { School } from "@/core/domain/School";
 import { Spinner } from "./LoadingSpin";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";

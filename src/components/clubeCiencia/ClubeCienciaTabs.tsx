@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Expand } from "lucide-react";
-import { Project } from "@/core/interface/Project";
+import { Project } from "@/core/domain/Project";
 import CardProjeto from "../projeto/ProjetoCard";
 import { useState } from "react";
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
+import { ScienceClub } from "@/core/domain/Club";
 import Link from "next/link";
 
 interface ClubeCienciaTotal {
-    clubeCiencia: ClubeCiencia;
+    clubeCiencia: ScienceClub;
     projetosClubeCiencia: Project[];
     pesquisadoresClubeCiencia: string[];
 }
@@ -21,8 +21,11 @@ interface ClubeCienciaTabsProps {
     school_id: string;
 }
 
-export default function ClubeCienciaTabs({ school_id }: ClubeCienciaTabsProps) {
-    const [clubesCiencia, setClubesCiencia] = useState<ClubeCiencia[]>([]);
+export default function ClubeCienciaTabs({
+    school_id,
+    projetosClubeCiencia,
+}: ClubeCienciaTabsProps) {
+    const [clubesCiencia, setClubesCiencia] = useState<ScienceClub[]>([]);
     const [clubeCienciaTotal, setClubeCienciaTotal] = useState<
         ClubeCienciaTotal[]
     >([]);

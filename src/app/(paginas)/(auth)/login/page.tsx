@@ -15,7 +15,7 @@ export default function Login() {
     const {
         register,
         handleSubmit,
-        formState: { errors, },
+        formState: { errors },
         setError,
     } = useForm<userLoginData>({
         resolver: zodResolver(userLoginSchema),
@@ -23,8 +23,11 @@ export default function Login() {
 
     const onSubmit = async (data: userLoginData) => {
         const success = await loginUser(data);
-        if (!success) {  
-           setError("root", { type: "manual", message: "Falha no login. Verifique suas credenciais." });
+        if (!success) {
+            setError("root", {
+                type: "manual",
+                message: "Falha no login. Verifique suas credenciais.",
+            });
         }
     };
 
@@ -33,15 +36,15 @@ export default function Login() {
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4 text-lg font-medium 2xl:text-xl">
-                <label htmlFor="username" className="flex flex-col gap-2">
+                <label htmlFor="email" className="flex flex-col gap-2">
                     Nome
                     <Input
-                        {...register("username")}
+                        {...register("email")}
                         type="text"
                         className="bg-background #b5b5b5 rounded-md border-1 border-gray-300 px-2 py-2"
                     />
                     <span className="text-sm text-red-500">
-                        {errors && errors.username?.message}
+                        {errors && errors.email?.message}
                     </span>
                 </label>
                 <label htmlFor="password" className="flex flex-col gap-2">
@@ -55,7 +58,11 @@ export default function Login() {
                         {errors && errors.password?.message}
                     </span>
                 </label>
-                {errors && <p className="text-sm text-red-500">{errors.root?.message}</p>}
+                {errors && (
+                    <p className="text-sm text-red-500">
+                        {errors.root?.message}
+                    </p>
+                )}
                 <Button type="submit">Fazer Login</Button>
             </form>
         </div>

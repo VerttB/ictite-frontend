@@ -1,5 +1,5 @@
 "use client";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
+import { Researcher } from "@/core/domain/Researcher";
 import { Book } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";

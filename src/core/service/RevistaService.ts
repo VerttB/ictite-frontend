@@ -1,11 +1,10 @@
-import { Revista } from "../interface/Revista";
+import { Magazine, MagazineCreate, MagazineSearchParams } from "../domain/Magazine";
+import { getBaseUrl } from "../utils/api";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const getRevistas = async (): Promise<Required<Revista>[]> => {
-    console.log("Base URL:", baseUrl);
+export const getRevistas = async (params?: MagazineSearchParams): Promise<Required<Magazine>[]> => {
     try {
-        const response = await fetch(`${baseUrl}/magazine`, {
+        const response = await fetch(`${getBaseUrl()}/magazine`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -22,15 +21,35 @@ export const getRevistas = async (): Promise<Required<Revista>[]> => {
     }
 };
 
-export const createRevista = async (newRevista: FormData) => {
+export const createRevista = async (newRevista: MagazineCreate) => {
     try {
-        const response = await fetch(`${baseUrl}/magazine`, {
+        const response = await fetch(`${getBaseUrl()}/magazine`, {
             method: "POST",
 
-            body: newRevista,
+            body: JSON.stringify(newRevista),
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
         if (!response.ok) {
             throw new Error("Failed to create material");
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {
+    try {
+        const response = await fetch(`${getBaseUrl()}/magazine/${magazineId}/images`, {
+            method: "POST",
+            body: formData,
+        });
+        if (!response.ok) {
+            throw new Error("Failed to upload magazine images");
         }
         const data = await response.json();
         return data;

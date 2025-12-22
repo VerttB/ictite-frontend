@@ -1,13 +1,19 @@
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { ResearcherFinal } from "@/core/interface/Pesquisador/ResearcherFinal";
-import { Project } from "@/core/interface/Project";
+import { ResearcherFinal } from "@/core/domain/Researcher";
+import { Project } from "@/core/domain/Project";
 import { getBaseUrl } from "@/core/utils/api";
-import { PesquisadorType } from "@/schemas/PesquisadorSchema";
+import {Researcher,  ResearcherCreate, ResearcherSearchParams } from "@/core/domain/Researcher";
 
-export const getResearchers = async (name: string) => {
+export const getResearchers = async (params?: ResearcherSearchParams) => {
     try {
+        const query = new URLSearchParams();
+        if (params?.name) query.append("name", params.name);
+        if (params?.type) params.type.forEach(type => query.append("type", type));
+        if (params?.gender) params.gender.forEach(gender => query.append("gender", gender));
+        if (params?.race) params.race.forEach(race => query.append("race", race));
+        if (params?.page) query.append("page", params.page.toString());
+
         const res: Response = await fetch(
-            `${getBaseUrl()}/researchers/?name=${name}`
+            `${getBaseUrl()}/researchers/?${query.toString()}`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -73,7 +79,7 @@ export async function getResearchersByClube(
     }
 }
 
-export async function createResearcher(newResearcher: PesquisadorType) {
+export async function createResearcher(newResearcher: ResearcherCreate) {
     console.log("Creating researcher...", newResearcher);
     try {
         const res: Response = await fetch(`${getBaseUrl()}/researchers/`, {
