@@ -2,10 +2,11 @@ import { SchoolAdm } from "@/components/console/SchoolAdm";
 import { SchoolSearchParamsSchema } from "@/core/domain/School";
 
 interface SchoolPageProps {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Page({ searchParams }: SchoolPageProps) {
-    const parsedParams = SchoolSearchParamsSchema.parse(searchParams);
+    const params = await searchParams;
+    const parsedParams = SchoolSearchParamsSchema.parse(params);
     return <SchoolAdm params={parsedParams} />;
 }

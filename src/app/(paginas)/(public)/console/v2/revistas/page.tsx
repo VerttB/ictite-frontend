@@ -2,10 +2,11 @@ import { MagazineAdm } from "@/components/console/MagazineAdm";
 import { MagazineSearchParamsSchema } from "@/core/domain/Magazine";
 
 interface MagazinePageProps {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Page({ searchParams }: MagazinePageProps) {
-    const parsedParams = MagazineSearchParamsSchema.parse(searchParams);
+    const params = await searchParams;
+    const parsedParams = MagazineSearchParamsSchema.parse(params);
     return <MagazineAdm params={parsedParams} />;
 }

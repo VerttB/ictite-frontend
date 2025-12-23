@@ -1,11 +1,12 @@
 import { ProjectAdm } from "@/components/console/ProjectAdm";
-import { ProjectSearchParams, ProjectSearchParamsSchema } from "@/core/domain/Project";
+import { ProjectSearchParamsSchema } from "@/core/domain/Project";
 
 interface ProjectPageProps {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Page({ searchParams }: ProjectPageProps) {
-    const parsedParams = ProjectSearchParamsSchema.parse(searchParams);
+    const params = await searchParams;
+    const parsedParams = ProjectSearchParamsSchema.parse(params);
     return <ProjectAdm params={parsedParams} />;
 }
