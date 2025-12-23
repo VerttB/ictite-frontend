@@ -6,6 +6,8 @@ import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Spinner } from "../LoadingSpin";
 import { BookA, BookOpen, BookOpenText, HeartHandshake } from "lucide-react";
 import { ResearcherByType } from "@/core/domain/Researcher";
+import CardNaoEncotrado from "../card/CardNaoEncontrado";
+import CardNaoEncontrado from "../card/CardNaoEncontrado";
 export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
     const { data: pesquisador, isLoading } = useSWR<ResearcherByType>(
         `project-${projectId}`,
@@ -38,12 +40,8 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
-                                    <BookOpenText className="h-8 w-8 opacity-50" />
-                                    <p className="text-center text-sm font-medium">
-                                        Nenhum Professor cadastrado neste
-                                        proejeto.
-                                    </p>
+                                <div>
+                                    <CardNaoEncontrado icon={BookOpenText} text="Nenhum professor cadastrado neste projeto."/>
                                 </div>
                             )}
                         </div>
@@ -61,11 +59,8 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
-                                    <BookA className="h-8 w-8 opacity-50" />
-                                    <p className="text-center text-sm font-medium">
-                                        Nenhum Alunos cadastrado neste projeto.
-                                    </p>
+                                <div>
+                                    <CardNaoEncontrado icon={BookA} text="Nenhum aluno cadastrado neste projeto."/>
                                 </div>
                             )}
                         </div>
@@ -87,12 +82,8 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                     )}
                                 </div>
                             ) : (
-                                <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
-                                    <HeartHandshake className="h-8 w-8 opacity-50" />
-                                    <p className="text-center text-sm font-medium">
-                                        Nenhum Coordenador cadastrado neste
-                                        projeto.
-                                    </p>
+                                <div>
+                                    <CardNaoEncontrado icon={HeartHandshake} text="Nenhum coordenador cadastrado neste projeto."/>
                                 </div>
                             )}
                         </div>

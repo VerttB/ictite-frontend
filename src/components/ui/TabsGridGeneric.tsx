@@ -3,6 +3,7 @@ import { Spinner } from "../LoadingSpin";
 import Masonry from "react-responsive-masonry";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ScrollArea";
+import CardNaoEncontrado from "../card/CardNaoEncontrado";
 
 type TabsGridProps<T> = {
     isLoading: boolean;
@@ -39,7 +40,7 @@ export const TabsGrid = <T,>({
         return <div>Erro ao carregar os dados.</div>;
     }
     if (!data || data.length === 0 || renderItem === undefined || Array.isArray(data) === false) {
-        return <div>{emptyMessage}</div>;
+        return <div className="mt-4"><CardNaoEncontrado  text={emptyMessage} /></div>;
     }
     
 

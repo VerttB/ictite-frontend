@@ -11,6 +11,7 @@ import {
 import CardProjeto from "../projeto/ProjetoCard";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
 import { ResearcherByType } from "@/core/domain/Researcher";
+import CardNaoEncontrado from "../card/CardNaoEncontrado";
 
 interface ClubeProjetoPesquisadorProps {
     projects: Project[];
@@ -35,11 +36,8 @@ export default function ClubeProjetoPesquisador({
                         ))}
                     </div>
                 ) : (
-                    <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
-                        <PanelsTopLeft className="h-8 w-8 opacity-50" />
-                        <p className="text-center text-sm font-medium">
-                            Nenhum projeto cadastrado neste clube.
-                        </p>
+                    <div>
+                        <CardNaoEncontrado icon={PanelsTopLeft} text="Nenhum Projeto cadastrado neste clube."/>
                     </div>
                 )}
             </div>
@@ -64,11 +62,8 @@ export default function ClubeProjetoPesquisador({
                             ))}
                         </div>
                     ) : (
-                        <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex w-full flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
-                            <BookOpenText className="h-8 w-8 opacity-50" />
-                            <p className="text-center text-sm font-medium">
-                                Nenhum Professor cadastrado neste clube.
-                            </p>
+                        <div>
+                            <CardNaoEncontrado icon={BookOpenText} text="Nenhum Professor cadastrado neste clube."/>
                         </div>
                     )}
                 </div>
@@ -87,11 +82,8 @@ export default function ClubeProjetoPesquisador({
                             ))}
                         </div>
                     ) : (
-                        <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
-                            <BookA className="h-8 w-8 opacity-50" />
-                            <p className="text-center text-sm font-medium">
-                                Nenhum Alunos cadastrado neste clube.
-                            </p>
+                        <div>
+                            <CardNaoEncontrado icon={BookA} text="Nenhum Aluno cadastrado neste clube."/>
                         </div>
                     )}
                 </div>
@@ -110,11 +102,8 @@ export default function ClubeProjetoPesquisador({
                             ))}
                         </div>
                     ) : (
-                        <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-10">
-                            <HeartHandshake className="h-8 w-8 opacity-50" />
-                            <p className="text-center text-sm font-medium">
-                                Nenhum Coordenador cadastrado neste clube.
-                            </p>
+                        <div>
+                            <CardNaoEncontrado icon={HeartHandshake} text="Nenhum Coordenador cadastrado neste clube."/>
                         </div>
                     )}
                 </div>
