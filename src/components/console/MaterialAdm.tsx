@@ -17,6 +17,8 @@ import {
     MaterialCreate,
     MaterialSearchParams,
 } from "@/core/domain/Material";
+import { ControlledSelect } from "../ui/ControlledSelect";
+import { MaterialType } from "@/core/constants/materialType";
 
 interface MaterialAdmProps {
     params: MaterialSearchParams;
@@ -28,6 +30,7 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
     const [open, setOpen] = useState(false);
 
     const onSubmit = async (data: MaterialCreate) => {
+        console.log(data);
         const { id } = await createMaterial(data);
         const newMaterial = new FormData();
         data.images.forEach((file) => newMaterial.append("images", file));
@@ -55,6 +58,11 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
                 <InputField name="name" label="Nome do Material" />
                 <InputField name="description" label="Descrição" />
                 <InputField name="link" label="Link" />
+                <ControlledSelect
+                    name="type"
+                    label="Tipo"
+                    options={Object.values(MaterialType)}
+                />
                 <ControlledImageUpload name="images" />
             </BaseFormModal>
         </>
