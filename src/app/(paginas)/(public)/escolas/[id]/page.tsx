@@ -69,7 +69,7 @@ export default async function Page({
                     />
                 </div>
 
-                <div className="flex flex-col gap-2 text-justify sm:w-2/3 sm:text-left">
+                <div className="flex flex-col gap-2 text-justify sm:w-2/3 md:w-full sm:text-left">
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
                         <p className="text-2xl">{school.name}</p>
                         <Downloader path="schools" id={school.id} />
@@ -88,9 +88,20 @@ export default async function Page({
                 </div>
             </div>
 
-            <InfoBar data={stats} />
+            <div className="grid grid-cols-1 gap-6  lg:grid-cols-[70%_30%]xl:grid-cols-[75%_25%]w-full">
+                    {/* TABS DA ESCOLA */}
+                    <div className="w-full">
+                        <EscolaTabs school={school} />
+                    </div>
 
-            <EscolaTabs school={school} />
+                    {/* INFOBAR */}
+                    <div className="w-full">
+                        <InfoBar 
+                        data={stats} 
+                        position={typeof window !== "undefined" && window.innerWidth < 768 ? "horizontal" : "vertical"} 
+                        />
+                    </div>
+                </div>
         </div>
     );
 }
