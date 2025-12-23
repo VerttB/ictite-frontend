@@ -38,9 +38,10 @@ export const TabsGrid = <T,>({
     if (isError) {
         return <div>Erro ao carregar os dados.</div>;
     }
-    if (!data || data.length === 0 || renderItem === undefined) {
+    if (!data || data.length === 0 || renderItem === undefined || Array.isArray(data) === false) {
         return <div>{emptyMessage}</div>;
     }
+    
 
     if (layoutType === "grid") {
         return (
@@ -49,7 +50,7 @@ export const TabsGrid = <T,>({
                 style={{
                     gridTemplateColumns: `repeat(auto-fill, minmax(${minCardWidth}, 1fr))`,
                 }}>
-                {data.map((item) => renderItem(item))}
+                { data.map((item) => renderItem(item))}
             </div>
         );
     }
