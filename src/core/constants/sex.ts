@@ -1,4 +1,4 @@
-export const SexTypes = {
+export const GenderTypes = {
     MASCULINO: "Masculino",
     FEMININO: "Feminino",
     OUTRO: "Outro",

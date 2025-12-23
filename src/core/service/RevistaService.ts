@@ -32,7 +32,7 @@ export const getRevistas = async (
 
 export const createRevista = async (newRevista: MagazineCreate) => {
     try {
-        const response = await fetch(`${getBaseUrl()}/magazine`, {
+        const response = await fetch(`${getBaseUrl()}/magazine/`, {
             method: "POST",
 
             body: JSON.stringify(newRevista),

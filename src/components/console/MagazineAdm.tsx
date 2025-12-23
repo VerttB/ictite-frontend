@@ -51,7 +51,7 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
                 schema={MagazineCreateSchema}
                 title="Adicionar Revista"
                 props={{ defaultValues: { images: [] } }}>
-                <InputField name="title" label="Título da Revista" />
+                <InputField name="name" label="Título da Revista" />
                 <InputField name="description" label="Descrição" />
                 <InputField name="link" label="Link da Revista" />
                 <ControlledImageUpload name="images" />

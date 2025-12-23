@@ -1,6 +1,6 @@
 import { RaceTypes } from "@/core/constants/race";
 import { ResearcherTypes } from "@/core/constants/researcherType";
-import { SexTypes } from "@/core/constants/sex";
+import { GenderTypes } from "@/core/constants/sex";
 import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
 import z from "zod";
 import { ProjectSchema } from "./Project";
@@ -9,19 +9,22 @@ import { ImageSchema } from "./Image";
 export const ResearcherSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "O nome não deve estar vazio"),
-    sex: z.enum(Object.values(SexTypes), "Selecione um sexo válido"),
+    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido"),
     race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida"),
     type: z.enum(Object.values(ResearcherTypes), "Selecione um tipo válido"),
-    lattes: z.string().min(1, "O Lattes não deve estar vazio"),
+    lattes_id: z.string().min(1, "O Lattes não deve estar vazio"),
     image: z.url().optional(),
 });
 
 export const ResearcherCreateSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio"),
-    sex: z.enum(Object.values(SexTypes), "Selecione um sexo válido"),
+    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido"),
     race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida"),
     type: z.enum(Object.values(ResearcherTypes), "Selecione um tipo válido"),
-    lattes: z.string().min(1, "O Lattes não deve estar vazio"),
+    lattes_id: z
+        .string()
+        .min(1, "O Lattes não deve estar vazio")
+        .length(16, "O ID do Lattes deve ter 16 caracteres"),
 });
 
 export const ResearcherUpdateSchema = ResearcherCreateSchema.extend({

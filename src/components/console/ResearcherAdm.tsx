@@ -14,7 +14,7 @@ import { InputField } from "../ui/FormInputField";
 import { ControlledSelect } from "../ui/ControlledSelect";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { RaceTypes } from "@/core/constants/race";
-import { SexTypes } from "@/core/constants/sex";
+import { GenderTypes } from "@/core/constants/sex";
 import {
     ResearcherSearchParams,
     ResearcherCreate,
@@ -32,6 +32,7 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
     const { data: escolas } = useSWR("escolas", () => getSchools());
     const [open, setOpen] = useState(false);
     const onSubmit = async (data: ResearcherCreate) => {
+        console.log("Researcher", data);
         await createResearcher(data);
         mutate();
         setOpen(false);
@@ -52,19 +53,17 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                 title="Adicionar Pesquisador"
                 schema={ResearcherCreateSchema}>
                 <InputField name="name" label="Nome do Pesquisador" />
-                <InputField name="lattes" label="Link do Lattes" />
+                <InputField
+                    name="lattes_id"
+                    label="Id do Lattes"
+                    maxLength={16}
+                />
                 <div className="flex w-full gap-2">
                     <ControlledSelect
                         className="w-full"
                         name="type"
                         label="Tipo de Pesquisador"
                         options={Object.values(ResearcherTypes)}
-                    />
-                    <ControlledSelect
-                        className="w-full"
-                        name="school_id"
-                        label="Escola"
-                        options={escolas || []}
                     />
                 </div>
                 <div className="flex w-full gap-2">
@@ -76,9 +75,9 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                     />
                     <ControlledSelect
                         className="w-full"
-                        name="sex"
-                        label="Sexo"
-                        options={Object.values(SexTypes)}
+                        name="gender"
+                        label="Gênero"
+                        options={Object.values(GenderTypes)}
                     />
                 </div>
             </BaseFormModal>
