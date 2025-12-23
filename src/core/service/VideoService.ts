@@ -5,14 +5,14 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 export const getVideos = async (): Promise<Required<Video>[]> => {
     console.log("Base URL:", baseUrl);
     try {
-        const response = await fetch(`${baseUrl}/material`, {
+        const response = await fetch(`${baseUrl}/video`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
         });
         if (!response.ok) {
-            throw new Error("Failed to fetch materials");
+            throw new Error("Failed to fetch videos");
         }
         const data = await response.json();
         return data || [];

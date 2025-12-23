@@ -1,19 +1,17 @@
 import { ResearcherFinal } from "@/core/domain/Researcher";
 import { Project } from "@/core/domain/Project";
 import { getBaseUrl } from "@/core/utils/api";
-import {Researcher,  ResearcherCreate, ResearcherSearchParams } from "@/core/domain/Researcher";
+import {
+    Researcher,
+    ResearcherCreate,
+    ResearcherSearchParams,
+} from "@/core/domain/Researcher";
+import { buildSearchParameters } from "../utils/searchParamBuilder";
 
 export const getResearchers = async (params?: ResearcherSearchParams) => {
     try {
-        const query = new URLSearchParams();
-        if (params?.name) query.append("name", params.name);
-        if (params?.type) params.type.forEach(type => query.append("type", type));
-        if (params?.gender) params.gender.forEach(gender => query.append("gender", gender));
-        if (params?.race) params.race.forEach(race => query.append("race", race));
-        if (params?.page) query.append("page", params.page.toString());
-
         const res: Response = await fetch(
-            `${getBaseUrl()}/researchers/?${query.toString()}`
+            `${getBaseUrl()}/researchers/?${buildSearchParameters(params || {})}`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();

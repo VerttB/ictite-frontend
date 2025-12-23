@@ -1,16 +1,18 @@
-import { ScienceClub, ScienceClubCreate, ScienceClubSearchParams } from "../domain/Club";
+import {
+    ScienceClub,
+    ScienceClubCreate,
+    ScienceClubSearchParams,
+} from "../domain/Club";
 import { getBaseUrl } from "../utils/api";
+import { buildSearchParameters } from "../utils/searchParamBuilder";
 
 // |=======| GET DE TODOS OS CLUBES DE CIÊNCIA |=======|
 export const getClubesCiencia = async (
     params?: ScienceClubSearchParams
 ): Promise<Required<ScienceClub>[]> => {
     try {
-        const query = new URLSearchParams();
-        if (params?.name) query.append("name", params.name);
-        if (params?.school) query.append("school", params.school);
         const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/?${query.toString()}`
+            `${getBaseUrl()}/clubes-ciencia/?${buildSearchParameters(params || {})}`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -24,7 +26,9 @@ export const getClubesCiencia = async (
 // |=======| GET DE UM CLUBE DE CIÊNCIA PELO ID |=======|
 export const getClubeCienciaById = async (id: string) => {
     try {
-        const res: Response = await fetch(`${getBaseUrl()}/clubes-ciencia/${id}`);
+        const res: Response = await fetch(
+            `${getBaseUrl()}/clubes-ciencia/${id}`
+        );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
         return data;
@@ -34,7 +38,6 @@ export const getClubeCienciaById = async (id: string) => {
 };
 
 // |=======| GET TODOS OS CLUBES DE CIÊNCIA DE UMA ESCOLA |=======|
-
 
 // |=======| GET TODOS OS PESQUISADORES DE UM CLUBE DE CIÊNCIAS |=======|
 export const getClubeCienciaResearchers = async (id: string) => {
@@ -48,8 +51,7 @@ export const getClubeCienciaResearchers = async (id: string) => {
     } catch (e: unknown) {
         console.error(e);
     }
-}
-
+};
 
 // |=======| GET TODOS OS PROJETOS DE UM CLUBE DE CIÊNCIAS |=======|
 export const getClubeCienciaProjects = async (id: string) => {
@@ -63,7 +65,7 @@ export const getClubeCienciaProjects = async (id: string) => {
     } catch (e: unknown) {
         console.error(e);
     }
-}
+};
 
 // |=======| GET ESTATÍSTICAS DE UM CLUBE DE CIÊNCIAS |=======|
 export const getClubeCienciaStats = async (id: string) => {
@@ -99,8 +101,8 @@ export const createClubeCiencias = async (club: ScienceClubCreate) => {
             method: "POST",
             body: JSON.stringify(club),
             headers: {
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         });
         if (!res.ok) throw new Error(`Erro: ${res.statusText}`);
         const data = await res.json();

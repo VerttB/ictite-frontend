@@ -2,6 +2,7 @@ import { Equipment } from "@/core/domain/Equipment";
 import { getBaseUrl } from "@/core/utils/api";
 import { School, SchoolCreate, SchoolSearchParams } from "../domain/School";
 import { ScienceClub } from "../domain/Club";
+import { buildSearchParameters } from "../utils/searchParamBuilder";
 
 export const getSchoolGeoData = async () => {
     try {
@@ -41,11 +42,9 @@ export const getSchools = async (
     params?: SchoolSearchParams
 ): Promise<School[]> => {
     try {
-        const query = new URLSearchParams();
-        if (params?.name) query.append("name", params.name);
-        if (params?.city) query.append("city", params.city);
-        if (params?.page) query.append("page", params.page.toString());
-        const res = await fetch(`${getBaseUrl()}/schools/?${query.toString()}`);
+        const res = await fetch(
+            `${getBaseUrl()}/schools/?${buildSearchParameters(params || {})}`
+        );
 
         if (!res.ok) {
             throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);

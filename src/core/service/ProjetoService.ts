@@ -1,10 +1,11 @@
-import {Project, ProjectCreate, ProjectSearchParams } from "../domain/Project";
+import { Project, ProjectCreate, ProjectSearchParams } from "../domain/Project";
 import { getBaseUrl } from "../utils/api";
+import { buildSearchParameters } from "../utils/searchParamBuilder";
 
-export const getProjects = async (params: ProjectSearchParams = {}) => {
+export const getProjects = async (params?: ProjectSearchParams) => {
     try {
         const res: Response = await fetch(
-            `${getBaseUrl()}/projects/?name=${name}`
+            `${getBaseUrl()}/projects/?${buildSearchParameters(params || {})}`
         );
         if (!res) throw new Error(`Erro: ${res}`);
         const data = await res.json();
@@ -30,7 +31,7 @@ export const getProjectById = async (
     }
 };
 
-export const getProjectResearchers = async ( projectId: string ) => {
+export const getProjectResearchers = async (projectId: string) => {
     try {
         const res: Response = await fetch(
             `${getBaseUrl()}/projects/${projectId}/researchers`
@@ -59,7 +60,6 @@ export const getProjectbyClube = async (
     }
 };
 
-
 export const getProjectStatistics = async (projectId: string) => {
     try {
         const res: Response = await fetch(
@@ -71,7 +71,7 @@ export const getProjectStatistics = async (projectId: string) => {
     } catch (e: unknown) {
         console.error(e);
     }
-}
+};
 
 export const createProject = async (data: ProjectCreate) => {
     try {
@@ -79,8 +79,8 @@ export const createProject = async (data: ProjectCreate) => {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         });
         if (!res) throw new Error(`Erro: ${res}`);
         const responseData = await res.json();

@@ -1,15 +1,24 @@
-import { Magazine, MagazineCreate, MagazineSearchParams } from "../domain/Magazine";
+import {
+    Magazine,
+    MagazineCreate,
+    MagazineSearchParams,
+} from "../domain/Magazine";
 import { getBaseUrl } from "../utils/api";
+import { buildSearchParameters } from "../utils/searchParamBuilder";
 
-
-export const getRevistas = async (params?: MagazineSearchParams): Promise<Required<Magazine>[]> => {
+export const getRevistas = async (
+    params?: MagazineSearchParams
+): Promise<Required<Magazine>[]> => {
     try {
-        const response = await fetch(`${getBaseUrl()}/magazine`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        const response = await fetch(
+            `${getBaseUrl()}/magazine/?${buildSearchParameters(params || {})}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
         if (!response.ok) {
             throw new Error("Failed to fetch revistas");
         }
@@ -42,12 +51,18 @@ export const createRevista = async (newRevista: MagazineCreate) => {
     }
 };
 
-export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {
+export const uploadMagazineImage = async (
+    magazineId: string,
+    formData: FormData
+) => {
     try {
-        const response = await fetch(`${getBaseUrl()}/magazine/${magazineId}/images`, {
-            method: "POST",
-            body: formData,
-        });
+        const response = await fetch(
+            `${getBaseUrl()}/magazine/${magazineId}/images`,
+            {
+                method: "POST",
+                body: formData,
+            }
+        );
         if (!response.ok) {
             throw new Error("Failed to upload magazine images");
         }

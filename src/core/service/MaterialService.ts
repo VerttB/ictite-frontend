@@ -1,19 +1,28 @@
-import { MaterialCreate, Material, MaterialSearchParams } from "../domain/Material";
+import {
+    MaterialCreate,
+    Material,
+    MaterialSearchParams,
+} from "../domain/Material";
 import { getBaseUrl } from "../utils/api";
+import { buildSearchParameters } from "../utils/searchParamBuilder";
 
-export const getMaterials = async (params?: MaterialSearchParams): Promise<Required<Material>[]> => {
+export const getMaterials = async (
+    params?: MaterialSearchParams
+): Promise<Required<Material>[]> => {
     try {
-        const response = await fetch(`${getBaseUrl()}/material`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        const response = await fetch(
+            `${getBaseUrl()}/material/?${buildSearchParameters(params || {})}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
         if (!response.ok) {
             throw new Error("Failed to fetch materials");
         }
 
-        
         const data = await response.json();
         return data || [];
     } catch (error) {
@@ -42,12 +51,18 @@ export const createMaterial = async (newMaterial: MaterialCreate) => {
     }
 };
 
-export const uploadMaterialImages = async (materialId: string, images: FormData) => {
+export const uploadMaterialImages = async (
+    materialId: string,
+    images: FormData
+) => {
     try {
-        const response = await fetch(`${getBaseUrl()}/material/${materialId}/images`, {
-            method: "POST",
-            body: images,
-        });
+        const response = await fetch(
+            `${getBaseUrl()}/material/${materialId}/images`,
+            {
+                method: "POST",
+                body: images,
+            }
+        );
         if (!response.ok) {
             throw new Error("Failed to upload material images");
         }
