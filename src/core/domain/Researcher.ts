@@ -1,9 +1,10 @@
 import { RaceTypes } from "@/core/constants/race";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { SexTypes } from "@/core/constants/sex";
-import { SearchParamParser } from "@/schemas/Common";
+import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
 import z from "zod";
 import { ProjectSchema } from "./Project";
+import { ImageSchema } from "./Image";
 
 export const ResearcherSchema = z.object({
     id: z.uuid(),
@@ -39,7 +40,7 @@ export const ResearcherByTypeSchema = z.object({
     aluno: ResearcherSchema.array(),
     professor: ResearcherSchema.array(),
     coordenador: ResearcherSchema.array(),
-})
+});
 
 const ResearcherSimccSchema = z.object({
     id: z.uuid(),
@@ -50,24 +51,31 @@ const ResearcherSimccSchema = z.object({
     abstract: z.string().min(1, "O resumo não deve estar vazio"),
     orcid: z.string().min(1, "O ORCID não deve estar vazio"),
     graduation: z.string().min(1, "A graduação não deve estar vazia"),
-})
+});
 const ResearcherArticleSchema = z.object({
     id: z.uuid(),
     title: z.string().min(1, "O título não deve estar vazio"),
     year: z.number().int().nonnegative(),
     abstract: z.string().min(1, "O resumo não deve estar vazio"),
-})
+});
 
 export const ResearcherFinalSchema = ResearcherSchema.extend({
     simcc: ResearcherSimccSchema,
     articles: ResearcherArticleSchema.array(),
-    projects: z.record(z.string(), ProjectSchema.pick({ id: true, name: true, description: true }).array()),
+    projects: z.record(
+        z.string(),
+        SimpleIdNameSchema.array().and(
+            z.object({ images: ImageSchema.array().optional() })
+        )
+    ),
 });
 
 export type Researcher = z.infer<typeof ResearcherSchema>;
 export type ResearcherCreate = z.infer<typeof ResearcherCreateSchema>;
 export type ResearcherUpdate = z.infer<typeof ResearcherUpdateSchema>;
-export type ResearcherSearchParams = z.infer<typeof ResearcherSearchParamsSchema>;
+export type ResearcherSearchParams = z.infer<
+    typeof ResearcherSearchParamsSchema
+>;
 export type ResearcherByType = z.infer<typeof ResearcherByTypeSchema>;
 export type ResearcherFinal = z.infer<typeof ResearcherFinalSchema>;
-export type ResearcherArticles= z.infer<typeof ResearcherArticleSchema>;
+export type ResearcherArticles = z.infer<typeof ResearcherArticleSchema>;
