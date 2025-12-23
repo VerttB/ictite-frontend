@@ -88,20 +88,20 @@ export default async function Page({
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-6  lg:grid-cols-[70%_30%]xl:grid-cols-[75%_25%]w-full">
+            <div className="grid grid-cols-1 gap-6  lg:grid-cols-[70%_30%] xl:grid-cols-[75%_25%] w-full">
                     {/* TABS DA ESCOLA */}
-                    <div className="w-full">
-                        <EscolaTabs school={school} />
-                    </div>
-
-                    {/* INFOBAR */}
-                    <div className="w-full">
-                        <InfoBar 
-                        data={stats} 
-                        position={typeof window !== "undefined" && window.innerWidth < 768 ? "horizontal" : "vertical"} 
-                        />
-                    </div>
+                <div className="w-full order-2 lg:order-1">
+                    <EscolaTabs school={school} />
                 </div>
+
+                {/* INFOBAR */}
+                <div className="w-full order-1 lg:order-2">
+                    <InfoBar 
+                    data={stats} 
+                    position={typeof window !== "undefined" && window.innerWidth < 768 ? "horizontal" : "vertical"} 
+                    />
+                </div>
+            </div>
         </div>
     );
 }
