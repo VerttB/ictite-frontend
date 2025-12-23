@@ -7,6 +7,8 @@ export const ProjectSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "Nome obrigatório"),
     description: z.string().min(1, "Descrição obrigatória"),
+    description_long: z.string().min(1, "Descrição longa é obrigatória"),
+    year: z.number().int().nonnegative(),
     clube: SimpleIdNameSchema,
     images: ImageSchema.array()
 });
