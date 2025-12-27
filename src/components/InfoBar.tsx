@@ -1,22 +1,46 @@
-import { LucideIcon } from "lucide-react"
+import { LucideIcon } from "lucide-react";
 
-interface InfoBarProps{
-    titulo : string,
-    valor  : number,
-    Icon   : LucideIcon 
+interface InfoBarItem {
+  titulo: string;
+  valor: number;
+  Icon: LucideIcon;
 }
 
-export default function InfoBar(props: { data: InfoBarProps[] }){
-    return(
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-foreground rounded-md shadow-sm border  ">
+interface InfoBarProps {
+  data: InfoBarItem[];
+  position?: "horizontal" | "vertical"; // novo atributo
+}
 
-            {props.data.map(({titulo, valor, Icon}) => (
-               <div key={titulo} className="flex flex-col items-center text-center p-3 rounded-md bg-primary transition-all duration-300 hover:scale-95 border text-white">
-                <Icon />
-                <span className="font-light text-lg sm:text-xl">{titulo}</span>
-                <span className="font-extrabold text-3xl sm:text-4xl">{valor}</span>
-               </div>
+export default function InfoBar({ data, position = "horizontal" }: InfoBarProps) {
+    const isVertical = position === "vertical";
+        
+    if (!data || data.length === 0 ||  !Array.isArray(data)) {
+        return null;
+    }
+
+    return (
+        <div
+            className={`bg-foreground rounded-md border p-4 shadow-sm transition-all duration-300 
+            ${isVertical ? "flex flex-col gap-3" : "grid grid-cols-1 gap-4 md:grid-cols-4"}`}
+        >
+            {data.map(({ titulo, valor, Icon }) => (
+                <div
+                    key={titulo}
+                    className={`bg-primary text-white rounded-md border p-3 transition-all duration-300 hover:scale-95
+                        ${isVertical ? "flex flex-row items-center justify-between  gap-3" : "flex flex-col items-center text-center"}`}>
+                    <div
+                        className={`flex items-center justify-center 
+                        ${isVertical ? "w-10 h-10 rounded-full bg-primary/20" : ""}`}>
+                        <Icon />
+                    </div>
+
+                    <div
+                        className={`flex flex-col ${isVertical ? "items-end" : "items-center"}`}>
+                        <span className="text-lg font-light sm:text-xl">{titulo}</span>
+                        <span className="text-3xl font-extrabold sm:text-4xl">{valor}</span>
+                    </div>
+                </div>
             ))}
         </div>
-    )
+    );
 }

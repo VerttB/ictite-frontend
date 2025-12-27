@@ -1,15 +1,25 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Calendar, ChevronLeft, PlayCircleIcon, PlaySquare } from "lucide-react";
+import {
+    Calendar,
+    ChevronLeft,
+    PlayCircleIcon,
+    PlaySquare,
+} from "lucide-react";
 import Link from "next/link";
 
-export default function Videos () {
-
+export default function Videos() {
     const videosMock = [
         {
             id: "1",
             title: "Como criar sua conta Lattes",
-            description: "Passo a passo completo para registro na plataforma Lattes...",
+            description:
+                "Passo a passo completo para registro na plataforma Lattes...",
             url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
             duration: "8:15",
             date: "15/10/2024",
@@ -18,7 +28,8 @@ export default function Videos () {
         {
             id: "2",
             title: "Como logar com o ORCCID",
-            description: "Passo a passo completo para logar com ORCCID no portal ICTITE...",
+            description:
+                "Passo a passo completo para logar com ORCCID no portal ICTITE...",
             url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
             duration: "8:15",
             date: "15/10/2024",
@@ -27,19 +38,19 @@ export default function Videos () {
         {
             id: "3",
             title: "Como Visualizar os projetos das escolas",
-            description: "Passo a passo completo para visualizar os projetos científicos das escolas...",
+            description:
+                "Passo a passo completo para visualizar os projetos científicos das escolas...",
             url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
             duration: "8:15",
             date: "15/10/2024",
             category: "Tutoriais",
         },
-        
-    ]
+    ];
 
-    return(
-        <div className="w-full  sm:px-8 py-4 flex flex-col gap-8">
+    return (
+        <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| SUPERIOR DOS VÍDEOS |=======| */}
-            <div className="flex flex-row gap-4 items-center">
+            <div className="flex flex-row items-center gap-4">
                 <Link href={"/"}>
                     <Button size={"icon"} variant={"outline"}>
                         <ChevronLeft size={20} />
@@ -49,51 +60,62 @@ export default function Videos () {
             </div>
 
             {/* |=======| DESCRIÇÃO DA PÁGINA |=======| */}
-            <div className=" flex flex-col gap-3 bg-primary text-white
-                     p-4 mx-4 mt-4 rounded-md shadow-sm border border-blue-100
-            ">
+            <div className="bg-primary mx-4 mt-4 flex flex-col gap-3 rounded-md border border-blue-100 p-4 text-white shadow-sm">
                 <div className="flex flex-col gap-0">
-                    <h2 className="text-xl font-semibold flex gap-1 items-center">
-                        <PlaySquare size={18}/>
+                    <h2 className="flex items-center gap-1 text-xl font-semibold">
+                        <PlaySquare size={18} />
                         Vídeos Tutorias e Explicativos
                     </h2>
-                    <p className="text-xs text-gray-300">Versão beta β 1.0 do site ICTITE</p>
+                    <p className="text-xs text-gray-300">
+                        Versão beta β 1.0 do site ICTITE
+                    </p>
                 </div>
-                <p className="text-sm sm:text-base">Bem-vindo à nossa aba de vídeos! Nesta seção, você encontrará um acervo dinâmico de conteúdos 
-                    audiovisuais produzidos para apoiar sua jornada no mundo da pesquisa e inovação educacional.
-                    Aqui você acessa tutoriais, registros de eventos científicos, depoimentos e materiais</p>
+                <p className="text-sm sm:text-base">
+                    Bem-vindo à nossa aba de vídeos! Nesta seção, você
+                    encontrará um acervo dinâmico de conteúdos audiovisuais
+                    produzidos para apoiar sua jornada no mundo da pesquisa e
+                    inovação educacional. Aqui você acessa tutoriais, registros
+                    de eventos científicos, depoimentos e materiais
+                </p>
             </div>
 
             {/* |=======| VÍDEOS |=======|*/}
-            <div className="mx-2 sm:mx-28 flex flex-col gap-2">
+            <div className="mx-2 flex flex-col gap-2 sm:mx-28">
                 <Accordion type="multiple">
                     {videosMock.map((video) => (
                         <AccordionItem key={video.id} value={video.id}>
-                            <AccordionTrigger className="hover:bg-gray-50 p-4 rounded-lg">
-                                <div className="flex gap-5 items-center">
-                                    <PlayCircleIcon size={24}  />
-                                    <span className="text-left font-medium">{video.title}</span>
+                            <AccordionTrigger className="rounded-lg p-4 hover:bg-gray-50">
+                                <div className="flex items-center gap-5">
+                                    <PlayCircleIcon size={24} />
+                                    <span className="text-left font-medium">
+                                        {video.title}
+                                    </span>
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div
-                                    className="flex flex-col xl:flex-row gap-6 p-4 bg-gray-50 rounded-md">
+                                <div className="flex flex-col gap-6 rounded-md bg-gray-50 p-4 xl:flex-row">
                                     {/* IFRAME DO VÍDEO */}
                                     <div className="xl:w-1/2">
                                         <iframe
                                             src={video.url}
-                                            className="w-full aspect-video rounded-md shadow"
+                                            className="aspect-video w-full rounded-md shadow"
                                             allowFullScreen
                                         />
                                     </div>
                                     {/* INFORMAÇÃO DO VÍDEO */}
                                     <div className="xl:w-1/2">
                                         <div className="w-full">
-                                            <h3 className="font-semibold text-xl mb-2">{video.title}</h3>
-                                            <p className="text-gray-600 mb-3">{video.description}</p>
-                                            <p className="text-gray-600 mb-3">{video.category}</p>
+                                            <h3 className="mb-2 text-xl font-semibold">
+                                                {video.title}
+                                            </h3>
+                                            <p className="mb-3 text-gray-600">
+                                                {video.description}
+                                            </p>
+                                            <p className="mb-3 text-gray-600">
+                                                {video.category}
+                                            </p>
                                             <div className="flex items-center text-sm text-gray-500">
-                                                <Calendar className="w-4 h-4 mr-1" />
+                                                <Calendar className="mr-1 h-4 w-4" />
                                                 {video.date} | {video.duration}
                                             </div>
                                         </div>
@@ -104,7 +126,6 @@ export default function Videos () {
                     ))}
                 </Accordion>
             </div>
-
         </div>
     );
 }

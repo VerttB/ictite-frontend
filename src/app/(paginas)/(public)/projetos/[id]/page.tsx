@@ -1,86 +1,148 @@
-import React from 'react'
+import React from "react";
 import { PesquisadoresLista } from "@/components/pesquisador/PesquisadoresLista";
-import { getProjectById } from "@/core/service/ProjetoService";
-import { Book, ChevronLeft, GraduationCap, Handshake, School } from "lucide-react";
+import {
+    getProjectById,
+    getProjectStatistics,
+} from "@/core/service/ProjetoService";
+import {
+    Book,
+    BrainCircuit,
+    Calendar,
+    ChevronLeft,
+    GraduationCap,
+    Handshake,
+    School,
+} from "lucide-react";
 import Image from "next/image";
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ProjectStatistic } from "@/core/domain/Project";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export default async function Page({
-  params,
+    params,
 }: {
-  params: Promise<{ id: string }>;
-
+    params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const project = await getProjectById(id);
-  if (!project) return <div className="px-10 py-6">Projeto não encontrado</div>
+    const { id } = await params;
+    const project = await getProjectById(id);
 
-  return(
-    <div className="w-full shadow p-8">
-      {/* |=======| MENU SUPERIOR DE PROJETO |=======| */}
-      <div className="flex flex-col gap-3 border-b pb-3">
-          <div className="flex flex-row gap-4 items-center">
-            <Link href={"/"}>
-                <Button size={"icon"} variant={"outline"}>
-                    <ChevronLeft size={20} />
-                </Button>
-            </Link>
-            <div className="text-4xl font-semibold">{project.name}</div>
-          </div>
-          <div>
-            <div className="">{project.description}</div>
-            <div className="flex flex-row gap-0.5 items-center text-gray-500 mt-2">
-              <School size={16} />
-              <span className="text-sm">{project.school}</span>
+    const projectStatistics: ProjectStatistic = await getProjectStatistics(id);
+
+    console.log(projectStatistics);
+
+    if (!project)
+        return <div className="px-10 py-6">Projeto não encontrado</div>;
+
+    return (
+        <div className="w-full p-8">
+            {/* |=======| MENU SUPERIOR DE PROJETO |=======| */}
+            <div className="flex flex-col gap-3 border-b pb-3">
+                <div className="flex flex-row items-center gap-4">
+                    <Link href={"/"}>
+                        <Button size={"icon"} variant={"outline"}>
+                            <ChevronLeft size={20} />
+                        </Button>
+                    </Link>
+                    <div className="text-4xl font-semibold">{project.name}</div>
+                </div>
+                <div>
+                    <div className="">{project.description}</div>
+                    <div className="flex gap-4">
+                        <Link href={`/clubes/${project.clube.id}`}>
+                            <div className="hover:text-primary mt-2 flex cursor-pointer flex-row items-center gap-2 text-gray-500 transition-all hover:underline">
+                                <BrainCircuit size={16} />
+                                <span className="text-sm">
+                                    {project.clube.name}
+                                </span>
+                            </div>
+                        </Link>
+                        <div className="mt-2 flex flex-row items-center gap-2 text-gray-500">
+                            <Calendar size={16} />
+                            <span className="text-sm">{project.year}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-      </div>
 
-      {/* |=======| IMAGENS DO PROJETO |=======| */}
-      <div className="pl-5 pt-2 overflow-y-auto">
-        <div className="flex flex-row gap-5 py-7 border-b">
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
-          <Image src={"https://picsum.photos/100/100"} alt={"Projeto"} width={164} height={164}></Image>
+            {/* |=======| IMAGENS DO PROJETO |=======| */}
+            <div className="overflow-y-auto pt-2">
+                {project.images?.length ? (
+                    <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden border-b py-7 md:items-start md:justify-start">
+                        {project.images?.map((image, i) => (
+                            <Popover key={i}>
+                                <PopoverTrigger>
+                                    <div
+                                        className="relative h-[200px] w-[200px] overflow-hidden cursor-pointer ">
+                                        <Image
+                                            src={image.url}
+                                            alt={"Projeto"}
+                                            fill
+                                            className="object-cover object-center"
+                                        />
+                                    </div>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <Image
+                                        src={image.url}
+                                        alt={"Projeto"}
+                                        width={1000}
+                                        height={1000}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="border-b pt-5 pb-7">
+                        <p>Nenhuma imagem de projeto cadastrada</p>
+                    </div>
+                )}
+            </div>
+
+            {/* |=======| FUTURA DESCRIÇÃO LONGA + ESTATÍSTICAS |=======| */}
+            <div className="mt-4 mb-8 flex flex-col gap-5 lg:flex-row">
+                {/* DESCRIÇÃO LONGA */}
+                <div className="bg-foreground flex flex-3/4 flex-col gap-1 rounded-md border p-3">
+                    <h2 className="border-b pb-2 text-xl font-semibold">
+                        Descrição Longa do Projeto
+                    </h2>
+                    <p className="text-justify">
+                        {project.description_long || "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic? Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic? Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic?"}
+                    </p>
+                </div>
+
+                {/* ESTATÍSTICAS */}
+                <div className="bg-foreground flex-1/4 rounded-md border p-3">
+                    <h2 className="border-b pb-2 text-xl font-semibold">
+                        Estatísticas
+                    </h2>
+                    <div className="mt-2 flex flex-col gap-4 md:flex-row lg:flex-col">
+                        <div className="flex gap-2">
+                            <Book />
+                            <span>
+                                Professores:{" "}
+                                {projectStatistics.total_professores}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <GraduationCap />
+                            <span>
+                                Alunos: {projectStatistics.total_alunos}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <Handshake />
+                            <span>
+                                Coordenadores:{" "}
+                                {projectStatistics.total_coordenadores}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <PesquisadoresLista projectId={project.id} />
         </div>
-      </div>
-
-      {/* |=======| FUTURA DESCRIÇÃO LONGA + ESTATÍSTICAS |=======| */}
-      <div className="flex flex-col lg:flex-row gap-5 mt-4">
-
-        {/* DESCRIÇÃO LONGA */}
-        <div className="flex flex-col flex-3/4 gap-1 p-3 bg-foreground rounded-md  border">
-          <h2 className="text-xl font-semibold border-b pb-2">Descrição Longa do Projeto</h2>
-          <p className='text-justify'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic?
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic?
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic?
-          </p>
-        </div>
-
-        {/* ESTATÍSTICAS */}
-        <div className="flex-1/4 p-3 bg-foreground rounded-md border">
-          <h2 className="text-xl font-semibold border-b pb-2">Estatísticas</h2>
-          <div className="flex flex-col md:flex-row gap-4 lg:flex-col mt-2">
-            <div className="flex gap-2 ">
-              <Book />
-              <span>Professores: XX</span>
-            </div>
-            <div className="flex gap-2">
-              <GraduationCap />
-              <span>Alunos: XX</span>
-            </div>
-            <div className="flex gap-2">
-              <Handshake />
-              <span>Facilitadores: XX</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <PesquisadoresLista projectId={project.id}/>
-    </div>
-  )
+    );
 }

@@ -1,29 +1,58 @@
-
 import ClubeProjetoPesquisador from "@/components/clubeCiencia/ClubeProjetoPesquisador";
 import InfoBar from "@/components/InfoBar";
-import CardProjeto from "@/components/projeto/ProjetoCard";
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
-import { OneClubeCienciaStatstics } from "@/core/interface/Clube/OneClubeCienciaStatstics";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { Project } from "@/core/interface/Project";
-import { getClubeCienciaById, getClubeCienciaStats } from "@/core/service/ClubeCienciaService";
-import { getResearchersByClube } from "@/core/service/PesquisadorService";
-import { getProjectbyClube } from "@/core/service/ProjetoService";
-import { get } from "http";
-import { BookA, BookOpenText, Goal, HeartHandshake, Instagram, LucideIcon, PanelsTopLeft, School } from "lucide-react";
+import { ResearcherByType } from "@/core/domain/Researcher";
+import { Project } from "@/core/domain/Project";
+import {
+    ScienceClubStatisticsAll,
+    ScienceClubStatistics,
+    ScienceClub,
+} from "@/core/domain/Club";
+
+import {
+    getClubeCienciaById,
+    getClubeCienciaProjects,
+    getClubeCienciaResearchers,
+    getClubeCienciaStats,
+} from "@/core/service/ClubeCienciaService";
+
+import {
+    BookA,
+    BookOpenText,
+    HeartHandshake,
+    Instagram,
+    LucideIcon,
+    PanelsTopLeft,
+    School,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-export default async function OneClubeCiencia ( { params }: { params: Promise<{ id: string }> } ) {
-
+export default async function OneClubeCiencia({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}) {
     const { id } = await params;
 
-    const clubeCiencia : ClubeCiencia = await getClubeCienciaById(id);
+    const clubeCiencia: ScienceClub = await getClubeCienciaById(id);
+    const projects: Project[] = (await getClubeCienciaProjects(id)) ?? [];
+    const researchers: ResearcherByType = (await getClubeCienciaResearchers(
+        id
+    )) ?? {
+        Professor: [],
+        Aluno: [],
+        Coordenador: [],
+    };
 
-    const researchers : Researcher[] = (await getResearchersByClube(clubeCiencia.id)) ?? [];
+    console.log(clubeCiencia);
+    /*const researchers: Researcher[] =
+        (await getResearchersByClube(clubeCiencia.id)) ?? [];
 
-    const projects : Project[] = await (getProjectbyClube(clubeCiencia.id)) ?? [];
+    const projects: Project[] =
+        (await getProjectbyClube(clubeCiencia.id)) ?? [];*/
 
-    const statistics : OneClubeCienciaStatstics = await getClubeCienciaStats(id);
+    const statistics: ScienceClubStatistics = await getClubeCienciaStats(id);
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
@@ -39,37 +68,44 @@ export default async function OneClubeCiencia ( { params }: { params: Promise<{ 
             Icon: BookOpenText,
         },
         {
-            titulo: "Facilitadores",
-            valor: statistics.total_facilitadores,
+            titulo: "Coordenadores",
+            valor: statistics.total_coordenadores,
             Icon: HeartHandshake,
         },
         {
             titulo: "Projetos",
             valor: statistics.total_projetos,
             Icon: PanelsTopLeft,
-        }
+        },
     ];
 
-    
-
-    return(
+    return (
         <div className="flex flex-col gap-8 p-8">
-
             {/* |=======| CABEÇALHO DO CLUBE DE CIÊNCIA |=======| */}
-            <div className="flex gap-5 items-center">
-                <div className="rounded-full border">
-                    <Image src={"https://picsum.photos/100/100"} alt={"Logo Clube de Ciência"} width={100} height={100}
-                    className="object-cover rounded-full"></Image>
+            <div className="flex flex-col items-center gap-5 md:flex-row">
+                <div className="border-primary relative h-[100px] w-[100px] overflow-hidden rounded-full border-2 shadow-md">
+                    <Image
+                        src={
+                            clubeCiencia.images?.[0]?.url ??
+                            "https://picsum.photos/100/100"
+                        }
+                        alt={"Logo Clube de Ciência"}
+                        fill
+                        className="object-cover"></Image>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-4xl font-semibold">{clubeCiencia.title}</h1>
-                    <div className="flex gap-2">
-                        <div className="flex gap-2 items-center text-primary pr-5 border-r">
-                            <School size={20}/>
-                            <p>{clubeCiencia.school}</p>
+                    <h1 className="text-center text-4xl font-semibold md:text-start">
+                        {clubeCiencia.name}
+                    </h1>
+                    <div className="flex flex-col gap-2 md:flex-row">
+                        <div className="text-primary flex items-center gap-2 pr-5 hover:cursor-pointer hover:underline md:border-r">
+                            <School size={20} />
+                            <Link href={`/escolas/${clubeCiencia.school.id}`}>
+                                {clubeCiencia.school.name}
+                            </Link>
                         </div>
-                        <div className="flex gap-2 items-center text-primary pl-5">
-                            <Instagram size={20}/>
+                        <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:pl-5">
+                            <Instagram size={20} />
                             <p>@instagram_clube</p>
                         </div>
                     </div>
@@ -77,31 +113,50 @@ export default async function OneClubeCiencia ( { params }: { params: Promise<{ 
             </div>
 
             {/* |=======| IMAGENS DO CLUBE DE CIÊNCIA |=======| */}
-            <div className="flex">
-                <div className="flex flex-wrap gap-3 overflow-x-hidden">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                        <Image key={index} src={"https://picsum.photos/200/200"} alt="Clube de Ciência" width={200} height={200}></Image>
+            <div className="flex border-t pt-4">
+                <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
+                    {clubeCiencia.images?.map((image, index) => (
+                        <Popover key={index}>
+                            <PopoverTrigger>
+                                <div
+                                    className="relative h-[200px] w-[200px] overflow-hidden cursor-pointer">
+                                    <Image
+                                        src={image.url}
+                                        alt="Clube de Ciência"
+                                        fill
+                                        className="object-cover object-center"></Image>
+                                </div>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                                <Image src={image.url} alt="Clube de Ciência" height={1000} width={1000}></Image>
+                            </PopoverContent>
+                        </Popover>
                     ))}
                 </div>
             </div>
 
             {/* |=======| DESCRICAO DO CLUBE DE CIÊNCIA |=======| */}
-            <div className="flex flex-col gap-2 bg-foreground rounded-md border p-3">
-                <p className="text-xl font-semibold pb-2 border-b">Descrição:</p>
-                <p className="">{clubeCiencia.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Et nisi tempore, error quidem debitis neque expedita aut dolores quae saepe accusantium quod cum, aperiam nobis sed magni nesciunt? Delectus, pariatur.</p>
+            <div className="bg-foreground flex flex-col gap-2 rounded-md border p-3">
+                <p className="border-b pb-2 text-xl font-semibold">
+                    Descrição:
+                </p>
+                <p className="">{clubeCiencia.description}</p>
             </div>
 
             {/* |=======| ESTATÍSTICAS DO CLUBE DE CIÊNCIA |=======| */}
             <div>
-                <InfoBar  data={stats}/>
+                <InfoBar data={stats} />
             </div>
 
             {/* |=======| PROJETOS  E PESQUISADORES DO CLUBE DE CIÊNCIA |=======| */}
             <div>
-                <ClubeProjetoPesquisador projects={projects} pesquisador={researchers} />
+                {
+                    <ClubeProjetoPesquisador
+                        projects={projects}
+                        pesquisador={researchers}
+                    />
+                }
             </div>
-
-            
         </div>
-    )
+    );
 }

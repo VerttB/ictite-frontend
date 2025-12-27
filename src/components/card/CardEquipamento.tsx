@@ -1,12 +1,30 @@
-import { Equipment } from "@/core/interface/Equipment";
+import { Equipment } from "@/core/domain/Equipment";
+import Image from "next/image";
 
-export default function CardEquipamento ({equipment}:{equipment: Equipment}) {
-    return(
-        <div className="p-5 flex flex-col gap-4 border justify-center
-            border-l-lime-500 border-l-8  h-fit rounded-md bg-background
-            ">
-            <h2 className="text-2xl font-semibold text-font-primary">{equipment.name}</h2>
-            <p className="text-sm text-font-secondary text-justify max-h-28 overflow-y-auto">{equipment.type}</p>
+export default function CardEquipamento({
+    equipment,
+}: {
+    equipment: Equipment;
+}) {
+    console.log(equipment);
+    return (
+        <div className="bg-background flex h-fit justify-between overflow-hidden rounded-md border border-l-8 border-l-lime-500">
+            <div className="flex flex-1 flex-col justify-center gap-4 p-5">
+                <h2 className="text-font-primary text-2xl font-semibold">
+                    {equipment.name}
+                </h2>
+                <p className="text-font-secondary max-h-28 overflow-y-auto text-justify text-sm">
+                    {equipment.type_equipment.name}
+                </p>
+            </div>
+            <div className="relative w-[140px] flex-shrink-0">
+                <Image
+                    src={equipment.images[0].url}
+                    alt={equipment.name}
+                    fill
+                    className="rounded-r-md object-cover object-center"
+                />
+            </div>
         </div>
     );
 }
