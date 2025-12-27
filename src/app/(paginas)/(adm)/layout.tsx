@@ -15,7 +15,7 @@ export default function layout({
                 <Header></Header>
 
                 <main
-                    className="bg-background h-full w-full p-2"
+                    className="bg-background flex h-full w-full flex-col p-2"
                     style={{
                         boxShadow: "inset 0px 0px 5px rgba(0, 0, 0, .5)",
                         borderRadius: "10px 10px 10px 10px",
