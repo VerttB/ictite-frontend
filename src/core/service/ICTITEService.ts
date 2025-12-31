@@ -1,16 +1,10 @@
 import { Ictite } from "../interface/IIctite";
-import { getBaseUrl } from "../utils/api";
+import { apiClient } from "@/lib/api/client";
 
 export const GETictite = async (): Promise<Ictite> => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/ictite/`);
-        if (!res) throw new Error(`Erro: ${res}`);
-
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
-
+    const data = await apiClient.get<Ictite>("/ictite/");
+    if (!data) {
         throw new Error("Erro ao buscar ictite");
     }
+    return data;
 };

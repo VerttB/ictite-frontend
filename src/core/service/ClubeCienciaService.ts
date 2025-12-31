@@ -1,127 +1,53 @@
-import {
-    ScienceClub,
-    ScienceClubCreate,
-    ScienceClubSearchParams,
-} from "../domain/Club";
-import { getBaseUrl } from "../utils/api";
-import { buildSearchParameters } from "../utils/searchParamBuilder";
+import { ScienceClub, ScienceClubCreate, ScienceClubSearchParams } from "../domain/Club";
+import { apiClient } from "@/lib/api/client";
 
 // |=======| GET DE TODOS OS CLUBES DE CIÊNCIA |=======|
 export const getClubesCiencia = async (
     params?: ScienceClubSearchParams
 ): Promise<Required<ScienceClub>[]> => {
-    try {
-        const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/?${buildSearchParameters(params || {})}`
-        );
-        if (!res) throw new Error(`Erro: ${res}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
-        return [];
-    }
+    const data = await apiClient.get<Required<ScienceClub>[]>("/clubes-ciencia/", {
+        params,
+    });
+    return data || [];
 };
 
 // |=======| GET DE UM CLUBE DE CIÊNCIA PELO ID |=======|
 export const getClubeCienciaById = async (id: string) => {
-    try {
-        const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/${id}`
-        );
-        if (!res) throw new Error(`Erro: ${res}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
+    const data = await apiClient.get(`/clubes-ciencia/${id}`);
+    if (!data) {
+        throw new Error("Clube de ciência não encontrado");
     }
+    return data;
 };
 
 // |=======| GET TODOS OS CLUBES DE CIÊNCIA DE UMA ESCOLA |=======|
 
 // |=======| GET TODOS OS PESQUISADORES DE UM CLUBE DE CIÊNCIAS |=======|
 export const getClubeCienciaResearchers = async (id: string) => {
-    try {
-        const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/${id}/researchers`
-        );
-        if (!res) throw new Error(`Erro: ${res}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
-    }
+    const data = await apiClient.get(`/clubes-ciencia/${id}/researchers`);
+    return data || [];
 };
 
 // |=======| GET TODOS OS PROJETOS DE UM CLUBE DE CIÊNCIAS |=======|
 export const getClubeCienciaProjects = async (id: string) => {
-    try {
-        const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/${id}/projects`
-        );
-        if (!res) throw new Error(`Erro: ${res}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
-    }
+    const data = await apiClient.get(`/clubes-ciencia/${id}/projects`);
+    return data || [];
 };
 
 // |=======| GET ESTATÍSTICAS DE UM CLUBE DE CIÊNCIAS |=======|
 export const getClubeCienciaStats = async (id: string) => {
-    try {
-        const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/${id}/statistics`
-        );
-        if (!res) throw new Error(`Erro: ${res}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
-    }
+    return await apiClient.get(`/clubes-ciencia/${id}/statistics`);
 };
 
 // |=======| GET ESTATÍSTICAS DE TODOS OS CLUBES DE CIÊNCIAS |=======|
 export const getClubesCienciaStats = async () => {
-    try {
-        const res: Response = await fetch(
-            `${getBaseUrl()}/clubes-ciencia/statistics`
-        );
-        if (!res) throw new Error(`Erro: ${res}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
-    }
+    return await apiClient.get("/clubes-ciencia/statistics");
 };
 
 export const createClubeCiencias = async (club: ScienceClubCreate) => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/clubes-ciencia`, {
-            method: "POST",
-            body: JSON.stringify(club),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!res.ok) throw new Error(`Erro: ${res.statusText}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.warn(e);
-    }
+    return await apiClient.post("/clubes-ciencia", club);
 };
 
 export const uploadClubImage = async (id: string, form: FormData) => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/clubes-ciencia/${id}/images`, {
-            method: "POST",
-            body: form,
-        });
-        if (!res.ok) throw new Error(`Erro: ${res.statusText}`);
-        const data = await res.json();
-        return data;
-    } catch (e: unknown) {
-        console.error(e);
-    }
+    return await apiClient.post(`/clubes-ciencia/${id}/images`, form);
 };

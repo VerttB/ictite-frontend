@@ -1,16 +1,7 @@
 import { EquipmentType } from "../domain/EquipmentType";
-import { getBaseUrl } from "../utils/api";
+import { apiClient } from "@/lib/api/client";
 
 export const getEquipamentTypes = async (): Promise<EquipmentType[]> => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/equipment-types`);
-        if (!res.ok) {
-            throw new Error("Failed to fetch equipment types");
-        }
-        const data = await res.json();
-        return data || [];
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    const data = await apiClient.get<EquipmentType[]>("/equipment-types");
+    return data || [];
 };
