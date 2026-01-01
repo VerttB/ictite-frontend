@@ -5,6 +5,7 @@ import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
 import z from "zod";
 import { ProjectSchema } from "./Project";
 import { ImageSchema } from "./Image";
+import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 
 export const ResearcherSchema = z.object({
     id: z.uuid(),
@@ -31,13 +32,14 @@ export const ResearcherUpdateSchema = ResearcherCreateSchema.extend({
     id: z.string().uuid(),
 });
 
-export const ResearcherSearchParamsSchema = z.object({
-    name: SearchParamParser.string,
-    gender: SearchParamParser.array,
-    type: SearchParamParser.array,
-    race: SearchParamParser.array,
-    page: SearchParamParser.page,
-});
+export const ResearcherSearchParamsSchema = z
+    .object({
+        name: SearchParamParser.string,
+        gender: SearchParamParser.array,
+        type: SearchParamParser.array,
+        race: SearchParamParser.array,
+    })
+    .and(PaginationSearchParamsSchema);
 
 export const ResearcherByTypeSchema = z.object({
     aluno: ResearcherSchema.array(),
@@ -76,9 +78,7 @@ export const ResearcherFinalSchema = ResearcherSchema.extend({
 export type Researcher = z.infer<typeof ResearcherSchema>;
 export type ResearcherCreate = z.infer<typeof ResearcherCreateSchema>;
 export type ResearcherUpdate = z.infer<typeof ResearcherUpdateSchema>;
-export type ResearcherSearchParams = z.infer<
-    typeof ResearcherSearchParamsSchema
->;
+export type ResearcherSearchParams = z.infer<typeof ResearcherSearchParamsSchema>;
 export type ResearcherByType = z.infer<typeof ResearcherByTypeSchema>;
 export type ResearcherFinal = z.infer<typeof ResearcherFinalSchema>;
 export type ResearcherArticles = z.infer<typeof ResearcherArticleSchema>;

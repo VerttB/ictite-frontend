@@ -1,6 +1,7 @@
 import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
 import z from "zod";
 import { ImageCreateSchema, ImageSchema } from "./Image";
+import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 
 export const ScienceClubSchema = z.object({
     id: z.uuid(),
@@ -9,7 +10,6 @@ export const ScienceClubSchema = z.object({
     school: SimpleIdNameSchema,
     images: ImageSchema.array(),
 });
-
 
 export const ScienceClubCreateSchema = ScienceClubSchema.omit({
     id: true,
@@ -22,10 +22,12 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
     })
 );
 
-export const ScienceClubSearchParamsSchema = z.object({
-    name: SearchParamParser.string,
-    school: SearchParamParser.string,
-});
+export const ScienceClubSearchParamsSchema = z
+    .object({
+        name: SearchParamParser.string,
+        school: SearchParamParser.string,
+    })
+    .and(PaginationSearchParamsSchema);
 
 export const ScienceClubStatisticsAllSchema = z.object({
     total_clubes: z.number(),
@@ -41,7 +43,6 @@ export const ScienceClubStatisticsSchema = z.object({
     total_coordenadores: z.number(),
     total_projetos: z.number(),
 });
-
 
 export type ScienceClub = z.infer<typeof ScienceClubSchema>;
 export type ScienceClubCreate = z.infer<typeof ScienceClubCreateSchema>;

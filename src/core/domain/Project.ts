@@ -1,7 +1,8 @@
-import {z} from "zod";
+import { z } from "zod";
 import { SimpleIdNameSchema, SearchParamParser } from "../../schemas/Common";
 import { ImageSchema, ImageCreateSchema } from "./Image";
 import { ResearcherSchema } from "./Researcher";
+import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 
 export const ProjectSchema = z.object({
     id: z.uuid(),
@@ -10,26 +11,31 @@ export const ProjectSchema = z.object({
     description_long: z.string().min(1, "Descrição longa é obrigatória"),
     year: z.number().int().nonnegative(),
     clube: SimpleIdNameSchema,
-    images: ImageSchema.array()
+    images: ImageSchema.array(),
 });
 
-
-export const ProjectCreateSchema = ProjectSchema.omit({ id: true, clube: true, images: true }).and(
+export const ProjectCreateSchema = ProjectSchema.omit({
+    id: true,
+    clube: true,
+    images: true,
+}).and(
     z.object({
         clube_ciencia_id: z.uuid(),
-        images:  z.any().pipe(ImageCreateSchema).optional(),
+        images: z.any().pipe(ImageCreateSchema).optional(),
     })
 );
 
-export const ProjectSearchParamsSchema = z.object({
-    name: SearchParamParser.string,
-    clube: SearchParamParser.string,
-});
+export const ProjectSearchParamsSchema = z
+    .object({
+        name: SearchParamParser.string,
+        clube: SearchParamParser.string,
+    })
+    .and(PaginationSearchParamsSchema);
 
 export const ProjectResearchersSchema = z.object({
-   professores: ResearcherSchema.array(),
-   alunos: ResearcherSchema.array(),
-   facilitadores: ResearcherSchema.array(),
+    professores: ResearcherSchema.array(),
+    alunos: ResearcherSchema.array(),
+    facilitadores: ResearcherSchema.array(),
 });
 
 export const ProjectStatisticSchema = z.object({
