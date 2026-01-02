@@ -7,6 +7,8 @@ export const buildSearchParameters = (filters: Record<string, any>): string => {
             } else {
                 params.append(key, value);
             }
+        } else {
+            params.delete(key);
         }
     });
 
