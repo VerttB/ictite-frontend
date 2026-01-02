@@ -1,9 +1,17 @@
-import { Project, ProjectCreate, ProjectSearchParams } from "../domain/Project";
+import { Pagination } from "@/schemas/Pagination";
+import {
+    Project,
+    ProjectCreate,
+    ProjectSearchParams,
+    ProjectStatistic,
+} from "../domain/Project";
 import { apiClient } from "@/lib/api/client";
 
-export const getProjects = async (params?: ProjectSearchParams) => {
-    const data = await apiClient.get("/projects/", { params });
-    return data || [];
+export const getProjects = async (
+    params?: ProjectSearchParams
+): Promise<Pagination<Project>> => {
+    const data = await apiClient.get<Pagination<Project>>("/projects/", { params });
+    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
 export const getProjectById = async (projectId: string): Promise<Project> => {
@@ -24,12 +32,22 @@ export const getProjectbyClube = async (clubeId: string): Promise<Project[]> => 
     return data || [];
 };
 
-export const getProjectStatistics = async (projectId: string) => {
-    return await apiClient.get(`/projects/${projectId}/statistic`);
+export const getProjectStatistics = async (
+    projectId: string
+): Promise<ProjectStatistic> => {
+    const data = await apiClient.get<ProjectStatistic>(
+        `/projects/${projectId}/statistics`
+    );
+    if (!data) throw new Error("Estatísticas do projeto não encontradas");
+    return data;
 };
 
-export const createProject = async (data: ProjectCreate) => {
-    return await apiClient.post("/projects/", data);
+export const createProject = async (newProject: ProjectCreate): Promise<Project> => {
+    const data = await apiClient.post<Project>("/projects/", newProject);
+    if (!data) {
+        throw new Error("Erro ao criar projeto");
+    }
+    return data;
 };
 
 export const uploadProjectImages = async (projectId: string, formData: FormData) => {

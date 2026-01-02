@@ -6,10 +6,13 @@ import {
     ResearcherSearchParams,
 } from "@/core/domain/Researcher";
 import { apiClient } from "@/lib/api/client";
+import { Pagination } from "@/schemas/Pagination";
 
-export const getResearchers = async (params?: ResearcherSearchParams) => {
-    const data = await apiClient.get("/researchers/", { params });
-    return data || [];
+export const getResearchers = async (
+    params?: ResearcherSearchParams
+): Promise<Pagination<Researcher>> => {
+    const data = await apiClient.get<Pagination<Researcher>>("/researchers/", { params });
+    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
 export async function getResearcherById(researcherId: string, full: boolean = false) {

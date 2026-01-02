@@ -1,8 +1,15 @@
 import { Equipment } from "@/core/domain/Equipment";
-import { School, SchoolCreate, SchoolSearchParams } from "../domain/School";
+import {
+    School,
+    SchoolCreate,
+    SchoolSearchParams,
+    SchoolStatistics,
+} from "../domain/School";
 import { ScienceClub } from "../domain/Club";
 import { Pagination } from "@/schemas/Pagination";
 import { apiClient } from "@/lib/api/client";
+import { Project } from "../domain/Project";
+import { Researcher } from "../domain/Researcher";
 
 export const getSchoolGeoData = async () => {
     return await apiClient.get<any>("/schools/geojson");
@@ -19,7 +26,9 @@ export const getSchoolById = async (id: string): Promise<School> => {
 export const getSchools = async (
     params?: SchoolSearchParams
 ): Promise<Pagination<School>> => {
+    console.log(params);
     const data = await apiClient.get<Pagination<School>>("/schools", { params });
+
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
@@ -31,18 +40,26 @@ export const getSchoolClubs = async (school_id: string): Promise<ScienceClub[]> 
     return (await apiClient.get<ScienceClub[]>(`/schools/${school_id}/clubs`)) || [];
 };
 
-export const getSchoolProjects = async (school_id: string) => {
-    const data = await apiClient.get(`/schools/${school_id}/projects`);
+export const getSchoolProjects = async (school_id: string): Promise<Project[]> => {
+    const data = await apiClient.get<Project[]>(`/schools/${school_id}/projects`);
     return data || [];
 };
 
-export const getSchoolResearchers = async (school_id: string) => {
-    const data = await apiClient.get(`/schools/${school_id}/researchers`);
+export const getSchoolResearchers = async (school_id: string): Promise<Researcher[]> => {
+    const data = await apiClient.get<Researcher[]>(`/schools/${school_id}/researchers`);
     return data || [];
 };
 
-export const getSchoolStatistics = async (school_id: string) => {
-    return await apiClient.get(`/schools/${school_id}/statistics`);
+export const getSchoolStatistics = async (
+    school_id: string
+): Promise<SchoolStatistics> => {
+    const data = await apiClient.get<SchoolStatistics>(
+        `/schools/${school_id}/statistics`
+    );
+    if (!data) {
+        throw new Error("Estatísticas da escola não encontradas");
+    }
+    return data;
 };
 
 export const createSchool = async (school: SchoolCreate): Promise<School> => {
