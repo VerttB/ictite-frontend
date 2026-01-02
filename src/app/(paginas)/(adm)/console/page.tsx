@@ -41,11 +41,10 @@ type EntidadeType =
     | "equipamento";
 
 export default function Console() {
-    const [entidadeSelecionada, setEntidadeSelecionada] =
-        useState<EntidadeType | null>(null);
-    const [escolaSelecionada, setEscolaSelecionada] = useState<string | null>(
+    const [entidadeSelecionada, setEntidadeSelecionada] = useState<EntidadeType | null>(
         null
     );
+    const [escolaSelecionada, setEscolaSelecionada] = useState<string | null>(null);
     const [arquivo, setArquivo] = useState<File | null>(null);
     const [schools, setSchools] = useState<School[]>([]);
     const [schoolsLoading, setSchoolsLoading] = useState(false);
@@ -106,7 +105,7 @@ export default function Console() {
             setSchoolsError(null);
             try {
                 const data = await getSchools();
-                setSchools(data || []);
+                setSchools(data.items || []);
             } catch (err: unknown) {
                 console.error("Erro ao buscar escolas:", err);
                 setSchoolsError("Não foi possível carregar as escolas.");
@@ -163,8 +162,7 @@ export default function Console() {
         let rotaBase: string = "";
 
         if (entidadeSelecionada === "escola") rotaBase = "schools";
-        else if (entidadeSelecionada === "pesquisador")
-            rotaBase = "researchers";
+        else if (entidadeSelecionada === "pesquisador") rotaBase = "researchers";
         else if (entidadeSelecionada === "equipamento") rotaBase = "equipment";
         else if (entidadeSelecionada === "projeto") rotaBase = "projects";
         else if (entidadeSelecionada === "revista") rotaBase = "magazine";
@@ -199,10 +197,7 @@ export default function Console() {
             {/* |=======| MENU SUPERIOR - CONSOLE |=======| */}
             <div className="flex w-full flex-row justify-between">
                 <div className="flex flex-row items-center gap-5">
-                    <Button
-                        variant={"outline"}
-                        size={"icon"}
-                        className="cursor-pointer">
+                    <Button variant={"outline"} size={"icon"} className="cursor-pointer">
                         <ChevronLeft />
                     </Button>
                     <h2 className="text-2xl font-semibold">Console</h2>
@@ -268,9 +263,7 @@ export default function Console() {
                     <div className="flex flex-row items-center gap-2">
                         <p className="w-24 font-semibold">Escola:</p>
                         <Select
-                            onValueChange={(value) =>
-                                setEscolaSelecionada(value)
-                            }
+                            onValueChange={(value) => setEscolaSelecionada(value)}
                             value={escolaSelecionada || undefined}>
                             <SelectTrigger className="w-full bg-white">
                                 <SelectValue
@@ -307,9 +300,7 @@ export default function Console() {
                                     {!schoolsLoading &&
                                         !schoolsError &&
                                         schools.map((escola) => (
-                                            <SelectItem
-                                                key={escola.id}
-                                                value={escola.id}>
+                                            <SelectItem key={escola.id} value={escola.id}>
                                                 {escola.name}
                                             </SelectItem>
                                         ))}
@@ -343,9 +334,7 @@ export default function Console() {
                     <div className="flex items-center gap-3">
                         <FileText size={22} className="text-primary" />
                         <div>
-                            <p className="text-sm font-medium">
-                                {arquivo.name}
-                            </p>
+                            <p className="text-sm font-medium">{arquivo.name}</p>
                             <p className="text-xs text-gray-500">
                                 {(arquivo.size / 1024).toFixed(1)} KB
                             </p>
@@ -371,12 +360,12 @@ export default function Console() {
                     <div>
                         <ul className="list-outside list-decimal space-y-2 pl-5">
                             <li>
-                                Selecione a <strong>entidade</strong> desejada
-                                no campo de opções.
+                                Selecione a <strong>entidade</strong> desejada no campo de
+                                opções.
                             </li>
                             <li>
-                                Se necessário, escolha também a{" "}
-                                <strong>escola</strong> vinculada.
+                                Se necessário, escolha também a <strong>escola</strong>{" "}
+                                vinculada.
                             </li>
                             <li>
                                 Caso tenha dúvida de como deve ficar o arquivo,{" "}
@@ -387,13 +376,12 @@ export default function Console() {
                                 <strong>Carregar Arquivo</strong>.
                             </li>
                             <li>
-                                Confira a lista de arquivos selecionados e
-                                clique em <strong>Salvar</strong> para enviar.
+                                Confira a lista de arquivos selecionados e clique em{" "}
+                                <strong>Salvar</strong> para enviar.
                             </li>
                             <li>
-                                Ao final, será exibido um resumo com a
-                                quantidade de registros{" "}
-                                <strong>importados</strong> e os{" "}
+                                Ao final, será exibido um resumo com a quantidade de
+                                registros <strong>importados</strong> e os{" "}
                                 <strong>erros encontrados</strong>, se houver.
                             </li>
                         </ul>
@@ -407,10 +395,7 @@ export default function Console() {
                     </div>
                     <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
                         {entidades.map((entidade) => (
-                            <CardEntidade
-                                key={entidade.nome}
-                                entidade={entidade}
-                            />
+                            <CardEntidade key={entidade.nome} entidade={entidade} />
                         ))}
                     </div>
                 </div>
