@@ -1,6 +1,5 @@
-import { School } from "@/core/domain/School";
 import z from "zod";
-
+import { SearchParamParser } from "./Common";
 export const PaginationSchema = <T extends z.ZodType>(itemSchema: T) => {
     return z.object({
         page: z.number().min(1).default(1),
@@ -11,6 +10,11 @@ export const PaginationSchema = <T extends z.ZodType>(itemSchema: T) => {
     });
 };
 
-export type Pagination<T> = z.infer<
-    ReturnType<typeof PaginationSchema<z.ZodType<T>>>
->;
+export type Pagination<T> = z.infer<ReturnType<typeof PaginationSchema<z.ZodType<T>>>>;
+
+export const PaginationSearchParamsSchema = z.object({
+    page: SearchParamParser.page,
+    size: SearchParamParser.number,
+});
+
+export type PaginationSearchParams = z.infer<typeof PaginationSearchParamsSchema>;
