@@ -18,6 +18,9 @@ import {
     ProjectSearchParams,
 } from "@/core/domain/Project";
 import { getClubesCiencia } from "@/core/service/ClubeCienciaService";
+import { Pagination } from "../Pagination";
+import { useUrlPagination } from "@/hooks/useUrlPagination";
+import { SearchAndFilter } from "../SearchAndFilter";
 
 interface ProjectAdmProps {
     params?: ProjectSearchParams;
@@ -26,8 +29,10 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
     const { data: projetos, mutate } = useSWR(["projetos", params], ([, p]) =>
         getProjects(p)
     );
-
-    const { data: clubes } = useSWR("clubes", () => getClubesCiencia());
+    const { changePage, applyFilters } = useUrlPagination();
+    const { data: clubes } = useSWR("clubes", () =>
+        getClubesCiencia().then((res) => res.items)
+    );
     const [open, setOpen] = useState(false);
     const onSubmit = async (data: ProjectCreate) => {
         const { id } = await createProject(data);
@@ -45,10 +50,17 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         <>
             <Section
                 title="Projetos"
-                items={projetos}
+                items={projetos.items}
                 icon={null}
-                onAdd={() => setOpen(true)}
-            />
+                onAdd={() => setOpen(true)}>
+                <SearchAndFilter
+                    currentParams={params as any}
+                    applyParams={applyFilters}
+                    mainSearchKey="name"
+                    mainSearchPlaceholder="Buscar projetos"
+                    filters={[]}
+                />
+            </Section>
 
             <BaseFormModal<typeof ProjectCreateSchema, ProjectCreate>
                 open={open}
@@ -67,6 +79,12 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                 />
                 <ControlledImageUpload name="images" />
             </BaseFormModal>
+
+            <Pagination
+                currentPage={projetos.page}
+                onLoadMore={changePage}
+                totalPages={projetos.total_pages}
+            />
         </>
     );
 };

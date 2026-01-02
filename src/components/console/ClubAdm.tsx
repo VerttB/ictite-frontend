@@ -18,15 +18,24 @@ import {
     ScienceClubCreateSchema,
     ScienceClubSearchParams,
 } from "@/core/domain/Club";
+import { Pagination } from "../Pagination";
+import { useUrlPagination } from "@/hooks/useUrlPagination";
+import { SearchAndFilter } from "../SearchAndFilter";
+import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
 
 interface ClubAdmProps {
     params?: ScienceClubSearchParams;
 }
 
 export const ClubAdm = ({ params }: ClubAdmProps) => {
-    const { data: clubes, mutate } = useSWR(["clubes", params], ([, p]) =>
-        getClubesCiencia(p)
+    const { data: clubes, mutate } = useSWR(
+        ["clubes", params],
+        ([, p]) => getClubesCiencia(p),
+        {
+            keepPreviousData: true,
+        }
     );
+    const { applyFilters, changePage } = useUrlPagination();
 
     const { data: escolas } = useSWR("escolas", () => getSchools());
     const [open, setOpen] = useState(false);
@@ -39,16 +48,36 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         mutate();
         setOpen(false);
     };
-
+    const filters: ItemFilterConfig[] = [
+        {
+            label: "Nome",
+            type: "text",
+            value: "",
+            key: "name",
+        },
+        {
+            label: "Escola",
+            type: "array",
+            value: "",
+            key: "school_name",
+        },
+    ];
     if (!clubes) return null;
     return (
-        <>
+        <div className="flex h-full w-full flex-col">
             <Section
                 title="Clubes de Ciências"
-                items={clubes}
+                items={clubes.items}
                 icon={null}
-                onAdd={() => setOpen(true)}
-            />
+                onAdd={() => setOpen(true)}>
+                <SearchAndFilter
+                    currentParams={params as any}
+                    applyParams={applyFilters}
+                    mainSearchKey="name"
+                    mainSearchPlaceholder="Buscar projetos"
+                    filters={filters}
+                />
+            </Section>
 
             <BaseFormModal<typeof ScienceClubCreateSchema, ScienceClubCreate>
                 open={open}
@@ -63,10 +92,16 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     className="w-full"
                     name="school_id"
                     label="Escola"
-                    options={escolas || []}
+                    options={escolas?.items || []}
                 />
                 <ControlledImageUpload name="images" />
             </BaseFormModal>
-        </>
+
+            <Pagination
+                totalPages={clubes.total_pages}
+                currentPage={clubes.page}
+                onLoadMore={changePage}
+            />
+        </div>
     );
 };

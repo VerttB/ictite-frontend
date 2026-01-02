@@ -32,6 +32,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
     } = useSWR(["schools", params], ([_, p]) => getSchools(p), {
         keepPreviousData: true,
     });
+
     const [open, setOpen] = useState(false);
 
     const { applyFilters, changePage } = useUrlPagination();
@@ -85,7 +86,6 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
             <Pagination
                 currentPage={paginatedSchools.page}
                 onLoadMore={changePage}
-                hasMoreData={paginatedSchools.page < paginatedSchools.total_pages}
                 totalPages={paginatedSchools.total_pages}
             />
         </div>
