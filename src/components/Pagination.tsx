@@ -3,16 +3,10 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 interface PaginationProps {
     currentPage: number;
     onLoadMore: (page: number) => void;
-    hasMoreData: boolean;
     totalPages: number;
 }
 
-export const Pagination = ({
-    currentPage,
-    onLoadMore,
-    hasMoreData,
-    totalPages,
-}: PaginationProps) => {
+export const Pagination = ({ currentPage, onLoadMore, totalPages }: PaginationProps) => {
     const getPageNumbers = () => {
         const pages = new Set<number>();
 
@@ -37,7 +31,7 @@ export const Pagination = ({
     const visiblePages = getPageNumbers();
     const isAtStart = currentPage <= 1;
     const isAtEnd = currentPage >= totalPages;
-
+    const hasMoreData = currentPage < totalPages;
     if (totalPages === 0) return null;
     return (
         <div className="bg-background flex w-full items-center justify-center gap-3 rounded-lg py-2">
