@@ -9,6 +9,13 @@ import { getProjects } from "@/core/service/ProjetoService";
 import { getClubesCiencia } from "@/core/service/ClubeCienciaService";
 import { GenericList } from "./GenericList";
 import { School, PersonStanding, Projector, Club } from "lucide-react";
+import { SchoolSearchParamsSchema } from "@/core/domain/School";
+import { ResearcherSearchParamsSchema } from "@/core/domain/Researcher";
+import { ProjectSearchParamsSchema } from "@/core/domain/Project";
+import {
+    ScienceClubCreateSchema,
+    ScienceClubSearchParamsSchema,
+} from "@/core/domain/Club";
 
 const fetcher = async (query: string) => {
     if (!query) {
@@ -16,10 +23,18 @@ const fetcher = async (query: string) => {
     }
 
     const [escolas, pesquisadores, projetos, clubes] = await Promise.all([
-        getSchools(query),
-        getResearchers(query),
-        getProjects(query),
-        getClubesCiencia(query),
+        getSchools(SchoolSearchParamsSchema.parse({ name: query })).then(
+            (res) => res.items
+        ),
+        getResearchers(ResearcherSearchParamsSchema.parse({ name: query })).then(
+            (res) => res.items
+        ),
+        getProjects(ProjectSearchParamsSchema.parse({ name: query })).then(
+            (res) => res.items
+        ),
+        getClubesCiencia(ScienceClubSearchParamsSchema.parse({ name: query })).then(
+            (res) => res.items
+        ),
     ]);
 
     return { escolas, pesquisadores, projetos, clubes };
@@ -46,18 +61,11 @@ export default function SearchClient() {
 
                 {query ? (
                     <>
-                        <SearchStats
-                            title="Escolas"
-                            count={resultados.escolas.length}>
+                        <SearchStats title="Escolas" count={resultados.escolas.length}>
                             <GenericList
                                 searchResult={resultados.escolas}
                                 path="escolas"
-                                icon={
-                                    <School
-                                        size={24}
-                                        className="text-primary"
-                                    />
-                                }
+                                icon={<School size={24} className="text-primary" />}
                             />
                         </SearchStats>
 
@@ -68,38 +76,24 @@ export default function SearchClient() {
                                 searchResult={resultados.pesquisadores}
                                 path="pesquisadores"
                                 icon={
-                                    <PersonStanding
-                                        size={24}
-                                        className="text-primary"
-                                    />
+                                    <PersonStanding size={24} className="text-primary" />
                                 }
                             />
                         </SearchStats>
 
-                        <SearchStats
-                            title="Projetos"
-                            count={resultados.projetos.length}>
+                        <SearchStats title="Projetos" count={resultados.projetos.length}>
                             <GenericList
                                 searchResult={resultados.projetos}
                                 path="projetos"
-                                icon={
-                                    <Projector
-                                        size={24}
-                                        className="text-primary"
-                                    />
-                                }
+                                icon={<Projector size={24} className="text-primary" />}
                             />
                         </SearchStats>
 
-                        <SearchStats
-                            title="Clubes"
-                            count={resultados.clubes.length}>
+                        <SearchStats title="Clubes" count={resultados.clubes.length}>
                             <GenericList
                                 searchResult={resultados.clubes}
                                 path="clubes"
-                                icon={
-                                    <Club size={24} className="text-primary" />
-                                }
+                                icon={<Club size={24} className="text-primary" />}
                             />
                         </SearchStats>
                     </>
@@ -120,9 +114,7 @@ function SearchStats({ title, count, children }: SearchStatsProps) {
         <div className="mt-6">
             <div className="mb-2 flex justify-between">
                 <h2 className="text-2xl font-semibold">{title}</h2>
-                <span className="bg-foreground rounded-full p-1">
-                    Total: {count}
-                </span>
+                <span className="bg-foreground rounded-full p-1">Total: {count}</span>
             </div>
             <div className="grid gap-4">{children}</div>
         </div>
