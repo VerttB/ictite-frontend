@@ -1,0 +1,95 @@
+import { useState } from "react";
+import { toast } from "sonner";
+import { KeyedMutator } from "swr";
+interface UseAdmCrudProps<T, CreateDTO, UpdateDTO> {
+    mutate: KeyedMutator<any>; // Função do SWR para atualizar a lista
+
+    createFn?: (data: CreateDTO) => Promise<any>;
+    updateFn?: (id: string, data: UpdateDTO) => Promise<any>;
+    deleteFn?: (id: string) => Promise<any>;
+}
+
+export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
+    mutate,
+    createFn,
+    updateFn,
+    deleteFn,
+}: UseAdmCrudProps<T, CreateDTO, UpdateDTO>) => {
+    const [isCreating, setIsCreating] = useState(false);
+    const [editingItem, setEditingItem] = useState<T | null>(null);
+    const [deletingItem, setDeletingItem] = useState<T | null>(null);
+
+    // --- HANDLERS DE AÇÃO (WRAPPERS) ---
+
+    // Wrapper para Criação: Recebe os dados, chama a função, atualiza e fecha
+    const handleCreate = async (
+        data: CreateDTO,
+        customFn?: (data: CreateDTO) => Promise<any>
+    ) => {
+        try {
+            const fn = customFn || createFn;
+            if (!fn) throw new Error("Função de criação não fornecida");
+
+            await fn(data);
+            await mutate();
+            setIsCreating(false);
+        } catch (error) {
+            toast.error("Erro ao criar o item.");
+        }
+    };
+
+    const handleUpdate = async (
+        data: UpdateDTO,
+        customFn?: (id: string, data: UpdateDTO) => Promise<any>
+    ) => {
+        if (!editingItem) return;
+        try {
+            const fn = customFn || updateFn;
+            if (!fn) throw new Error("Função de atualização não fornecida");
+
+            await fn(editingItem.id, data);
+            await mutate();
+            setEditingItem(null);
+        } catch (error) {
+            toast.error("Erro ao atualizar o item.");
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!deletingItem) return;
+        try {
+            if (!deleteFn) throw new Error("Função de delete não fornecida");
+
+            await deleteFn(deletingItem.id);
+            await mutate();
+            setDeletingItem(null);
+        } catch (error) {
+            toast.error("Erro ao deletar o item.");
+        }
+    };
+
+    const ui = {
+        openCreate: () => setIsCreating(true),
+        closeCreate: () => setIsCreating(false),
+
+        openEdit: (item: T) => setEditingItem(item),
+        closeEdit: () => setEditingItem(null),
+
+        openDelete: (item: T) => setDeletingItem(item),
+        closeDelete: () => setDeletingItem(null),
+    };
+
+    const actions = {
+        create: handleCreate,
+        update: handleUpdate,
+        delete: handleDelete,
+    };
+    return {
+        isCreating,
+        editingItem,
+        deletingItem,
+
+        actions,
+        ui,
+    };
+};

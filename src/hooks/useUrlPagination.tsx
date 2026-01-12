@@ -1,3 +1,4 @@
+import { buildSearchParameters } from "@/core/utils/searchParamBuilder";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useCallback } from "react";
 
@@ -8,16 +9,8 @@ export const useUrlPagination = (defaultPage = 1) => {
     const currentPage = Number(searchParams.get("page")) || defaultPage;
     const updateUrl = useCallback(
         (newParams: Record<string, any>) => {
-            const currentParams = new URLSearchParams(searchParams);
-            console.log(searchParams.toString());
-            Object.entries(newParams).forEach(([key, value]) => {
-                if (value !== undefined && value !== null && value !== "") {
-                    currentParams.set(key, value);
-                } else {
-                    currentParams.delete(key);
-                }
-            });
-            router.replace(`${pathname}?${currentParams.toString()}`);
+            const query = buildSearchParameters(newParams);
+            router.replace(`${pathname}?${query.toString()}`);
         },
         [pathname, router, searchParams]
     );
