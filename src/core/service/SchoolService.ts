@@ -4,6 +4,7 @@ import {
     SchoolCreate,
     SchoolSearchParams,
     SchoolStatistics,
+    SchoolUpdate,
 } from "../domain/School";
 import { ScienceClub } from "../domain/Club";
 import { Pagination } from "@/schemas/Pagination";
@@ -75,6 +76,13 @@ export const deleteSchool = async (id: string) => {
     return true;
 };
 
+export const updateSchool = async (id: string, school: Partial<SchoolUpdate>) => {
+    const data = await apiClient.patch<School>(`/schools/${id}`, school);
+    if (!data) {
+        throw new Error("Erro ao atualizar escola");
+    }
+    return data;
+};
 export const uploadSchoolImage = async (school_id: string, form: FormData) => {
     return await apiClient.post(`/schools/${school_id}/images`, form);
 };
