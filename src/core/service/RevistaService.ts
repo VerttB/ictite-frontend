@@ -1,11 +1,12 @@
 import { Magazine, MagazineCreate, MagazineSearchParams } from "../domain/Magazine";
 import { apiClient } from "@/lib/api/client";
+import { Pagination } from "@/schemas/Pagination";
 
 export const getRevistas = async (
     params?: MagazineSearchParams
-): Promise<Required<Magazine>[]> => {
-    const data = await apiClient.get<Required<Magazine>[]>("/magazine/", { params });
-    return data || [];
+): Promise<Pagination<Magazine>> => {
+    const data = await apiClient.get<Pagination<Magazine>>("/magazine/", { params });
+    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
 export const createRevista = async (newRevista: MagazineCreate) => {

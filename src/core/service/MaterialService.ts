@@ -1,11 +1,17 @@
-import { MaterialCreate, Material, MaterialSearchParams } from "../domain/Material";
+import {
+    MaterialCreate,
+    Material,
+    MaterialSchema,
+    MaterialSearchParams,
+} from "../domain/Material";
 import { apiClient } from "@/lib/api/client";
+import { Pagination, PaginationSchema } from "@/schemas/Pagination";
 
 export const getMaterials = async (
     params?: MaterialSearchParams
-): Promise<Required<Material>[]> => {
-    const data = await apiClient.get<Required<Material>[]>("/material/", { params });
-    return data || [];
+): Promise<Pagination<Material>> => {
+    const data = await apiClient.get<Pagination<Material>>("/material/", { params });
+    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
 export const createMaterial = async (newMaterial: MaterialCreate) => {

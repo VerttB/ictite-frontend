@@ -1,12 +1,13 @@
 import { EquipmentCreateType, EquipmentSearchParams } from "../domain/Equipment";
 import { Equipment } from "@/core/domain/Equipment";
 import { apiClient } from "@/lib/api/client";
+import { Pagination } from "@/schemas/Pagination";
 
 export const getEquipaments = async (
     params: EquipmentSearchParams = {}
-): Promise<Equipment[]> => {
-    const data = await apiClient.get<Equipment[]>("/equipment/", { params });
-    return data || [];
+): Promise<Pagination<Equipment>> => {
+    const data = await apiClient.get<Pagination<Equipment>>("/equipment/", { params });
+    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
 export const createEquipament = async (newEquipament: EquipmentCreateType) => {
