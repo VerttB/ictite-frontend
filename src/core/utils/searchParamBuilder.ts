@@ -1,5 +1,8 @@
-export const buildSearchParameters = (filters: Record<string, any>): string => {
-    const params = new URLSearchParams();
+export const buildSearchParameters = (
+    filters: Record<string, any>,
+    existingParams?: URLSearchParams
+): string => {
+    const params = new URLSearchParams(existingParams?.toString() || "");
     Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
             if (Array.isArray(value)) {

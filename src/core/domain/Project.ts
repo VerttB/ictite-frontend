@@ -25,6 +25,12 @@ export const ProjectCreateSchema = ProjectSchema.omit({
     })
 );
 
+export const ProjectUpdateSchema = ProjectSchema.pick({
+    name: true,
+    description_long: true,
+    description: true,
+});
+
 export const ProjectSearchParamsSchema = z
     .object({
         name: SearchParamParser.string,
@@ -45,6 +51,7 @@ export const ProjectStatisticSchema = z.object({
 });
 export type Project = z.infer<typeof ProjectSchema>;
 export type ProjectCreate = z.infer<typeof ProjectCreateSchema>;
+export type ProjectUpdate = z.infer<typeof ProjectUpdateSchema>;
 export type ProjectSearchParams = z.infer<typeof ProjectSearchParamsSchema>;
 export type ProjectResearchers = z.infer<typeof ProjectResearchersSchema>;
 export type ProjectStatistic = z.infer<typeof ProjectStatisticSchema>;

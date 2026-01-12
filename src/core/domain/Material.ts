@@ -25,6 +25,12 @@ export const MaterialSearchParamsSchema = z.object({
     page: SearchParamParser.page,
 });
 
+export const MaterialUpdateSchema = MaterialSchema.pick({
+    name: true,
+    description: true,
+    link: true,
+});
 export type Material = z.infer<typeof MaterialSchema>;
 export type MaterialCreate = z.infer<typeof MaterialCreateSchema>;
 export type MaterialSearchParams = z.infer<typeof MaterialSearchParamsSchema>;
+export type MaterialUpdate = z.infer<typeof MaterialUpdateSchema>;

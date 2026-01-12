@@ -22,6 +22,10 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
     })
 );
 
+export const ScienceClubUpdateSchema = ScienceClubSchema.pick({
+    name: true,
+    description: true,
+});
 export const ScienceClubSearchParamsSchema = z
     .object({
         name: SearchParamParser.string,
@@ -49,3 +53,4 @@ export type ScienceClubCreate = z.infer<typeof ScienceClubCreateSchema>;
 export type ScienceClubSearchParams = z.infer<typeof ScienceClubSearchParamsSchema>;
 export type ScienceClubStatistics = z.infer<typeof ScienceClubStatisticsSchema>;
 export type ScienceClubStatisticsAll = z.infer<typeof ScienceClubStatisticsAllSchema>;
+export type ScienceClubUpdate = z.infer<typeof ScienceClubUpdateSchema>;

@@ -1,4 +1,9 @@
-import { Magazine, MagazineCreate, MagazineSearchParams } from "../domain/Magazine";
+import {
+    Magazine,
+    MagazineCreate,
+    MagazineSearchParams,
+    MagazineUpdate,
+} from "../domain/Magazine";
 import { apiClient } from "@/lib/api/client";
 import { Pagination } from "@/schemas/Pagination";
 
@@ -15,4 +20,15 @@ export const createRevista = async (newRevista: MagazineCreate) => {
 
 export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {
     return await apiClient.post(`/magazine/${magazineId}/images`, formData);
+};
+
+export const updateRevista = async (
+    magazineId: string,
+    updatedRevista: Partial<MagazineUpdate>
+) => {
+    return await apiClient.patch(`/magazine/${magazineId}`, updatedRevista);
+};
+
+export const deleteRevista = async (magazineId: string) => {
+    return await apiClient.delete(`/magazine/${magazineId}`);
 };

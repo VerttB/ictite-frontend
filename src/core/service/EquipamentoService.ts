@@ -1,4 +1,8 @@
-import { EquipmentCreateType, EquipmentSearchParams } from "../domain/Equipment";
+import {
+    EquipmentCreate,
+    EquipmentSearchParams,
+    EquipmentUpdate,
+} from "../domain/Equipment";
 import { Equipment } from "@/core/domain/Equipment";
 import { apiClient } from "@/lib/api/client";
 import { Pagination } from "@/schemas/Pagination";
@@ -10,10 +14,21 @@ export const getEquipaments = async (
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
-export const createEquipament = async (newEquipament: EquipmentCreateType) => {
+export const createEquipament = async (newEquipament: EquipmentCreate) => {
     return await apiClient.post("/equipment", newEquipament);
 };
 
 export const uploadEquipamentImages = async (equipmentId: string, formData: FormData) => {
     return await apiClient.post(`/equipment/${equipmentId}/images`, formData);
+};
+
+export const updateEquipament = async (
+    equipmentId: string,
+    updatedEquipament: Partial<EquipmentUpdate>
+) => {
+    return await apiClient.patch(`/equipment/${equipmentId}`, updatedEquipament);
+};
+
+export const deleteEquipament = async (equipmentId: string) => {
+    return await apiClient.delete(`/equipment/${equipmentId}`);
 };

@@ -4,6 +4,7 @@ import {
     ProjectCreate,
     ProjectSearchParams,
     ProjectStatistic,
+    ProjectUpdate,
 } from "../domain/Project";
 import { apiClient } from "@/lib/api/client";
 
@@ -48,6 +49,17 @@ export const createProject = async (newProject: ProjectCreate): Promise<Project>
         throw new Error("Erro ao criar projeto");
     }
     return data;
+};
+
+export const updateProject = async (
+    projectId: string,
+    updatedProject: Partial<ProjectUpdate>
+) => {
+    return await apiClient.patch(`/projects/${projectId}`, updatedProject);
+};
+
+export const deleteProject = async (projectId: string) => {
+    return await apiClient.delete(`/projects/${projectId}`);
 };
 
 export const uploadProjectImages = async (projectId: string, formData: FormData) => {

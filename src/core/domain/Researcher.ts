@@ -28,8 +28,11 @@ export const ResearcherCreateSchema = z.object({
         .length(16, "O ID do Lattes deve ter 16 caracteres"),
 });
 
-export const ResearcherUpdateSchema = ResearcherCreateSchema.extend({
-    id: z.string().uuid(),
+export const ResearcherUpdateSchema = ResearcherCreateSchema.pick({
+    name: true,
+    gender: true,
+    race: true,
+    type: true,
 });
 
 export const ResearcherSearchParamsSchema = z

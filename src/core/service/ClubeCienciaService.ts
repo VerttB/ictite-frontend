@@ -2,6 +2,7 @@ import { Pagination } from "@/schemas/Pagination";
 import {
     ScienceClub,
     ScienceClubCreate,
+    ScienceClubUpdate,
     ScienceClubSearchParams,
     ScienceClubStatisticsAll,
 } from "../domain/Club";
@@ -67,6 +68,16 @@ export const createClubeCiencias = async (
     return data;
 };
 
+export const updateClubeCiencias = async (
+    clubeId: string,
+    updatedClube: Partial<ScienceClubUpdate>
+) => {
+    return await apiClient.patch(`/clubes-ciencia/${clubeId}`, updatedClube);
+};
+
+export const deleteClubeCiencias = async (clubeId: string) => {
+    return await apiClient.delete(`/clubes-ciencia/${clubeId}`);
+};
 export const uploadClubImage = async (id: string, form: FormData) => {
     return await apiClient.post(`/clubes-ciencia/${id}/images`, form);
 };

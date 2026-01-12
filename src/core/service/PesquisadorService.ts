@@ -1,4 +1,4 @@
-import { ResearcherFinal } from "@/core/domain/Researcher";
+import { ResearcherFinal, ResearcherUpdate } from "@/core/domain/Researcher";
 import { Project } from "@/core/domain/Project";
 import {
     Researcher,
@@ -38,4 +38,14 @@ export async function getResearchersByClube(clubeId: string): Promise<Researcher
 export async function createResearcher(newResearcher: ResearcherCreate) {
     console.log("Creating researcher...", newResearcher);
     return await apiClient.post("/researchers/", newResearcher);
+}
+
+export async function updateResearcher(
+    researcherId: string,
+    updatedResearcher: Partial<ResearcherUpdate>
+) {
+    return await apiClient.patch(`/researchers/${researcherId}`, updatedResearcher);
+}
+export async function deleteResearcher(researcherId: string) {
+    return await apiClient.delete(`/researchers/${researcherId}`);
 }

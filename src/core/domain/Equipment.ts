@@ -10,8 +10,7 @@ export const EquipmentSchema = z.object({
     images: ImageSchema.array(),
 });
 
-
-export const EquipmentCreateSchema = EquipmentSchema.omit({ 
+export const EquipmentCreateSchema = EquipmentSchema.omit({
     id: true,
     images: true,
     school: true,
@@ -24,10 +23,15 @@ export const EquipmentCreateSchema = EquipmentSchema.omit({
     })
 );
 
-
 export const EquipmentSearchParamsSchema = z.object({
     name: SearchParamParser.string,
-})
+});
+
+export const EquipmentUpdateSchema = EquipmentSchema.pick({
+    name: true,
+});
+
 export type Equipment = z.infer<typeof EquipmentSchema>;
-export type EquipmentCreateType = z.infer<typeof EquipmentCreateSchema>;
+export type EquipmentCreate = z.infer<typeof EquipmentCreateSchema>;
 export type EquipmentSearchParams = z.infer<typeof EquipmentSearchParamsSchema>;
+export type EquipmentUpdate = z.infer<typeof EquipmentUpdateSchema>;
