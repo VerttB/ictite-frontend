@@ -29,63 +29,36 @@ import { Pagination } from "../Pagination";
 
 import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
+import { useAdmCrud } from "@/hooks/useAdmCrud";
 interface SchoolAdmProps {
     params: SchoolSearchParams;
 }
 
 export const SchoolAdm = ({ params }: SchoolAdmProps) => {
-    const {
-        data: paginatedSchools,
-        isLoading,
+    const { data: paginatedSchools, mutate } = useSWR(
+        ["schools", params],
+        ([_, p]) => getSchools(p),
+        {
+            keepPreviousData: true,
+        }
+    );
+
+    const crud = useAdmCrud<School, SchoolCreate, SchoolUpdate>({
         mutate,
-    } = useSWR(["schools", params], ([_, p]) => getSchools(p), {
-        keepPreviousData: true,
+        deleteFn: deleteSchool,
     });
-
-    const [isCreating, setIsCreating] = useState(false);
-    const [editingItem, setEditingItem] = useState<School | null>(null);
-    const [deletingItem, setDeletingItem] = useState<School | null>(null);
-
     const { applyFilters, changePage } = useUrlPagination();
 
-    const onSubmit = async (data: SchoolCreate) => {
-        try {
-            const { id } = await createSchool(data);
+    const handleCreate = async (data: SchoolCreate) => {
+        const { id } = await createSchool(data);
+        if (data.images?.length) {
             const form = new FormData();
-            data.images.forEach((image) => {
-                form.append("images", image);
-            });
-
+            data.images.forEach((img) => form.append("images", img));
             await uploadSchoolImage(id, form);
-            mutate();
-            setIsCreating(false);
-        } catch (error) {
-            console.error("Error creating school:", error);
         }
     };
-
-    const onSubmitUpdate = async (data: SchoolUpdate) => {
-        if (!editingItem) return;
-        try {
-            await updateSchool(editingItem.id, data);
-            mutate();
-        } catch (error) {
-            console.error("Error updating school:", error);
-        } finally {
-            setEditingItem(null);
-        }
-    };
-
-    const onSubmitDelete = async () => {
-        if (!deletingItem) return;
-        try {
-            await deleteSchool(deletingItem.id);
-            mutate();
-        } catch (error) {
-            console.error("Error deleting school:", error);
-        } finally {
-            setDeletingItem(null);
-        }
+    const handleUpdate = async (id: string, data: SchoolUpdate) => {
+        await updateSchool(id, data);
     };
 
     const filters: ItemFilterConfig[] = [
@@ -100,9 +73,9 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 title="Escolas"
                 items={paginatedSchools.items}
                 icon={<School2 />}
-                onAdd={() => setIsCreating(true)}
-                onUpdate={(school) => setEditingItem(school)}
-                onDelete={(school) => setDeletingItem(school)}>
+                onAdd={crud.ui.openCreate}
+                onUpdate={crud.ui.openEdit}
+                onDelete={crud.ui.openDelete}>
                 <SearchAndFilter
                     currentParams={params as any}
                     applyParams={applyFilters}
@@ -113,9 +86,9 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
             </Section>
 
             <BaseFormModal<typeof SchoolCreateSchema, SchoolCreate>
-                open={isCreating}
-                onClose={() => setIsCreating(false)}
-                onSubmit={onSubmit}
+                open={crud.isCreating}
+                onClose={crud.ui.closeCreate}
+                onSubmit={(data) => crud.actions.create(data, handleCreate)}
                 title="Adicionar Escola"
                 schema={SchoolCreateSchema}
                 props={{ defaultValues: { images: [] } }}>
@@ -126,18 +99,18 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 <ControlledImageUpload name="images" />
             </BaseFormModal>
 
-            {editingItem && (
+            {crud.editingItem && (
                 <BaseFormModal<typeof SchoolUpdateSchema, SchoolUpdate>
-                    open={!!editingItem}
-                    key={editingItem.id}
-                    onClose={() => setEditingItem(null)}
-                    onSubmit={onSubmitUpdate}
+                    open={!!crud.editingItem}
+                    key={crud.editingItem.id}
+                    onClose={crud.ui.closeEdit}
+                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
                     title="Atualizar Escola"
                     schema={SchoolUpdateSchema}
                     props={{
                         defaultValues: {
-                            name: editingItem?.name,
-                            description: editingItem?.description,
+                            name: crud.editingItem?.name,
+                            description: crud.editingItem?.description,
                         },
                     }}>
                     <InputField name="name" label="Nome da Escola" />
@@ -146,10 +119,10 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
             )}
 
             <DeleteConfirmationModal
-                open={!!deletingItem}
-                onClose={() => setDeletingItem(null)}
-                onConfirm={onSubmitDelete}
-                title={`Deseja excluir ${deletingItem?.name}?`}
+                open={!!crud.deletingItem}
+                onClose={crud.ui.closeDelete}
+                onConfirm={crud.actions.delete}
+                title={`Deseja excluir ${crud.deletingItem?.name}?`}
                 description="Essa ação não pode ser desfeita."
             />
             <Pagination
