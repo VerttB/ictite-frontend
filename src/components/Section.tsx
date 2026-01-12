@@ -6,31 +6,28 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import {
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-} from "@radix-ui/react-dropdown-menu";
+import { DropdownMenuLabel, DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { useState } from "react";
 import { Grid, List } from "lucide-react";
 import { Button } from "./ui/button";
-type ItemType = {
+interface BaseItem {
+    id: string;
     name: string;
     images?: Image[];
     image?: string;
-    extra?: any[];
-};
+}
 
-type SectionProps = {
+interface SectionProps<T extends BaseItem> {
     title: string;
-    items: ItemType[];
+    items: T[];
     icon?: React.ReactNode;
     children?: React.ReactNode;
     onAdd?: () => void;
-    onUpdate?: (item: any) => void;
-    onDelete?: (item: any) => void;
-};
+    onUpdate?: (item: T) => void;
+    onDelete?: (item: T) => void;
+}
 
-const resolveImage = (item: ItemType) => {
+const resolveImage = (item: BaseItem) => {
     if (item.image) return item.image;
 
     if (typeof item.images === "string") return item.images;
@@ -42,13 +39,14 @@ const resolveImage = (item: ItemType) => {
     return undefined;
 };
 
-export const Section = ({
+export const Section = <T extends BaseItem>({
     title,
     items,
     icon,
     onAdd,
+    onUpdate,
     children,
-}: SectionProps) => {
+}: SectionProps<T>) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
     return (
         <section className="flex-1 px-4">
@@ -69,9 +67,7 @@ export const Section = ({
                         title="Layout em lista">
                         <List
                             size={20}
-                            className={
-                                layout === "list" ? "text-font-primary" : ""
-                            }
+                            className={layout === "list" ? "text-font-primary" : ""}
                         />
                     </Button>
                     <Button
@@ -87,20 +83,19 @@ export const Section = ({
                 {items.map((item, i) => (
                     <DropdownMenu key={item.name + i}>
                         <DropdownMenuTrigger>
-                            <CardGenerico
-                                title={item.name}
-                                image={resolveImage(item)}
-                            />
+                            <CardGenerico title={item.name} image={resolveImage(item)} />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent side="bottom" sideOffset={4}>
-                            <DropdownMenuLabel>Opções</DropdownMenuLabel>
+                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => onUpdate && onUpdate(item)}>
+                                Editar
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Excluir</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 ))}
-                <CardGenerico isAddButton onClick={onAdd} />
+                {onAdd && <CardGenerico isAddButton onClick={onAdd} />}
             </div>
         </section>
     );
