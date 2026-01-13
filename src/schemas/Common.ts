@@ -10,7 +10,7 @@ export const SearchParamParser = {
     page: z.coerce.number().min(1).optional().default(1).catch(1),
     number: z.coerce.number().min(0).optional().catch(undefined),
     array: z.preprocess((val) => {
-        if (val === undefined || val === null) return [];
+        if (val === undefined || val === null) return undefined;
         if (Array.isArray(val)) return val;
         return [val];
     }, z.array(z.string()).optional().default([])),
