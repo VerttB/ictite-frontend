@@ -14,8 +14,14 @@ export const getEquipaments = async (
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
-export const createEquipament = async (newEquipament: EquipmentCreate) => {
-    return await apiClient.post("/equipment", newEquipament);
+export const createEquipament = async (
+    newEquipament: EquipmentCreate
+): Promise<Equipment> => {
+    const data = await apiClient.post<Equipment>("/equipment", newEquipament);
+    if (!data) {
+        throw new Error("Erro ao criar equipamento");
+    }
+    return data;
 };
 
 export const uploadEquipamentImages = async (equipmentId: string, formData: FormData) => {

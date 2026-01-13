@@ -14,8 +14,12 @@ export const getRevistas = async (
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
-export const createRevista = async (newRevista: MagazineCreate) => {
-    return await apiClient.post("/magazine/", newRevista);
+export const createRevista = async (newRevista: MagazineCreate): Promise<Magazine> => {
+    const data = await apiClient.post<Magazine>("/magazine/", newRevista);
+    if (!data) {
+        throw new Error("Erro ao criar revista");
+    }
+    return data;
 };
 
 export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {

@@ -15,8 +15,12 @@ export const getMaterials = async (
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
-export const createMaterial = async (newMaterial: MaterialCreate) => {
-    return await apiClient.post("/material", newMaterial);
+export const createMaterial = async (newMaterial: MaterialCreate): Promise<Material> => {
+    const data = await apiClient.post<Material>("/material", newMaterial);
+    if (!data) {
+        throw new Error("Erro ao criar material");
+    }
+    return data;
 };
 
 export const uploadMaterialImages = async (materialId: string, images: FormData) => {
