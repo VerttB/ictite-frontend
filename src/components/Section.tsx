@@ -10,6 +10,7 @@ import { DropdownMenuLabel, DropdownMenuSeparator } from "@radix-ui/react-dropdo
 import { useState } from "react";
 import { Grid, List } from "lucide-react";
 import { Button } from "./ui/button";
+import { set } from "zod";
 interface BaseItem {
     id: string;
     name: string;
@@ -45,6 +46,7 @@ export const Section = <T extends BaseItem>({
     icon,
     onAdd,
     onUpdate,
+    onDelete,
     children,
 }: SectionProps<T>) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
@@ -88,10 +90,22 @@ export const Section = <T extends BaseItem>({
                         <DropdownMenuContent side="bottom" sideOffset={4}>
                             <DropdownMenuLabel>Ações</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => onUpdate && onUpdate(item)}>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    setTimeout(() => {
+                                        if (onUpdate) onUpdate(item);
+                                    }, 100);
+                                }}>
                                 Editar
                             </DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    setTimeout(() => {
+                                        if (onDelete) onDelete(item);
+                                    }, 100);
+                                }}>
+                                Excluir
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 ))}
