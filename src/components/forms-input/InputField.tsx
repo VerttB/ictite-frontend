@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { Input } from "./input";
+import { Input } from "../ui/input";
 
 interface InputFieldProps {
     name: string;
@@ -8,12 +8,7 @@ interface InputFieldProps {
     maxLength?: number;
 }
 
-export const InputField = ({
-    name,
-    label,
-    mask,
-    maxLength,
-}: InputFieldProps) => {
+export const InputField = ({ name, label, mask, maxLength }: InputFieldProps) => {
     const {
         register,
         formState: { errors },
@@ -33,9 +28,7 @@ export const InputField = ({
                 }}
             />
             {errors[name] && (
-                <p className="text-sm text-red-500">
-                    {errors[name].message as string}
-                </p>
+                <p className="text-sm text-red-500">{errors[name].message as string}</p>
             )}
         </div>
     );
