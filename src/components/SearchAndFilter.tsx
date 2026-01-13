@@ -12,7 +12,7 @@ import {
 } from "./ui/dialog";
 interface FilterListProps {
     onSearch?: (filters: Record<string, any>) => void;
-    currentParams: { [key: string]: string | string[] | undefined };
+    currentParams: { [key: string]: string | string[] | number | undefined };
     applyParams: (params: Record<string, any>) => void;
     mainSearchKey: string;
     mainSearchPlaceholder?: string;
@@ -30,9 +30,7 @@ export const SearchAndFilter = ({
     const [openModal, setOpenModal] = useState(false);
     const [localFilters, setLocalFilters] = useState<Record<string, any>>({});
 
-    const activeFiltersCount = filters.filter(
-        (f) => !!currentParams[f.key]
-    ).length;
+    const activeFiltersCount = filters.filter((f) => !!currentParams[f.key]).length;
 
     const handleMainSearch = (value: string) => {
         const newParams = { ...currentParams };
