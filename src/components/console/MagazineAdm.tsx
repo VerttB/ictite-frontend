@@ -11,7 +11,7 @@ import {
 import { Book } from "lucide-react";
 import useSWR from "swr";
 import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../ui/FormInputField";
+import { InputField } from "../forms-input/InputField";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import {
     Magazine,

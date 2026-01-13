@@ -2,7 +2,6 @@
 
 import { Section } from "../Section";
 import useSWR from "swr";
-import { useState } from "react";
 import {
     getProjects,
     createProject,
@@ -11,7 +10,7 @@ import {
     deleteProject,
 } from "@/core/service/ProjetoService";
 import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../ui/FormInputField";
+import { InputField } from "../forms-input/InputField";
 import { ControlledSelect } from "../forms-input/ControlledSelect";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import {
@@ -29,6 +28,7 @@ import { SearchAndFilter } from "../SearchAndFilter";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { TextField } from "../forms-input/TextField";
+import { yearValidation } from "@/core/constants/validation";
 
 interface ProjectAdmProps {
     params?: ProjectSearchParams;
@@ -97,7 +97,9 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                 <ControlledSelect
                     name="year"
                     label="Ano"
-                    options={new Array(50).map((_, i) => (i + 1984).toString())}
+                    options={new Array(yearValidation.max - yearValidation.min + 1)
+                        .fill(null)
+                        .map((_, i) => (i + yearValidation.min).toString())}
                 />
                 <TextField name="description_long" label="Descrição Longa" />
                 <ControlledImageUpload name="images" />
@@ -120,11 +122,6 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                     }}>
                     <InputField name="name" label="Nome do Projeto" />
                     <InputField name="description" label="Descrição" />
-                    <ControlledSelect
-                        name="year"
-                        label="Ano"
-                        options={new Array(40).map((_, i) => (i + 1984).toString())}
-                    />
                     <TextField name="description_long" label="Descrição Longa" />
                 </BaseFormModal>
             )}

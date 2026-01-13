@@ -13,7 +13,7 @@ import {
 } from "@/core/service/EquipamentoService";
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
 import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../ui/FormInputField";
+import { InputField } from "../forms-input/InputField";
 import { ControlledSelect } from "../forms-input/ControlledSelect";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import {

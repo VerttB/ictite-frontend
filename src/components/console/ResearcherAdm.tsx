@@ -11,7 +11,7 @@ import {
     updateResearcher,
 } from "@/core/service/PesquisadorService";
 import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../ui/FormInputField";
+import { InputField } from "../forms-input/InputField";
 import { ControlledSelect } from "../forms-input/ControlledSelect";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { RaceTypes } from "@/core/constants/race";

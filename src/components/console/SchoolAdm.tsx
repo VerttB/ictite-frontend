@@ -13,7 +13,7 @@ import { useState } from "react";
 import { School2 } from "lucide-react";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
-import { InputField } from "../ui/FormInputField";
+import { InputField } from "../forms-input/InputField";
 import { mask } from "@/lib/maskBuilder";
 import { SchoolSearchParams } from "@/core/domain/School";
 import {

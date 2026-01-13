@@ -13,7 +13,7 @@ import {
 } from "@/core/service/MaterialService";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
-import { InputField } from "../ui/FormInputField";
+import { InputField } from "../forms-input/InputField";
 import {
     Material,
     MaterialCreateSchema,
