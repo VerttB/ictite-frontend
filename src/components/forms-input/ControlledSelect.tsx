@@ -12,7 +12,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "./select";
+} from "../ui/select";
 
 export const ControlledSelect = ({
     name,
@@ -33,9 +33,7 @@ export const ControlledSelect = ({
                 name={name}
                 control={control}
                 render={({ field }) => (
-                    <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <SelectTrigger className="w-full">
                             <SelectValue
                                 placeholder={`Selecione ${label.toLowerCase()}`}
@@ -45,9 +43,7 @@ export const ControlledSelect = ({
                             {options.map((opt) => (
                                 <SelectItem
                                     key={typeof opt === "string" ? opt : opt.id}
-                                    value={
-                                        typeof opt === "string" ? opt : opt.id
-                                    }>
+                                    value={typeof opt === "string" ? opt : opt.id}>
                                     {typeof opt === "string" ? opt : opt.name}
                                 </SelectItem>
                             ))}
@@ -57,9 +53,7 @@ export const ControlledSelect = ({
             />
 
             {errors[name] && (
-                <p className="text-sm text-red-500">
-                    {errors[name].message as string}
-                </p>
+                <p className="text-sm text-red-500">{errors[name].message as string}</p>
             )}
         </div>
     );
