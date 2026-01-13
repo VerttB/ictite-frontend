@@ -16,8 +16,8 @@ export const TextField = ({ name, label, maxLength }: TextFieldProps) => {
         <div>
             <label className="mb-1 block text-sm">{label}</label>
             <textarea
+                className="w-full rounded border border-gray-300 p-2"
                 {...rest}
-                maxLength={maxLength}
                 onChange={(e) => {
                     onChange(e);
                 }}
