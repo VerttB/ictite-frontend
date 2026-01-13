@@ -14,14 +14,14 @@ export const ProjectSchema = z.object({
     images: ImageSchema.array(),
 });
 
-export const ProjectCreateSchema = ProjectSchema.omit({
+export const ProjectCreateSchema = ProjectSchema.pick({
     id: true,
-    clube: true,
-    images: true,
+    description_long: true,
+    description: true,
 }).and(
     z.object({
         clube_ciencia_id: z.uuid(),
-        images: z.any().pipe(ImageCreateSchema).optional(),
+        images: z.any().pipe(ImageCreateSchema),
     })
 );
 
