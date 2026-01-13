@@ -19,9 +19,6 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
     const [editingItem, setEditingItem] = useState<T | null>(null);
     const [deletingItem, setDeletingItem] = useState<T | null>(null);
 
-    // --- HANDLERS DE AÇÃO (WRAPPERS) ---
-
-    // Wrapper para Criação: Recebe os dados, chama a função, atualiza e fecha
     const handleCreate = async (
         data: CreateDTO,
         customFn?: (data: CreateDTO) => Promise<any>
