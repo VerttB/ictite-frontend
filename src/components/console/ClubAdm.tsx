@@ -7,21 +7,28 @@ import {
     getClubesCiencia,
     createClubeCiencias,
     uploadClubImage,
+    updateClubeCiencias,
+    deleteClubeCiencias,
 } from "@/core/service/ClubeCienciaService";
 import { useState } from "react";
 import { BaseFormModal } from "../BaseFormAddModal";
-import { ControlledImageUpload } from "../ui/ControlledImageInput";
+import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import { InputField } from "../ui/FormInputField";
-import { ControlledSelect } from "../ui/ControlledSelect";
+import { ControlledSelect } from "../forms-input/ControlledSelect";
 import {
+    ScienceClub,
     ScienceClubCreate,
     ScienceClubCreateSchema,
+    ScienceClubUpdate,
+    ScienceClubUpdateSchema,
     ScienceClubSearchParams,
 } from "@/core/domain/Club";
 import { Pagination } from "../Pagination";
 import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { SearchAndFilter } from "../SearchAndFilter";
 import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
+import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
+import { useAdmCrud } from "@/hooks/useAdmCrud";
 
 interface ClubAdmProps {
     params?: ScienceClubSearchParams;
@@ -38,15 +45,21 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
     const { applyFilters, changePage } = useUrlPagination();
 
     const { data: escolas } = useSWR("escolas", () => getSchools());
-    const [open, setOpen] = useState(false);
 
-    const onSubmit = async (data: ScienceClubCreate) => {
+    const crud = useAdmCrud<ScienceClub, ScienceClubCreate, ScienceClubUpdate>({
+        mutate,
+        deleteFn: deleteClubeCiencias,
+    });
+
+    const handleCreate = async (data: ScienceClubCreate) => {
         const { id } = await createClubeCiencias(data);
         const form = new FormData();
         data.images.forEach((file) => form.append("images", file));
         await uploadClubImage(id, form);
-        mutate();
-        setOpen(false);
+    };
+
+    const handleUpdate = async (id: string, data: ScienceClubUpdate) => {
+        await updateClubeCiencias(id, data);
     };
     const filters: ItemFilterConfig[] = [
         {
@@ -65,11 +78,13 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
     if (!clubes) return null;
     return (
         <div className="flex h-full w-full flex-col">
-            <Section
+            <Section<ScienceClub>
                 title="Clubes de Ciências"
                 items={clubes.items}
                 icon={null}
-                onAdd={() => setOpen(true)}>
+                onAdd={crud.ui.openCreate}
+                onUpdate={crud.ui.openEdit}
+                onDelete={crud.ui.openDelete}>
                 <SearchAndFilter
                     currentParams={params as any}
                     applyParams={applyFilters}
@@ -80,12 +95,12 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
             </Section>
 
             <BaseFormModal<typeof ScienceClubCreateSchema, ScienceClubCreate>
-                open={open}
-                onClose={() => setOpen(false)}
+                open={crud.isCreating}
+                onClose={crud.ui.closeCreate}
+                onSubmit={(data) => crud.actions.create(data, handleCreate)}
                 title="Adicionar Clube de Ciências"
                 schema={ScienceClubCreateSchema}
-                props={{ defaultValues: { images: [] } }}
-                onSubmit={onSubmit}>
+                props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Clube de Ciências" />
                 <InputField name="description" label="Descrição" />
                 <ControlledSelect
@@ -96,6 +111,33 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                 />
                 <ControlledImageUpload name="images" />
             </BaseFormModal>
+
+            {crud.editingItem && (
+                <BaseFormModal<typeof ScienceClubUpdateSchema, ScienceClubUpdate>
+                    open={!!crud.editingItem}
+                    key={crud.editingItem.id}
+                    onClose={crud.ui.closeEdit}
+                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
+                    title="Atualizar Clube de Ciências"
+                    schema={ScienceClubUpdateSchema}
+                    props={{
+                        defaultValues: {
+                            name: crud.editingItem?.name,
+                            description: crud.editingItem?.description,
+                        },
+                    }}>
+                    <InputField name="name" label="Nome do Clube de Ciências" />
+                    <InputField name="description" label="Descrição" />
+                </BaseFormModal>
+            )}
+
+            <DeleteConfirmationModal
+                open={!!crud.deletingItem}
+                onClose={crud.ui.closeDelete}
+                onConfirm={crud.actions.delete}
+                title={`Deseja excluir ${crud.deletingItem?.name}?`}
+                description="Essa ação não pode ser desfeita."
+            />
 
             <Pagination
                 totalPages={clubes.total_pages}
