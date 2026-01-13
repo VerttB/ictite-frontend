@@ -3,11 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import {
-    Popover,
-    PopoverContent,
-    PopoverAnchor,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverAnchor } from "@/components/ui/popover";
 import { School } from "@/core/domain/School";
 import { Spinner } from "./LoadingSpin";
 import { useRouter } from "next/navigation";
@@ -28,7 +24,13 @@ export default function MapaRender() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const { data: geojsonData, isLoading: loading } = useSWR(
         "schools-geo-data",
-        getSchoolGeoData
+        getSchoolGeoData,
+        {
+            keepPreviousData: true,
+            revalidateOnFocus: false,
+            revalidadeOnReconnect: false,
+            dedupingInterval: 60000,
+        }
     );
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [popoverPosition, setPopoverPosition] = useState<{
@@ -57,8 +59,7 @@ export default function MapaRender() {
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             style:
-                "mapbox://styles/mapbox/" +
-                (theme === "dark" ? "dark-v10" : "light-v10"),
+                "mapbox://styles/mapbox/" + (theme === "dark" ? "dark-v10" : "light-v10"),
             center: [-41.5, -12.9],
             zoom: 5,
             trackResize: true,
@@ -91,15 +92,7 @@ export default function MapaRender() {
                         30,
                         "#00737A",
                     ],
-                    "circle-radius": [
-                        "step",
-                        ["get", "point_count"],
-                        15,
-                        10,
-                        25,
-                        30,
-                        35,
-                    ],
+                    "circle-radius": ["step", ["get", "point_count"], 15, 10, 25, 30, 35],
                 },
             });
             map.addLayer({
@@ -141,34 +134,24 @@ export default function MapaRender() {
                 if (!features[0].properties) return;
                 const clusterId = features[0].properties.cluster_id;
                 if (features[0].geometry.type !== "Point") return;
-                const coordinates =
-                    features[0].geometry.coordinates.slice() as [
-                        number,
-                        number,
-                    ];
+                const coordinates = features[0].geometry.coordinates.slice() as [
+                    number,
+                    number,
+                ];
 
-                const source = map.getSource(
-                    "instituicoes"
-                ) as mapboxgl.GeoJSONSource;
+                const source = map.getSource("instituicoes") as mapboxgl.GeoJSONSource;
 
-                source.getClusterLeaves(
-                    clusterId,
-                    Infinity,
-                    0,
-                    (err, leaves) => {
-                        if (err || !leaves) {
-                            return;
-                        }
-
-                        const position = map.project(coordinates);
-                        const School = leaves.map(
-                            (leaf) => leaf.properties as School
-                        );
-                        setPopoverContent(School);
-                        setPopoverPosition(position);
-                        setPopoverOpen(true);
+                source.getClusterLeaves(clusterId, Infinity, 0, (err, leaves) => {
+                    if (err || !leaves) {
+                        return;
                     }
-                );
+
+                    const position = map.project(coordinates);
+                    const School = leaves.map((leaf) => leaf.properties as School);
+                    setPopoverContent(School);
+                    setPopoverPosition(position);
+                    setPopoverOpen(true);
+                });
             });
 
             map.on("click", "unclustered-point", (e) => {
@@ -234,9 +217,7 @@ export default function MapaRender() {
                 <PopoverContent className="w-80">
                     <div className="grid gap-4">
                         <div className="space-y-2">
-                            <h4 className="leading-none font-medium">
-                                Escolas
-                            </h4>
+                            <h4 className="leading-none font-medium">Escolas</h4>
                             <p className="text-muted-foreground text-sm">
                                 Lista de instituições neste ponto.
                             </p>
