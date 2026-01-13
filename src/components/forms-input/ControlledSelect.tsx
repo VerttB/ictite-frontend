@@ -1,10 +1,3 @@
-interface ControlledSelectProps {
-    name: string;
-    label: string;
-    options: { id: string; name: string }[] | string[];
-    className?: string;
-}
-
 import { useFormContext, Controller } from "react-hook-form";
 import {
     Select,
@@ -13,7 +6,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";
+import { SimpleIdName } from "@/schemas/Common";
 
+interface ControlledSelectProps {
+    name: string;
+    label: string;
+    options: SimpleIdName[] | string[] | number[];
+    className?: string;
+}
 export const ControlledSelect = ({
     name,
     label,
@@ -42,9 +42,11 @@ export const ControlledSelect = ({
                         <SelectContent>
                             {options.map((opt) => (
                                 <SelectItem
-                                    key={typeof opt === "string" ? opt : opt.id}
-                                    value={typeof opt === "string" ? opt : opt.id}>
-                                    {typeof opt === "string" ? opt : opt.name}
+                                    key={typeof opt === "object" ? opt.id : opt}
+                                    value={
+                                        typeof opt === "object" ? opt.id : opt.toString()
+                                    }>
+                                    {typeof opt === "object" ? opt.name : opt}
                                 </SelectItem>
                             ))}
                         </SelectContent>
