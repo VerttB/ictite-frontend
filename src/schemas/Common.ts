@@ -15,3 +15,5 @@ export const SearchParamParser = {
         return [val];
     }, z.array(z.string()).optional().default([])),
 };
+
+export type SimpleIdName = z.infer<typeof SimpleIdNameSchema>;
