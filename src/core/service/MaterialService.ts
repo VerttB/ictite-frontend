@@ -1,7 +1,6 @@
 import {
     MaterialCreate,
     Material,
-    MaterialSchema,
     MaterialUpdate,
     MaterialSearchParams,
 } from "../domain/Material";
@@ -16,11 +15,7 @@ export const getMaterials = async (
 };
 
 export const createMaterial = async (newMaterial: MaterialCreate): Promise<Material> => {
-    const data = await apiClient.post<Material>("/material", newMaterial);
-    if (!data) {
-        throw new Error("Erro ao criar material");
-    }
-    return data;
+    return await apiClient.post<Material>("/material", newMaterial);
 };
 
 export const uploadMaterialImages = async (materialId: string, images: FormData) => {
@@ -30,9 +25,9 @@ export const uploadMaterialImages = async (materialId: string, images: FormData)
 export const updateMaterial = async (
     materialId: string,
     updatedMaterial: Partial<MaterialUpdate>
-) => {
-    return await apiClient.patch(`/material/${materialId}`, updatedMaterial);
+): Promise<Material> => {
+    return await apiClient.patch<Material>(`/material/${materialId}`, updatedMaterial);
 };
-export const deleteMaterial = async (materialId: string) => {
-    return await apiClient.delete(`/material/${materialId}`);
+export const deleteMaterial = async (materialId: string): Promise<void> => {
+    await apiClient.delete(`/material/${materialId}`);
 };

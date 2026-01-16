@@ -15,14 +15,13 @@ export const getResearchers = async (
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
-export async function getResearcherById(researcherId: string, full: boolean = false) {
-    const data = await apiClient.get(`/researchers/${researcherId}`, {
+export async function getResearcherById(
+    researcherId: string,
+    full: boolean = false
+): Promise<ResearcherFinal> {
+    return await apiClient.get<ResearcherFinal>(`/researchers/${researcherId}`, {
         params: { full },
     });
-    if (!data) {
-        throw new Error("Pesquisador não encontrado");
-    }
-    return data;
 }
 
 export async function getResearcherProjects(researcherId: string): Promise<Project[]> {
@@ -35,17 +34,20 @@ export async function getResearchersByClube(clubeId: string): Promise<Researcher
     return data || [];
 }
 
-export async function createResearcher(newResearcher: ResearcherCreate) {
-    console.log("Creating researcher...", newResearcher);
-    return await apiClient.post("/researchers/", newResearcher);
+export async function createResearcher(
+    newResearcher: ResearcherCreate
+): Promise<Researcher> {
+    return await apiClient.post<Researcher>("/researchers/", newResearcher);
 }
-
 export async function updateResearcher(
     researcherId: string,
     updatedResearcher: Partial<ResearcherUpdate>
-) {
-    return await apiClient.patch(`/researchers/${researcherId}`, updatedResearcher);
+): Promise<Researcher> {
+    return await apiClient.patch<Researcher>(
+        `/researchers/${researcherId}`,
+        updatedResearcher
+    );
 }
-export async function deleteResearcher(researcherId: string) {
-    return await apiClient.delete(`/researchers/${researcherId}`);
+export async function deleteResearcher(researcherId: string): Promise<void> {
+    await apiClient.delete(`/researchers/${researcherId}`);
 }

@@ -7,59 +7,46 @@ import {
     ProjectUpdate,
 } from "../domain/Project";
 import { apiClient } from "@/lib/api/client";
+import { ResearcherByType } from "../domain/Researcher";
 
 export const getProjects = async (
     params?: ProjectSearchParams
 ): Promise<Pagination<Project>> => {
-    const data = await apiClient.get<Pagination<Project>>("/projects/", { params });
-    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
+    return await apiClient.get<Pagination<Project>>("/projects/", { params });
 };
 
 export const getProjectById = async (projectId: string): Promise<Project> => {
-    const data = await apiClient.get<Project>(`/projects/${projectId}`);
-    if (!data) {
-        throw new Error("Projeto não encontrado");
-    }
-    return data;
+    return await apiClient.get<Project>(`/projects/${projectId}`);
 };
-
-export const getProjectResearchers = async (projectId: string) => {
-    const data = await apiClient.get(`/projects/${projectId}/researchers`);
-    return data || [];
+export const getProjectResearchers = async (
+    projectId: string
+): Promise<ResearcherByType> => {
+    return await apiClient.get<ResearcherByType>(`/projects/${projectId}/researchers`);
 };
 
 export const getProjectbyClube = async (clubeId: string): Promise<Project[]> => {
-    const data = await apiClient.get<Project[]>(`/projects/${clubeId}/clube`);
-    return data || [];
+    return await apiClient.get<Project[]>(`/projects/${clubeId}/clube`);
 };
 
 export const getProjectStatistics = async (
     projectId: string
 ): Promise<ProjectStatistic> => {
-    const data = await apiClient.get<ProjectStatistic>(
-        `/projects/${projectId}/statistics`
-    );
-    if (!data) throw new Error("Estatísticas do projeto não encontradas");
-    return data;
+    return await apiClient.get<ProjectStatistic>(`/projects/${projectId}/statistics`);
 };
 
 export const createProject = async (newProject: ProjectCreate): Promise<Project> => {
-    const data = await apiClient.post<Project>("/projects/", newProject);
-    if (!data) {
-        throw new Error("Erro ao criar projeto");
-    }
-    return data;
+    return await apiClient.post<Project>("/projects/", newProject);
 };
 
 export const updateProject = async (
     projectId: string,
     updatedProject: Partial<ProjectUpdate>
-) => {
-    return await apiClient.patch(`/projects/${projectId}`, updatedProject);
+): Promise<Project> => {
+    return await apiClient.patch<Project>(`/projects/${projectId}`, updatedProject);
 };
 
-export const deleteProject = async (projectId: string) => {
-    return await apiClient.delete(`/projects/${projectId}`);
+export const deleteProject = async (projectId: string): Promise<void> => {
+    await apiClient.delete(`/projects/${projectId}`);
 };
 
 export const uploadProjectImages = async (projectId: string, formData: FormData) => {

@@ -1,10 +1,5 @@
-import { Ictite } from "../interface/IIctite";
 import { apiClient } from "@/lib/api/client";
 
-export const GETictite = async (): Promise<Ictite> => {
-    const data = await apiClient.get<Ictite>("/ictite/");
-    if (!data) {
-        throw new Error("Erro ao buscar ictite");
-    }
-    return data;
+export const GETictite = async (): Promise<{ link: string; objective: string }> => {
+    return await apiClient.get<{ link: string; objective: string }>("/ictite/");
 };

@@ -2,6 +2,7 @@ import { Equipment } from "@/core/domain/Equipment";
 import {
     School,
     SchoolCreate,
+    SchoolGeoJson,
     SchoolSearchParams,
     SchoolStatistics,
     SchoolUpdate,
@@ -12,8 +13,8 @@ import { apiClient } from "@/lib/api/client";
 import { Project } from "../domain/Project";
 import { Researcher } from "../domain/Researcher";
 
-export const getSchoolGeoData = async () => {
-    return await apiClient.get<any>("/schools/geojson");
+export const getSchoolGeoData = async (): Promise<SchoolGeoJson> => {
+    return await apiClient.get<SchoolGeoJson>("/schools/geojson");
 };
 
 export const getSchoolById = async (id: string): Promise<School> => {
@@ -54,34 +55,28 @@ export const getSchoolResearchers = async (school_id: string): Promise<Researche
 export const getSchoolStatistics = async (
     school_id: string
 ): Promise<SchoolStatistics> => {
-    const data = await apiClient.get<SchoolStatistics>(
-        `/schools/${school_id}/statistics`
+    return (
+        (await apiClient.get<SchoolStatistics>(`/schools/${school_id}/statistics`)) || {
+            total_clubs: 0,
+            total_projects: 0,
+            total_researchers: 0,
+        }
     );
-    if (!data) {
-        throw new Error("Estatísticas da escola não encontradas");
-    }
-    return data;
 };
 
 export const createSchool = async (school: SchoolCreate): Promise<School> => {
-    const data = await apiClient.post<School>("/schools", school);
-    if (!data) {
-        throw new Error("Erro ao criar escola");
-    }
-    return data;
+    return await apiClient.post<School>("/schools", school);
 };
 
-export const deleteSchool = async (id: string) => {
+export const deleteSchool = async (id: string): Promise<void> => {
     await apiClient.delete(`/schools/${id}`);
-    return true;
 };
 
-export const updateSchool = async (id: string, school: Partial<SchoolUpdate>) => {
-    const data = await apiClient.patch<School>(`/schools/${id}`, school);
-    if (!data) {
-        throw new Error("Erro ao atualizar escola");
-    }
-    return data;
+export const updateSchool = async (
+    id: string,
+    school: Partial<SchoolUpdate>
+): Promise<School> => {
+    return await apiClient.patch<School>(`/schools/${id}`, school);
 };
 export const uploadSchoolImage = async (school_id: string, form: FormData) => {
     return await apiClient.post(`/schools/${school_id}/images`, form);

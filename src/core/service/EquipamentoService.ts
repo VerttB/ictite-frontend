@@ -17,11 +17,7 @@ export const getEquipaments = async (
 export const createEquipament = async (
     newEquipament: EquipmentCreate
 ): Promise<Equipment> => {
-    const data = await apiClient.post<Equipment>("/equipment", newEquipament);
-    if (!data) {
-        throw new Error("Erro ao criar equipamento");
-    }
-    return data;
+    return await apiClient.post<Equipment>("/equipment", newEquipament);
 };
 
 export const uploadEquipamentImages = async (equipmentId: string, formData: FormData) => {
@@ -31,10 +27,13 @@ export const uploadEquipamentImages = async (equipmentId: string, formData: Form
 export const updateEquipament = async (
     equipmentId: string,
     updatedEquipament: Partial<EquipmentUpdate>
-) => {
-    return await apiClient.patch(`/equipment/${equipmentId}`, updatedEquipament);
+): Promise<Equipment> => {
+    return await apiClient.patch<Equipment>(
+        `/equipment/${equipmentId}`,
+        updatedEquipament
+    );
 };
 
-export const deleteEquipament = async (equipmentId: string) => {
-    return await apiClient.delete(`/equipment/${equipmentId}`);
+export const deleteEquipament = async (equipmentId: string): Promise<void> => {
+    await apiClient.delete(`/equipment/${equipmentId}`);
 };

@@ -10,16 +10,19 @@ import { Pagination } from "@/schemas/Pagination";
 export const getRevistas = async (
     params?: MagazineSearchParams
 ): Promise<Pagination<Magazine>> => {
-    const data = await apiClient.get<Pagination<Magazine>>("/magazine/", { params });
-    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
+    return (
+        (await apiClient.get<Pagination<Magazine>>("/magazine/", { params })) || {
+            items: [],
+            total: 0,
+            page: 1,
+            total_pages: 0,
+            size: 0,
+        }
+    );
 };
 
 export const createRevista = async (newRevista: MagazineCreate): Promise<Magazine> => {
-    const data = await apiClient.post<Magazine>("/magazine/", newRevista);
-    if (!data) {
-        throw new Error("Erro ao criar revista");
-    }
-    return data;
+    return await apiClient.post<Magazine>("/magazine/", newRevista);
 };
 
 export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {
@@ -29,10 +32,10 @@ export const uploadMagazineImage = async (magazineId: string, formData: FormData
 export const updateRevista = async (
     magazineId: string,
     updatedRevista: Partial<MagazineUpdate>
-) => {
-    return await apiClient.patch(`/magazine/${magazineId}`, updatedRevista);
+): Promise<Magazine> => {
+    return await apiClient.patch<Magazine>(`/magazine/${magazineId}`, updatedRevista);
 };
 
-export const deleteRevista = async (magazineId: string) => {
+export const deleteRevista = async (magazineId: string): Promise<void> => {
     return await apiClient.delete(`/magazine/${magazineId}`);
 };
