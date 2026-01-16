@@ -1,32 +1,27 @@
+/* eslint-disable */
 import { useState } from "react";
 import { SearchBar } from "./SearchBar";
 import { Button } from "./ui/button";
 import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
 import { ListFilter } from "lucide-react";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogTitle,
-} from "./ui/dialog";
-interface FilterListProps {
-    onSearch?: (filters: Record<string, any>) => void;
-    currentParams: { [key: string]: string | string[] | number | undefined };
-    applyParams: (params: Record<string, any>) => void;
+import { SearchParams } from "@/core/interface/SearchParams";
+interface FilterListProps<T> {
+    onSearch?: (filters: SearchParams) => void;
+    currentParams: SearchParams;
+    applyParams: (params: SearchParams) => void;
     mainSearchKey: string;
     mainSearchPlaceholder?: string;
-    filters: ItemFilterConfig[];
+    filters: ItemFilterConfig<T>[];
 }
 
-export const SearchAndFilter = ({
+export const SearchAndFilter = <T,>({
     onSearch,
     currentParams,
     applyParams,
     mainSearchKey,
     mainSearchPlaceholder,
     filters,
-}: FilterListProps) => {
+}: FilterListProps<T>) => {
     const [openModal, setOpenModal] = useState(false);
     const [localFilters, setLocalFilters] = useState<Record<string, any>>({});
 

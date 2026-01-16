@@ -5,7 +5,6 @@ import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { useDebounce } from "@/hooks/useDebouce";
-import { url } from "inspector";
 
 interface SearchBarProps {
     onSearch: (value: string) => void;
@@ -13,11 +12,7 @@ interface SearchBarProps {
     initialValue?: string;
 }
 
-export function SearchBar({
-    onSearch,
-    placeholder,
-    initialValue = "",
-}: SearchBarProps) {
+export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBarProps) {
     const [value, setValue] = useState(initialValue);
     const deboucedValue = useDebounce(value, 300);
 
@@ -27,7 +22,7 @@ export function SearchBar({
         } else if (deboucedValue.length === 0) {
             onSearch("");
         }
-    }, [deboucedValue]);
+    }, [deboucedValue, onSearch]);
 
     const submitSearch = () => {
         onSearch(value);

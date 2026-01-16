@@ -12,10 +12,7 @@ import { School, PersonStanding, Projector, Club } from "lucide-react";
 import { SchoolSearchParamsSchema } from "@/core/domain/School";
 import { ResearcherSearchParamsSchema } from "@/core/domain/Researcher";
 import { ProjectSearchParamsSchema } from "@/core/domain/Project";
-import {
-    ScienceClubCreateSchema,
-    ScienceClubSearchParamsSchema,
-} from "@/core/domain/Club";
+import { ScienceClubSearchParamsSchema } from "@/core/domain/Club";
 
 const fetcher = async (query: string) => {
     if (!query) {

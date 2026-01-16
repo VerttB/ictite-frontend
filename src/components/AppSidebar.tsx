@@ -13,15 +13,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import { useUserContext } from "@/providers/UserContext";
-import {
-    BookOpen,
-    ChartSpline,
-    Handshake,
-    Home,
-    Newspaper,
-    SquareChartGantt,
-    Video,
-} from "lucide-react";
+import { Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -74,17 +66,13 @@ export function AppSidebar() {
                                                 tooltip={item.title}
                                                 className={cn(
                                                     "flex rounded-sm transition-all duration-200",
-                                                    open
-                                                        ? "w-full"
-                                                        : "justify-center",
+                                                    open ? "w-full" : "justify-center",
                                                     isActive
                                                         ? "bg-primary hover:bg-primary text-white hover:text-white"
                                                         : "hover:bg-primary/70 bg-gray-200 hover:text-white"
                                                 )}
                                                 asChild>
-                                                <Link
-                                                    className="flex"
-                                                    href={item.url}>
+                                                <Link className="flex" href={item.url}>
                                                     <item.icon />
                                                     <span>{item.title}</span>
                                                 </Link>
@@ -129,11 +117,7 @@ export function AppSidebar() {
                 </SidebarGroup>
                 <SidebarSeparator />
                 <SidebarGroup>
-                    <p
-                        className={cn(
-                            "text-xs text-gray-500",
-                            open ? "block" : "hidden"
-                        )}>
+                    <p className={cn("text-xs text-gray-500", open ? "block" : "hidden")}>
                         © 2025 ICTITE
                     </p>
                 </SidebarGroup>
