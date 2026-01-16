@@ -2,7 +2,6 @@ import { useViewPort } from "@/hooks/useViewPort";
 import { Spinner } from "../LoadingSpin";
 import Masonry from "react-responsive-masonry";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "../ScrollArea";
 import CardNaoEncontrado from "../card/CardNaoEncontrado";
 
 type TabsGridProps<T> = {
@@ -39,10 +38,18 @@ export const TabsGrid = <T,>({
     if (isError) {
         return <div>Erro ao carregar os dados.</div>;
     }
-    if (!data || data.length === 0 || renderItem === undefined || Array.isArray(data) === false) {
-        return <div className="mt-4"><CardNaoEncontrado  text={emptyMessage} /></div>;
+    if (
+        !data ||
+        data.length === 0 ||
+        renderItem === undefined ||
+        Array.isArray(data) === false
+    ) {
+        return (
+            <div className="mt-4">
+                <CardNaoEncontrado text={emptyMessage} />
+            </div>
+        );
     }
-    
 
     if (layoutType === "grid") {
         return (
@@ -51,7 +58,7 @@ export const TabsGrid = <T,>({
                 style={{
                     gridTemplateColumns: `repeat(auto-fill, minmax(${minCardWidth}, 1fr))`,
                 }}>
-                { data.map((item) => renderItem(item))}
+                {data.map((item) => renderItem(item))}
             </div>
         );
     }

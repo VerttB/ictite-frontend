@@ -1,5 +1,5 @@
 "use client";
-import { BrainCircuit, Expand, School, X } from "lucide-react";
+import { BrainCircuit, Expand, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
     Drawer,
@@ -10,10 +10,7 @@ import {
 } from "../ui/drawer";
 import Image from "next/image";
 import useSWR from "swr";
-import {
-    getProjectById,
-    getProjectResearchers,
-} from "@/core/service/ProjetoService";
+import { getProjectById } from "@/core/service/ProjetoService";
 
 import Link from "next/link";
 import { useViewPort } from "@/hooks/useViewPort";
@@ -27,9 +24,8 @@ interface ProjetoProps {
 }
 
 export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
-    const { data: project, isLoading } = useSWR(
-        `project-data-${project_id}`,
-        () => getProjectById(project_id)
+    const { data: project, isLoading } = useSWR(`project-data-${project_id}`, () =>
+        getProjectById(project_id)
     );
     const { isMobile } = useViewPort();
     if (isLoading) return <Spinner />;

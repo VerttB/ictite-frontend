@@ -4,7 +4,6 @@ import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
 import { Button } from "@/components/ui/button";
-import { ScienceClubStatisticsAll, ScienceClub } from "@/core/domain/Club";
 import {
     getClubesCiencia,
     getClubesCienciaStats,
@@ -14,7 +13,6 @@ import {
     BookOpenText,
     BrainCircuit,
     ChartBar,
-    ChartSpline,
     ChevronLeft,
     Cpu,
     FlaskConical,
@@ -23,7 +21,6 @@ import {
     LucideIcon,
     Users2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 export default function Clubes() {

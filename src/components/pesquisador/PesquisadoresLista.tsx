@@ -1,12 +1,10 @@
 "use client";
 import CardPesquisador from "./PesquisadorCard";
-import { capitalize } from "@/core/utils/capitalize";
 import useSWR from "swr";
 import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Spinner } from "../LoadingSpin";
 import { BookA, BookOpen, BookOpenText, HeartHandshake } from "lucide-react";
 import { ResearcherByType } from "@/core/domain/Researcher";
-import CardNaoEncotrado from "../card/CardNaoEncontrado";
 import CardNaoEncontrado from "../card/CardNaoEncontrado";
 export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
     const { data: pesquisador, isLoading } = useSWR<ResearcherByType>(
@@ -21,9 +19,7 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">
                         <BookOpen />
-                        <h1 className="text-2xl font-semibold">
-                            Pesquisadores:
-                        </h1>
+                        <h1 className="text-2xl font-semibold">Pesquisadores:</h1>
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -41,7 +37,10 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                 </div>
                             ) : (
                                 <div>
-                                    <CardNaoEncontrado icon={BookOpenText} text="Nenhum professor cadastrado neste projeto."/>
+                                    <CardNaoEncontrado
+                                        icon={BookOpenText}
+                                        text="Nenhum professor cadastrado neste projeto."
+                                    />
                                 </div>
                             )}
                         </div>
@@ -60,30 +59,32 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                 </div>
                             ) : (
                                 <div>
-                                    <CardNaoEncontrado icon={BookA} text="Nenhum aluno cadastrado neste projeto."/>
+                                    <CardNaoEncontrado
+                                        icon={BookA}
+                                        text="Nenhum aluno cadastrado neste projeto."
+                                    />
                                 </div>
                             )}
                         </div>
 
                         {/* COORDENADORES */}
                         <div className="flex flex-col gap-2 border-b pb-4">
-                            <h2 className="text-xl font-semibold">
-                                Coordenador
-                            </h2>
+                            <h2 className="text-xl font-semibold">Coordenador</h2>
                             {pesquisador?.coordenador?.length ? (
                                 <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                                    {pesquisador?.coordenador.map(
-                                        (coordenador) => (
-                                            <CardPesquisador
-                                                key={coordenador.id}
-                                                researcher={coordenador}
-                                            />
-                                        )
-                                    )}
+                                    {pesquisador?.coordenador.map((coordenador) => (
+                                        <CardPesquisador
+                                            key={coordenador.id}
+                                            researcher={coordenador}
+                                        />
+                                    ))}
                                 </div>
                             ) : (
                                 <div>
-                                    <CardNaoEncontrado icon={HeartHandshake} text="Nenhum coordenador cadastrado neste projeto."/>
+                                    <CardNaoEncontrado
+                                        icon={HeartHandshake}
+                                        text="Nenhum coordenador cadastrado neste projeto."
+                                    />
                                 </div>
                             )}
                         </div>

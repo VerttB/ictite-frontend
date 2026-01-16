@@ -9,12 +9,6 @@ import { useState } from "react";
 import { ScienceClub } from "@/core/domain/Club";
 import Link from "next/link";
 
-interface ClubeCienciaTotal {
-    clubeCiencia: ScienceClub;
-    projetosClubeCiencia: Project[];
-    pesquisadoresClubeCiencia: string[];
-}
-
 interface ClubeCienciaTabsProps {
     //clubeCiencia: ClubeCienciaBase;
     projetosClubeCiencia: Project[];
@@ -22,13 +16,9 @@ interface ClubeCienciaTabsProps {
 }
 
 export default function ClubeCienciaTabs({
-    school_id,
     projetosClubeCiencia,
 }: ClubeCienciaTabsProps) {
-    const [clubesCiencia, setClubesCiencia] = useState<ScienceClub[]>([]);
-    const [clubeCienciaTotal, setClubeCienciaTotal] = useState<
-        ClubeCienciaTotal[]
-    >([]);
+    const [clubesCiencia] = useState<ScienceClub[]>([]);
 
     return (
         <div>

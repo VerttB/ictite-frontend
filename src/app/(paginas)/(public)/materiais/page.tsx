@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useMemo, useState } from "react";
 import CardMateriais from "@/components/card/CardMateriais";
 import { Button } from "@/components/ui/button";
@@ -7,16 +6,15 @@ import { BookText, ChevronLeft } from "lucide-react";
 import CardCategoriaMateriais from "@/components/card/CardCategoriaMateriais";
 
 export default function Materiais() {
-
     const [selectedType, setSelectedType] = useState<string | null>(null);
-    
+
     const materiaisMock = [
         {
             id: "1",
             name: "Robótica Educacional",
             link: "https://minimakerlab.com.br/?page_id=481",
             description:
-            "Material introdutório sobre robótica e sua aplicação em laboratórios makers. Inclui atividades práticas e vídeos explicativos.",
+                "Material introdutório sobre robótica e sua aplicação em laboratórios makers. Inclui atividades práticas e vídeos explicativos.",
             type: "laboratórios makers",
             images: [
                 "https://minimakerlab.com.br/wp-content/uploads/2019/10/robo-200x200.png",
@@ -27,7 +25,7 @@ export default function Materiais() {
             name: "Display Box Maker",
             link: "https://minimakerlab.com.br/?page_id=82",
             description:
-            "Guia de montagem e uso de display box em ambientes makers. Foco em eletrônica e prototipagem.",
+                "Guia de montagem e uso de display box em ambientes makers. Foco em eletrônica e prototipagem.",
             type: "laboratórios makers",
             images: [
                 "https://minimakerlab.com.br/wp-content/uploads/2018/04/display_box.png",
@@ -38,18 +36,16 @@ export default function Materiais() {
             name: "Oficina de Crafting",
             link: "https://minimakerlab.com.br/?page_id=86",
             description:
-            "Atividades práticas com materiais recicláveis e sustentáveis voltadas à criatividade e design.",
+                "Atividades práticas com materiais recicláveis e sustentáveis voltadas à criatividade e design.",
             type: "laboratórios makers",
-            images: [
-                "https://minimakerlab.com.br/wp-content/uploads/2018/04/craft.png",
-            ],
+            images: ["https://minimakerlab.com.br/wp-content/uploads/2018/04/craft.png"],
         },
         {
             id: "4",
             name: "Code Table Display",
             link: "https://minimakerlab.com.br/?page_id=92",
             description:
-            "Exemplo de projeto de mesa interativa para ensino de lógica de programação.",
+                "Exemplo de projeto de mesa interativa para ensino de lógica de programação.",
             type: "laboratórios makers",
             images: [
                 "https://minimakerlab.com.br/wp-content/uploads/2018/04/display_codetable-1.png",
@@ -60,9 +56,11 @@ export default function Materiais() {
             name: "Fotografia e Prototipagem",
             link: "https://minimakerlab.com.br/?page_id=368",
             description:
-            "Uso de fotografia para documentar experimentos e protótipos. Inclui orientações de luz e composição.",
+                "Uso de fotografia para documentar experimentos e protótipos. Inclui orientações de luz e composição.",
             type: "laboratórios makers",
-            images: ["https://minimakerlab.com.br/wp-content/uploads/2018/12/foto2-2.jpg"],
+            images: [
+                "https://minimakerlab.com.br/wp-content/uploads/2018/12/foto2-2.jpg",
+            ],
         },
         // ---- exemplos extras de outros tipos ----
         {
@@ -70,7 +68,7 @@ export default function Materiais() {
             name: "Introdução à Programação Criativa",
             link: "http://localhost:3000/videos/",
             description:
-            "Vídeo introdutório sobre pensamento computacional e lógica aplicada à arte e design digital.",
+                "Vídeo introdutório sobre pensamento computacional e lógica aplicada à arte e design digital.",
             type: "Vídeo",
             images: ["https://picsum.photos/id/1015/400/300"],
         },
@@ -79,7 +77,7 @@ export default function Materiais() {
             name: "Guia de Energias Renováveis",
             link: "https://example.com/energias-renovaveis",
             description:
-            "Guia prático sobre uso de energia solar e eólica em escolas, com kits experimentais.",
+                "Guia prático sobre uso de energia solar e eólica em escolas, com kits experimentais.",
             type: "Apostila",
             images: ["https://picsum.photos/id/1022/400/300"],
         },
@@ -88,7 +86,7 @@ export default function Materiais() {
             name: "Sustentabilidade e Inovação",
             link: "https://example.com/sustentabilidade",
             description:
-            "Artigo sobre o impacto da sustentabilidade na inovação tecnológica e educacional.",
+                "Artigo sobre o impacto da sustentabilidade na inovação tecnológica e educacional.",
             type: "Artigo",
             images: ["https://picsum.photos/id/1033/400/300"],
         },
@@ -97,7 +95,7 @@ export default function Materiais() {
             name: "Oficina de IoT para Iniciantes",
             link: "https://example.com/iot-iniciantes",
             description:
-            "Apostila com exercícios práticos para introdução à Internet das Coisas usando Arduino.",
+                "Apostila com exercícios práticos para introdução à Internet das Coisas usando Arduino.",
             type: "Apostila",
             images: ["https://picsum.photos/id/1045/400/300"],
         },
@@ -106,7 +104,7 @@ export default function Materiais() {
             name: "Experimentos de Física com Materiais Simples",
             link: "https://example.com/fisica-experimentos",
             description:
-            "Coletânea de experimentos simples para aulas de física, utilizando materiais recicláveis.",
+                "Coletânea de experimentos simples para aulas de física, utilizando materiais recicláveis.",
             type: "Artigo",
             images: ["https://picsum.photos/id/1062/400/300"],
         },
@@ -116,8 +114,12 @@ export default function Materiais() {
     const categorias = useMemo(() => {
         const map = new Map<string, number>();
         materiaisMock.forEach((m) => map.set(m.type, (map.get(m.type) || 0) + 1));
-        return Array.from(map.entries()).map(([type, count]) => ({ name: type, type, count }));
-    }, [materiaisMock]);
+        return Array.from(map.entries()).map(([type, count]) => ({
+            name: type,
+            type,
+            count,
+        }));
+    }, []);
 
     // materiais filtrados (ou todos)
     const materiaisFiltrados = selectedType
@@ -132,10 +134,7 @@ export default function Materiais() {
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
             <div className="flex flex-row items-center gap-5">
-                <Button
-                    size={"icon"}
-                    variant={"outline"}
-                    className="cursor-pointer">
+                <Button size={"icon"} variant={"outline"} className="cursor-pointer">
                     <ChevronLeft />
                 </Button>
                 <p className="text-2xl font-semibold">Materiais Didáticos</p>
@@ -150,13 +149,12 @@ export default function Materiais() {
                     </h2>
                 </div>
                 <p className="text-sm sm:text-base">
-                    Explore recursos educativos desenvolvidos para transformar o
-                    ensino de ciências e tecnologia na Bahia. Oferecemos planos
-                    de aula, kits experimentais e guias práticos sobre robótica,
-                    energias renováveis e inovação, todos alinhados à realidade
-                    local e de acesso gratuito. Ideal para professores e
-                    estudantes, nossos materiais incentivam aprendizagem mão na
-                    massa e abordagem investigativa.
+                    Explore recursos educativos desenvolvidos para transformar o ensino de
+                    ciências e tecnologia na Bahia. Oferecemos planos de aula, kits
+                    experimentais e guias práticos sobre robótica, energias renováveis e
+                    inovação, todos alinhados à realidade local e de acesso gratuito.
+                    Ideal para professores e estudantes, nossos materiais incentivam
+                    aprendizagem mão na massa e abordagem investigativa.
                 </p>
             </div>
 
@@ -165,9 +163,16 @@ export default function Materiais() {
                 <div className="text-2xl font-semibold">
                     <h2>Categorias</h2>
                 </div>
-                <div className="flex flex-wrap gap-2 items-center justify-center">
+                <div className="flex flex-wrap items-center justify-center gap-2">
                     {categorias.map((categoria, i) => (
-                        <CardCategoriaMateriais key={i} name={categoria.name} type={categoria.type} count={categoria.count} onFilter={handleFilter} active={selectedType === categoria.type} />
+                        <CardCategoriaMateriais
+                            key={i}
+                            name={categoria.name}
+                            type={categoria.type}
+                            count={categoria.count}
+                            onFilter={handleFilter}
+                            active={selectedType === categoria.type}
+                        />
                     ))}
                 </div>
             </div>

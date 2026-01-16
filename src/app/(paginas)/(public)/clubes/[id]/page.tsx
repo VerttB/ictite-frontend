@@ -2,11 +2,7 @@ import ClubeProjetoPesquisador from "@/components/clubeCiencia/ClubeProjetoPesqu
 import InfoBar from "@/components/InfoBar";
 import { ResearcherByType } from "@/core/domain/Researcher";
 import { Project } from "@/core/domain/Project";
-import {
-    ScienceClubStatisticsAll,
-    ScienceClubStatistics,
-    ScienceClub,
-} from "@/core/domain/Club";
+import { ScienceClubStatistics, ScienceClub } from "@/core/domain/Club";
 
 import {
     getClubeCienciaById,
@@ -37,9 +33,7 @@ export default async function OneClubeCiencia({
 
     const clubeCiencia: ScienceClub = await getClubeCienciaById(id);
     const projects: Project[] = (await getClubeCienciaProjects(id)) ?? [];
-    const researchers: ResearcherByType = (await getClubeCienciaResearchers(
-        id
-    )) ?? {
+    const researchers: ResearcherByType = (await getClubeCienciaResearchers(id)) ?? {
         Professor: [],
         Aluno: [],
         Coordenador: [],
@@ -118,8 +112,7 @@ export default async function OneClubeCiencia({
                     {clubeCiencia.images?.map((image, index) => (
                         <Popover key={index}>
                             <PopoverTrigger>
-                                <div
-                                    className="relative h-[200px] w-[200px] overflow-hidden cursor-pointer">
+                                <div className="relative h-[200px] w-[200px] cursor-pointer overflow-hidden">
                                     <Image
                                         src={image.url}
                                         alt="Clube de Ciência"
@@ -128,7 +121,11 @@ export default async function OneClubeCiencia({
                                 </div>
                             </PopoverTrigger>
                             <PopoverContent>
-                                <Image src={image.url} alt="Clube de Ciência" height={1000} width={1000}></Image>
+                                <Image
+                                    src={image.url}
+                                    alt="Clube de Ciência"
+                                    height={1000}
+                                    width={1000}></Image>
                             </PopoverContent>
                         </Popover>
                     ))}
@@ -137,9 +134,7 @@ export default async function OneClubeCiencia({
 
             {/* |=======| DESCRICAO DO CLUBE DE CIÊNCIA |=======| */}
             <div className="bg-foreground flex flex-col gap-2 rounded-md border p-3">
-                <p className="border-b pb-2 text-xl font-semibold">
-                    Descrição:
-                </p>
+                <p className="border-b pb-2 text-xl font-semibold">Descrição:</p>
                 <p className="">{clubeCiencia.description}</p>
             </div>
 
