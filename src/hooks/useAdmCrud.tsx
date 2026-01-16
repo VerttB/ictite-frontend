@@ -1,12 +1,12 @@
+import { Pagination } from "@/schemas/Pagination";
 import { useState } from "react";
 import { toast } from "sonner";
 import { KeyedMutator } from "swr";
 interface UseAdmCrudProps<T, CreateDTO, UpdateDTO> {
-    mutate: KeyedMutator<any>; // Função do SWR para atualizar a lista
-
-    createFn?: (data: CreateDTO) => Promise<any>;
-    updateFn?: (id: string, data: UpdateDTO) => Promise<any>;
-    deleteFn?: (id: string) => Promise<any>;
+    mutate: KeyedMutator<Pagination<T>>;
+    createFn?: (data: CreateDTO) => Promise<T | void>;
+    updateFn?: (id: string, data: UpdateDTO) => Promise<T | void>;
+    deleteFn?: (id: string) => Promise<void>;
 }
 
 export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
@@ -21,7 +21,7 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
 
     const handleCreate = async (
         data: CreateDTO,
-        customFn?: (data: CreateDTO) => Promise<any>
+        customFn?: (data: CreateDTO) => Promise<T | void>
     ) => {
         try {
             const fn = customFn || createFn;
@@ -31,13 +31,15 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             await mutate();
             setIsCreating(false);
         } catch (error) {
-            toast.error("Erro ao criar o item.");
+            const message =
+                error instanceof Error ? error.message : "Erro ao criar o item.";
+            toast.error(message);
         }
     };
 
     const handleUpdate = async (
         data: UpdateDTO,
-        customFn?: (id: string, data: UpdateDTO) => Promise<any>
+        customFn?: (id: string, data: UpdateDTO) => Promise<T | void>
     ) => {
         if (!editingItem) return;
         try {
@@ -48,7 +50,9 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             await mutate();
             setEditingItem(null);
         } catch (error) {
-            toast.error("Erro ao atualizar o item.");
+            const message =
+                error instanceof Error ? error.message : "Erro ao atualizar o item.";
+            toast.error(message);
         }
     };
 
@@ -61,7 +65,9 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             await mutate();
             setDeletingItem(null);
         } catch (error) {
-            toast.error("Erro ao deletar o item.");
+            const message =
+                error instanceof Error ? error.message : "Erro ao deletar o item.";
+            toast.error(message);
         }
     };
 
