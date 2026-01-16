@@ -71,7 +71,7 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                 onUpdate={crud.ui.openEdit}
                 onDelete={crud.ui.openDelete}>
                 <SearchAndFilter
-                    currentParams={params as any}
+                    currentParams={params || {}}
                     applyParams={applyFilters}
                     mainSearchKey="name"
                     mainSearchPlaceholder="Buscar projetos"

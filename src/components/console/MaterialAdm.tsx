@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Section } from "../Section";
 import { BookOpenCheck } from "lucide-react";
 import useSWR from "swr";

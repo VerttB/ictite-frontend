@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Section } from "../Section";
 import {
     createRevista,

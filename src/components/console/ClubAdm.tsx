@@ -10,7 +10,6 @@ import {
     updateClubeCiencias,
     deleteClubeCiencias,
 } from "@/core/service/ClubeCienciaService";
-import { useState } from "react";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import { InputField } from "../forms-input/InputField";
@@ -61,7 +60,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
     const handleUpdate = async (id: string, data: ScienceClubUpdate) => {
         await updateClubeCiencias(id, data);
     };
-    const filters: ItemFilterConfig[] = [
+    const filters: ItemFilterConfig<ScienceClubSearchParams>[] = [
         {
             label: "Nome",
             type: "text",
@@ -72,7 +71,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
             label: "Escola",
             type: "array",
             value: "",
-            key: "school_name",
+            key: "school",
         },
     ];
     if (!clubes) return null;
@@ -86,7 +85,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                 onUpdate={crud.ui.openEdit}
                 onDelete={crud.ui.openDelete}>
                 <SearchAndFilter
-                    currentParams={params as any}
+                    currentParams={params || {}}
                     applyParams={applyFilters}
                     mainSearchKey="name"
                     mainSearchPlaceholder="Buscar projetos"

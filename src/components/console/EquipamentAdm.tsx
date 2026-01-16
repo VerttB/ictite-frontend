@@ -3,7 +3,6 @@
 import { Section } from "../Section";
 import useSWR from "swr";
 import { getSchools } from "@/core/service/SchoolService";
-import { useState } from "react";
 import {
     createEquipament,
     getEquipaments,

@@ -3,11 +3,8 @@ import { useState } from "react";
 import { Section } from "../Section";
 
 export const VideoAdm = () => {
-    const [open, setOpen] = useState(false);
+    const [, setOpen] = useState(false);
 
-    const onSubmit = async (data: any) => {
-        console.log(data);
-    };
     return (
         <>
             <Section title="Vídeos" items={[]} onAdd={() => setOpen(true)} />

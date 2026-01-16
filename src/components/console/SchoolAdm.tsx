@@ -9,7 +9,6 @@ import {
     updateSchool,
     uploadSchoolImage,
 } from "@/core/service/SchoolService";
-import { useState } from "react";
 import { School2 } from "lucide-react";
 import { BaseFormModal } from "../BaseFormAddModal";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
@@ -37,7 +36,7 @@ interface SchoolAdmProps {
 export const SchoolAdm = ({ params }: SchoolAdmProps) => {
     const { data: paginatedSchools, mutate } = useSWR(
         ["schools", params],
-        ([_, p]) => getSchools(p),
+        ([, p]) => getSchools(p),
         {
             keepPreviousData: true,
         }
@@ -61,7 +60,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         await updateSchool(id, data);
     };
 
-    const filters: ItemFilterConfig[] = [
+    const filters: ItemFilterConfig<SchoolSearchParams>[] = [
         { label: "Nome", type: "text", value: "", key: "name" },
         { label: "Cidade", type: "text", value: "", key: "city" },
     ];
@@ -77,7 +76,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 onUpdate={crud.ui.openEdit}
                 onDelete={crud.ui.openDelete}>
                 <SearchAndFilter
-                    currentParams={params as any}
+                    currentParams={params || {}}
                     applyParams={applyFilters}
                     mainSearchKey="name"
                     mainSearchPlaceholder="Buscar escolas"
