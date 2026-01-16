@@ -1,7 +1,9 @@
 import { buildSearchParameters } from "@/core/utils/searchParamBuilder";
 import { apiDefaultConfig, ApiRequestOptions } from "./config";
 import { ApiError } from "./error";
-import { errorTypes, RequestMethod } from "./types";
+import { RequestMethod } from "./types";
+import { SearchParams } from "@/core/interface/SearchParams";
+import { getErrorMessages } from "./helpers";
 
 export class ApiClient {
     private baseUrl: string;
@@ -12,60 +14,79 @@ export class ApiClient {
         this.defaultTimeout = config.timeout || apiDefaultConfig.timeout;
     }
 
-    private async handleResponse<T>(response: Response): Promise<T | null> {
-        if (response.status === 204) return null;
-
-        const data = await response.json().catch(() => ({}));
-
+    private async handleResponse<T>(
+        response: Response,
+        expectNoContent: boolean
+    ): Promise<T> {
+        if (response.status === 204) {
+            if (expectNoContent) {
+                throw new ApiError("A api não retornou nenhuma resposta.", 204);
+            }
+            return null as T;
+        }
+        let data: unknown = {};
+        const contentType = response.headers.get("Content-Type");
+        try {
+            if (contentType && contentType.includes("application/json")) {
+                data = await response.json();
+            } else if (contentType && contentType.includes("text/")) {
+                data = await response.text();
+                try {
+                    data = JSON.parse(data as string);
+                } catch (_e) {
+                    data = { message: data };
+                }
+            }
+        } catch (_e) {}
         if (response.ok) return data as T;
 
-        const errorMessage =
-            data.message ||
-            data.detail ||
-            errorTypes[response.status] ||
-            `Erro HTTP ${response.status}`;
-
-        throw new ApiError(errorMessage, response.status, response);
+        throw new ApiError(
+            getErrorMessages(data, response.status),
+            response.status,
+            response
+        );
     }
 
     private isEndpointAbsolute(url: string): boolean {
         return /^(?:[a-z]+:)?\/\//i.test(url);
     }
 
-    private buildUrl(endpoint: string, parsedParams?: string): string {
+    private buildUrl(endpoint: string, params?: SearchParams): string {
         let finalUrl = "";
         if (this.isEndpointAbsolute(endpoint)) {
             finalUrl = endpoint;
         } else {
-            finalUrl = this.baseUrl + endpoint;
-            if (this.baseUrl === "") {
+            const cleanBase = this.baseUrl.replace(/\/$/, "");
+            const cleanEndpoint = endpoint.replace(/^\//, "");
+            if (cleanBase === "") {
                 throw new Error(
                     "A url não foi definida no ApiClient e o endpoint fornecido não é absoluto."
                 );
             }
+            finalUrl = `${cleanBase}/${cleanEndpoint}`;
         }
-
-        const separator = finalUrl.includes("?") ? "&" : "?";
-        return `${finalUrl}${parsedParams ? separator + parsedParams : ""}`;
+        if (params) {
+            const parsedParams = buildSearchParameters(params);
+            const separator = finalUrl.includes("?") ? "&" : "?";
+            return `${finalUrl}${parsedParams ? separator + parsedParams : ""}`;
+        }
+        return finalUrl;
     }
-    private async request<T>(
+    private async request<T, K = unknown>(
         endpoint: string,
         method: RequestMethod,
-        body?: any,
+        body?: K,
         options: ApiRequestOptions = {}
-    ): Promise<T | null> {
+    ): Promise<T> {
         const {
             timeout = this.defaultTimeout,
             params,
             headers: customHeaders,
+            expectNoContent = method !== "DELETE",
             ...fetchOptions
         } = options;
 
-        let parsedParams = "";
-        if (params) {
-            parsedParams = buildSearchParameters(params);
-        }
-        let url = this.buildUrl(endpoint, parsedParams);
+        const url = this.buildUrl(endpoint, params);
 
         const controller = new AbortController();
         const signalId = setTimeout(() => controller.abort(), timeout);
@@ -80,13 +101,17 @@ export class ApiClient {
                 if (token) {
                     headers.append("Cookie", `${token.name}=${token.value}`);
                 }
-            } catch (e) {}
+            } catch (e) {} //eslint-disable-line
         }
 
-        let finalBody = body;
-        if (method !== "GET" && body && !(body instanceof FormData)) {
-            headers.set("Content-Type", "application/json");
-            finalBody = JSON.stringify(body);
+        let finalBody: BodyInit | null | undefined;
+        if (method !== "GET") {
+            if (body instanceof FormData) {
+                finalBody = body;
+            } else if (body !== undefined && body !== null) {
+                headers.set("Content-Type", "application/json");
+                finalBody = JSON.stringify(body);
+            }
         }
 
         try {
@@ -101,13 +126,13 @@ export class ApiClient {
             });
 
             clearTimeout(signalId);
-            return await this.handleResponse<T>(res);
+            return await this.handleResponse<T>(res, expectNoContent);
         } catch (error: unknown) {
             clearTimeout(signalId);
 
             if (error instanceof ApiError) throw error;
 
-            if ((error as any).name === "AbortError") {
+            if (error instanceof Error && error.name === "AbortError") {
                 throw new ApiError("A requisição demorou muito (Timeout).", 408);
             }
 
@@ -119,19 +144,19 @@ export class ApiClient {
         return this.request<T>(endpoint, "GET", undefined, options);
     }
 
-    public post<T, K = any>(endpoint: string, body: K, options?: ApiRequestOptions) {
+    public post<T, K = unknown>(endpoint: string, body: K, options?: ApiRequestOptions) {
         return this.request<T>(endpoint, "POST", body, options);
     }
 
-    public put<T, K = any>(endpoint: string, body: K, options?: ApiRequestOptions) {
+    public put<T, K = unknown>(endpoint: string, body: K, options?: ApiRequestOptions) {
         return this.request<T>(endpoint, "PUT", body, options);
     }
 
-    public patch<T, K = any>(endpoint: string, body: K, options?: ApiRequestOptions) {
+    public patch<T, K = unknown>(endpoint: string, body: K, options?: ApiRequestOptions) {
         return this.request<T>(endpoint, "PATCH", body, options);
     }
 
-    public delete<T>(endpoint: string, options?: ApiRequestOptions) {
+    public delete<T = void>(endpoint: string, options?: ApiRequestOptions) {
         return this.request<T>(endpoint, "DELETE", undefined, options);
     }
 }
