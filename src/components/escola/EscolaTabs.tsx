@@ -2,14 +2,13 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
-import { House, Printer, PanelsTopLeft, Brain, BookOpen } from "lucide-react";
+import { Printer, PanelsTopLeft, Brain, BookOpen } from "lucide-react";
 import { useState } from "react";
 import {
     useSchoolEquipments,
     useSchoolProjects,
     useSchoolResearchers,
 } from "@/hooks/useSchools";
-import { Spinner } from "../LoadingSpin";
 import CardProjeto from "../projeto/ProjetoCard";
 import CardEquipamento from "../card/CardEquipamento";
 import CardPesquisador from "../pesquisador/PesquisadorCard";
@@ -54,6 +53,18 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
 
     const tabsConfig: TabsConfig[] = [
         {
+            value: "clube de ciência",
+            label: "Clube de Ciência",
+            icon: Brain,
+            isLoading: loadingClube,
+            isError: errorClubs,
+            emptyMessage: "Nenhum clube de ciência encontrado para esta escola.",
+            data: clubes || [],
+            renderItem: (clube: ScienceClub) => (
+                <ClubeCienciaCard key={clube.id} clubeCiencia={clube} />
+            ),
+        },
+        {
             value: "pesquisadores",
             label: "Pesquisadores",
             icon: BookOpen,
@@ -73,9 +84,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             isError: errorEq,
             emptyMessage: "Nenhum equipamento encontrado para esta escola.",
             data: equipments || [],
-            renderItem: (e: Equipment) => (
-                <CardEquipamento key={e.id} equipment={e} />
-            ),
+            renderItem: (e: Equipment) => <CardEquipamento key={e.id} equipment={e} />,
         },
         {
             value: "projetos",
@@ -87,33 +96,15 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             data: projects || [],
             renderItem: (p: Project) => <CardProjeto key={p.id} project={p} />,
         },
-        {
-            value: "clube de ciência",
-            label: "Clube de Ciência",
-            icon: Brain,
-            isLoading: loadingClube,
-            isError: errorClubs,
-            emptyMessage:
-                "Nenhum clube de ciência encontrado para esta escola.",
-            data: clubes || [],
-            renderItem: (clube: ScienceClub) => (
-                <ClubeCienciaCard key={clube.id} clubeCiencia={clube} />
-            ),
-        },
     ];
     return (
         <>
-            <Tabs
-                value={activeTab}
-                onValueChange={setActiveTab}
-                className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="bg-accent flex w-full flex-row gap-5 overflow-hidden overflow-x-auto rounded-md px-4 py-2">
                     {tabsConfig.map(({ value, label, icon: Icon }) => (
                         <TabsTrigger key={value} value={value} asChild>
                             <Button
-                                variant={
-                                    activeTab === value ? "default" : "outline"
-                                }
+                                variant={activeTab === value ? "default" : "outline"}
                                 className="flex items-center gap-2">
                                 <Icon size={16} />
                                 <span>{label}</span>
