@@ -1,14 +1,14 @@
-import { Project } from "@/core/interface/Project";
+import { Researcher } from "@/core/domain/Researcher";
+import { Project } from "@/core/domain/Project";
 import {
     getSchoolEquiments,
     getSchoolProjects,
     getSchoolResearchers,
-    getSchoolStatistics,
 } from "@/core/service/SchoolService";
 import useSWR from "swr";
 
 export const useSchoolResearchers = (id: string) => {
-    const { data, isLoading, error } = useSWR(
+    const { data, isLoading, error } = useSWR<Researcher[]>(
         id ? `school-${id}-researchers` : null,
         () => getSchoolResearchers(id)
     );
@@ -46,14 +46,14 @@ export const useSchoolEquipments = (id: string) => {
     };
 };
 
-export const useSchoolStatistcs = (id: string) => {
-    const { data, isLoading, error } = useSWR(
-        id ? `school-${id}-statistics` : null,
-        () => getSchoolStatistics(id)
-    );
-    return {
-        statistics: data,
-        isLoading,
-        errorStatistics: error,
-    };
-};
+// export const useSchoolStatistcs = (id: string) => {
+//     const { data, isLoading, error } = useSWR(
+//         id ? `school-${id}-statistics` : null,
+//         () => getSchoolStatistics(id)
+//     );
+//     return {
+//         statistics: data,
+//         isLoading,
+//         errorStatistics: error,
+//     };
+// };

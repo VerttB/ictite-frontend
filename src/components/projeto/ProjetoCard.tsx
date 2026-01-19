@@ -2,11 +2,11 @@ import { BrainCircuit, Maximize2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Projeto from "./ProjetoDrawer";
-import { Project } from "@/core/interface/Project";
+import { Project } from "@/core/domain/Project";
 
 interface ProjectProps {
     onClick?: () => void;
-    project: Project;
+    project: Pick<Project, "id" | "name" | "description">;
 }
 
 export default function CardProjeto({ project, onClick }: ProjectProps) {
@@ -34,9 +34,7 @@ export default function CardProjeto({ project, onClick }: ProjectProps) {
                         <Maximize2 />
                     </Button>
                 </div>
-                <p className="text-font-secondary max-h-28 overflow-y-auto text-justify text-sm">
-                    {project.description}
-                </p>
+                <p>{project.description}</p>
 
                 <div>
                     <span className="text-font-secondary flex items-center gap-2 text-sm">
@@ -49,7 +47,7 @@ export default function CardProjeto({ project, onClick }: ProjectProps) {
             </div>
             <Projeto
                 isOpen={isProjetoDrawerOpen}
-                project={project}
+                project_id={project.id}
                 onClose={() => setIsProjetoDrawerOpen(false)}
             />
         </>

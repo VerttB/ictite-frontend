@@ -4,8 +4,6 @@ import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
 import { Button } from "@/components/ui/button";
-import { AllClubeCienciaStatistics } from "@/core/interface/Clube/AllClubeCienciaStatistics";
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
 import {
     getClubesCiencia,
     getClubesCienciaStats,
@@ -15,32 +13,44 @@ import {
     BookOpenText,
     BrainCircuit,
     ChartBar,
-    ChartSpline,
     ChevronLeft,
+    Cpu,
+    FlaskConical,
     Goal,
     HeartHandshake,
     LucideIcon,
+    Users2,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export default function Clubes() {
-    const [clubeCienciaStats, setClubeCienciaStats] =
-        useState<AllClubeCienciaStatistics>();
+    const { data: clubesCiencia } = useSWR("clubes-ciencia", () =>
+        getClubesCiencia().then((res) => res.items)
+    );
+    const { data: clubeCienciaStats } = useSWR("clubes-ciencia-stats", () =>
+        getClubesCienciaStats()
+    );
 
-    useEffect(() => {
-        const carreharClubes = async () => {
-            const clubes = await getClubesCiencia();
-            setClubesCiencia(clubes);
-        };
-
-        const carregarEstatisticasClubes = async () => {
-            const estatisticas = await getClubesCienciaStats();
-            setClubeCienciaStats(estatisticas);
-        };
-
-        carreharClubes();
-        carregarEstatisticasClubes();
-    }, []);
+    const objetivos: { titulo: string; descricao: string; Icon: LucideIcon }[] = [
+        {
+            titulo: "Integração entre Alunos e Professores",
+            descricao:
+                "Promover a colaboração e o trabalho em equipe entre estudantes e professores, estimulando a troca de ideias e a curiosidade científica dentro e fora da sala de aula.",
+            Icon: Users2,
+        },
+        {
+            titulo: "Fomento à Ciência e Tecnologia",
+            descricao:
+                "Estimular o interesse pela investigação científica e pelo uso da tecnologia como ferramenta para compreender e transformar a realidade.",
+            Icon: FlaskConical,
+        },
+        {
+            titulo: "Desenvolvimento de Projetos Inovadores",
+            descricao:
+                "Incentivar a criação de projetos que unam criatividade, método científico e impacto social, preparando os jovens para os desafios do futuro.",
+            Icon: Cpu,
+        },
+    ];
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
@@ -61,42 +71,22 @@ export default function Clubes() {
             Icon: BookOpenText,
         },
         {
-            titulo: "Facilitadores",
-            valor: clubeCienciaStats?.total_facilitadores ?? 0,
+            titulo: "Coordenadores",
+            valor: clubeCienciaStats?.total_coordenadores ?? 0,
             Icon: HeartHandshake,
         },
         {
-            titulo: "Média de alunos por clube",
-            valor: clubeCienciaStats?.media_alunos ?? 0,
+            titulo: "Projetos",
+            valor: clubeCienciaStats?.total_projetos ?? 0,
             Icon: ChartBar,
         },
-        {
-            titulo: "Média de professores por clube",
-            valor: clubeCienciaStats?.media_professores ?? 0,
-            Icon: ChartSpline,
-        },
-        {
-            titulo: "Média de facilitadores por clube",
-            valor: clubeCienciaStats?.media_facilitadores ?? 0,
-            Icon: ChartSpline,
-        },
-        {
-            titulo: "Média de projetos por clube",
-            valor: clubeCienciaStats?.media_projetos ?? 0,
-            Icon: ChartSpline,
-        },
     ];
-
-    const [clubesCiencia, setClubesCiencia] = useState<ClubeCiencia[]>([]);
 
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
             <div className="flex flex-row items-center gap-5">
-                <Button
-                    size={"icon"}
-                    variant={"outline"}
-                    className="cursor-pointer">
+                <Button size={"icon"} variant={"outline"} className="cursor-pointer">
                     <ChevronLeft />
                 </Button>
                 <p className="text-2xl font-semibold">Clubes de Ciência</p>
@@ -112,9 +102,14 @@ export default function Clubes() {
                 </div>
 
                 <div className="my-5 grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    <ObjetivoClubeCard />
-                    <ObjetivoClubeCard />
-                    <ObjetivoClubeCard />
+                    {objetivos.map((objetivo) => (
+                        <ObjetivoClubeCard
+                            key={objetivo.titulo}
+                            titulo={objetivo.titulo}
+                            descricao={objetivo.descricao}
+                            Icon={objetivo.Icon}
+                        />
+                    ))}
                 </div>
             </div>
 
@@ -126,9 +121,7 @@ export default function Clubes() {
             {/* |=======| LISTAGEM DOS CLUBES DE CIÊNCIA |=======| */}
             <div className="flex flex-col gap-4">
                 <div>
-                    <h2 className="text-2xl font-semibold">
-                        Clubes de Ciência:
-                    </h2>
+                    <h2 className="text-2xl font-semibold">Clubes de Ciência:</h2>
                 </div>
                 <div className="grid grid-cols-1 justify-items-center gap-5 md:grid-cols-2 xl:grid-cols-3">
                     {clubesCiencia ? (

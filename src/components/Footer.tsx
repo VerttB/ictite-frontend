@@ -2,7 +2,7 @@ import { getAssetPrefix } from "@/core/utils/api";
 import Image from "next/image";
 export const Footer = () => {
     return (
-        <footer className="bg-foreground relative mt-3 ml-4 flex h-16 w-full flex-wrap items-center gap-4 rounded-sm p-2 px-4 py-2">
+        <footer className="bg-foreground relative mt-3 ml-4 flex h-fit min-h-16 xl:h-16 w-full flex-wrap items-center gap-4 rounded-sm p-2 px-4 py-2">
             <Image
                 src={`${getAssetPrefix()}/apoios/UnebLogo.svg`}
                 alt="Logo"
@@ -11,7 +11,7 @@ export const Footer = () => {
                 className="inline-block object-contain"
             />
             <Image
-                src={`${getAssetPrefix()}/apoios/fapesbLogo.jpg`}
+                src={`${getAssetPrefix()}/apoios/fapesbLogo_semFundo.png`}
                 alt="Logo"
                 width={96}
                 height={96}
@@ -26,6 +26,27 @@ export const Footer = () => {
             />
             <Image
                 src={`${getAssetPrefix()}/apoios/fiocruzLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+            <Image
+                src={`${getAssetPrefix()}/apoios/governoFederalLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+            <Image
+                src={`${getAssetPrefix()}/apoios/fndctLogo.png`}
+                alt="Logo"
+                width={96}
+                height={96}
+                className="inline-block object-contain"
+            />
+            <Image
+                src={`${getAssetPrefix()}/apoios/cnpqLogo.png`}
                 alt="Logo"
                 width={96}
                 height={96}

@@ -60,8 +60,7 @@ export function BaseFormModal<
     const {
         handleSubmit,
         reset,
-        
-        formState: { isSubmitting },
+        formState: { isSubmitting, errors },
     } = methods;
 
     const handleManualSubmit = async (data: z.infer<T>) => {
@@ -120,7 +119,10 @@ export function BaseFormModal<
                                         Cancelar
                                     </Button>
 
-                                    <Button className="w-20" type="submit">
+                                    <Button
+                                        className="w-20"
+                                        type="submit"
+                                        disabled={isSubmitting}>
                                         {isSubmitting ? (
                                             <LoaderCircle className="animate-spin" />
                                         ) : (
@@ -128,11 +130,15 @@ export function BaseFormModal<
                                         )}
                                     </Button>
                                 </div>
+                                {errors && Object.keys(errors).length > 0 && (
+                                    <p className="text-sm text-red-500">
+                                        Por favor, corrija os erros acima.
+                                    </p>
+                                )}
                             </form>
                         </FormProvider>
                     </TabsContent>
 
-                    {/* ----------- IMPORT TAB ----------- */}
                     <TabsContent value="importar">
                         <div className="mt-4 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6">
                             <p className="mb-3 text-sm text-gray-600">
@@ -160,7 +166,6 @@ export function BaseFormModal<
                                         return toast.error(
                                             "Selecione um arquivo"
                                         );
-                                    // você implementa o import depois
                                     toast.success(
                                         "Import funcionalidade futura"
                                     );

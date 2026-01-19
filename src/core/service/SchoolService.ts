@@ -1,156 +1,83 @@
-import { Equipment } from "@/core/interface/Equipment";
-import { Researcher } from "@/core/interface/Pesquisador/Researcher";
-import { Project } from "@/core/interface/Project";
-import { SchoolData } from "@/core/interface/School";
-import { SchoolStatistics } from "@/core/interface/School/SchoolStatistics";
-import { getBaseUrl } from "@/core/utils/api";
+import { Equipment } from "@/core/domain/Equipment";
+import {
+    School,
+    SchoolCreate,
+    SchoolGeoJson,
+    SchoolSearchParams,
+    SchoolStatistics,
+    SchoolUpdate,
+} from "../domain/School";
+import { ScienceClub } from "../domain/Club";
+import { Pagination } from "@/schemas/Pagination";
+import { apiClient } from "@/lib/api/client";
+import { Project } from "../domain/Project";
+import { Researcher } from "../domain/Researcher";
 
-export const getSchoolGeoData = async () => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/schools/geojson`);
-
-        if (!res.ok) {
-            throw new Error(`Erro na buca: ${res.status} ${res.statusText}`);
-        }
-
-        const data = await res.json();
-
-        return data;
-    } catch (e) {
-        console.error("Falha ao buscar dados de escolas:", e);
-        return null;
-    }
+export const getSchoolGeoData = async (): Promise<SchoolGeoJson> => {
+    return await apiClient.get<SchoolGeoJson>("/schools/geojson");
 };
 
-export const getSchoolById = async (
-    id: string,
-    full: boolean = false
-): Promise<SchoolData | null> => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/schools/${id}?full=${full}`);
-
-        if (!res.ok) {
-            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
-        }
-
-        const data = await res.json();
-
-        return data;
-    } catch (e) {
-        console.error("Falha ao buscar dados de escolas:", e);
-        return null;
+export const getSchoolById = async (id: string): Promise<School> => {
+    const data = await apiClient.get<School>(`/schools/${id}`);
+    if (!data) {
+        throw new Error("Escola não encontrada");
     }
+    return data;
 };
 
 export const getSchools = async (
-    name: string = "",
-    city: string = ""
-): Promise<SchoolData[]> => {
-    try {
-        const res = await fetch(
-            `${getBaseUrl()}/schools/?name=${name}&city=${city}`
-        );
+    params?: SchoolSearchParams
+): Promise<Pagination<School>> => {
+    console.log(params);
+    const data = await apiClient.get<Pagination<School>>("/schools", { params });
 
-        if (!res.ok) {
-            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
-        }
-
-        const data = await res.json();
-
-        return data;
-    } catch (e) {
-        console.error("Falha ao buscar dados de escolas:", e);
-        return [];
-    }
-};
-
-export const getSchoolResearchers = async (
-    id: string
-): Promise<Researcher[]> => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/schools/${id}/researchers`);
-
-        if (!res.ok) {
-            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
-        }
-
-        const data: Researcher[] = await res.json();
-
-        return data;
-    } catch (e) {
-        console.error("Falha ao buscar dados de escolas:", e);
-        return [];
-    }
-};
-
-export const getSchoolProjects = async (id: string): Promise<Project[]> => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/schools/${id}/projects`);
-
-        if (!res.ok) {
-            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
-        }
-
-        const data = res.json();
-
-        return data;
-    } catch (e) {
-        console.error("Falha ao buscar projetos de escolas:", e);
-        return [];
-    }
+    return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
 export const getSchoolEquiments = async (id: string): Promise<Equipment[]> => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/schools/${id}/equipments`);
+    return (await apiClient.get<Equipment[]>(`/schools/${id}/equipments`)) || [];
+};
 
-        if (!res.ok) {
-            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
-        }
+export const getSchoolClubs = async (school_id: string): Promise<ScienceClub[]> => {
+    return (await apiClient.get<ScienceClub[]>(`/schools/${school_id}/clubs`)) || [];
+};
 
-        const data = res.json();
+export const getSchoolProjects = async (school_id: string): Promise<Project[]> => {
+    const data = await apiClient.get<Project[]>(`/schools/${school_id}/projects`);
+    return data || [];
+};
 
-        return data;
-    } catch (e) {
-        console.error("Falha ao buscar equipamentos de escolas:", e);
-        return [];
-    }
+export const getSchoolResearchers = async (school_id: string): Promise<Researcher[]> => {
+    const data = await apiClient.get<Researcher[]>(`/schools/${school_id}/researchers`);
+    return data || [];
 };
 
 export const getSchoolStatistics = async (
-    id: string
-): Promise<SchoolStatistics | null> => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/schools/${id}/statistics`);
-
-        if (!res.ok) {
-            throw new Error(`Erro na busca: ${res.status} ${res.statusText}`);
+    school_id: string
+): Promise<SchoolStatistics> => {
+    return (
+        (await apiClient.get<SchoolStatistics>(`/schools/${school_id}/statistics`)) || {
+            total_clubs: 0,
+            total_projects: 0,
+            total_researchers: 0,
         }
-
-        const data = res.json();
-
-        return data;
-    } catch (e) {
-        console.error("Falha ao buscar equipamentos de escolas:", e);
-        return null;
-    }
+    );
 };
 
-export const createSchool = async (formData: FormData) => {
-    try {
-        const res = await fetch(`${getBaseUrl()}/schools`, {
-            method: "POST",
-            body: formData,
-        });
-        if (!res.ok) {
-            throw new Error(
-                `Erro ao criar escola: ${res.status} ${res.statusText}`
-            );
-        }
-        const data = await res.json();
-        return data;
-    } catch (e) {
-        console.error("Falha ao criar escola:", e);
-        throw e;
-    }
+export const createSchool = async (school: SchoolCreate): Promise<School> => {
+    return await apiClient.post<School>("/schools", school);
+};
+
+export const deleteSchool = async (id: string): Promise<void> => {
+    await apiClient.delete(`/schools/${id}`);
+};
+
+export const updateSchool = async (
+    id: string,
+    school: Partial<SchoolUpdate>
+): Promise<School> => {
+    return await apiClient.patch<School>(`/schools/${id}`, school);
+};
+export const uploadSchoolImage = async (school_id: string, form: FormData) => {
+    return await apiClient.post(`/schools/${school_id}/images`, form);
 };

@@ -1,41 +1,41 @@
-import { Revista } from "../interface/Revista";
+import {
+    Magazine,
+    MagazineCreate,
+    MagazineSearchParams,
+    MagazineUpdate,
+} from "../domain/Magazine";
+import { apiClient } from "@/lib/api/client";
+import { Pagination } from "@/schemas/Pagination";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-export const getRevistas = async (): Promise<Required<Revista>[]> => {
-    console.log("Base URL:", baseUrl);
-    try {
-        const response = await fetch(`${baseUrl}/magazine`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!response.ok) {
-            throw new Error("Failed to fetch revistas");
+export const getRevistas = async (
+    params?: MagazineSearchParams
+): Promise<Pagination<Magazine>> => {
+    return (
+        (await apiClient.get<Pagination<Magazine>>("/magazine/", { params })) || {
+            items: [],
+            total: 0,
+            page: 1,
+            total_pages: 0,
+            size: 0,
         }
-        const data = await response.json();
-        return data || [];
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    );
 };
 
-export const createRevista = async (newRevista: FormData) => {
-    try {
-        const response = await fetch(`${baseUrl}/magazine`, {
-            method: "POST",
+export const createRevista = async (newRevista: MagazineCreate): Promise<Magazine> => {
+    return await apiClient.post<Magazine>("/magazine/", newRevista);
+};
 
-            body: newRevista,
-        });
-        if (!response.ok) {
-            throw new Error("Failed to create material");
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {
+    return await apiClient.post(`/magazine/${magazineId}/images`, formData);
+};
+
+export const updateRevista = async (
+    magazineId: string,
+    updatedRevista: Partial<MagazineUpdate>
+): Promise<Magazine> => {
+    return await apiClient.patch<Magazine>(`/magazine/${magazineId}`, updatedRevista);
+};
+
+export const deleteRevista = async (magazineId: string): Promise<void> => {
+    return await apiClient.delete(`/magazine/${magazineId}`);
 };

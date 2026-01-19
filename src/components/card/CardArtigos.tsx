@@ -1,7 +1,11 @@
-import { Article } from "@/core/interface/Pesquisador/Article";
+import { ResearcherArticles } from "@/core/domain/Researcher";
 import { Calendar } from "lucide-react";
 
-export default function CardArtigo({ article }: { article: Article }) {
+export default function CardArtigo({
+    article,
+}: {
+    article: ResearcherArticles;
+}) {
     return (
         <div className="bg-background flex h-fit w-full flex-col gap-4 rounded-md border border-l-8 border-l-lime-500 p-2 shadow-md">
             <h2 className="text-md text-wrap hyphens-auto">{article.title}</h2>

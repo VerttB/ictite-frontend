@@ -1,5 +1,5 @@
 "use client";
-import { Expand, School, X } from "lucide-react";
+import { BrainCircuit, Expand, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
     Drawer,
@@ -9,25 +9,28 @@ import {
     DrawerTitle,
 } from "../ui/drawer";
 import Image from "next/image";
-import CardPesquisador from "../pesquisador/PesquisadorCard";
 import useSWR from "swr";
-import { getProjectResearchers } from "@/core/service/ProjetoService";
-import { Project } from "@/core/interface/Project";
-import { capitalize } from "@/core/utils/capitalize";
+import { getProjectById } from "@/core/service/ProjetoService";
+
 import Link from "next/link";
 import { useViewPort } from "@/hooks/useViewPort";
+import { Spinner } from "../LoadingSpin";
+import { PesquisadoresLista } from "../pesquisador/PesquisadoresLista";
 
 interface ProjetoProps {
     isOpen: boolean;
     onClose: (open: boolean) => void;
-    project: Project;
+    project_id: string;
 }
 
-export default function Projeto({ isOpen, onClose, project }: ProjetoProps) {
-    const { data: pesquisadores } = useSWR(`project-${project.id}`, () =>
-        getProjectResearchers(project.id)
+export default function Projeto({ isOpen, onClose, project_id }: ProjetoProps) {
+    const { data: project, isLoading } = useSWR(`project-data-${project_id}`, () =>
+        getProjectById(project_id)
     );
     const { isMobile } = useViewPort();
+    if (isLoading) return <Spinner />;
+    if (!project) return null;
+
     return (
         <Drawer
             open={isOpen}
@@ -56,29 +59,41 @@ export default function Projeto({ isOpen, onClose, project }: ProjetoProps) {
                         {project.description}
                     </DrawerDescription>
                     {/* NOME DA ESCOLA */}
-                    <div className="text-font-secondary mt-2 flex flex-row items-center gap-0.5">
-                        <School size={16} />
-                        <span className="text-sm">{project.school}</span>
+                    <div className="text-font-secondary mt-2 flex flex-row items-center gap-2">
+                        <BrainCircuit size={16} />
+                        <span className="text-sm">{project.clube.name}</span>
                     </div>
                 </DrawerHeader>
 
                 {/* BODY DOS PESQUISADORES */}
                 <div className="overflow-y-auto pt-2 pl-5">
                     {/* IMAGENS DO PROJETO */}
-                    <div className="grid w-full [grid-template-columns:repeat(auto-fill,minmax(100px,1fr))] gap-4">
-                        {project.images &&
-                            project.images.map((image, i) => (
-                                <Image
-                                    key={i}
-                                    src={image.path}
-                                    alt={"Projeto"}
-                                    width={164}
-                                    height={164}
-                                />
-                            ))}
+                    {/* |=======| IMAGENS DO PROJETO |=======| */}
+                    <div className="mb-4 overflow-y-auto pt-2">
+                        {project.images?.length ? (
+                            <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden border-b py-7 md:items-start md:justify-start">
+                                {project.images?.map((image, i) => (
+                                    <div
+                                        key={i}
+                                        className="relative h-[200px] w-[200px] overflow-hidden">
+                                        <Image
+                                            src={image.url}
+                                            alt={"Projeto"}
+                                            fill
+                                            className="object-cover object-center"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="border-b pt-5 pb-7">
+                                <p>Nenhuma imagem de projeto cadastrada</p>
+                            </div>
+                        )}
                     </div>
 
-                    {pesquisadores &&
+                    <PesquisadoresLista projectId={project_id} />
+                    {/* {pesquisadores &&
                         Object.keys(pesquisadores).map((key: string) => {
                             const items =
                                 pesquisadores[
@@ -108,7 +123,7 @@ export default function Projeto({ isOpen, onClose, project }: ProjetoProps) {
                                     </div>
                                 </div>
                             );
-                        })}
+                        })} */}
                 </div>
             </DrawerContent>
         </Drawer>

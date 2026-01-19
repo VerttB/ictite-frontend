@@ -3,5 +3,7 @@
   "trailingComma": "es5",
   "tabWidth": 4,
   "bracketSameLine": true,
-  "singleAttributePerLine": false
+  "singleAttributePerLine": false,
+  "printWidth": 90
+
 }

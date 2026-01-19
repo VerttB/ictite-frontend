@@ -1,10 +1,10 @@
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
+import { ScienceClub } from "@/core/domain/Club";
 import { School } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ClubeCienciaCardProps {
-    clubeCiencia: ClubeCiencia;
+    clubeCiencia: ScienceClub;
 }
 
 export default function ClubeCienciaCard({
@@ -13,25 +13,26 @@ export default function ClubeCienciaCard({
     return (
         <Link href={`/clubes/${clubeCiencia.id}`}>
             <div className="flex w-[300px] cursor-pointer flex-col gap-1 rounded-md border transition-all hover:scale-[102%] hover:shadow-md">
-                <div>
+                <div className="relative h-[200px] w-full overflow-hidden rounded-t-md">
                     <Image
                         src={
                             clubeCiencia.images.length > 0
-                                ? clubeCiencia.images[0].path
+                                ? clubeCiencia.images[0].url
                                 : "https://picsum.photos/300/190"
                         }
                         alt={"Clube Ciência"}
-                        width={300}
-                        height={200}
+                        fill
                         className="rounded-t-md object-cover"></Image>
                 </div>
                 <div className="p-3">
                     <h1 className="line-clamp-1 text-xl font-semibold">
-                        {clubeCiencia.title}
+                        {clubeCiencia.name}
                     </h1>
                     <div className="text-primary flex items-center gap-2">
                         <School size={20} />
-                        <p className="line-clamp-1">{clubeCiencia.school}</p>
+                        <p className="line-clamp-1">
+                            {clubeCiencia.school.name}
+                        </p>
                     </div>
                 </div>
             </div>

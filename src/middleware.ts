@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
     const token = req.cookies.get("access_token");
-
     const protectedRoutes = ["/console", "/console/v2"];
     const isProtected = protectedRoutes.some((path) =>
         req.nextUrl.pathname.startsWith(path)
@@ -18,5 +17,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/console", "/console/v2"],
+    matcher: ["/console/:path*", "/console/v2/:path*"],
 };

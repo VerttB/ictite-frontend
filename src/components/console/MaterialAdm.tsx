@@ -1,52 +1,113 @@
 "use client";
-import { useState } from "react";
 import { Section } from "../Section";
 import { BookOpenCheck } from "lucide-react";
 import useSWR from "swr";
 
-import { createMaterial, getMaterials } from "@/core/service/MaterialService";
-import { MaterialSchema, MaterialType } from "@/schemas/MaterialSchema";
+import {
+    createMaterial,
+    getMaterials,
+    uploadMaterialImages,
+    updateMaterial,
+    deleteMaterial,
+} from "@/core/service/MaterialService";
 import { BaseFormModal } from "../BaseFormAddModal";
-import { ControlledImageUpload } from "../ui/ControlledImageInput";
-import { InputField } from "../ui/FormInputField";
+import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
+import { InputField } from "../forms-input/InputField";
+import {
+    Material,
+    MaterialCreateSchema,
+    MaterialCreate,
+    MaterialUpdate,
+    MaterialUpdateSchema,
+    MaterialSearchParams,
+} from "@/core/domain/Material";
+import { ControlledSelect } from "../forms-input/ControlledSelect";
+import { MaterialType } from "@/core/constants/materialType";
+import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
+import { useAdmCrud } from "@/hooks/useAdmCrud";
 
-export const MaterialAdm = () => {
-    const {
-        data: materials,
+interface MaterialAdmProps {
+    params: MaterialSearchParams;
+}
+export const MaterialAdm = ({ params }: MaterialAdmProps) => {
+    const { data: materials, mutate } = useSWR(["materials", params], ([, p]) =>
+        getMaterials(p)
+    );
+
+    const crud = useAdmCrud<Material, MaterialCreate, MaterialUpdate>({
         mutate,
-    } = useSWR("materials", getMaterials);
-    const [open, setOpen] = useState(false);
+        deleteFn: deleteMaterial,
+    });
 
-    const onSubmit = async (data: MaterialType) => {
+    const handleCreate = async (data: MaterialCreate) => {
+        console.log(data);
+        const { id } = await createMaterial(data);
         const newMaterial = new FormData();
-        newMaterial.append("name", data.name);
-        newMaterial.append("description", data.description);
-        newMaterial.append("link", data.link);
         data.images.forEach((file) => newMaterial.append("images", file));
-        await createMaterial(newMaterial);
-        mutate();
-        setOpen(false);
+        await uploadMaterialImages(id, newMaterial);
     };
+
+    const handleUpdate = async (id: string, data: MaterialUpdate) => {
+        await updateMaterial(id, data);
+    };
+
+    if (!materials) return null;
     return (
         <>
-            <Section
+            <Section<Material>
                 title="Materiais"
-                items={materials ?? []}
-                onAdd={() => setOpen(true)}
+                items={materials.items}
+                onAdd={crud.ui.openCreate}
+                onUpdate={crud.ui.openEdit}
+                onDelete={crud.ui.openDelete}
                 icon={<BookOpenCheck />}
             />
-            <BaseFormModal<typeof MaterialSchema, MaterialType>
-                open={open}
-                onClose={() => setOpen(false)}
-                onSubmit={onSubmit}
+            <BaseFormModal<typeof MaterialCreateSchema, MaterialCreate>
+                open={crud.isCreating}
+                onClose={crud.ui.closeCreate}
+                onSubmit={(data) => crud.actions.create(data, handleCreate)}
                 title="Adicionar Material"
-                schema={MaterialSchema}
+                schema={MaterialCreateSchema}
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Material" />
                 <InputField name="description" label="Descrição" />
                 <InputField name="link" label="Link" />
+                <ControlledSelect
+                    name="type"
+                    label="Tipo"
+                    options={Object.values(MaterialType)}
+                />
                 <ControlledImageUpload name="images" />
             </BaseFormModal>
+
+            {crud.editingItem && (
+                <BaseFormModal<typeof MaterialUpdateSchema, MaterialUpdate>
+                    open={!!crud.editingItem}
+                    key={crud.editingItem.id}
+                    onClose={crud.ui.closeEdit}
+                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
+                    title="Atualizar Material"
+                    schema={MaterialUpdateSchema}
+                    props={{
+                        defaultValues: {
+                            name: crud.editingItem?.name,
+                            description: crud.editingItem?.description,
+                            link: crud.editingItem?.link,
+                        },
+                    }}>
+                    <InputField name="name" label="Nome do Material" />
+                    <InputField name="description" label="Descrição" />
+                    <InputField name="link" label="Link" />
+                </BaseFormModal>
+            )}
+
+            <DeleteConfirmationModal
+                open={!!crud.deletingItem}
+                onClose={crud.ui.closeDelete}
+                onConfirm={crud.actions.delete}
+                title={`Deseja excluir ${crud.deletingItem?.name}?`}
+                description="Essa ação não pode ser desfeita."
+            />
         </>
     );
 };

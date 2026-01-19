@@ -3,20 +3,11 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Expand } from "lucide-react";
-import { Project } from "@/core/interface/Project";
+import { Project } from "@/core/domain/Project";
 import CardProjeto from "../projeto/ProjetoCard";
-import { useEffect, useState } from "react";
-import { ClubeCiencia } from "@/core/interface/Clube/ClubeCiencia";
-import { getClubesCienciaBySchool } from "@/core/service/ClubeCienciaService";
+import { useState } from "react";
+import { ScienceClub } from "@/core/domain/Club";
 import Link from "next/link";
-import { getProjectbyClube } from "@/core/service/ProjetoService";
-import { getResearchersByClube } from "@/core/service/PesquisadorService";
-
-interface ClubeCienciaTotal {
-    clubeCiencia: ClubeCiencia;
-    projetosClubeCiencia: Project[];
-    pesquisadoresClubeCiencia: string[];
-}
 
 interface ClubeCienciaTabsProps {
     //clubeCiencia: ClubeCienciaBase;
@@ -26,32 +17,8 @@ interface ClubeCienciaTabsProps {
 
 export default function ClubeCienciaTabs({
     projetosClubeCiencia,
-    school_id,
 }: ClubeCienciaTabsProps) {
-    const [clubesCiencia, setClubesCiencia] = useState<ClubeCiencia[]>([]);
-    const [clubeCienciaTotal, setClubeCienciaTotal] = useState<
-        ClubeCienciaTotal[]
-    >([]);
-
-    useEffect(() => {
-        const carregarClubes = async () => {
-            const clubes = await getClubesCienciaBySchool(school_id);
-            setClubesCiencia(clubes);
-        };
-
-        const carregarProjetosClube = async () => {
-            while (clubeCienciaTotal.length < clubesCiencia.length) {
-                const projetos = await getProjectbyClube(
-                    clubesCiencia[clubeCienciaTotal.length].id
-                );
-                const researchers = await getResearchersByClube(
-                    clubesCiencia[clubeCienciaTotal.length].id
-                );
-            }
-        };
-
-        carregarClubes();
-    });
+    const [clubesCiencia] = useState<ScienceClub[]>([]);
 
     return (
         <div>
@@ -61,7 +28,7 @@ export default function ClubeCienciaTabs({
                     className="flex h-full w-full flex-col gap-5 border-t p-6">
                     <div className="flex items-center justify-between">
                         <h1 className="text-font-primary text-2xl font-semibold">
-                            {clubeCiencia.title}
+                            {clubeCiencia.name}
                         </h1>
                         <Link href={`/clubes/${clubeCiencia.id}`}>
                             <Button size={"icon"} className="cursor-pointer">
@@ -72,14 +39,18 @@ export default function ClubeCienciaTabs({
                     </div>
                     {/* IMAGENS */}
                     <div className="grid [grid-template-columns:repeat(auto-fill,minmax(270px,1fr))] gap-3">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <Image
-                                key={i}
-                                src={"https://picsum.photos/200/200"}
-                                alt="Clube de Ciência"
-                                width={200}
-                                height={200}></Image>
-                        ))}
+                        {clubeCiencia.images.length > 0 ? (
+                            clubeCiencia.images.map((image, i) => (
+                                <Image
+                                    key={i}
+                                    src={"https://picsum.photos/200/200"}
+                                    alt="Clube de Ciência"
+                                    width={200}
+                                    height={200}></Image>
+                            ))
+                        ) : (
+                            <p>Nenhuma imagem disponível</p>
+                        )}
                     </div>
                     {/* DESCRICAO */}
                     <div className="bg-foreground flex flex-col gap-2 rounded-md border p-4">

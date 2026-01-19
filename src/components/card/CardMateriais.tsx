@@ -1,24 +1,44 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function CardMateriais() {
+interface MateriaisProps {
+    name: string;
+    description: string;
+    type: string;
+    link: string;
+    images: string[];
+}
+
+interface CardMateriaisProps {
+    material: MateriaisProps;
+}
+
+
+export default function CardMateriais({ material }: CardMateriaisProps) {
     return (
-        <div className="bg-secondary h-[280px] w-[220px] cursor-pointer rounded-sm shadow-sm transition-all hover:scale-105 md:w-[260px]">
-            <div className="flex w-full flex-col items-center justify-center gap-3 pt-2.5">
-                <Image
-                    src={"https://picsum.photos/100/100"}
-                    alt="Material"
-                    width={100}
-                    height={100}
-                    className="rounded-full"></Image>
-                <h2 className="text-2xl font-semibold text-white">Título</h2>
-                <p className="line-clamp-4 px-1.5 text-justify text-white">
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                    Est ullam perferendis enim iure commodi nemo eveniet,
-                    voluptatibus perspiciatis quas inventore consectetur velit.
-                    Doloremque odio blanditiis aliquid rem corrupti. Optio,
-                    numquam.
-                </p>
+        <Link href={material.link} target="_blank">
+            <div className="group bg-secondary w-[240px] md:w-[260px] h-[320px] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer flex flex-col">
+                <div className="relative w-full h-[140px]">
+                    <Image
+                        src={material.images[0] || "https://picsum.photos/400/300"}
+                        alt={material.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"></Image>
+                    <span className="absolute top-2 right-2 bg-primary text-xs text-white font-semibold px-2 py-1 rounded-md shadow-sm">
+                        {material.type}
+                    </span>
+                </div>
+
+                {/* Conteúdo */}
+                <div className="flex flex-col flex-1 gap-2 p-3 text-white">
+                    <h2 className="text-lg font-semibold leading-tight line-clamp-2">
+                        {material.name}
+                    </h2>
+                    <p className="text-sm text-white/90 line-clamp-4 text-justify">
+                        {material.description}
+                    </p>
+                </div>
             </div>
-        </div>
+        </Link>
     );
 }

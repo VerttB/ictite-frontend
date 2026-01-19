@@ -1,26 +1,20 @@
 import React from "react";
 import { PesquisadorTabs } from "@/components/pesquisador/PesquisadorTabs";
 import { getResearcherById } from "@/core/service/PesquisadorService";
-import { GraduationCap, MapPin, School } from "lucide-react";
+import { GraduationCap, MapPin } from "lucide-react";
 import Image from "next/image";
 
 import { ScrollArea } from "@/components/ScrollArea";
 import { Downloader } from "@/components/Downloader";
 
-export default async function Page({
-    params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const researcher = await getResearcherById(id, true);
 
     if (!researcher) {
         return (
             <div className="flex w-full flex-col gap-4 overflow-x-hidden p-4">
-                <h2 className="text-2xl font-semibold">
-                    Pesquisador não encontrado
-                </h2>
+                <h2 className="text-2xl font-semibold">Pesquisador não encontrado</h2>
             </div>
         );
     }
@@ -60,13 +54,6 @@ export default async function Page({
                                     <p>
                                         {researcher?.simcc.graduation ??
                                             "Graduação não disponível"}
-                                    </p>
-                                </span>
-                                <span className="text-font-primary/80 flex items-center gap-1 text-xs lg:text-lg">
-                                    <School size={15} />
-                                    <p>
-                                        {researcher?.school ??
-                                            "Instituição não disponível"}
                                     </p>
                                 </span>
                             </div>
