@@ -1,10 +1,10 @@
 type ItemType = "array" | "text";
 
-export interface ItemFilterConfig {
+export interface ItemFilterConfig<T> {
     label: string;
     type: ItemType;
-    value: any;
+    value: string | number | boolean | undefined | Array<string | number | boolean>;
     placeholder?: string;
-    key: string;
+    key: keyof T & string;
     options?: string[];
 }
