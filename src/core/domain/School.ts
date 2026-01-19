@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { ImageCreateSchema, ImageSchema } from "./Image";
-import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
+import {
+    SearchParamParser,
+    SimpleIdNameDescriptionSchema,
+    SimpleIdNameSchema,
+} from "@/schemas/Common";
 import { mask } from "@/lib/maskBuilder";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 export const SchoolSchema = z.object({
@@ -50,8 +54,22 @@ export const SchoolStatisticsSchema = z.object({
     total_projetos: z.number().int().nonnegative(),
 });
 
+export const SchoolGeoJsonSchema = z.object({
+    type: z.literal("FeatureCollection"),
+    features: z.array(
+        z.object({
+            type: z.literal("Feature"),
+            geometry: z.object({
+                type: z.literal("Point"),
+                coordinates: z.tuple([z.number(), z.number()]),
+            }),
+            properties: SimpleIdNameDescriptionSchema,
+        })
+    ),
+});
 export type School = z.infer<typeof SchoolSchema>;
 export type SchoolCreate = z.infer<typeof SchoolCreateSchema>;
 export type SchoolUpdate = z.infer<typeof SchoolUpdateSchema>;
 export type SchoolSearchParams = z.infer<typeof SchoolSearchParamsSchema>;
 export type SchoolStatistics = z.infer<typeof SchoolStatisticsSchema>;
+export type SchoolGeoJson = z.infer<typeof SchoolGeoJsonSchema>;

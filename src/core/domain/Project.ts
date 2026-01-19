@@ -49,11 +49,7 @@ export const ProjectSearchParamsSchema = z
     })
     .and(PaginationSearchParamsSchema);
 
-export const ProjectResearchersSchema = z.object({
-    professores: ResearcherSchema.array(),
-    alunos: ResearcherSchema.array(),
-    facilitadores: ResearcherSchema.array(),
-});
+export const ProjectResearchersSchema = z.record(z.string(), ResearcherSchema.array());
 
 export const ProjectStatisticSchema = z.object({
     total_alunos: z.number().int().nonnegative(),

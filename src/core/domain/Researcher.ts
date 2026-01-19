@@ -1,9 +1,8 @@
 import { RaceTypes } from "@/core/constants/race";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { GenderTypes } from "@/core/constants/sex";
-import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
+import { SearchParamParser, SimpleIdNameDescriptionSchema } from "@/schemas/Common";
 import z from "zod";
-import { ProjectSchema } from "./Project";
 import { ImageSchema } from "./Image";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 
@@ -72,7 +71,7 @@ export const ResearcherFinalSchema = ResearcherSchema.extend({
     articles: ResearcherArticleSchema.array(),
     projects: z.record(
         z.string(),
-        SimpleIdNameSchema.array().and(
+        SimpleIdNameDescriptionSchema.array().and(
             z.object({ images: ImageSchema.array().optional() })
         )
     ),
