@@ -16,8 +16,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
 }
 
-const isTokenExpired = (token: string): boolean => { return true}
-
 export const config = {
     matcher: ["/console/:path*", "/console/v2/:path*"],
 };
