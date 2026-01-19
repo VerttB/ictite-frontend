@@ -2,7 +2,6 @@
 
 import { Section } from "../Section";
 import useSWR from "swr";
-import { useState } from "react";
 import { PersonStanding } from "lucide-react";
 import {
     createResearcher,
@@ -28,6 +27,7 @@ import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { SearchAndFilter } from "../SearchAndFilter";
 import { Pagination } from "../Pagination";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
+import { useAdmCrud } from "@/hooks/useAdmCrud";
 interface ResearcherAdmProps {
     params: ResearcherSearchParams;
 }
@@ -36,39 +36,13 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
         getResearchers(p)
     );
     const { applyFilters, changePage } = useUrlPagination();
-    const [isCreating, setIsCreating] = useState(false);
-    const [editingItem, setEditingItem] = useState<Researcher | null>(null);
-    const [deletingItem, setDeletingItem] = useState<Researcher | null>(null);
-    const onSubmit = async (data: ResearcherCreate) => {
-        console.log("Researcher", data);
-        await createResearcher(data);
-        mutate();
-        setIsCreating(false);
-    };
-    const onSubmitUpdate = async (data: any) => {
-        try {
-            if (editingItem) {
-                await updateResearcher(editingItem.id, data);
-                mutate();
-            }
-        } catch (error) {
-            console.error("Error updating researcher:", error);
-        } finally {
-            setEditingItem(null);
-        }
-    };
-    const onSubmitDelete = async () => {
-        try {
-            if (deletingItem) {
-                await deleteResearcher(deletingItem.id);
-                mutate();
-            }
-        } catch (error) {
-            console.error("Error deleting researcher:", error);
-        } finally {
-            setDeletingItem(null);
-        }
-    };
+
+    const crud = useAdmCrud<Researcher, ResearcherCreate, ResearcherUpdate>({
+        mutate,
+        deleteFn: deleteResearcher,
+        createFn: createResearcher,
+        updateFn: updateResearcher,
+    });
 
     if (!pesquisadores) return null;
     return (
@@ -77,11 +51,11 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                 title="Pesquisadores"
                 items={pesquisadores.items}
                 icon={<PersonStanding />}
-                onAdd={() => setIsCreating(true)}
-                onDelete={(researcher) => setDeletingItem(researcher)}
-                onUpdate={(researcher) => setEditingItem(researcher)}>
+                onAdd={crud.ui.openCreate}
+                onDelete={crud.ui.openDelete}
+                onUpdate={crud.ui.openEdit}>
                 <SearchAndFilter
-                    currentParams={params as any}
+                    currentParams={params}
                     applyParams={applyFilters}
                     mainSearchKey="name"
                     mainSearchPlaceholder="Buscar pesquisadores"
@@ -89,9 +63,9 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                 />
             </Section>
             <BaseFormModal<typeof ResearcherCreateSchema, ResearcherCreate>
-                open={isCreating}
-                onClose={() => setIsCreating(false)}
-                onSubmit={onSubmit}
+                open={crud.isCreating}
+                onClose={crud.ui.closeCreate}
+                onSubmit={crud.actions.create}
                 title="Adicionar Pesquisador"
                 schema={ResearcherCreateSchema}>
                 <InputField name="name" label="Nome do Pesquisador" />
@@ -124,20 +98,20 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                     />
                 </div>
             </BaseFormModal>
-            {editingItem && (
+            {crud.editingItem && (
                 <BaseFormModal<typeof ResearcherUpdateSchema, ResearcherUpdate>
-                    open={!!editingItem}
-                    key={editingItem.id}
-                    onClose={() => setEditingItem(null)}
-                    onSubmit={onSubmitUpdate}
+                    open={!!crud.editingItem}
+                    key={crud.editingItem.id}
+                    onClose={crud.ui.closeEdit}
+                    onSubmit={crud.actions.update}
                     title="Atualizar Pesquisador"
                     schema={ResearcherUpdateSchema}
                     props={{
                         defaultValues: {
-                            name: editingItem?.name,
-                            race: editingItem?.race,
-                            type: editingItem?.type,
-                            gender: editingItem?.gender,
+                            name: crud.editingItem?.name,
+                            race: crud.editingItem?.race,
+                            type: crud.editingItem?.type,
+                            gender: crud.editingItem?.gender,
                         },
                     }}>
                     <InputField name="name" label="Nome do Pesquisador" />
@@ -165,10 +139,10 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
             )}
 
             <DeleteConfirmationModal
-                open={!!deletingItem}
-                onClose={() => setDeletingItem(null)}
-                onConfirm={onSubmitDelete}
-                title={`Deseja excluir ${deletingItem?.name}?`}
+                open={!!crud.deletingItem}
+                onClose={crud.ui.closeDelete}
+                onConfirm={crud.actions.delete}
+                title={`Deseja excluir ${crud.deletingItem?.name}?`}
                 description="Essa ação não pode ser desfeita."
             />
         </>
