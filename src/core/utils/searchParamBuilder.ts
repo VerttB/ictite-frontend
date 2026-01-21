@@ -10,7 +10,7 @@ export const buildSearchParameters = (
             if (Array.isArray(value)) {
                 value.forEach((val) => params.append(key, val.toString()));
             } else {
-                params.append(key, value.toString());
+                params.set(key, value.toString());
             }
         } else {
             params.delete(key);
