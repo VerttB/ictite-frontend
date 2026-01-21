@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     basePath: isProd ? "/ictite/v1/web" : "",
     assetPrefix: isProd ? "/ictite/v1/web" : "",
     trailingSlash: true,
+    reactCompiler: true,
+    typedRoutes: true,
     images: {
         remotePatterns: [
             { protocol: "https", hostname: "picsum.photos" },

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { SearchBar } from "./SearchBar";
 import { Button } from "./ui/button";
 import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
@@ -24,15 +24,15 @@ export const SearchAndFilter = <T,>({
 }: FilterListProps<T>) => {
     const [openModal, setOpenModal] = useState(false);
     const [localFilters, setLocalFilters] = useState<Record<string, any>>({});
-
-    const activeFiltersCount = filters.filter((f) => !!currentParams[f.key]).length;
-
-    const handleMainSearch = (value: string) => {
-        const newParams = { ...currentParams };
-        if (value) newParams[mainSearchKey] = value;
-        else delete newParams[mainSearchKey];
-        applyParams(newParams);
-    };
+    const handleMainSearch = useCallback(
+        (value: string) => {
+            const newParams = { ...currentParams };
+            if (value) newParams[mainSearchKey] = value;
+            else delete newParams[mainSearchKey];
+            applyParams(newParams);
+        },
+        [currentParams, mainSearchKey, applyParams]
+    );
 
     const clearAllFilters = () => {
         const cleared: Record<string, any> = {};
@@ -43,7 +43,7 @@ export const SearchAndFilter = <T,>({
         <div className="flex items-center">
             <SearchBar
                 placeholder={mainSearchPlaceholder}
-                initialValue={String(currentParams[mainSearchKey] || "")}
+                initialValue={currentParams[mainSearchKey]?.toString() || ""}
                 onSearch={handleMainSearch}
             />
             <Button title="Mais Filtros" onClick={() => setOpenModal(true)}>

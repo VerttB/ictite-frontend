@@ -76,7 +76,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 onUpdate={crud.ui.openEdit}
                 onDelete={crud.ui.openDelete}>
                 <SearchAndFilter
-                    currentParams={params || {}}
+                    currentParams={params}
                     applyParams={applyFilters}
                     mainSearchKey="name"
                     mainSearchPlaceholder="Buscar escolas"
