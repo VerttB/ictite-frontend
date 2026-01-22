@@ -77,11 +77,6 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                         label="Tipo de Pesquisador"
                         options={Object.values(ResearcherTypes)}
                     />
-                    <Pagination
-                        currentPage={pesquisadores.page}
-                        onLoadMore={changePage}
-                        totalPages={pesquisadores.total_pages}
-                    />
                 </div>
                 <div className="flex w-full gap-2">
                     <ControlledSelect
@@ -144,6 +139,11 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                 onConfirm={crud.actions.delete}
                 title={`Deseja excluir ${crud.deletingItem?.name}?`}
                 description="Essa ação não pode ser desfeita."
+            />
+            <Pagination
+                currentPage={pesquisadores.page}
+                onLoadMore={changePage}
+                totalPages={pesquisadores.total_pages}
             />
         </>
     );
