@@ -33,7 +33,11 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
         } catch (error) {
             const message =
                 error instanceof Error ? error.message : "Erro ao criar o item.";
-            toast.error(message);
+            toast.error(message, {
+                position: "top-center",
+                duration: 5000,
+                closeButton: true,
+            });
         }
     };
 
@@ -52,7 +56,11 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
         } catch (error) {
             const message =
                 error instanceof Error ? error.message : "Erro ao atualizar o item.";
-            toast.error(message);
+            toast.error(message, {
+                position: "top-center",
+                duration: 5000,
+                closeButton: true,
+            });
         }
     };
 
@@ -67,7 +75,11 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
         } catch (error) {
             const message =
                 error instanceof Error ? error.message : "Erro ao deletar o item.";
-            toast.error(message);
+            toast.error(message, {
+                position: "top-center",
+                duration: 5000,
+                closeButton: true,
+            });
         }
     };
 
