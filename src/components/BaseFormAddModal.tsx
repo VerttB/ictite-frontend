@@ -1,33 +1,20 @@
 "use client";
 
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import {
-    FieldValues,
-    FormProvider,
-    useForm,
-    type UseFormProps,
-} from "react-hook-form";
+import { FieldValues, FormProvider, useForm, type UseFormProps } from "react-hook-form";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { ReactNode } from "react";
 import * as z from "zod";
 import { LoaderCircle } from "lucide-react";
 
-interface BaseFormModalProps<
-    T extends z.ZodType<FieldValues, FieldValues>,
-    TContext,
-> {
+interface BaseFormModalProps<T extends z.ZodType<FieldValues, FieldValues>, TContext> {
     open: boolean;
     onClose: () => void;
     title: string;
@@ -37,10 +24,7 @@ interface BaseFormModalProps<
     children: ReactNode;
 }
 
-export function BaseFormModal<
-    T extends z.ZodType<FieldValues, FieldValues>,
-    TContext,
->({
+export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TContext>({
     open,
     onClose,
     title,
@@ -93,10 +77,10 @@ export function BaseFormModal<
 
                 <Tabs value={tab} onValueChange={setTab}>
                     <TabsList className="mb-4 grid grid-cols-2">
-                        <TabsTrigger value="manual">
+                        <TabsTrigger value="manual" className="text-font-primary">
                             Adicionar manualmente
                         </TabsTrigger>
-                        <TabsTrigger value="importar">
+                        <TabsTrigger value="importar" className="text-font-primary">
                             Importar arquivo
                         </TabsTrigger>
                     </TabsList>
@@ -163,12 +147,8 @@ export function BaseFormModal<
                                 className="mt-4"
                                 onClick={() => {
                                     if (!arquivo)
-                                        return toast.error(
-                                            "Selecione um arquivo"
-                                        );
-                                    toast.success(
-                                        "Import funcionalidade futura"
-                                    );
+                                        return toast.error("Selecione um arquivo");
+                                    toast.success("Import funcionalidade futura");
                                 }}>
                                 Importar
                             </Button>
