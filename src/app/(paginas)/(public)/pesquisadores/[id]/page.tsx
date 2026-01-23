@@ -18,18 +18,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
         );
     }
-
     return (
         <div className="flex w-full flex-col gap-4 overflow-x-hidden p-4">
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <div className="relative h-72 w-full cursor-pointer sm:w-1/2 xl:w-2/7">
                     <Image
                         fill
-                        src={
-                            researcher.image
-                                ? `${researcher.image}`
-                                : "https://picsum.photos/100/100"
-                        }
+                        src={researcher.image!}
                         alt="pesquisador"
                         className="border-border rounded-md border object-cover"
                     />

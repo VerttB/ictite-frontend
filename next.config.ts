@@ -15,10 +15,13 @@ const nextConfig: NextConfig = {
             { protocol: "http", hostname: "200.128.66.226" },
             { protocol: "https", hostname: "images.unsplash.com" },
             { protocol: "https", hostname: "plus.unsplash.com" },
-            { protocol: "http", hostname: "localhost" },
+            { protocol: "http", hostname: "localhost", port: "8000", pathname: "/**" },
+            { protocol: "https", hostname: "127.0.0.1", port: "8000", pathname: "/**" },
             { protocol: "https", hostname: "minimakerlab.com.br" },
+            { protocol: "https", hostname: "simcc.uesc.br", pathname: "/**" },
+            { protocol: "http", hostname: "simcc.uesc.br", pathname: "/**" },
         ],
-        unoptimized: isProd ? true : false,
+        unoptimized: true,
     },
 };
 
