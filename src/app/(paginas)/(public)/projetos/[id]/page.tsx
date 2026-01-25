@@ -21,8 +21,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     const projectStatistics: ProjectStatistic = await getProjectStatistics(id);
 
-    console.log(projectStatistics);
-
     if (!project) return <div className="px-10 py-6">Projeto não encontrado</div>;
 
     return (

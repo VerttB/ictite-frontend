@@ -39,7 +39,6 @@ export default async function OneClubeCiencia({
         Coordenador: [],
     };
 
-    console.log(clubeCiencia);
     /*const researchers: Researcher[] =
         (await getResearchersByClube(clubeCiencia.id)) ?? [];
 

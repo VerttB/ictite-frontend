@@ -28,7 +28,6 @@ export const getSchoolById = async (id: string): Promise<School> => {
 export const getSchools = async (
     params?: SchoolSearchParams
 ): Promise<Pagination<School>> => {
-    console.log(params);
     const data = await apiClient.get<Pagination<School>>("/schools", { params });
 
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
@@ -43,7 +42,7 @@ export const getSchoolClubs = async (school_id: string): Promise<ScienceClub[]> 
 };
 
 export const getSchoolProjects = async (school_id: string): Promise<Project[]> => {
-    const data = await apiClient.get<Project[]>(`/schools/${school_id}/projects`);
+    const data = await apiClient.get<Project[]>(`/schools/${school_id}/projects`, {});
     return data || [];
 };
 
