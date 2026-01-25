@@ -68,7 +68,7 @@ export const createSchool = async (school: SchoolCreate): Promise<School> => {
 };
 
 export const deleteSchool = async (id: string): Promise<void> => {
-    await apiClient.delete(`/schools/${id}/`);
+    await apiClient.delete(`/schools/${id}`);
 };
 
 export const updateSchool = async (
