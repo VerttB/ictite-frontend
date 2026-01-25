@@ -17,11 +17,11 @@ export const getEquipaments = async (
 export const createEquipament = async (
     newEquipament: EquipmentCreate
 ): Promise<Equipment> => {
-    return await apiClient.post<Equipment>("/equipment", newEquipament);
+    return await apiClient.post<Equipment>("/equipment/", newEquipament);
 };
 
 export const uploadEquipamentImages = async (equipmentId: string, formData: FormData) => {
-    return await apiClient.post(`/equipment/${equipmentId}/images`, formData);
+    return await apiClient.post(`/equipment/${equipmentId}/images/`, formData);
 };
 
 export const updateEquipament = async (
@@ -29,11 +29,11 @@ export const updateEquipament = async (
     updatedEquipament: Partial<EquipmentUpdate>
 ): Promise<Equipment> => {
     return await apiClient.patch<Equipment>(
-        `/equipment/${equipmentId}`,
+        `/equipment/${equipmentId}/`,
         updatedEquipament
     );
 };
 
 export const deleteEquipament = async (equipmentId: string): Promise<void> => {
-    await apiClient.delete(`/equipment/${equipmentId}`);
+    await apiClient.delete(`/equipment/${equipmentId}/`);
 };

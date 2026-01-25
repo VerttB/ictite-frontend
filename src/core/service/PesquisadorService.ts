@@ -16,16 +16,16 @@ export const getResearchers = async (
 };
 
 export async function getResearcherById(researcherId: string): Promise<ResearcherFinal> {
-    return await apiClient.get<ResearcherFinal>(`/researchers/${researcherId}`);
+    return await apiClient.get<ResearcherFinal>(`/researchers/${researcherId}/`);
 }
 
 export async function getResearcherProjects(researcherId: string): Promise<Project[]> {
-    const data = await apiClient.get<Project[]>(`/researchers/${researcherId}/projects`);
+    const data = await apiClient.get<Project[]>(`/researchers/${researcherId}/projects/`);
     return data || [];
 }
 
 export async function getResearchersByClube(clubeId: string): Promise<Researcher[]> {
-    const data = await apiClient.get<Researcher[]>(`/researchers/${clubeId}/clube`);
+    const data = await apiClient.get<Researcher[]>(`/researchers/${clubeId}/clube/`);
     return data || [];
 }
 
@@ -44,5 +44,5 @@ export async function updateResearcher(
     );
 }
 export async function deleteResearcher(researcherId: string): Promise<void> {
-    await apiClient.delete(`/researchers/${researcherId}`);
+    await apiClient.delete(`/researchers/${researcherId}/`);
 }

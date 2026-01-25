@@ -15,19 +15,19 @@ export const getMaterials = async (
 };
 
 export const createMaterial = async (newMaterial: MaterialCreate): Promise<Material> => {
-    return await apiClient.post<Material>("/material", newMaterial);
+    return await apiClient.post<Material>("/material/", newMaterial);
 };
 
 export const uploadMaterialImages = async (materialId: string, images: FormData) => {
-    return await apiClient.post(`/material/${materialId}/images`, images);
+    return await apiClient.post(`/material/${materialId}/images/`, images);
 };
 
 export const updateMaterial = async (
     materialId: string,
     updatedMaterial: Partial<MaterialUpdate>
 ): Promise<Material> => {
-    return await apiClient.patch<Material>(`/material/${materialId}`, updatedMaterial);
+    return await apiClient.patch<Material>(`/material/${materialId}/`, updatedMaterial);
 };
 export const deleteMaterial = async (materialId: string): Promise<void> => {
-    await apiClient.delete(`/material/${materialId}`);
+    await apiClient.delete(`/material/${materialId}/`);
 };
