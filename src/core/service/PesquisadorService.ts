@@ -15,13 +15,8 @@ export const getResearchers = async (
     return data || { items: [], total: 0, page: 1, total_pages: 0, size: 0 };
 };
 
-export async function getResearcherById(
-    researcherId: string,
-    full: boolean = false
-): Promise<ResearcherFinal> {
-    return await apiClient.get<ResearcherFinal>(`/researchers/${researcherId}`, {
-        params: { full },
-    });
+export async function getResearcherById(researcherId: string): Promise<ResearcherFinal> {
+    return await apiClient.get<ResearcherFinal>(`/researchers/${researcherId}`);
 }
 
 export async function getResearcherProjects(researcherId: string): Promise<Project[]> {
