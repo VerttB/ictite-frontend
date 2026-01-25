@@ -14,7 +14,7 @@ import { Project } from "../domain/Project";
 import { Researcher } from "../domain/Researcher";
 
 export const getSchoolGeoData = async (): Promise<SchoolGeoJson> => {
-    return await apiClient.get<SchoolGeoJson>("/schools/geojson/");
+    return await apiClient.get<SchoolGeoJson>("/schools/geojson");
 };
 
 export const getSchoolById = async (id: string): Promise<School> => {
@@ -34,20 +34,20 @@ export const getSchools = async (
 };
 
 export const getSchoolEquiments = async (id: string): Promise<Equipment[]> => {
-    return (await apiClient.get<Equipment[]>(`/schools/${id}/equipments/`)) || [];
+    return (await apiClient.get<Equipment[]>(`/schools/${id}/equipments`)) || [];
 };
 
 export const getSchoolClubs = async (school_id: string): Promise<ScienceClub[]> => {
-    return (await apiClient.get<ScienceClub[]>(`/schools/${school_id}/clubs/`)) || [];
+    return (await apiClient.get<ScienceClub[]>(`/schools/${school_id}/clubs`)) || [];
 };
 
 export const getSchoolProjects = async (school_id: string): Promise<Project[]> => {
-    const data = await apiClient.get<Project[]>(`/schools/${school_id}/projects/`, {});
+    const data = await apiClient.get<Project[]>(`/schools/${school_id}/projects`, {});
     return data || [];
 };
 
 export const getSchoolResearchers = async (school_id: string): Promise<Researcher[]> => {
-    const data = await apiClient.get<Researcher[]>(`/schools/${school_id}/researchers/`);
+    const data = await apiClient.get<Researcher[]>(`/schools/${school_id}/researchers`);
     return data || [];
 };
 
@@ -55,7 +55,7 @@ export const getSchoolStatistics = async (
     school_id: string
 ): Promise<SchoolStatistics> => {
     return (
-        (await apiClient.get<SchoolStatistics>(`/schools/${school_id}/statistics/`)) || {
+        (await apiClient.get<SchoolStatistics>(`/schools/${school_id}/statistics`)) || {
             total_clubs: 0,
             total_projects: 0,
             total_researchers: 0,
@@ -75,8 +75,8 @@ export const updateSchool = async (
     id: string,
     school: Partial<SchoolUpdate>
 ): Promise<School> => {
-    return await apiClient.patch<School>(`/schools/${id}/`, school);
+    return await apiClient.patch<School>(`/schools/${id}`, school);
 };
 export const uploadSchoolImage = async (school_id: string, form: FormData) => {
-    return await apiClient.post(`/schools/${school_id}/images/`, form);
+    return await apiClient.post(`/schools/${school_id}/images`, form);
 };

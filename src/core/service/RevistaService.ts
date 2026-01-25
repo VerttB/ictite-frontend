@@ -26,16 +26,16 @@ export const createRevista = async (newRevista: MagazineCreate): Promise<Magazin
 };
 
 export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {
-    return await apiClient.post(`/magazine/${magazineId}/images/`, formData);
+    return await apiClient.post(`/magazine/${magazineId}/images`, formData);
 };
 
 export const updateRevista = async (
     magazineId: string,
     updatedRevista: Partial<MagazineUpdate>
 ): Promise<Magazine> => {
-    return await apiClient.patch<Magazine>(`/magazine/${magazineId}/`, updatedRevista);
+    return await apiClient.patch<Magazine>(`/magazine/${magazineId}`, updatedRevista);
 };
 
 export const deleteRevista = async (magazineId: string): Promise<void> => {
-    return await apiClient.delete(`/magazine/${magazineId}/`);
+    return await apiClient.delete(`/magazine/${magazineId}`);
 };

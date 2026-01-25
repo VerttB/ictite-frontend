@@ -50,7 +50,7 @@ export const getClubeCienciaStats = async (
     id: string
 ): Promise<ScienceClubStatistics> => {
     return (
-        (await apiClient.get(`/clubes-ciencia/${id}/statistics/`)) || {
+        (await apiClient.get(`/clubes-ciencia/${id}/statistics`)) || {
             total_alunos: 0,
             total_coordenadores: 0,
             total_professores: 0,
@@ -62,7 +62,7 @@ export const getClubeCienciaStats = async (
 // |=======| GET ESTATÍSTICAS DE TODOS OS CLUBES DE CIÊNCIAS |=======|
 export const getClubesCienciaStats = async (): Promise<ScienceClubStatisticsAll> => {
     const data = await apiClient.get<ScienceClubStatisticsAll>(
-        "/clubes-ciencia/statistics/"
+        "/clubes-ciencia/statistics"
     );
 
     return (
@@ -86,15 +86,12 @@ export const updateClubeCiencias = async (
     clubeId: string,
     updatedClube: Partial<ScienceClubUpdate>
 ): Promise<ScienceClub> => {
-    return await apiClient.patch<ScienceClub>(
-        `/clubes-ciencia/${clubeId}/`,
-        updatedClube
-    );
+    return await apiClient.patch<ScienceClub>(`/clubes-ciencia/${clubeId}`, updatedClube);
 };
 
 export const deleteClubeCiencias = async (clubeId: string): Promise<void> => {
-    await apiClient.delete(`/clubes-ciencia/${clubeId}/`);
+    await apiClient.delete(`/clubes-ciencia/${clubeId}`);
 };
 export const uploadClubImage = async (id: string, form: FormData) => {
-    return await apiClient.post(`/clubes-ciencia/${id}/images/`, form);
+    return await apiClient.post(`/clubes-ciencia/${id}/images`, form);
 };
