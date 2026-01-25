@@ -10,10 +10,7 @@ interface CardPesquisadorProps {
     researcher: Researcher;
 }
 
-export default function CardPesquisador({
-    onClick,
-    researcher,
-}: CardPesquisadorProps) {
+export default function CardPesquisador({ onClick, researcher }: CardPesquisadorProps) {
     const [openDrawer, setOpenDrawer] = useState(false);
 
     return (
@@ -39,7 +36,7 @@ export default function CardPesquisador({
                     <div className="text-white">
                         <p className="text-xl">{researcher.name}</p>
                         <div className="hidden group-hover:block">
-                            <p>{researcher.sex}</p>
+                            <p>{researcher.gender}</p>
                             <p>{researcher.race}</p>
                         </div>
                     </div>
