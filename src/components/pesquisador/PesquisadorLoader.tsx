@@ -19,7 +19,7 @@ export default function PesquisadorLoader({ suggestion }: Props) {
         const load = async () => {
             setLoading(true);
             try {
-                const data = await getResearcherById(suggestion.id, true);
+                const data = await getResearcherById(suggestion.id);
                 if (!mounted) return;
 
                 setResearcher(data);

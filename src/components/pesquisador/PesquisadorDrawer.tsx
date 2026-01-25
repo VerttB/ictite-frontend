@@ -6,14 +6,7 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from "../ui/drawer";
-import {
-    Expand,
-    GraduationCap,
-    MapPin,
-    ExternalLink,
-    School,
-    X,
-} from "lucide-react";
+import { Expand, GraduationCap, MapPin, ExternalLink, School, X } from "lucide-react";
 
 import useSWR from "swr";
 import { getResearcherById } from "@/core/service/PesquisadorService";
@@ -24,6 +17,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { useViewPort } from "@/hooks/useViewPort";
 import { ScrollArea } from "../ScrollArea";
+import { Route } from "next";
 
 interface PesquisadorProps {
     isOpen: boolean;
@@ -31,15 +25,11 @@ interface PesquisadorProps {
     researcherId: string;
 }
 
-export default function Pesquisador({
-    isOpen,
-    onClose,
-    researcherId,
-}: PesquisadorProps) {
+export default function Pesquisador({ isOpen, onClose, researcherId }: PesquisadorProps) {
     const router = useRouter();
     const { data: researcher, isLoading } = useSWR(
         researcherId ? `simcc-researcher-${researcherId}` : null,
-        () => getResearcherById(researcherId, true)
+        () => getResearcherById(researcherId)
     );
     const { isMobile } = useViewPort();
 
@@ -52,9 +42,7 @@ export default function Pesquisador({
             direction={`${isMobile ? "bottom" : "right"}`}>
             <DrawerContent
                 className={`flex flex-col p-0 ${
-                    isMobile
-                        ? "h-[90vh] max-h-[90vh]"
-                        : "h-full w-[520px] max-w-full"
+                    isMobile ? "h-[90vh] max-h-[90vh]" : "h-full w-[520px] max-w-full"
                 }`}>
                 <DrawerHeader className="shadow">
                     <div className="flex items-center justify-between border-b pb-2.5">
@@ -68,7 +56,7 @@ export default function Pesquisador({
                             className="cursor-pointer">
                             <X />
                         </Button>
-                        <Link href={`/pesquisadores/${researcherId}/`}>
+                        <Link href={`/pesquisadores/${researcherId}/` as Route}>
                             <Button size={"icon"} className="cursor-pointer">
                                 <Expand />
                             </Button>
@@ -78,7 +66,7 @@ export default function Pesquisador({
                         <div
                             className="relative h-72 w-full cursor-pointer sm:w-1/2"
                             onClick={() =>
-                                router.push(`/pesquisadores/${researcherId}/`)
+                                router.push(`/pesquisadores/${researcherId}/` as Route)
                             }>
                             <Image
                                 fill
@@ -124,21 +112,13 @@ export default function Pesquisador({
                                                     "Graduação não disponível"}
                                             </p>
                                         </span>
-                                        <span className="text-font-primary/80 flex items-center gap-1 text-lg">
-                                            <School size={15} />
-                                            <p>
-                                                {researcher?.school ??
-                                                    "Instituição não disponível"}
-                                            </p>
-                                        </span>
                                     </>
                                 ) : (
                                     <p>Nenhuma informação disponível</p>
                                 )}
                             </div>
                             <ScrollArea>
-                                <DrawerDescription
-                                    className={`py-2 pr-2 text-sm`}>
+                                <DrawerDescription className={`py-2 pr-2 text-sm`}>
                                     {researcher?.simcc?.abstract ??
                                         "Descrição não disponível."}
                                 </DrawerDescription>

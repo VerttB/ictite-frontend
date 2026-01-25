@@ -9,7 +9,7 @@ import { Downloader } from "@/components/Downloader";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const researcher = await getResearcherById(id, true);
+    const researcher = await getResearcherById(id);
 
     if (!researcher) {
         return (
