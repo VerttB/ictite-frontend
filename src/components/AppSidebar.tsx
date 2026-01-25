@@ -25,6 +25,7 @@ import {
 } from "./ui/dropdown-menu";
 import { admItems, baseItems } from "@/core/constants/sidebar";
 import { cn } from "@/lib/utils";
+import { Route } from "next";
 
 export function AppSidebar() {
     const path = usePathname();
@@ -72,7 +73,9 @@ export function AppSidebar() {
                                                         : "hover:bg-primary/70 bg-gray-200 hover:text-white"
                                                 )}
                                                 asChild>
-                                                <Link className="flex" href={item.url}>
+                                                <Link
+                                                    className="flex"
+                                                    href={item.url as Route}>
                                                     <item.icon />
                                                     <span>{item.title}</span>
                                                 </Link>

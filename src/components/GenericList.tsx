@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { SugestionBase } from "@/core/interface/SugestionBase";
+import { Route } from "next";
 
 interface GenericListProps {
     searchResult: SugestionBase[];
@@ -26,7 +27,7 @@ export const GenericList = ({ searchResult, path, icon }: GenericListProps) => {
                         <span className="line-clamp-1 text-lg">{result.name}</span>
                     </div>
                     <div className="">
-                        <Link href={`/${path}/${result.id}`}>
+                        <Link href={`/${path}/${result.id}` as Route}>
                             <Button size={"icon"} className="cursor-pointer">
                                 <ChevronRight />
                             </Button>

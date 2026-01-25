@@ -11,6 +11,7 @@ import useSWR from "swr";
 import { getSchoolGeoData } from "@/core/service/SchoolService";
 import { useSidebar } from "./ui/sidebar";
 import { useTheme } from "@/core/providers/ThemeProvider";
+import { Route } from "next";
 
 type LngLatBoundsLike =
     | [[number, number], [number, number]]
@@ -159,7 +160,7 @@ export default function MapaRender() {
                 const feat = e.features?.[0];
                 if (!feat || feat.geometry.type !== "Point") return;
                 if (feat.properties && feat.properties.id)
-                    router.push(`escolas/${feat.properties.id}`);
+                    router.push(`escolas/${feat.properties.id}` as Route);
             });
 
             map.on("move", () => setPopoverOpen(false));
@@ -228,7 +229,7 @@ export default function MapaRender() {
                                     <li
                                         onClick={() => {
                                             setPopoverOpen(false);
-                                            router.push(`escolas/${school.id}`);
+                                            router.push(`escolas/${school.id}` as Route);
                                         }}
                                         key={school.id}
                                         className="hover:bg-primary cursor-pointer rounded-md border-b p-2 text-sm hover:text-white">

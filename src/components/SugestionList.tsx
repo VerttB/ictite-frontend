@@ -1,5 +1,6 @@
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import { capitalize } from "@/core/utils/capitalize";
+import { Route } from "next";
 import Link from "next/link";
 
 interface SugestionListProps {
@@ -31,7 +32,7 @@ export const SugestionList = ({ data }: SugestionListProps) => {
                                 <div className="grid w-full grid-cols-2 items-start gap-1">
                                     {items.map((e) => (
                                         <Link
-                                            href={`${key}/${e.id}`}
+                                            href={`${key}/${e.id}` as Route}
                                             key={e.id}
                                             className="hover:bg-primary w-full rounded-md px-4 py-1 hover:text-white">
                                             {e.name ?? e.title ?? "Sem título"}

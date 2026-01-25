@@ -1,3 +1,4 @@
+import { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,28 +14,27 @@ interface CardMateriaisProps {
     material: MateriaisProps;
 }
 
-
 export default function CardMateriais({ material }: CardMateriaisProps) {
     return (
-        <Link href={material.link} target="_blank">
-            <div className="group bg-secondary w-[240px] md:w-[260px] h-[320px] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer flex flex-col">
-                <div className="relative w-full h-[140px]">
+        <Link href={material.link as Route} target="_blank">
+            <div className="group bg-secondary flex h-[320px] w-[240px] cursor-pointer flex-col overflow-hidden rounded-xl shadow-sm transition-all hover:-translate-y-1 hover:shadow-md md:w-[260px]">
+                <div className="relative h-[140px] w-full">
                     <Image
                         src={material.images[0] || "https://picsum.photos/400/300"}
                         alt={material.name}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"></Image>
-                    <span className="absolute top-2 right-2 bg-primary text-xs text-white font-semibold px-2 py-1 rounded-md shadow-sm">
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"></Image>
+                    <span className="bg-primary absolute top-2 right-2 rounded-md px-2 py-1 text-xs font-semibold text-white shadow-sm">
                         {material.type}
                     </span>
                 </div>
 
                 {/* Conteúdo */}
-                <div className="flex flex-col flex-1 gap-2 p-3 text-white">
-                    <h2 className="text-lg font-semibold leading-tight line-clamp-2">
+                <div className="flex flex-1 flex-col gap-2 p-3 text-white">
+                    <h2 className="line-clamp-2 text-lg leading-tight font-semibold">
                         {material.name}
                     </h2>
-                    <p className="text-sm text-white/90 line-clamp-4 text-justify">
+                    <p className="line-clamp-4 text-justify text-sm text-white/90">
                         {material.description}
                     </p>
                 </div>
