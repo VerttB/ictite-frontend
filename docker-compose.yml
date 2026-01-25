@@ -1,15 +1,20 @@
 services:
-  ictite-front:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: next-app
-    ports:
-      - "8010:8010"
-    env_file:
-      - .env
-    environment:
-      - NODE_ENV=production
-      - PORT=8010
-      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
-    restart: unless-stopped
+    ictite-front:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: next-app
+        ports:
+            - "8010:8010"
+        env_file:
+            - .env
+        networks:
+            - ictite-novo-network
+        environment:
+            - NODE_ENV=production
+            - PORT=8010
+            - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+        restart: unless-stopped
+networks:
+    ictite-novo-network:
+        external: true
