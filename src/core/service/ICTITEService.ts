@@ -1,4 +1,4 @@
-import { Ictite } from "../interface/IIctite";
+import { Ictite } from "../domain/Ictite";
 import { getBaseUrl } from "../utils/api";
 
 export const GETictite = async (): Promise<Ictite> => {
