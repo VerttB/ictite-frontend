@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["picsum.photos", "200.128.66.226", "images.unsplash.com", "plus.unsplash.com", "localhost", "minimakerlab.com.br"],
     unoptimized: isProd ? true : false,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.cdninstagram.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.fbcdn.net",
+      },
+    ]
   },
 };
 
