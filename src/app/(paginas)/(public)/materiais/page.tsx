@@ -15,7 +15,7 @@ export default function Materiais() {
             link: "https://minimakerlab.com.br/?page_id=481",
             description:
                 "Material introdutório sobre robótica e sua aplicação em laboratórios makers. Inclui atividades práticas e vídeos explicativos.",
-            type: "laboratórios makers",
+            type: "Laboratórios Makers",
             images: [
                 "https://minimakerlab.com.br/wp-content/uploads/2019/10/robo-200x200.png",
             ],
@@ -26,7 +26,7 @@ export default function Materiais() {
             link: "https://minimakerlab.com.br/?page_id=82",
             description:
                 "Guia de montagem e uso de display box em ambientes makers. Foco em eletrônica e prototipagem.",
-            type: "laboratórios makers",
+            type: "Laboratórios Makers",
             images: [
                 "https://minimakerlab.com.br/wp-content/uploads/2018/04/display_box.png",
             ],
@@ -37,7 +37,7 @@ export default function Materiais() {
             link: "https://minimakerlab.com.br/?page_id=86",
             description:
                 "Atividades práticas com materiais recicláveis e sustentáveis voltadas à criatividade e design.",
-            type: "laboratórios makers",
+            type: "Laboratórios Makers",
             images: ["https://minimakerlab.com.br/wp-content/uploads/2018/04/craft.png"],
         },
         {
@@ -46,7 +46,7 @@ export default function Materiais() {
             link: "https://minimakerlab.com.br/?page_id=92",
             description:
                 "Exemplo de projeto de mesa interativa para ensino de lógica de programação.",
-            type: "laboratórios makers",
+            type: "Laboratórios Makers",
             images: [
                 "https://minimakerlab.com.br/wp-content/uploads/2018/04/display_codetable-1.png",
             ],
@@ -57,7 +57,7 @@ export default function Materiais() {
             link: "https://minimakerlab.com.br/?page_id=368",
             description:
                 "Uso de fotografia para documentar experimentos e protótipos. Inclui orientações de luz e composição.",
-            type: "laboratórios makers",
+            type: "Laboratórios Makers",
             images: [
                 "https://minimakerlab.com.br/wp-content/uploads/2018/12/foto2-2.jpg",
             ],
@@ -69,7 +69,7 @@ export default function Materiais() {
             link: "http://localhost:3000/videos/",
             description:
                 "Vídeo introdutório sobre pensamento computacional e lógica aplicada à arte e design digital.",
-            type: "Vídeo",
+            type: "Vídeos",
             images: ["https://picsum.photos/id/1015/400/300"],
         },
         {
@@ -78,7 +78,7 @@ export default function Materiais() {
             link: "https://example.com/energias-renovaveis",
             description:
                 "Guia prático sobre uso de energia solar e eólica em escolas, com kits experimentais.",
-            type: "Apostila",
+            type: "Apostilas",
             images: ["https://picsum.photos/id/1022/400/300"],
         },
         {
@@ -87,7 +87,7 @@ export default function Materiais() {
             link: "https://example.com/sustentabilidade",
             description:
                 "Artigo sobre o impacto da sustentabilidade na inovação tecnológica e educacional.",
-            type: "Artigo",
+            type: "Artigos",
             images: ["https://picsum.photos/id/1033/400/300"],
         },
         {
@@ -96,7 +96,7 @@ export default function Materiais() {
             link: "https://example.com/iot-iniciantes",
             description:
                 "Apostila com exercícios práticos para introdução à Internet das Coisas usando Arduino.",
-            type: "Apostila",
+            type: "Apostilas",
             images: ["https://picsum.photos/id/1045/400/300"],
         },
         {
@@ -105,7 +105,7 @@ export default function Materiais() {
             link: "https://example.com/fisica-experimentos",
             description:
                 "Coletânea de experimentos simples para aulas de física, utilizando materiais recicláveis.",
-            type: "Artigo",
+            type: "Artigos",
             images: ["https://picsum.photos/id/1062/400/300"],
         },
     ];
@@ -149,12 +149,12 @@ export default function Materiais() {
                     </h2>
                 </div>
                 <p className="text-sm sm:text-base">
-                    Explore recursos educativos desenvolvidos para transformar o ensino de
-                    ciências e tecnologia na Bahia. Oferecemos planos de aula, kits
-                    experimentais e guias práticos sobre robótica, energias renováveis e
-                    inovação, todos alinhados à realidade local e de acesso gratuito.
-                    Ideal para professores e estudantes, nossos materiais incentivam
-                    aprendizagem mão na massa e abordagem investigativa.
+                    Explore recursos educativos desenvolvidos para transformar o ensino e
+                    educação na Bahia. Oferecemos planos de aula, kits experimentais e
+                    guias práticos sobre robótica, energias renováveis e inovação, todos
+                    alinhados à realidade local e de acesso gratuito. Ideal para
+                    professores e estudantes, nossos materiais incentivam aprendizagem mão
+                    na massa e abordagem investigativa.
                 </p>
             </div>
 
