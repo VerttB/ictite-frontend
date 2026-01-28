@@ -33,7 +33,7 @@ export default function Clubes() {
 
     const objetivos: { titulo: string; descricao: string; Icon: LucideIcon }[] = [
         {
-            titulo: "Integração entre Alunos e Professores",
+            titulo: "Integração entre Estudantes e Professores",
             descricao:
                 "Promover a colaboração e o trabalho em equipe entre estudantes e professores, estimulando a troca de ideias e a curiosidade científica dentro e fora da sala de aula.",
             Icon: Users2,
@@ -61,7 +61,7 @@ export default function Clubes() {
             Icon: BrainCircuit,
         },
         {
-            titulo: "Alunos",
+            titulo: "Estudantes",
             valor: clubeCienciaStats?.total_alunos ?? 0,
             Icon: BookA,
         },

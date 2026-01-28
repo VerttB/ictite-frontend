@@ -5,12 +5,7 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import {
-    Calendar,
-    ChevronLeft,
-    PlayCircleIcon,
-    PlaySquare,
-} from "lucide-react";
+import { Calendar, ChevronLeft, PlayCircleIcon, PlaySquare } from "lucide-react";
 import Link from "next/link";
 
 export default function Videos() {
@@ -18,8 +13,7 @@ export default function Videos() {
         {
             id: "1",
             title: "Como criar sua conta Lattes",
-            description:
-                "Passo a passo completo para registro na plataforma Lattes...",
+            description: "Passo a passo completo para registro na plataforma Lattes...",
             url: "https://www.youtube.com/watch?v=SElLRiXLw7g",
             duration: "8:15",
             date: "15/10/2024",
@@ -66,16 +60,12 @@ export default function Videos() {
                         <PlaySquare size={18} />
                         Vídeos Tutorias e Explicativos
                     </h2>
-                    <p className="text-xs text-gray-300">
-                        Versão beta β 1.0 do site ICTITE
-                    </p>
                 </div>
                 <p className="text-sm sm:text-base">
-                    Bem-vindo à nossa aba de vídeos! Nesta seção, você
-                    encontrará um acervo dinâmico de conteúdos audiovisuais
-                    produzidos para apoiar sua jornada no mundo da pesquisa e
-                    inovação educacional. Aqui você acessa tutoriais, registros
-                    de eventos científicos, depoimentos e materiais
+                    Bem-vindo à nossa aba de vídeos! Nesta seção, você encontrará um
+                    acervo dinâmico de conteúdos audiovisuais produzidos para apoiar sua
+                    jornada no mundo da pesquisa e inovação educacional. Aqui você acessa
+                    tutoriais, registros de eventos científicos, depoimentos e materiais
                 </p>
             </div>
 

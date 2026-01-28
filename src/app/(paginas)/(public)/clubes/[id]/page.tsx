@@ -33,11 +33,7 @@ export default async function OneClubeCiencia({
 
     const clubeCiencia: ScienceClub = await getClubeCienciaById(id);
     const projects: Project[] = (await getClubeCienciaProjects(id)) ?? [];
-    const researchers: ResearcherByType = (await getClubeCienciaResearchers(id)) ?? {
-        Professor: [],
-        Aluno: [],
-        Coordenador: [],
-    };
+    const researchers: ResearcherByType = await getClubeCienciaResearchers(id);
 
     /*const researchers: Researcher[] =
         (await getResearchersByClube(clubeCiencia.id)) ?? [];
@@ -51,7 +47,7 @@ export default async function OneClubeCiencia({
 
     stats = [
         {
-            titulo: "Alunos",
+            titulo: "Estudantes",
             valor: statistics.total_alunos,
             Icon: BookA,
         },
