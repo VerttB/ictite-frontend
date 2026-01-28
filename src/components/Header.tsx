@@ -25,7 +25,7 @@ export const Header = () => {
                 <div className="relative h-16 w-32 sm:w-48">
                     <Image src={logoSrc} alt="Logo" fill className="object-contain" />
                 </div>
-                <p className="flex items-end text-sm text-gray-500">beta β 2.0</p>
+                <p className="flex items-end text-sm text-gray-500">Versão 2.0.1</p>
             </div>
             <div className="flex flex-row items-center gap-2 sm:gap-4">
                 <Link href={"https://simcc.uesc.br/observatorio"}>
