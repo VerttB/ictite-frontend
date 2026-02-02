@@ -30,7 +30,11 @@ export default function Noticias() {
     }, []);
 
     if (loading) return <div>Carregando notícias...</div>;
-    if (posts.length === 0) return <div>Nenhuma notícia encontrada.</div>;
+    if (posts.length === 0) return (
+        <div className="border-muted-foreground/40 bg-muted/10 text-muted-foreground flex flex-col items-center justify-center gap-2 rounded-md border border-dashed py-5">
+            <span>Nenhuma noticia encontrada</span>
+        </div>
+    );
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-4">
