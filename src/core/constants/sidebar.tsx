@@ -4,6 +4,7 @@ import {
     Handshake,
     Home,
     Newspaper,
+    School,
     SquareChartGantt,
     Video,
 } from "lucide-react";
@@ -13,6 +14,12 @@ export const baseItems = [
         title: "Clubes de Ciência",
         url: "/clubes",
         icon: Handshake,
+        allowedRoles: ["guest", "admin"],
+    },
+    {
+        title: "Escolas",
+        url: "/escolas",
+        icon: School,
         allowedRoles: ["guest", "admin"],
     },
     {
