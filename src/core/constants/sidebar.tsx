@@ -10,6 +10,12 @@ import {
 
 export const baseItems = [
     {
+        title: "Clubes de Ciência",
+        url: "/clubes",
+        icon: Handshake,
+        allowedRoles: ["guest", "admin"],
+    },
+    {
         title: "Documento ICTITE",
         url: "/projeto",
         icon: SquareChartGantt,
@@ -37,12 +43,6 @@ export const baseItems = [
         title: "Gráficos Estatísticos",
         url: "/materiais",
         icon: ChartSpline,
-        allowedRoles: ["guest", "admin"],
-    },
-    {
-        title: "CCTIC",
-        url: "/clubes",
-        icon: Handshake,
         allowedRoles: ["guest", "admin"],
     },
 ];
