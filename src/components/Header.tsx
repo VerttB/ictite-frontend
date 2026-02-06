@@ -28,7 +28,7 @@ export const Header = () => {
                 <p className="flex items-end text-sm text-gray-500">beta β 2.0</p>
             </div>
             <div className="flex flex-row items-center gap-2 sm:gap-4">
-                <Link href={"https://simcc.uesc.br/observatorio"}>
+                <Link target="_blank" href={"https://simcc.uesc.br/observatorio"}>
                     <Button
                         size={isMobile ? "icon" : "default"}
                         className="cursor-pointer text-xl">
