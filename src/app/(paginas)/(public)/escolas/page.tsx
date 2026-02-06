@@ -8,6 +8,7 @@ import { School } from "@/core/domain/School";
 import { Pagination } from "@/schemas/Pagination";
 import { Building2, ChevronLeft, Filter, School as SchoolIcon, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function Escolas() {
     const [loading, setLoading] = useState(true);
@@ -74,10 +75,21 @@ export default function Escolas() {
             {/* |=======| BUSCA |=======| */}
             <div className="flex flex-row gap-2 px-4 sm:px-0 items-center">
                 <SearchBar onSearch={handleSearch} placeholder="Buscar escola por nome..." />
-                <Button className="h-12 gap-2 px-5 rounded-lg border-2 font-bold">
-                    <Filter size={20} />
-                    <span className="hidden sm:inline">Filtrar</span>
-                </Button>
+                <DropdownMenu >
+                    <DropdownMenuTrigger asChild>
+                        <Button className="h-12 gap-2 px-5 rounded-lg border-2 font-bold">
+                            <Filter size={20} />
+                            <span className="hidden sm:inline">Filtrar</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuLabel>Território Identidade</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="hover:bg-primary hover:text-white transition-all cursor-pointer">Território 01</DropdownMenuItem>
+                        <DropdownMenuItem className="hover:bg-primary hover:text-white transition-all cursor-pointer">Território 02</DropdownMenuItem>
+                        <DropdownMenuItem className="hover:bg-primary hover:text-white transition-all cursor-pointer">Território 03</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
 
             {/* |=======| LISTA DE ESCOLAS |=======| */}
