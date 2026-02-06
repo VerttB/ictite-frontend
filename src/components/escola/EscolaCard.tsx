@@ -9,7 +9,7 @@ interface EscolaCardProps {
 export default function EscolaCard({ escola }: EscolaCardProps) {
 
     return (
-        <div className="flex flex-col gap-1 w-full sm:w-[300px] border rounded-md transition-all hover:scale-[102%] hover:shadow-md cursor-pointer bg-white">
+        <div className="flex flex-col gap-1 w-full sm:w-[300px] border rounded-md transition-all hover:scale-[102%] hover:shadow-md cursor-pointe">
             {/* |=======| IMAGEM DA ESCOLA |=======| */}
             <div className="relative h-[200px] w-full overflow-hidden rounded-t-md">
                 <Image
@@ -31,10 +31,10 @@ export default function EscolaCard({ escola }: EscolaCardProps) {
 
             {/* |=======| INFORMAÇÕES DA ESCOLA |=======| */}
             <div className="flex flex-col p-3 gap-1">
-                <h1 className="line-clamp-1 text-lg font-semibold text-slate-800" title={escola.name}>
+                <h1 className="line-clamp-1 text-lg font-semibold" title={escola.name}>
                     {escola.name}
                 </h1>
-                <div className="flex gap-2 text-sm items-center text-primary/80">
+                <div className="flex gap-2 text-sm items-center text-primary">
                     <Map size={16} />
                     <span className="line-clamp-1">Território Identidade</span>
                 </div>
