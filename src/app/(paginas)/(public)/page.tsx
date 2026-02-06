@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 import { GETictite } from "@/core/service/ICTITEService";
 import Mapa from "@/components/Mapa";
 import { Spinner } from "@/components/LoadingSpin";
-import EscolaList from "@/components/escola/EscolaList";
 import { SugestionBase } from "@/core/interface/SugestionBase";
 import PesquisadorLoader from "@/components/pesquisador/PesquisadorLoader";
 import ProjetoLoader from "@/components/projeto/ProjetoLoader";
