@@ -25,7 +25,7 @@ export default function Escolas() {
         setLoading(true);
         try {
             const response = await getSchools({ 
-                name: name || undefined, 
+                name: name || "", 
                 page: 1, 
                 size: 12 
             });
@@ -98,7 +98,8 @@ export default function Escolas() {
                         <p>Carregando unidades...</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6
+                                    justify-items-center mt-1">
                         {data.items.length > 0 ? (
                             data.items.map((escola) => (
                                 <EscolaCard key={escola.id} escola={escola} />
