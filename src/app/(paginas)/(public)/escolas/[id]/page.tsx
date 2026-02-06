@@ -65,7 +65,7 @@ export default async function Page({
                             "https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         }
                         alt="escola"
-                        className="rounded-lg border-3 border-white/60 p-2 shadow-xs"
+                        className="rounded-lg border-3 border-white/60 p-2 shadow-xs object-cover"
                     />
                 </div>
 

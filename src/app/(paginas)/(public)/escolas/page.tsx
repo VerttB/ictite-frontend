@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { getSchools } from "@/core/service/SchoolService";
 import { School } from "@/core/domain/School";
 import { Pagination } from "@/schemas/Pagination";
-import { Building2, ChevronLeft, Filter, School as SchoolIcon, Loader2 } from "lucide-react";
+import { Building2, ChevronLeft, Filter, School as SchoolIcon, Loader2, MapIcon, BrainCircuit, LucideIcon, BookOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import InfoBar from "@/components/InfoBar";
 
 export default function Escolas() {
     const [loading, setLoading] = useState(true);
@@ -20,6 +21,8 @@ export default function Escolas() {
         size: 0
     });
     const [search, setSearch] = useState("");
+
+    
 
     // FETCH DAS ESCOLAS
     const fetchSchools = async (name?: string) => {
@@ -42,6 +45,31 @@ export default function Escolas() {
     useEffect(() => {
         fetchSchools(search);
     }, [search]);
+
+    let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
+
+    stats = [
+        {
+            titulo: "Escolas",
+            valor: 0,
+            Icon: SchoolIcon,
+        },
+        {
+            titulo: "Territórios",
+            valor: 0,
+            Icon: MapIcon,
+        },
+        {
+            titulo: "Clubes por escola",
+            valor: 0,
+            Icon: BrainCircuit,
+        },
+        {
+            titulo: "Pesquisadores por escola",
+            valor: 0,
+            Icon: BookOpen,
+        },
+    ];
 
     const handleSearch = (query: string) => {
         setSearch(query);
@@ -70,6 +98,11 @@ export default function Escolas() {
                     Explore as unidades de ensino, conheça seus laboratórios e os talentos 
                     que estão mudando a realidade local através da tecnologia
                 </p>
+            </div>
+
+            {/* |=======| ESTATÍSTICAS |=======| */}
+            <div>
+                <InfoBar data={stats} />
             </div>
 
             {/* |=======| BUSCA |=======| */}
