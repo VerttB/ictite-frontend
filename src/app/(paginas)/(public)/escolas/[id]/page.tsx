@@ -7,6 +7,7 @@ import { EscolaTabs } from "@/components/escola/EscolaTabs";
 import {
     BookOpen,
     BrainCircuit,
+    Instagram,
     LucideIcon,
     MapPin,
     PanelsTopLeft,
@@ -15,6 +16,7 @@ import {
 import { Downloader } from "@/components/Downloader";
 import { SchoolStatistics } from "@/core/domain/School";
 import InfoBar from "@/components/InfoBar";
+import Link from "next/link";
 
 export default async function Page({
     params,
@@ -74,11 +76,23 @@ export default async function Page({
                         <p className="text-2xl">{school.name}</p>
                         <Downloader path="schools" id={school.id} />
                     </div>
-                    <div className="flex flex-row items-center gap-2">
-                        <MapPin className="text-font-primary/60 text-lg" />
-                        <p className="text-font-primary/60 text-lg font-semibold">
-                            {school.city}
-                        </p>
+                    <div className="flex gap-4">
+                        <div className="flex flex-row items-center gap-2">
+                            <MapPin className="text-font-primary/60 text-lg" />
+                            <p className="text-font-primary/60 text-lg font-semibold">
+                                {school.city}
+                            </p>
+                        </div>
+                        {school.instagram && (
+                            <Link target="_blank" href={`https://www.instagram.com/${school.instagram}`}>
+                                <div className="flex flex-row items-center gap-2 hover:underline pl-4 border-l">
+                                    <Instagram className="text-font-primary/60 text-lg" />
+                                    <p className="text-font-primary/60 text-lg font-semibold">
+                                        {school.instagram}
+                                    </p>
+                                </div>
+                            </Link>
+                        )} 
                     </div>
                     <div className="bg-foreground rounded-md border p-4">
                         <p className="text-font-primary/50 text-lg font-semibold">
