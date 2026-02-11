@@ -7,6 +7,7 @@ import {
 } from "@/schemas/Common";
 import { mask } from "@/lib/maskBuilder";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
+import { IdentityTerritorySchema } from "./IdentityTerritory";
 export const SchoolSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "Nome obrigatório"),
@@ -16,12 +17,15 @@ export const SchoolSchema = z.object({
     instagram: z.string().optional(),
     clubs: SimpleIdNameSchema.array(),
     images: ImageSchema.array(),
+    identityTerritory: IdentityTerritorySchema.optional(),
     createdAt: z.date(),
 });
 
 export const SchoolCreateSchema = SchoolSchema.pick({
     name: true,
     description: true,
+    instagram: true,
+    identityTerritory: true,
 }).and(
     z.object({
         cep: z

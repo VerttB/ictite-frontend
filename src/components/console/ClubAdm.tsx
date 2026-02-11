@@ -108,6 +108,8 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     label="Escola"
                     options={escolas?.items || []}
                 />
+                <InputField name="instagram" label="Instagram" />
+
                 <ControlledImageUpload name="images" />
             </BaseFormModal>
 
