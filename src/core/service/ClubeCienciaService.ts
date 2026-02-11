@@ -79,7 +79,7 @@ export const getClubesCienciaStats = async (): Promise<ScienceClubStatisticsAll>
 export const createClubeCiencias = async (
     club: ScienceClubCreate
 ): Promise<ScienceClub> => {
-    return await apiClient.post<ScienceClub>("/clubes-ciencia", club);
+    return await apiClient.post<ScienceClub>("/clubes-ciencia/", club);
 };
 
 export const updateClubeCiencias = async (

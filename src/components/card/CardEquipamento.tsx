@@ -1,12 +1,7 @@
 import { Equipment } from "@/core/domain/Equipment";
 import Image from "next/image";
 
-export default function CardEquipamento({
-    equipment,
-}: {
-    equipment: Equipment;
-}) {
-    console.log(equipment);
+export default function CardEquipamento({ equipment }: { equipment: Equipment }) {
     return (
         <div className="bg-background flex h-fit justify-between overflow-hidden rounded-md border border-l-8 border-l-lime-500">
             <div className="flex flex-1 flex-col justify-center gap-4 p-5">

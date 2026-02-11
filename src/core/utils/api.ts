@@ -1,7 +1,8 @@
 export const getBaseUrl = (): string => {
-    const isProd = process.env.NODE_ENV === "production";
-    const url = isProd ? process.env.NEXT_PUBLIC_BASE_URL! : "http://localhost:8000";
-    return url;
+    if (typeof window === "undefined") {
+        return process.env.NEXT_PUBLIC_BASE_URL!;
+    }
+    return "http://localhost:8000";
 };
 
 export const getAssetPrefix = (): string => {

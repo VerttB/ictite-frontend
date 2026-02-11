@@ -40,7 +40,6 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
     });
 
     const handleCreate = async (data: MaterialCreate) => {
-        console.log(data);
         const { id } = await createMaterial(data);
         const newMaterial = new FormData();
         data.images.forEach((file) => newMaterial.append("images", file));
