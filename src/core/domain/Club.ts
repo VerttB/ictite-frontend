@@ -8,6 +8,7 @@ export const ScienceClubSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio"),
     description: z.string().min(1, "A descrição não deve estar vazia"),
     school: SimpleIdNameSchema,
+    instagram: z.string().optional(),
     images: ImageSchema.array(),
 });
 
@@ -19,6 +20,7 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
     z.object({
         school_id: z.uuid(),
         images: z.any().pipe(ImageCreateSchema),
+        instagram: z.string().optional(),
     })
 );
 
