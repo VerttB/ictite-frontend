@@ -3,6 +3,7 @@ import z from "zod";
 export const IdentityTerritorySchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "Nome obrigatório"),
+    code: z.number().int().nonnegative("Código obrigatório"),
     headquarters_city: z.string().min(1, "Cidade sede obrigatória"),
 });
 
