@@ -1,7 +1,4 @@
-import {
-    getSchoolById,
-    getSchoolStatistics,
-} from "@/core/service/SchoolService";
+import { getSchoolById, getSchoolStatistics } from "@/core/service/SchoolService";
 import Image from "next/image";
 import { EscolaTabs } from "@/components/escola/EscolaTabs";
 import {
@@ -17,12 +14,10 @@ import { Downloader } from "@/components/Downloader";
 import { SchoolStatistics } from "@/core/domain/School";
 import InfoBar from "@/components/InfoBar";
 import Link from "next/link";
+import { Route } from "next";
+import { ImageDisplay } from "@/components/ui/ImageDisplay";
 
-export default async function Page({
-    params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const school = await getSchoolById(id);
 
@@ -58,20 +53,8 @@ export default async function Page({
     return (
         <div className="flex flex-col gap-8 px-4 sm:px-8">
             <div className="flex flex-col gap-2 sm:flex-row">
-                {/* IMAGEM */}
-                <div className="relative flex min-h-64 w-full max-w-92 justify-center rounded-lg sm:w-4/5">
-                    <Image
-                        fill
-                        src={
-                            school.images?.[0]?.url ||
-                            "https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        }
-                        alt="escola"
-                        className="rounded-lg border-3 border-white/60 p-2 shadow-xs object-cover"
-                    />
-                </div>
-
-                <div className="flex flex-col gap-2 text-justify sm:w-2/3 md:w-full sm:text-left">
+                <ImageDisplay src={school.images[0].url} alt="Imagem da escola" />
+                <div className="flex flex-col gap-2 text-justify sm:w-2/3 sm:text-left md:w-full">
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
                         <p className="text-2xl">{school.name}</p>
                         <Downloader path="schools" id={school.id} />
@@ -84,15 +67,15 @@ export default async function Page({
                             </p>
                         </div>
                         {school.instagram && (
-                            <Link target="_blank" href={`https://www.instagram.com/${school.instagram}`}>
-                                <div className="flex flex-row items-center gap-2 hover:underline pl-4 border-l">
+                            <Link target="_blank" href={school.instagram as Route}>
+                                <div className="flex flex-row items-center gap-2 border-l pl-4 hover:underline">
                                     <Instagram className="text-font-primary/60 text-lg" />
                                     <p className="text-font-primary/60 text-lg font-semibold">
                                         {school.instagram}
                                     </p>
                                 </div>
                             </Link>
-                        )} 
+                        )}
                     </div>
                     <div className="bg-foreground rounded-md border p-4">
                         <p className="text-font-primary/50 text-lg font-semibold">
@@ -102,17 +85,21 @@ export default async function Page({
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-6  lg:grid-cols-[70%_30%] xl:grid-cols-[75%_25%] w-full">
-                    {/* TABS DA ESCOLA */}
-                <div className="w-full order-2 lg:order-1">
+            <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-[70%_30%] xl:grid-cols-[75%_25%]">
+                {/* TABS DA ESCOLA */}
+                <div className="order-2 w-full lg:order-1">
                     <EscolaTabs school={school} />
                 </div>
 
                 {/* INFOBAR */}
-                <div className="w-full order-1 lg:order-2">
-                    <InfoBar 
-                    data={stats} 
-                    position={typeof window !== "undefined" && window.innerWidth < 768 ? "horizontal" : "vertical"} 
+                <div className="order-1 w-full lg:order-2">
+                    <InfoBar
+                        data={stats}
+                        position={
+                            typeof window !== "undefined" && window.innerWidth < 768
+                                ? "horizontal"
+                                : "vertical"
+                        }
                     />
                 </div>
             </div>

@@ -6,6 +6,7 @@ import Image from "next/image";
 
 import { ScrollArea } from "@/components/ScrollArea";
 import { Downloader } from "@/components/Downloader";
+import { ImageDisplay } from "@/components/ui/ImageDisplay";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -21,14 +22,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <div className="flex w-full flex-col gap-4 overflow-x-hidden p-4">
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                <div className="relative h-72 w-full cursor-pointer sm:w-1/2 xl:w-2/7">
-                    <Image
-                        fill
-                        src={researcher.image!}
-                        alt="pesquisador"
-                        className="border-border rounded-md border object-cover"
-                    />
-                </div>
+                <ImageDisplay src={researcher.image!} alt="Imagem do pesquisador" />
+
                 <div className="w-full">
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
                         <h1 className="text-3xl">{researcher.name}</h1>
