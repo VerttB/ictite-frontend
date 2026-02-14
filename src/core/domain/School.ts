@@ -25,7 +25,6 @@ export const SchoolCreateSchema = SchoolSchema.pick({
     name: true,
     description: true,
     instagram: true,
-    identityTerritory: true,
 }).and(
     z.object({
         cep: z
@@ -37,6 +36,7 @@ export const SchoolCreateSchema = SchoolSchema.pick({
             }, "CEP inválido"),
 
         images: z.any().pipe(ImageCreateSchema),
+        identity_territory_id: z.uuid().optional(),
     })
 );
 

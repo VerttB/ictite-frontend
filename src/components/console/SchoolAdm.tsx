@@ -43,7 +43,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
             keepPreviousData: true,
         }
     );
-    const { data: territories } = useSWR(getTerritories);
+    const { data: territories } = useSWR("territories", () => getTerritories());
     const crud = useAdmCrud<School, SchoolCreate, SchoolUpdate>({
         mutate,
         deleteFn: deleteSchool,
@@ -98,8 +98,8 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 <InputField name="cep" label="CEP" mask={mask.cep} />
                 <InputField name="instagram" label="Instagram" />
                 <ControlledSelect
-                    name="identityTerritory"
-                    label="Território"
+                    name="identity_territory_id"
+                    label="Território de Identidade"
                     options={territories || []}
                 />
                 <ControlledImageUpload name="images" />
