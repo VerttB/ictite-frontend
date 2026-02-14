@@ -6,7 +6,7 @@ import {
 } from "../domain/IdentityTerritory";
 
 export const getTerritories = async (): Promise<IdentityTerritory[]> => {
-    return await apiClient.get<IdentityTerritory[]>("/identity-territories/");
+    return (await apiClient.get<IdentityTerritory[]>("/identity-territories/")) || [];
 };
 
 export const createTerritory = async (
