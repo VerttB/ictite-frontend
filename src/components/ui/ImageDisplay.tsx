@@ -1,13 +1,33 @@
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
-export const ImageDisplay = ({ src, alt }: { src: string; alt: string }) => {
+export const ImageDisplay = ({
+    src,
+    alt,
+    className,
+}: {
+    src: string;
+    alt: string;
+    className?: string;
+}) => {
+    if (!src) {
+        return (
+            <div className="flex h-72 w-92 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 text-gray-500">
+                Sem imagem disponível
+            </div>
+        );
+    }
     return (
-        <div className="relative flex min-h-64 max-w-76 justify-center rounded-lg sm:w-3/5">
+        <div
+            className={twMerge(
+                "relative h-72 w-92 rounded-lg max-md:size-32",
+                className
+            )}>
             <Image
-                fill
                 src={src}
                 alt={alt}
-                className="object-fit rounded-lg border-3 border-white/60 p-2 shadow-xs"
+                fill
+                className="rounded-lg border-white/60 object-scale-down p-2 shadow-xs"
             />
         </div>
     );
