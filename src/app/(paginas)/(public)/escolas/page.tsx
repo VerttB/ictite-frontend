@@ -29,12 +29,13 @@ import {
 import InfoBar from "@/components/InfoBar";
 import useSWR from "swr";
 import { Spinner } from "@/components/LoadingSpin";
+import { getTerritories } from "@/core/service/IdentityTerritoryService";
 
 export default function Escolas() {
     const [search, setSearch] = useState("");
 
     const { data, isLoading, error } = useSWR("schools", () => getSchools());
-
+    const { data: territorios } = useSWR("territorios", () => getTerritories());
     // FETCH DAS ESCOLAS
 
     // |=======| BUSCA INICIAL + BUSCA POR NOME |=======|
@@ -124,15 +125,19 @@ export default function Escolas() {
                     <DropdownMenuContent>
                         <DropdownMenuLabel>Território Identidade</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="hover:bg-primary cursor-pointer transition-all hover:text-white">
-                            Território 01
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="hover:bg-primary cursor-pointer transition-all hover:text-white">
-                            Território 02
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="hover:bg-primary cursor-pointer transition-all hover:text-white">
-                            Território 03
-                        </DropdownMenuItem>
+                        {territorios?.length && territorios.length > 0 ? (
+                            territorios.map((territorio) => (
+                                <DropdownMenuItem
+                                    key={territorio.id}
+                                    className="hover:bg-primary cursor-pointer transition-all hover:text-white">
+                                    {territorio.name}
+                                </DropdownMenuItem>
+                            ))
+                        ) : (
+                            <DropdownMenuItem className="hover:bg-primary cursor-pointer transition-all hover:text-white">
+                                Nenhum território disponível
+                            </DropdownMenuItem>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -157,7 +162,7 @@ export default function Escolas() {
                         <p>Carregando unidades...</p>
                     </div>
                 ) : (
-                    <div className="mt-1 grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    <div className="mt-1 grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 xl:grid-cols-5">
                         {data?.items.length && data.items.length > 0 ? (
                             data.items.map((escola) => (
                                 <EscolaCard key={escola.id} escola={escola} />

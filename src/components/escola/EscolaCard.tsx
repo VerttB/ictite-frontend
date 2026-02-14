@@ -24,19 +24,21 @@ export default function EscolaCard({ escola }: EscolaCardProps) {
                         <span>{escola.city}</span>
                     </div>
                 </div>
-            </div>
-            {/* |=======| INFORMAÇÕES DA ESCOLA |=======| */}
-            <div className="flex flex-col gap-1 p-3">
-                <h1 className="line-clamp-1 text-lg font-semibold" title={escola.name}>
-                    {escola.name}
-                </h1>
-                <div className="text-primary flex items-center gap-2 text-sm">
-                    <Map size={16} />
-                    <span className="line-clamp-1">
-                        {escola.identityTerritory?.name || "Território não definido"}
-                    </span>
+                <div className="flex flex-col gap-1 p-3">
+                    <h1
+                        className="line-clamp-1 text-lg font-semibold"
+                        title={escola.name}>
+                        {escola.name}
+                    </h1>
+                    <div className="text-primary flex items-center gap-2 text-sm">
+                        <Map size={16} />
+                        <span className="line-clamp-1">
+                            {escola.identityTerritory?.name || "Território não definido"}
+                        </span>
+                    </div>
                 </div>
             </div>
+            {/* |=======| INFORMAÇÕES DA ESCOLA |=======| */}
         </Link>
     );
 }
