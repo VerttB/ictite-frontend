@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <div className="flex flex-col gap-8 px-4 sm:px-8">
             <div className="flex flex-col gap-2 sm:flex-row">
-                <ImageDisplay src={school.images[0].url} alt="Imagem da escola" />
+                <ImageDisplay src={school.images[0]?.url} alt="Imagem da escola" />
                 <div className="flex flex-col gap-2 text-justify sm:w-2/3 sm:text-left md:w-full">
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
                         <p className="text-2xl">{school.name}</p>
