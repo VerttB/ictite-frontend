@@ -28,7 +28,7 @@ interface EscolaTabsProps {
 }
 
 export const EscolaTabs = ({ school }: EscolaTabsProps) => {
-    const [activeTab, setActiveTab] = useState("pesquisadores");
+    const [activeTab, setActiveTab] = useState("clubes");
     const {
         equipments,
         isLoading: loadingEq,
@@ -53,8 +53,8 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
 
     const tabsConfig: TabsConfig[] = [
         {
-            value: "clube de ciência",
-            label: "Clube de Ciência",
+            value: "clubes",
+            label: "Clubes de Ciência",
             icon: Brain,
             isLoading: loadingClube,
             isError: errorClubs,
