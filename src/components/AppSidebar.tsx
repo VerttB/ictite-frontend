@@ -56,7 +56,8 @@ export function AppSidebar() {
                                     Menu
                                 </SidebarGroupLabel>
                                 {items.map((item) => {
-                                    const isActive = path === item.url;
+                                    const isActive =
+                                        path === item.url + "/" || path === item.url;
 
                                     return (
                                         <SidebarMenuItem
