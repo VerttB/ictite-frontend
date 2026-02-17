@@ -42,6 +42,7 @@ export default function SearchClient() {
 
     const { data } = useSWR(query, fetcher, {
         revalidateOnFocus: false,
+        keepPreviousData: true,
     });
 
     const resultados = data || {
@@ -107,6 +108,9 @@ interface SearchStatsProps {
 }
 
 function SearchStats({ title, count, children }: SearchStatsProps) {
+    if (count === 0) {
+        return null;
+    }
     return (
         <div className="mt-6">
             <div className="mb-2 flex justify-between">
