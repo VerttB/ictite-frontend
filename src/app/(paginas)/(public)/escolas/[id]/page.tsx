@@ -1,5 +1,4 @@
 import { getSchoolById, getSchoolStatistics } from "@/core/service/SchoolService";
-import Image from "next/image";
 import { EscolaTabs } from "@/components/escola/EscolaTabs";
 import {
     BookOpen,

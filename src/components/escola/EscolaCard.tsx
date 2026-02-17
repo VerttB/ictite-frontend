@@ -1,5 +1,4 @@
 import { Map, MapPin } from "lucide-react";
-import Image from "next/image";
 import { School } from "@/core/domain/School";
 import Link from "next/link";
 import { ImageDisplay } from "../ui/ImageDisplay";

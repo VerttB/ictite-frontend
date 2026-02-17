@@ -6,7 +6,7 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from "../ui/drawer";
-import { Expand, GraduationCap, MapPin, ExternalLink, School, X } from "lucide-react";
+import { Expand, GraduationCap, MapPin, ExternalLink, X } from "lucide-react";
 
 import useSWR from "swr";
 import { getResearcherById } from "@/core/service/PesquisadorService";

@@ -6,10 +6,7 @@ import { ImageUpIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { MAX_IMAGE_SIZE, ACCEPTED_IMAGE_TYPE } from "@/core/constants/Image";
 
-type OmitValue = Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    "value" | "onChange"
->;
+type OmitValue = Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange">;
 
 interface ImageUploadInputProps extends OmitValue {
     label?: string;
@@ -20,14 +17,8 @@ interface ImageUploadInputProps extends OmitValue {
     onChange?: (files: File[]) => void;
 }
 
-export const ImageUploadInput = forwardRef<
-    HTMLInputElement,
-    ImageUploadInputProps
->(
-    (
-        { label, errors, className, value = [], multiple, onChange, ...rest },
-        ref
-    ) => {
+export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputProps>(
+    ({ label, errors, className, value = [], multiple, onChange, ...rest }, ref) => {
         const [previews, setPreviews] = useState<string[]>([]);
 
         useEffect(() => {
@@ -89,7 +80,7 @@ export const ImageUploadInput = forwardRef<
                     />
 
                     {previews.length > 0 ? (
-                        <div className="grid w-full grid-cols-3 gap-3">
+                        <div className={twMerge("grid w-full grid-cols-3 gap-3")}>
                             {previews.map((src, i) => (
                                 <div
                                     key={i}
@@ -127,9 +118,7 @@ export const ImageUploadInput = forwardRef<
                     )}
                 </div>
 
-                {errors && (
-                    <span className="text-sm text-red-600">{errors}</span>
-                )}
+                {errors && <span className="text-sm text-red-600">{errors}</span>}
             </div>
         );
     }

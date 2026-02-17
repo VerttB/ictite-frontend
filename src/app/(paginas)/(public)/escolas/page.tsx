@@ -4,8 +4,7 @@ import EscolaCard from "@/components/escola/EscolaCard";
 import { SearchBar } from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { getSchools } from "@/core/service/SchoolService";
-import { School } from "@/core/domain/School";
-import { Pagination } from "@/schemas/Pagination";
+
 import {
     Building2,
     ChevronLeft,
@@ -17,7 +16,7 @@ import {
     LucideIcon,
     BookOpen,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -28,11 +27,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import InfoBar from "@/components/InfoBar";
 import useSWR from "swr";
-import { Spinner } from "@/components/LoadingSpin";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
 
 export default function Escolas() {
-    const [search, setSearch] = useState("");
+    const [_search, setSearch] = useState("");
 
     const { data, isLoading, error } = useSWR("schools", () => getSchools());
     const { data: territorios } = useSWR("territorios", () => getTerritories());

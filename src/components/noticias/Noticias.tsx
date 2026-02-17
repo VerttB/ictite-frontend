@@ -8,31 +8,10 @@ import { getInstagramPosts } from "@/core/service/InstagramService";
 import useSWR from "swr";
 
 export default function Noticias() {
-    //const [posts, setPosts] = useState<InstagramPost[]>([]);
-    const {
-        data: posts,
-        isLoading,
-        error,
-    } = useSWR("instagramPosts", () => getInstagramPosts());
+    const { data: posts, isLoading } = useSWR("instagramPosts", () =>
+        getInstagramPosts()
+    );
     const [selectedPost, setSelectedPost] = useState<InstagramPost | null>(null);
-
-    // useEffect(() => {
-    //     const fetchPosts = async () => {
-    //         try {
-    //             const data = await getInstagramPosts();
-    //             setPosts(data);
-    //             if (data.length > 0) {
-    //                 setSelectedPost(data[0]);
-    //             }
-    //         } catch (error) {
-    //             console.error("Erro ao carregar notícias:", error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     fetchPosts();
-    // }, []);
 
     if (isLoading) return <div>Carregando notícias...</div>;
     if (posts?.length === 0)
