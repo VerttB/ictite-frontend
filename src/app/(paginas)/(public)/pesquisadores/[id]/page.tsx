@@ -1,9 +1,7 @@
-import React from "react";
 import { PesquisadorTabs } from "@/components/pesquisador/PesquisadorTabs";
 import { getResearcherById } from "@/core/service/PesquisadorService";
-import { GraduationCap, MapPin } from "lucide-react";
-import Image from "next/image";
-
+import { ExternalLink, GraduationCap, MapPin } from "lucide-react";
+import Link from "next/link";
 import { ScrollArea } from "@/components/ScrollArea";
 import { Downloader } from "@/components/Downloader";
 import { ImageDisplay } from "@/components/ui/ImageDisplay";
@@ -26,7 +24,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
                 <div className="w-full">
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
-                        <h1 className="text-3xl">{researcher.name}</h1>
+                        <Link
+                            href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`}
+                            target="_blank"
+                            className="flex cursor-pointer"
+                            title="Ver no SIMCC">
+                            <h1 className="text-3xl">{researcher.name}</h1>
+                            <ExternalLink className="mb-2 ml-1 inline" size={20} />
+                        </Link>
                         <Downloader path="researchers" id={researcher.id} />
                     </div>
                     {researcher.simcc && (

@@ -2,7 +2,7 @@
 
 import { Section } from "../Section";
 import useSWR from "swr";
-import { PersonStanding } from "lucide-react";
+import { PersonStanding, X } from "lucide-react";
 import {
     createResearcher,
     deleteResearcher,
@@ -28,13 +28,20 @@ import { SearchAndFilter } from "../SearchAndFilter";
 import { Pagination } from "../Pagination";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
+import { getProjects } from "@/core/service/ProjetoService";
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { ControlledMultiSelect } from "../forms-input/ControlledMultiSelect";
 interface ResearcherAdmProps {
     params: ResearcherSearchParams;
 }
 export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
+    const [seletectedProjects, setSelectedProjects] = useState<string[]>([]);
     const { data: pesquisadores, mutate } = useSWR(["researcher", params], ([, p]) =>
         getResearchers(p)
     );
+
+    const { data: projects } = useSWR("projects", () => getProjects());
     const { applyFilters, changePage } = useUrlPagination();
 
     const crud = useAdmCrud<Researcher, ResearcherCreate, ResearcherUpdate>({
@@ -91,6 +98,29 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                         label="Gênero"
                         options={Object.values(GenderTypes)}
                     />
+                </div>
+                <ControlledMultiSelect
+                    className="w-full"
+                    name="projects_ids"
+                    label="Projetos"
+                    options={projects?.items || []}
+                />
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                    {projects?.items.map((a) => {
+                        if (seletectedProjects.includes(a.id)) {
+                            return (
+                                <div
+                                    key={a.id}
+                                    className="bg-azul-claro flex items-center gap-1 rounded-full px-3 py-1 text-white">
+                                    <span>{a.name}</span>
+                                    <Button variant={"destructive"}>
+                                        <X size={16} />
+                                    </Button>
+                                </div>
+                            );
+                        }
+                    })}
                 </div>
             </BaseFormModal>
             {crud.editingItem && (

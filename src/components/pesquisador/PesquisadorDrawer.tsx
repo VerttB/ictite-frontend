@@ -81,13 +81,13 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                         </div>
                         <div className="flex h-full w-full flex-col items-start justify-start gap-1 px-2">
                             <DrawerTitle className="text-font-primary text-2xl">
-                                {researcher?.name}
                                 {researcher?.simcc && (
                                     <Link
                                         href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`}
                                         target="_blank"
-                                        title="Ver no SIMCC"
-                                        className="cursor-pointer">
+                                        className="flex cursor-pointer"
+                                        title="Ver no SIMCC">
+                                        <h1 className="text-3xl">{researcher.name}</h1>
                                         <ExternalLink
                                             className="mb-2 ml-1 inline"
                                             size={20}
