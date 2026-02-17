@@ -21,7 +21,7 @@ export const getProjectById = async (projectId: string): Promise<Project> => {
 export const getProjectResearchers = async (
     projectId: string
 ): Promise<ResearcherByType> => {
-    return await apiClient.get<ResearcherByType>(`/projects/${projectId}/researcher/`);
+    return await apiClient.get<ResearcherByType>(`/projects/${projectId}/researchers/`);
 };
 
 export const getProjectbyClube = async (clubeId: string): Promise<Project[]> => {
