@@ -15,13 +15,10 @@ export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBa
     const deboucedValue = useDebounce(value, 300);
 
     useEffect(() => {
-        if (deboucedValue === initialValue) {
-            onSearch("");
-            return;
-        }
+        if (deboucedValue === initialValue) return;
         if (deboucedValue.length >= 2) {
             onSearch(deboucedValue);
-        } else if (deboucedValue.length === 0) {
+        } else if (deboucedValue.length < 2) {
             onSearch("");
         }
     }, [deboucedValue, onSearch, initialValue]);

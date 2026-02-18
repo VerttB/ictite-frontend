@@ -80,11 +80,18 @@ export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputPro
                     />
 
                     {previews.length > 0 ? (
-                        <div className={twMerge("grid w-full grid-cols-3 gap-3")}>
+                        <div
+                            className={twMerge(
+                                "flex w-full flex-wrap gap-2",
+                                multiple ? "" : "justify-center"
+                            )}>
                             {previews.map((src, i) => (
                                 <div
                                     key={i}
-                                    className="relative h-32 w-full overflow-hidden rounded-xl">
+                                    className={twMerge(
+                                        "relative size-32 overflow-hidden rounded-xl",
+                                        multiple ? "" : "mx-auto size-44"
+                                    )}>
                                     <Image
                                         src={src}
                                         alt="Preview"

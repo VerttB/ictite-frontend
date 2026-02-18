@@ -102,7 +102,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     label="Território de Identidade"
                     options={territories || []}
                 />
-                <ControlledImageUpload name="images" />
+                <ControlledImageUpload name="images" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (

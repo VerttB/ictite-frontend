@@ -160,7 +160,7 @@ export default function Escolas() {
                         <p>Carregando unidades...</p>
                     </div>
                 ) : (
-                    <div className="grid [grid-template-columns:repeat(auto-fill,minmax(300px,1fr))] gap-4">
+                    <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {data?.items.length && data.items.length > 0 ? (
                             data.items.map((escola) => (
                                 <EscolaCard key={escola.id} escola={escola} />

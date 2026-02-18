@@ -110,7 +110,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                 />
                 <InputField name="instagram" label="Instagram" />
 
-                <ControlledImageUpload name="images" />
+                <ControlledImageUpload name="images" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (

@@ -55,7 +55,7 @@ export default function SearchClient() {
     return (
         <>
             <div className="flex flex-col gap-4">
-                <SearchBar onSearch={setQuery} />
+                <SearchBar onSearch={setQuery} initialValue="" />
 
                 {query ? (
                     <>

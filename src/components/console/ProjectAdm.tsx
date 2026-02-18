@@ -102,7 +102,7 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                         .map((_, i) => yearValidation.max - i)}
                 />
                 <TextField name="description_long" label="Descrição Longa" />
-                <ControlledImageUpload name="images" />
+                <ControlledImageUpload name="images" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (
