@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { InstagramPost } from "@/core/domain/Instagram";
 
@@ -37,7 +37,7 @@ export default function CardSecundariaNoticias({ post, isSelected, onSelect }: C
                 </div>
                 <p className="text-sm font-semibold line-clamp-2">{post.title}</p>
                 <div className="flex gap-1 text-primary items-center text-xs font-bold group-hover:underline">
-                    Ver Detalhes <ArrowRight size={14} />
+                    <ArrowLeft size={14} /> Aumentar 
                 </div>
             </div>
         </div>
