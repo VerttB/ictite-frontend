@@ -59,6 +59,16 @@ export default function SearchClient() {
 
                 {query ? (
                     <>
+                        {resultados.escolas.length === 0 &&
+                        resultados.pesquisadores.length === 0 &&
+                        resultados.projetos.length === 0 &&
+                        resultados.clubes.length === 0 ? (
+                            <div className="py-8 text-center">
+                                <p className="text-muted-foreground text-lg">
+                                    Nenhum resultado encontrado para a busca "{query}"
+                                </p>
+                            </div>
+                        ) : null}
                         <SearchStats title="Escolas" count={resultados.escolas.length}>
                             <GenericList
                                 searchResult={resultados.escolas}
