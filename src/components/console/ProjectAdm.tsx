@@ -99,10 +99,10 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                     label="Ano"
                     options={new Array(yearValidation.max - yearValidation.min + 1)
                         .fill(null)
-                        .map((_, i) => (i + yearValidation.min).toString())}
+                        .map((_, i) => yearValidation.max - i)}
                 />
                 <TextField name="description_long" label="Descrição Longa" />
-                <ControlledImageUpload name="images" />
+                <ControlledImageUpload name="images" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (

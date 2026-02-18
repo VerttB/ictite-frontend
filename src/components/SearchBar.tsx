@@ -18,7 +18,7 @@ export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBa
         if (deboucedValue === initialValue) return;
         if (deboucedValue.length >= 2) {
             onSearch(deboucedValue);
-        } else if (deboucedValue.length === 0) {
+        } else if (deboucedValue.length < 2) {
             onSearch("");
         }
     }, [deboucedValue, onSearch, initialValue]);

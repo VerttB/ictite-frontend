@@ -28,6 +28,9 @@ import { SearchAndFilter } from "../SearchAndFilter";
 import { Pagination } from "../Pagination";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
+import { getProjects } from "@/core/service/ProjetoService";
+
+import { ControlledMultiSelect } from "../forms-input/ControlledMultiSelect";
 interface ResearcherAdmProps {
     params: ResearcherSearchParams;
 }
@@ -35,6 +38,8 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
     const { data: pesquisadores, mutate } = useSWR(["researcher", params], ([, p]) =>
         getResearchers(p)
     );
+
+    const { data: projects } = useSWR("projects", () => getProjects());
     const { applyFilters, changePage } = useUrlPagination();
 
     const crud = useAdmCrud<Researcher, ResearcherCreate, ResearcherUpdate>({
@@ -92,6 +97,12 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                         options={Object.values(GenderTypes)}
                     />
                 </div>
+                <ControlledMultiSelect
+                    className="w-full"
+                    name="projects_ids"
+                    label="Projetos"
+                    options={projects?.items || []}
+                />
             </BaseFormModal>
             {crud.editingItem && (
                 <BaseFormModal<typeof ResearcherUpdateSchema, ResearcherUpdate>

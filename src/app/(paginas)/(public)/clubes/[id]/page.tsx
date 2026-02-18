@@ -23,6 +23,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ImageDisplay } from "@/components/ui/ImageDisplay";
 
 export default async function OneClubeCiencia({
     params,
@@ -72,16 +73,11 @@ export default async function OneClubeCiencia({
         <div className="flex flex-col gap-8 p-8">
             {/* |=======| CABEÇALHO DO CLUBE DE CIÊNCIA |=======| */}
             <div className="flex flex-col items-center gap-5 md:flex-row">
-                <div className="border-primary relative h-[100px] w-[100px] overflow-hidden rounded-full border-2 shadow-md">
-                    <Image
-                        src={
-                            clubeCiencia.images?.[0]?.url ??
-                            "https://picsum.photos/100/100"
-                        }
-                        alt={"Logo Clube de Ciência"}
-                        fill
-                        className="object-cover"></Image>
-                </div>
+                <ImageDisplay
+                    src={clubeCiencia.images?.[0]?.url}
+                    alt="Logo do clube de ciência"
+                    className="size-48 overflow-hidden rounded-full border-4 border-white/60 p-2 shadow-md"
+                />
                 <div className="flex flex-col gap-2">
                     <h1 className="text-center text-4xl font-semibold md:text-start">
                         {clubeCiencia.name}
@@ -107,13 +103,11 @@ export default async function OneClubeCiencia({
                     {clubeCiencia.images?.map((image, index) => (
                         <Popover key={index}>
                             <PopoverTrigger>
-                                <div className="relative h-[200px] w-[200px] cursor-pointer overflow-hidden">
-                                    <Image
-                                        src={image.url}
-                                        alt="Clube de Ciência"
-                                        fill
-                                        className="object-cover object-center"></Image>
-                                </div>
+                                <ImageDisplay
+                                    src={image?.url}
+                                    alt="Imagem do clube de ciência"
+                                    className="border-2"
+                                />
                             </PopoverTrigger>
                             <PopoverContent>
                                 <Image

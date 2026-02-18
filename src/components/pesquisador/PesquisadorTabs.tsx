@@ -10,6 +10,7 @@ import CardProjeto from "../projeto/ProjetoCard";
 import { useViewPort } from "@/hooks/useViewPort";
 import { TabsConfig } from "@/core/interface/TabsConfig";
 import { TabsGrid } from "../ui/TabsGridGeneric";
+import CardNaoEncontrado from "../card/CardNaoEncontrado";
 
 export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal }) => {
     const [activeTab, setActiveTab] = useState("artigos");
@@ -19,7 +20,6 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
         if (!researcher.articles) return [];
         return [...researcher.articles].sort((a, b) => b.year - a.year);
     }, [researcher]);
-
     const tabsConfig: TabsConfig[] = [
         {
             value: "artigos",
@@ -51,15 +51,20 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
             icon: PanelsTopLeft,
             isLoading: false,
             isError: false,
-            children: (
-                <Masonry columnsCount={isMobile ? 1 : isTablet ? 2 : 4} gutter="10px">
-                    {Object.entries(researcher.projects).map(([, projects]) =>
-                        projects.map((project) => (
-                            <CardProjeto key={project.id} project={project} />
-                        ))
-                    )}
-                </Masonry>
-            ),
+            children:
+                Object.entries(researcher.projects).length > 0 ? (
+                    <Masonry columnsCount={isMobile ? 1 : isTablet ? 2 : 4} gutter="10px">
+                        {Object.entries(researcher.projects).map(([, projects]) =>
+                            projects.map((project) => (
+                                <CardProjeto key={project.id} project={project} />
+                            ))
+                        )}
+                    </Masonry>
+                ) : (
+                    <div className="mt-4">
+                        <CardNaoEncontrado text="Nenhum projeto encontrado." />
+                    </div>
+                ),
         },
         {
             value: "livros_capitulos",

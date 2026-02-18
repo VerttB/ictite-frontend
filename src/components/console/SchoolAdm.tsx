@@ -29,6 +29,8 @@ import { Pagination } from "../Pagination";
 import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
+import { ControlledSelect } from "../forms-input/ControlledSelect";
+import { getTerritories } from "@/core/service/IdentityTerritoryService";
 interface SchoolAdmProps {
     params: SchoolSearchParams;
 }
@@ -41,7 +43,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
             keepPreviousData: true,
         }
     );
-
+    const { data: territories } = useSWR("territories", () => getTerritories());
     const crud = useAdmCrud<School, SchoolCreate, SchoolUpdate>({
         mutate,
         deleteFn: deleteSchool,
@@ -94,8 +96,13 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 <InputField name="name" label="Nome da Escola" />
                 <InputField name="description" label="Descrição" />
                 <InputField name="cep" label="CEP" mask={mask.cep} />
-
-                <ControlledImageUpload name="images" />
+                <InputField name="instagram" label="Instagram" />
+                <ControlledSelect
+                    name="identity_territory_id"
+                    label="Território de Identidade"
+                    options={territories || []}
+                />
+                <ControlledImageUpload name="images" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (

@@ -108,7 +108,9 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     label="Escola"
                     options={escolas?.items || []}
                 />
-                <ControlledImageUpload name="images" />
+                <InputField name="instagram" label="Instagram" />
+
+                <ControlledImageUpload name="images" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (

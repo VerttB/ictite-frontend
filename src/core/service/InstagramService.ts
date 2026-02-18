@@ -1,29 +1,13 @@
+import { apiClient } from "@/lib/api/client";
 import { InstagramPost, InstagramSearchParams } from "../domain/Instagram";
 import { getBaseUrl } from "../utils/api";
-import { buildSearchParameters } from "../utils/searchParamBuilder";
-
 
 export const getInstagramPosts = async (
     params: InstagramSearchParams = {}
 ): Promise<InstagramPost[]> => {
-    try {
-        const queryString = buildSearchParameters(params || {});
-        const url = `${getBaseUrl()}/instagram/news${queryString ? `?${queryString}` : ''}`;
-
-        const res = await fetch(url);
-
-        if (!res.ok) {
-            throw new Error("Erro ao buscar posts do Instagram");
-        }
-
-        const data = await res.json();
-        return data || [];
-    } catch (error) {
-        console.error("InstagramService.getPosts:", error);
-        throw error;
-    }
+    const data = await apiClient.get<InstagramPost[]>("/instagram/news", { params });
+    return data || [];
 };
-
 
 // NO FUTURO: COLOCAR TOKEN NA REQUISICAO
 export const syncInstagramPosts = async (): Promise<{ mensagem: string }> => {

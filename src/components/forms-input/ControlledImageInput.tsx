@@ -3,9 +3,13 @@ import { ImageUploadInput } from "../ImageInput";
 
 interface ControlledImageUploadProps {
     name: string;
+    multiple?: boolean;
 }
 
-export const ControlledImageUpload = ({ name }: ControlledImageUploadProps) => {
+export const ControlledImageUpload = ({
+    name,
+    multiple = false,
+}: ControlledImageUploadProps) => {
     const {
         control,
         formState: { errors },
@@ -18,7 +22,7 @@ export const ControlledImageUpload = ({ name }: ControlledImageUploadProps) => {
             render={({ field }) => (
                 <ImageUploadInput
                     label="Imagens"
-                    multiple={false}
+                    multiple={multiple}
                     value={field.value}
                     onChange={field.onChange}
                     errors={errors[name]?.message as string}

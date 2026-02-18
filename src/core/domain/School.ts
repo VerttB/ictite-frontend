@@ -7,20 +7,24 @@ import {
 } from "@/schemas/Common";
 import { mask } from "@/lib/maskBuilder";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
+import { IdentityTerritorySchema } from "./IdentityTerritory";
 export const SchoolSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "Nome obrigatório"),
     city: z.string(),
     cep: z.string().min(8, "CEP obrigatório"),
     description: z.string().min(1, "Descrição obrigatória"),
+    instagram: z.string().optional(),
     clubs: SimpleIdNameSchema.array(),
     images: ImageSchema.array(),
+    identityTerritory: IdentityTerritorySchema.optional(),
     createdAt: z.date(),
 });
 
 export const SchoolCreateSchema = SchoolSchema.pick({
     name: true,
     description: true,
+    instagram: true,
 }).and(
     z.object({
         cep: z
@@ -32,6 +36,7 @@ export const SchoolCreateSchema = SchoolSchema.pick({
             }, "CEP inválido"),
 
         images: z.any().pipe(ImageCreateSchema),
+        identity_territory_id: z.uuid().optional(),
     })
 );
 

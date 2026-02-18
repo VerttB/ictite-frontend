@@ -123,7 +123,7 @@ export default function Clubes() {
                 <div>
                     <h2 className="text-2xl font-semibold">Clubes de Ciência:</h2>
                 </div>
-                <div className="grid grid-cols-1 justify-items-center gap-5 md:grid-cols-2 xl:grid-cols-3">
+                <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {clubesCiencia ? (
                         clubesCiencia.map((clubeCiencia) => (
                             <ClubeCienciaCard

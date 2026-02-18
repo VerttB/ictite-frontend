@@ -6,7 +6,7 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from "../ui/drawer";
-import { Expand, GraduationCap, MapPin, ExternalLink, School, X } from "lucide-react";
+import { Expand, GraduationCap, MapPin, ExternalLink, X } from "lucide-react";
 
 import useSWR from "swr";
 import { getResearcherById } from "@/core/service/PesquisadorService";
@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 import { useViewPort } from "@/hooks/useViewPort";
 import { ScrollArea } from "../ScrollArea";
 import { Route } from "next";
+import { ImageDisplay } from "../ui/ImageDisplay";
 
 interface PesquisadorProps {
     isOpen: boolean;
@@ -26,7 +27,6 @@ interface PesquisadorProps {
 }
 
 export default function Pesquisador({ isOpen, onClose, researcherId }: PesquisadorProps) {
-    const router = useRouter();
     const { data: researcher, isLoading } = useSWR(
         researcherId ? `simcc-researcher-${researcherId}` : null,
         () => getResearcherById(researcherId)
@@ -63,31 +63,20 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                         </Link>
                     </div>
                     <div className="flex w-full flex-col items-center gap-2 p-2 shadow-xs sm:flex-row">
-                        <div
-                            className="relative h-72 w-full cursor-pointer sm:w-1/2"
-                            onClick={() =>
-                                router.push(`/pesquisadores/${researcherId}/` as Route)
-                            }>
-                            <Image
-                                fill
-                                src={
-                                    researcher?.image
-                                        ? `${researcher?.image}`
-                                        : "https://picsum.photos/100/100"
-                                }
-                                alt="pesquisador"
-                                className="border-border rounded-md border object-cover"
-                            />
-                        </div>
+                        <ImageDisplay
+                            src={researcher?.image!}
+                            alt="Imagem do pesquisador"
+                        />
+
                         <div className="flex h-full w-full flex-col items-start justify-start gap-1 px-2">
                             <DrawerTitle className="text-font-primary text-2xl">
-                                {researcher?.name}
                                 {researcher?.simcc && (
                                     <Link
                                         href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`}
                                         target="_blank"
-                                        title="Ver no SIMCC"
-                                        className="cursor-pointer">
+                                        className="flex cursor-pointer"
+                                        title="Ver no SIMCC">
+                                        <h1 className="text-3xl">{researcher.name}</h1>
                                         <ExternalLink
                                             className="mb-2 ml-1 inline"
                                             size={20}
