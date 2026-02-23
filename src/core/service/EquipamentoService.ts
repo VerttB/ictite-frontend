@@ -21,7 +21,7 @@ export const createEquipament = async (
 };
 
 export const uploadEquipamentImages = async (equipmentId: string, formData: FormData) => {
-    return await apiClient.post(`/equipment/${equipmentId}/images/`, formData);
+    return await apiClient.post(`/equipment/${equipmentId}/images`, formData);
 };
 
 export const updateEquipament = async (
