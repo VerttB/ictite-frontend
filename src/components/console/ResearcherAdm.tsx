@@ -31,6 +31,7 @@ import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { getProjects } from "@/core/service/ProjetoService";
 
 import { ControlledMultiSelect } from "../forms-input/ControlledMultiSelect";
+import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 interface ResearcherAdmProps {
     params: ResearcherSearchParams;
 }
@@ -97,10 +98,11 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                         options={Object.values(GenderTypes)}
                     />
                 </div>
-                <ControlledMultiSelect
+                <ControlledComboBox
                     className="w-full"
                     name="projects_ids"
                     label="Projetos"
+                    isMulti={true}
                     options={projects?.items || []}
                 />
             </BaseFormModal>

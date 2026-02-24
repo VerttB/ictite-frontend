@@ -43,6 +43,7 @@ export const SchoolCreateSchema = SchoolSchema.pick({
 export const SchoolUpdateSchema = SchoolSchema.pick({
     name: true,
     description: true,
+    instagram: true,
 }).partial();
 
 export const SchoolSearchParamsSchema = z

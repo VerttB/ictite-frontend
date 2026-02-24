@@ -31,6 +31,7 @@ import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { ControlledSelect } from "../forms-input/ControlledSelect";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
+import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 interface SchoolAdmProps {
     params: SchoolSearchParams;
 }
@@ -96,8 +97,8 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 <InputField name="name" label="Nome da Escola" />
                 <InputField name="description" label="Descrição" />
                 <InputField name="cep" label="CEP" mask={mask.cep} />
-                <InputField name="instagram" label="Instagram" />
-                <ControlledSelect
+                <InputField name="instagram" label="Instagram (Opcional)" />
+                <ControlledComboBox
                     name="identity_territory_id"
                     label="Território de Identidade"
                     options={territories || []}
@@ -117,10 +118,12 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         defaultValues: {
                             name: crud.editingItem?.name,
                             description: crud.editingItem?.description,
+                            instagram: crud.editingItem?.instagram,
                         },
                     }}>
                     <InputField name="name" label="Nome da Escola" />
                     <InputField name="description" label="Descrição" />
+                    <InputField name="instagram" label="Instagram" />
                 </BaseFormModal>
             )}
 
