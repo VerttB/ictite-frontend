@@ -39,7 +39,6 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
         } catch (error) {
             let message = "Erro ao criar o item.";
             if (error instanceof ApiError) {
-                console.log(error.message);
                 message = error.message;
             }
             toast.error(message, {
