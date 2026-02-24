@@ -1,3 +1,4 @@
+import { ApiError } from "@/lib/api/error";
 import { Pagination } from "@/schemas/Pagination";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -31,8 +32,11 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             await mutate();
             setIsCreating(false);
         } catch (error) {
-            const message =
-                error instanceof Error ? error.message : "Erro ao criar o item.";
+            let message = "Erro ao criar o item.";
+            if (error instanceof ApiError) {
+                console.log(error.message);
+                message = error.message;
+            }
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
@@ -55,7 +59,7 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             setEditingItem(null);
         } catch (error) {
             const message =
-                error instanceof Error ? error.message : "Erro ao atualizar o item.";
+                error instanceof ApiError ? error.message : "Erro ao atualizar o item.";
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
@@ -74,7 +78,7 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             setDeletingItem(null);
         } catch (error) {
             const message =
-                error instanceof Error ? error.message : "Erro ao deletar o item.";
+                error instanceof ApiError ? error.message : "Erro ao deletar o item.";
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
