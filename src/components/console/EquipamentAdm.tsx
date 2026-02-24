@@ -25,6 +25,7 @@ import {
 } from "@/core/domain/Equipment";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
+import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 interface EquipmentAdmProps {
     params?: EquipmentSearchParams;
 }
@@ -79,7 +80,7 @@ export const EquipmentAdm = ({ params }: EquipmentAdmProps) => {
                     label="Tipo de Equipamento"
                     options={equipamentosTipos}
                 />
-                <ControlledSelect
+                <ControlledComboBox
                     name="school_id"
                     label="Escola"
                     options={escolas.items}

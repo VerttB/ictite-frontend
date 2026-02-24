@@ -1,3 +1,4 @@
+import { ApiError } from "@/lib/api/error";
 import { Pagination } from "@/schemas/Pagination";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -30,9 +31,16 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             await fn(data);
             await mutate();
             setIsCreating(false);
+            toast.success("Item criado com sucesso!", {
+                position: "top-center",
+                duration: 5000,
+                closeButton: true,
+            });
         } catch (error) {
-            const message =
-                error instanceof Error ? error.message : "Erro ao criar o item.";
+            let message = "Erro ao criar o item.";
+            if (error instanceof ApiError) {
+                message = error.message;
+            }
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
@@ -49,13 +57,17 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
         try {
             const fn = customFn || updateFn;
             if (!fn) throw new Error("Função de atualização não fornecida");
-
             await fn(editingItem.id, data);
             await mutate();
             setEditingItem(null);
+            toast.success("Item atualizado com sucesso!", {
+                position: "top-center",
+                duration: 5000,
+                closeButton: true,
+            });
         } catch (error) {
             const message =
-                error instanceof Error ? error.message : "Erro ao atualizar o item.";
+                error instanceof ApiError ? error.message : "Erro ao atualizar o item.";
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
@@ -72,9 +84,14 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
             await deleteFn(deletingItem.id);
             await mutate();
             setDeletingItem(null);
+            toast.success("Item deletado com sucesso!", {
+                position: "top-center",
+                duration: 5000,
+                closeButton: true,
+            });
         } catch (error) {
             const message =
-                error instanceof Error ? error.message : "Erro ao deletar o item.";
+                error instanceof ApiError ? error.message : "Erro ao deletar o item.";
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,

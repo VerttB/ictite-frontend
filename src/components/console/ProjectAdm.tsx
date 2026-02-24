@@ -29,6 +29,7 @@ import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { TextField } from "../forms-input/TextField";
 import { yearValidation } from "@/core/constants/validation";
+import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 
 interface ProjectAdmProps {
     params?: ProjectSearchParams;
@@ -88,7 +89,7 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Projeto" />
                 <InputField name="description" label="Descrição" />
-                <ControlledSelect
+                <ControlledComboBox
                     className="w-full"
                     name="clube_ciencia_id"
                     label="Clube"

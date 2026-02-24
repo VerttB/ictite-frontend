@@ -27,7 +27,8 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
 export const ScienceClubUpdateSchema = ScienceClubSchema.pick({
     name: true,
     description: true,
-});
+    instagram: true,
+}).partial();
 export const ScienceClubSearchParamsSchema = z
     .object({
         name: SearchParamParser.string,

@@ -13,7 +13,6 @@ import {
 import { BaseFormModal } from "../BaseFormAddModal";
 import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import { InputField } from "../forms-input/InputField";
-import { ControlledSelect } from "../forms-input/ControlledSelect";
 import {
     ScienceClub,
     ScienceClubCreate,
@@ -28,6 +27,7 @@ import { SearchAndFilter } from "../SearchAndFilter";
 import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
+import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 
 interface ClubAdmProps {
     params?: ScienceClubSearchParams;
@@ -102,13 +102,13 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Clube de Ciências" />
                 <InputField name="description" label="Descrição" />
-                <ControlledSelect
+                <ControlledComboBox
                     className="w-full"
                     name="school_id"
                     label="Escola"
                     options={escolas?.items || []}
                 />
-                <InputField name="instagram" label="Instagram" />
+                <InputField name="instagram" label="Instagram (Opcional)" />
 
                 <ControlledImageUpload name="images" multiple={true} />
             </BaseFormModal>
@@ -125,10 +125,12 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         defaultValues: {
                             name: crud.editingItem?.name,
                             description: crud.editingItem?.description,
+                            instagram: crud.editingItem?.instagram,
                         },
                     }}>
                     <InputField name="name" label="Nome do Clube de Ciências" />
                     <InputField name="description" label="Descrição" />
+                    <InputField name="instagram" label="Instagram (Opcional)" />
                 </BaseFormModal>
             )}
 
