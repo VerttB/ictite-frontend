@@ -66,7 +66,7 @@ export default function Projeto() {
                                     </div>
                                     <div className="flex flex-col gap-0.5">
                                         <div className="flex gap-2 text-xs items-center">
-                                            <div className="p-1 rounded-md bg-secondary text-white">
+                                            <div className="py-1 px-2 rounded-md bg-secondary/70 text-white">
                                                 {documento.type}
                                             </div>
                                             <div className="flex gap-0.5 items-center">
