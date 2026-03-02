@@ -8,8 +8,14 @@ export default function AuthLayout({
    
     return (
         <div className="bg-background flex h-screen">
-            <div className="hidden bg-primary lg:flex h-full w-full flex-col justify-between p-24 text-white">
+            <div className="hidden bg-primary relative lg:flex h-full w-full flex-col justify-between p-24 text-white">
                 
+                <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+                    <svg width="100%" height="100%" viewBox="0 0 100 80" preserveAspectRatio="none" className="h-full w-full">
+                        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+                    </svg>
+                </div>
+
                 <div className="flex flex-col gap-2">
                     <div>
                         <Image
