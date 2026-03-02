@@ -1,3 +1,4 @@
+import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { getAssetPrefix } from "@/core/utils/api";
@@ -33,12 +34,7 @@ export default function Projeto() {
     return (
         <div className="flex flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
-            <div className="flex flex-row items-center gap-5">
-                <Button size={"icon"} variant={"outline"} className="cursor-pointer">
-                    <ChevronLeft />
-                </Button>
-                <p className="text-2xl font-semibold">Documentos</p>
-            </div>
+            <MenuSuperiorPagina title="Documento" />
 
             {/* |=======| DESCRIÇÃO DA PÁGINA |=======| */}
             <div className="bg-primary mx-4 mt-4 flex flex-col gap-3 rounded-md border border-blue-100 p-4 text-white shadow-sm">

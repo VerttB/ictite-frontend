@@ -1,4 +1,5 @@
 import CardRevista from "@/components/card/CardRevista";
+import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 import { Button } from "@/components/ui/button";
 import { Magazine } from "@/core/domain/Magazine";
 import { ChevronLeft } from "lucide-react";
@@ -126,14 +127,8 @@ export default function Revistas() {
     return (
         <div className="flex w-full flex-col gap-8 px-8 py-4">
             {/* |=======| SUPERIOR DE REVISTAS |=======| */}
-            <div className="flex flex-row items-center gap-4">
-                <Link href={"/"}>
-                    <Button size={"icon"} variant={"outline"}>
-                        <ChevronLeft size={20} />
-                    </Button>
-                </Link>
-                <h1 className="text-2xl font-semibold">Revistas</h1>
-            </div>
+            <MenuSuperiorPagina title="Revistas" />
+
             {/* |=======| REVISTAS DA FECIBA |=======| */}
             <div className="relative">
                 <div className="bg-primary absolute inset-x-0 top-0 h-[230px] rounded-md bg-cover bg-center"></div>

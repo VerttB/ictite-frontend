@@ -8,8 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userLoginSchema } from "@/schemas/LoginSchema";
 import { useUserContext } from "@/providers/UserContext";
 import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+    const router = useRouter();
+
     const { loginUser } = useUserContext();
 
     type userLoginData = z.infer<typeof userLoginSchema>;
@@ -36,7 +39,8 @@ export default function Login() {
     return (
         <div className="flex flex-col h-full bg-gray-100 p-6">
             <div className="flex flex-row items-center gap-5">
-                <Button size={"default"} variant={"ghost"} className="cursor-pointer hover:bg-primary/40">
+                <Button size={"default"} variant={"ghost"} className="cursor-pointer hover:bg-primary/40"
+                onClick={() => router.back()}>
                     <ChevronLeft />
                     <p className="text-2xl font-semibold">Voltar</p>
                 </Button>

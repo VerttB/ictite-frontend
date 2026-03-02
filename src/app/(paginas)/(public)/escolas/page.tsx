@@ -28,8 +28,10 @@ import {
 import InfoBar from "@/components/InfoBar";
 import useSWR from "swr";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
+import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 
 export default function Escolas() {
+
     const [_search, setSearch] = useState("");
 
     const { data, isLoading, error } = useSWR("schools", () => getSchools());
@@ -80,12 +82,7 @@ export default function Escolas() {
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
-            <div className="flex flex-row items-center gap-5">
-                <Button size={"icon"} variant={"outline"} className="cursor-pointer">
-                    <ChevronLeft />
-                </Button>
-                <p className="text-2xl font-semibold">Escolas</p>
-            </div>
+            <MenuSuperiorPagina title="Escolas" />
 
             {/* |=======| DESCRIÇÃO DA PÁGINA |=======| */}
             <div className="bg-primary mx-4 mt-4 flex flex-col gap-3 rounded-md border border-blue-100 p-4 text-white shadow-sm">

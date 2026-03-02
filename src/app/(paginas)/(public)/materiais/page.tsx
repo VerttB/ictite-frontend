@@ -4,6 +4,7 @@ import CardMateriais from "@/components/card/CardMateriais";
 import { Button } from "@/components/ui/button";
 import { BookText, ChevronLeft } from "lucide-react";
 import CardCategoriaMateriais from "@/components/card/CardCategoriaMateriais";
+import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 
 export default function Materiais() {
     const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -133,12 +134,7 @@ export default function Materiais() {
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
-            <div className="flex flex-row items-center gap-5">
-                <Button size={"icon"} variant={"outline"} className="cursor-pointer">
-                    <ChevronLeft />
-                </Button>
-                <p className="text-2xl font-semibold">Materiais Didáticos</p>
-            </div>
+            <MenuSuperiorPagina title="Materiais Didáticos" />
 
             {/* |=======| DESCRIÇÃO DA PÁGINA |=======| */}
             <div className="bg-primary mx-4 mt-4 flex flex-col gap-3 rounded-md border border-blue-100 p-4 text-white shadow-sm">

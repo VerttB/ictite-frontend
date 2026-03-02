@@ -1,3 +1,4 @@
+import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 import {
     Accordion,
     AccordionContent,
@@ -44,14 +45,7 @@ export default function Videos() {
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| SUPERIOR DOS VÍDEOS |=======| */}
-            <div className="flex flex-row items-center gap-4">
-                <Link href={"/"}>
-                    <Button size={"icon"} variant={"outline"}>
-                        <ChevronLeft size={20} />
-                    </Button>
-                </Link>
-                <h1 className="text-2xl font-semibold">Vídeos do ICTITE</h1>
-            </div>
+            <MenuSuperiorPagina title="Vídeos do ICTITE" />
 
             {/* |=======| DESCRIÇÃO DA PÁGINA |=======| */}
             <div className="bg-primary mx-4 mt-4 flex flex-col gap-3 rounded-md border border-blue-100 p-4 text-white shadow-sm">
