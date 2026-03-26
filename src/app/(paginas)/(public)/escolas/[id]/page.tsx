@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                             </p>
                         </div>
                         {school.instagram && (
-                            <Link target="_blank" href={school.instagram as Route}>
+                            <Link target="_blank" href={`https://instagram.com/${school.instagram}`}>
                                 <div className="flex flex-row items-center gap-2 border-l pl-4 hover:underline">
                                     <Instagram className="text-font-primary/60 text-lg" />
                                     <p className="text-font-primary/60 text-lg font-semibold">
