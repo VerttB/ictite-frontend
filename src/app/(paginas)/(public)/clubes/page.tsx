@@ -3,6 +3,7 @@
 import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
+import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 import { Button } from "@/components/ui/button";
 import {
     getClubesCiencia,
@@ -21,9 +22,12 @@ import {
     LucideIcon,
     Users2,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
 export default function Clubes() {
+    const router = useRouter();
+
     const { data: clubesCiencia } = useSWR("clubes-ciencia", () =>
         getClubesCiencia().then((res) => res.items)
     );
@@ -85,12 +89,7 @@ export default function Clubes() {
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
-            <div className="flex flex-row items-center gap-5">
-                <Button size={"icon"} variant={"outline"} className="cursor-pointer">
-                    <ChevronLeft />
-                </Button>
-                <p className="text-2xl font-semibold">Clubes de Ciência</p>
-            </div>
+            <MenuSuperiorPagina title="Clubes de Ciência" />
 
             {/* |=======| OBJETIVOS DOS CLUBES DE CIÊNCIA |=======| */}
             <div className="flex flex-col gap-5">

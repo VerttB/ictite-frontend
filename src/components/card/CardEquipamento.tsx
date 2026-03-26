@@ -12,14 +12,16 @@ export default function CardEquipamento({ equipment }: { equipment: Equipment })
                     {equipment.type_equipment.name}
                 </p>
             </div>
-            <div className="relative w-[140px] flex-shrink-0">
-                <Image
-                    src={equipment.images[0].url}
-                    alt={equipment.name}
-                    fill
-                    className="rounded-r-md object-cover object-center"
-                />
-            </div>
+            {equipment.images.length > 0 && (
+                <div className="relative w-[140px] flex-shrink-0">
+                    <Image
+                        src={equipment.images[0].url}
+                        alt={equipment.name}
+                        fill
+                        className="rounded-l-md object-cover object-center"
+                    />
+                </div>
+            )}
         </div>
     );
 }

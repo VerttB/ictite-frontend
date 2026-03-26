@@ -23,8 +23,8 @@ export const baseItems = [
         allowedRoles: ["guest", "admin"],
     },
     {
-        title: "Documento ICTITE",
-        url: "/projeto",
+        title: "Documentos ICTITE",
+        url: "/documentos",
         icon: SquareChartGantt,
         allowedRoles: ["guest", "admin"],
     },
