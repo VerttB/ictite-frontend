@@ -6,7 +6,7 @@ import { Project } from "@/core/domain/Project";
 
 interface ProjectProps {
     onClick?: () => void;
-    project: Pick<Project, "id" | "name" | "description">;
+    project: Project;
 }
 
 export default function CardProjeto({ project, onClick }: ProjectProps) {
@@ -39,7 +39,7 @@ export default function CardProjeto({ project, onClick }: ProjectProps) {
                 <div>
                     <span className="text-font-secondary flex items-center gap-2 text-sm">
                         <BrainCircuit size={16} />
-                        Nome do Clube de Ciência
+                        {project.clube.name}
                     </span>
                 </div>
 
