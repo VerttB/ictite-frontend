@@ -19,6 +19,7 @@ import {
     LucideIcon,
     PanelsTopLeft,
     School,
+    ScrollText,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -89,9 +90,14 @@ export default async function OneClubeCiencia({
                                 {clubeCiencia.school.name}
                             </Link>
                         </div>
-                        <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:pl-5">
+                        <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:pl-5 md:pr-5 md:border-r">
                             <Instagram size={20} />
                             <p>@instagram_clube</p>
+                        </div>
+                        <div className="text-primary flex items-center gap-2 hover:cursor-pointer md:pl-5">
+                            <ScrollText size={20} />
+                            <p>Nome do coordenador e Nome 02</p>
+                            
                         </div>
                     </div>
                 </div>

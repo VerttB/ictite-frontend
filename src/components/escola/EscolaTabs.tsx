@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
-import { Printer, PanelsTopLeft, Brain, BookOpen } from "lucide-react";
+import { Printer, PanelsTopLeft, Brain, BookOpen, NotebookText } from "lucide-react";
 import { useState } from "react";
 import {
     useSchoolEquipments,
@@ -96,6 +96,14 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             data: projects || [],
             renderItem: (p: Project) => <CardProjeto key={p.id} project={p} />,
         },
+        {
+            value: "documentos",
+            label: "Documentos",
+            icon: NotebookText,
+            isLoading: false,
+            isError: false,
+            emptyMessage: "Nenhum documento encontrado para esta escola.",
+        }
     ];
     return (
         <>
