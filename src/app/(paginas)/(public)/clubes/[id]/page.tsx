@@ -94,11 +94,19 @@ export default async function OneClubeCiencia({
                             <Instagram size={20} />
                             <p>@instagram_clube</p>
                         </div>
+                        { clubeCiencia.coordinators.length > 0 &&
                         <div className="text-primary flex items-center gap-2 hover:cursor-pointer md:pl-5">
                             <ScrollText size={20} />
-                            <p>Nome do coordenador e Nome 02</p>
+                            <div className="flex flex-col md:flex-row gap-2">
+                                {clubeCiencia.coordinators.map((coordinator) => (
+                                    <p key={coordinator.id} className="line-clamp-1">
+                                        {coordinator.name},
+                                    </p>
+                                ))}
+                            </div>
                             
                         </div>
+                        }       
                     </div>
                 </div>
             </div>

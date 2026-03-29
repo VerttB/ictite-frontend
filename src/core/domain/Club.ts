@@ -2,6 +2,7 @@ import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
 import z from "zod";
 import { ImageCreateSchema, ImageSchema } from "./Image";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
+import { CoordinatorSimplifiedSchema } from "./Coordinator";
 
 export const ScienceClubSchema = z.object({
     id: z.uuid(),
@@ -9,6 +10,7 @@ export const ScienceClubSchema = z.object({
     description: z.string().min(1, "A descrição não deve estar vazia"),
     school: SimpleIdNameSchema,
     instagram: z.string().optional(),
+    coordinators: CoordinatorSimplifiedSchema.array().default([]),
     images: ImageSchema.array(),
 });
 
@@ -16,6 +18,7 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
     id: true,
     school: true,
     images: true,
+    coordinators: true,
 }).and(
     z.object({
         school_id: z.uuid(),
