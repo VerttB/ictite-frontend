@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
-import { Printer, PanelsTopLeft, Brain, BookOpen, NotebookText } from "lucide-react";
+import { Printer, PanelsTopLeft, Brain, BookOpen, NotebookText, ScrollText } from "lucide-react";
 import { useState } from "react";
 import {
     useSchoolEquipments,
@@ -115,7 +115,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
         {
             value: "coordenadores",
             label: "Coordenadores de Clube",
-            icon: Printer,
+            icon: ScrollText,
             isLoading: false,
             isError: false,
             emptyMessage: "Nenhum coordenador de clube encontrado para esta escola.",
