@@ -41,13 +41,21 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
 
     const handleCreate = async (data: MaterialCreate) => {
         const { id } = await createMaterial(data);
-        const newMaterial = new FormData();
-        data.images.forEach((file) => newMaterial.append("images", file));
-        await uploadMaterialImages(id, newMaterial);
+        if (data.images?.length) {
+            const newMaterial = new FormData();
+            data.images.forEach((file) => newMaterial.append("images", file));
+            await uploadMaterialImages(id, newMaterial);
+        }
     };
 
     const handleUpdate = async (id: string, data: MaterialUpdate) => {
-        await updateMaterial(id, data);
+        const { images, ...materialData } = data;
+        await updateMaterial(id, materialData);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((file) => form.append("images", file));
+            await uploadMaterialImages(id, form, true);
+        }
     };
 
     if (!materials) return null;
@@ -76,7 +84,7 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
                     label="Tipo"
                     options={Object.values(MaterialType)}
                 />
-                <ControlledImageUpload name="images" />
+                <ControlledImageUpload name="images" label="Imagem (Opcional)" />
             </BaseFormModal>
 
             {crud.editingItem && (
@@ -92,11 +100,13 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
                             name: crud.editingItem?.name,
                             description: crud.editingItem?.description,
                             link: crud.editingItem?.link,
+                            images: [],
                         },
                     }}>
                     <InputField name="name" label="Nome do Material" />
                     <InputField name="description" label="Descrição" />
                     <InputField name="link" label="Link" />
+                    <ControlledImageUpload name="images" label="Imagem (Opcional)" />
                 </BaseFormModal>
             )}
 

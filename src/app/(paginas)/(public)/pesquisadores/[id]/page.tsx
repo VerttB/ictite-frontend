@@ -20,18 +20,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <div className="flex w-full flex-col gap-4 overflow-x-hidden p-4">
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                <ImageDisplay src={researcher.image!} alt="Imagem do pesquisador" />
+                <ImageDisplay src={researcher.image || ""} alt="Imagem do pesquisador" />
 
                 <div className="w-full">
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
-                        <Link
-                            href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`}
-                            target="_blank"
-                            className="flex cursor-pointer"
-                            title="Ver no SIMCC">
+                        {researcher.simcc ? (
+                            <Link
+                                href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`}
+                                target="_blank"
+                                className="flex cursor-pointer"
+                                title="Ver no SIMCC">
+                                <h1 className="text-3xl">{researcher.name}</h1>
+                                <ExternalLink
+                                    className="mb-2 ml-1 inline"
+                                    size={20}
+                                />
+                            </Link>
+                        ) : (
                             <h1 className="text-3xl">{researcher.name}</h1>
-                            <ExternalLink className="mb-2 ml-1 inline" size={20} />
-                        </Link>
+                        )}
                         <Downloader path="researchers" id={researcher.id} />
                     </div>
                     {researcher.simcc && (

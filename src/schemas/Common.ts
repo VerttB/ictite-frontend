@@ -6,7 +6,7 @@ export const SimpleIdNameSchema = z.object({
 });
 
 export const SimpleIdNameDescriptionSchema = SimpleIdNameSchema.extend({
-    description: z.string(),
+    description: z.string().nullish(),
 });
 export const SearchParamParser = {
     string: z.string().optional().catch(undefined),

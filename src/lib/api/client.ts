@@ -39,9 +39,9 @@ export class ApiClient {
             }
         } catch (_e) {}
         if (response.ok) return data as T;
-        let errorObject: any = data;
+        const errorObject: unknown = data;
         throw new ApiError(
-            getErrorMessages(errorObject.error, response.status),
+            getErrorMessages(errorObject, response.status),
             response.status,
             response
         );

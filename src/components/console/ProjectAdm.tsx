@@ -50,15 +50,21 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
 
     const handleCreate = async (data: ProjectCreate) => {
         const { id } = await createProject(data);
-        const form = new FormData();
-        if (data.images) {
+        if (data.images?.length) {
+            const form = new FormData();
             data.images.forEach((file) => form.append("images", file));
             await uploadProjectImages(id, form);
         }
     };
 
     const handleUpdate = async (id: string, data: ProjectUpdate) => {
-        await updateProject(id, data);
+        const { images, ...projectData } = data;
+        await updateProject(id, projectData);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((file) => form.append("images", file));
+            await uploadProjectImages(id, form, true);
+        }
     };
 
     if (!projetos) return null;
@@ -88,7 +94,7 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                 schema={ProjectCreateSchema}
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Projeto" />
-                <InputField name="description" label="Descrição" />
+                <InputField name="description" label="Descrição (Opcional)" />
                 <ControlledComboBox
                     className="w-full"
                     name="clube_ciencia_id"
@@ -97,13 +103,13 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                 />
                 <ControlledSelect
                     name="year"
-                    label="Ano"
+                    label="Ano (Opcional)"
                     options={new Array(yearValidation.max - yearValidation.min + 1)
                         .fill(null)
                         .map((_, i) => yearValidation.max - i)}
                 />
-                <TextField name="description_long" label="Descrição Longa" />
-                <ControlledImageUpload name="images" multiple={true} />
+                <TextField name="description_long" label="Descrição Longa (Opcional)" />
+                <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (
@@ -117,13 +123,30 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
                     props={{
                         defaultValues: {
                             name: crud.editingItem?.name,
-                            description: crud.editingItem?.description,
-                            description_long: crud.editingItem?.description_long,
+                            description: crud.editingItem?.description || undefined,
+                            description_long: crud.editingItem?.description_long || undefined,
+                            clube_ciencia_id: crud.editingItem?.clube?.id,
+                            year: crud.editingItem?.year?.toString(),
+                            images: [],
                         },
                     }}>
                     <InputField name="name" label="Nome do Projeto" />
-                    <InputField name="description" label="Descrição" />
-                    <TextField name="description_long" label="Descrição Longa" />
+                    <InputField name="description" label="Descrição (Opcional)" />
+                    <ControlledComboBox
+                        className="w-full"
+                        name="clube_ciencia_id"
+                        label="Clube"
+                        options={clubes || []}
+                    />
+                    <ControlledSelect
+                        name="year"
+                        label="Ano (Opcional)"
+                        options={new Array(yearValidation.max - yearValidation.min + 1)
+                            .fill(null)
+                            .map((_, i) => yearValidation.max - i)}
+                    />
+                    <TextField name="description_long" label="Descrição Longa (Opcional)" />
+                    <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
                 </BaseFormModal>
             )}
 

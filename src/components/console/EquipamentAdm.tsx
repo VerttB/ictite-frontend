@@ -46,13 +46,21 @@ export const EquipmentAdm = ({ params }: EquipmentAdmProps) => {
 
     const handleCreate = async (data: EquipmentCreate) => {
         const { id } = await createEquipament(data);
-        const form = new FormData();
-        data.images.forEach((file) => form.append("images", file));
-        await uploadEquipamentImages(id, form);
+        if (data.images?.length) {
+            const form = new FormData();
+            data.images.forEach((file) => form.append("images", file));
+            await uploadEquipamentImages(id, form);
+        }
     };
 
     const handleUpdate = async (id: string, data: EquipmentUpdate) => {
-        await updateEquipament(id, data);
+        const { images, ...equipmentData } = data;
+        await updateEquipament(id, equipmentData);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((file) => form.append("images", file));
+            await uploadEquipamentImages(id, form, true);
+        }
     };
 
     if (!equipamentos || !equipamentosTipos || !escolas) return null;
@@ -85,7 +93,7 @@ export const EquipmentAdm = ({ params }: EquipmentAdmProps) => {
                     label="Escola"
                     options={escolas.items}
                 />
-                <ControlledImageUpload name="images" />
+                <ControlledImageUpload name="images" label="Imagem (Opcional)" />
             </BaseFormModal>
 
             {crud.editingItem && (
@@ -99,9 +107,23 @@ export const EquipmentAdm = ({ params }: EquipmentAdmProps) => {
                     props={{
                         defaultValues: {
                             name: crud.editingItem?.name,
+                            type_equipment_id: crud.editingItem?.type_equipment?.id,
+                            school_id: crud.editingItem?.school?.id,
+                            images: [],
                         },
                     }}>
                     <InputField name="name" label="Nome do Equipamento" />
+                    <ControlledSelect
+                        name="type_equipment_id"
+                        label="Tipo de Equipamento"
+                        options={equipamentosTipos}
+                    />
+                    <ControlledComboBox
+                        name="school_id"
+                        label="Escola"
+                        options={escolas.items}
+                    />
+                    <ControlledImageUpload name="images" label="Imagem (Opcional)" />
                 </BaseFormModal>
             )}
 

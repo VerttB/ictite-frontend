@@ -38,15 +38,25 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
 
     const handleCreate = async (data: MagazineCreate) => {
         const { id } = await createRevista(data);
-        const form = new FormData();
-        for (const file of data.images) {
-            form.append("images", file);
+        if (data.images?.length) {
+            const form = new FormData();
+            for (const file of data.images) {
+                form.append("images", file);
+            }
+            await uploadMagazineImage(id, form);
         }
-        await uploadMagazineImage(id, form);
     };
 
     const handleUpdate = async (id: string, data: MagazineUpdate) => {
-        await updateRevista(id, data);
+        const { images, ...magazineData } = data;
+        await updateRevista(id, magazineData);
+        if (images?.length) {
+            const form = new FormData();
+            for (const file of images) {
+                form.append("images", file);
+            }
+            await uploadMagazineImage(id, form, true);
+        }
     };
     return (
         <>
@@ -68,7 +78,7 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
                 <InputField name="name" label="Título da Revista" />
                 <InputField name="description" label="Descrição" />
                 <InputField name="link" label="Link da Revista" />
-                <ControlledImageUpload name="images" />
+                <ControlledImageUpload name="images" label="Imagem (Opcional)" />
             </BaseFormModal>
 
             {crud.editingItem && (
@@ -84,11 +94,13 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
                             name: crud.editingItem?.name,
                             description: crud.editingItem?.description,
                             link: crud.editingItem?.link,
+                            images: [],
                         },
                     }}>
                     <InputField name="name" label="Título da Revista" />
                     <InputField name="description" label="Descrição" />
                     <InputField name="link" label="Link da Revista" />
+                    <ControlledImageUpload name="images" label="Imagem (Opcional)" />
                 </BaseFormModal>
             )}
 

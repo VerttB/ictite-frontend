@@ -18,3 +18,13 @@ export const ImageCreateSchema = z
         (arr) => arr.every((f) => ACCEPTED_IMAGE_TYPE.includes(f.type)),
         "Formato inválido"
     );
+
+export const OptionalImageCreateSchema = z
+    .any()
+    .transform<File[]>((files) => Array.from(files ?? []))
+    .refine((arr) => arr.length <= 5, "Máximo de 5 imagens")
+    .refine((arr) => arr.every((f) => f.size <= MAX_IMAGE_SIZE), "Máx 5MB")
+    .refine(
+        (arr) => arr.every((f) => ACCEPTED_IMAGE_TYPE.includes(f.type)),
+        "Formato inválido"
+    );

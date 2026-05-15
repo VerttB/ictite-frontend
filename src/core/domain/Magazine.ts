@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ImageCreateSchema, ImageSchema } from "./Image";
+import { ImageSchema, OptionalImageCreateSchema } from "./Image";
 import { SearchParamParser } from "../../schemas/Common";
 
 export const MagazineSchema = z.object({
@@ -15,14 +15,15 @@ export const MagazineCreateSchema = MagazineSchema.omit({
     images: true,
 }).and(
     z.object({
-        images: z.any().pipe(ImageCreateSchema),
+        images: OptionalImageCreateSchema,
     })
 );
 
-export const MagazineUpdateSchema = MagazineSchema.pick({
-    name: true,
-    description: true,
-    link: true,
+export const MagazineUpdateSchema = z.object({
+    name: z.string().min(1, "Nome obrigatório").optional(),
+    description: z.string().optional(),
+    link: z.url("Link inválido").optional(),
+    images: OptionalImageCreateSchema.optional(),
 });
 export const MagazineSearchParamsSchema = z.object({
     name: SearchParamParser.string,

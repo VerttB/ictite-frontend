@@ -25,8 +25,14 @@ export const createRevista = async (newRevista: MagazineCreate): Promise<Magazin
     return await apiClient.post<Magazine>("/magazine/", newRevista);
 };
 
-export const uploadMagazineImage = async (magazineId: string, formData: FormData) => {
-    return await apiClient.post(`/magazine/${magazineId}/images`, formData);
+export const uploadMagazineImage = async (
+    magazineId: string,
+    formData: FormData,
+    replace = false
+) => {
+    return await apiClient.post(`/magazine/${magazineId}/images`, formData, {
+        params: replace ? { replace: true } : undefined,
+    });
 };
 
 export const updateRevista = async (

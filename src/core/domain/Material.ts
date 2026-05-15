@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ImageCreateSchema, ImageSchema } from "./Image";
+import { ImageSchema, OptionalImageCreateSchema } from "./Image";
 import { SearchParamParser } from "../../schemas/Common";
 import { MaterialType } from "../constants/materialType";
 
@@ -17,7 +17,7 @@ export const MaterialCreateSchema = MaterialSchema.omit({
     images: true,
 }).and(
     z.object({
-        images: z.any().pipe(ImageCreateSchema),
+        images: OptionalImageCreateSchema,
     })
 );
 export const MaterialSearchParamsSchema = z.object({
@@ -25,10 +25,11 @@ export const MaterialSearchParamsSchema = z.object({
     page: SearchParamParser.page,
 });
 
-export const MaterialUpdateSchema = MaterialSchema.pick({
-    name: true,
-    description: true,
-    link: true,
+export const MaterialUpdateSchema = z.object({
+    name: z.string().min(1, "Nome obrigatório").optional(),
+    description: z.string().optional(),
+    link: z.string().url("Link inválido").optional(),
+    images: OptionalImageCreateSchema.optional(),
 });
 export type Material = z.infer<typeof MaterialSchema>;
 export type MaterialCreate = z.infer<typeof MaterialCreateSchema>;

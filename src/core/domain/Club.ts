@@ -1,12 +1,12 @@
 import { SearchParamParser, SimpleIdNameSchema } from "@/schemas/Common";
 import z from "zod";
-import { ImageCreateSchema, ImageSchema } from "./Image";
+import { ImageSchema, OptionalImageCreateSchema } from "./Image";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 
 export const ScienceClubSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "O nome não deve estar vazio"),
-    description: z.string().min(1, "A descrição não deve estar vazia"),
+    description: z.string().nullish(),
     school: SimpleIdNameSchema,
     instagram: z.string().optional(),
     images: ImageSchema.array(),
@@ -19,16 +19,17 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
 }).and(
     z.object({
         school_id: z.uuid(),
-        images: z.any().pipe(ImageCreateSchema),
+        images: OptionalImageCreateSchema,
         instagram: z.string().optional(),
     })
 );
 
-export const ScienceClubUpdateSchema = ScienceClubSchema.pick({
-    name: true,
-    description: true,
-    instagram: true,
-}).partial();
+export const ScienceClubUpdateSchema = z.object({
+    name: z.string().min(1, "O nome não deve estar vazio").optional(),
+    description: z.string().optional(),
+    instagram: z.string().optional(),
+    images: OptionalImageCreateSchema.optional(),
+});
 export const ScienceClubSearchParamsSchema = z
     .object({
         name: SearchParamParser.string,

@@ -7,26 +7,28 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userLoginSchema } from "@/schemas/LoginSchema";
 import { useUserContext } from "@/providers/UserContext";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, CircleUserRound, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
     const router = useRouter();
 
-    const { loginUser } = useUserContext();
+    const { loginUser, isLoading } = useUserContext();
 
     type userLoginData = z.infer<typeof userLoginSchema>;
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
         setError,
+        clearErrors,
     } = useForm<userLoginData>({
         resolver: zodResolver(userLoginSchema),
     });
 
     const onSubmit = async (data: userLoginData) => {
+        clearErrors("root");
         const success = await loginUser(data);
         if (!success) {
             setError("root", {
@@ -39,8 +41,12 @@ export default function Login() {
     return (
         <div className="flex flex-col h-full bg-gray-100 p-6">
             <div className="flex flex-row items-center gap-5">
-                <Button size={"default"} variant={"ghost"} className="cursor-pointer hover:bg-primary/40"
-                onClick={() => router.back()}>
+                <Button
+                    type="button"
+                    size={"default"}
+                    variant={"ghost"}
+                    className="cursor-pointer hover:bg-primary/40"
+                    onClick={() => router.back()}>
                     <ChevronLeft />
                     <p className="text-2xl font-semibold">Voltar</p>
                 </Button>
@@ -76,7 +82,14 @@ export default function Login() {
                             {errors.root?.message}
                         </p>
                     )}
-                    <Button type="submit">Fazer Login</Button>
+                    <Button type="submit" disabled={isSubmitting || isLoading}>
+                        {isSubmitting || isLoading ? (
+                            <LoaderCircle className="animate-spin" />
+                        ) : (
+                            <CircleUserRound />
+                        )}
+                        Fazer Login
+                    </Button>
                     <div className="flex items-center justify-center"><span className="text-xs" >© 2026 ICTITE</span></div>
                 </form>
             </div>

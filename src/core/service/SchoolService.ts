@@ -77,6 +77,12 @@ export const updateSchool = async (
 ): Promise<School> => {
     return await apiClient.patch<School>(`/schools/${id}`, school);
 };
-export const uploadSchoolImage = async (school_id: string, form: FormData) => {
-    return await apiClient.post(`/schools/${school_id}/images`, form);
+export const uploadSchoolImage = async (
+    school_id: string,
+    form: FormData,
+    replace = false
+) => {
+    return await apiClient.post(`/schools/${school_id}/images`, form, {
+        params: replace ? { replace: true } : undefined,
+    });
 };

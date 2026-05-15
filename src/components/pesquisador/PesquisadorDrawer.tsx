@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
     Drawer,
     DrawerContent,
@@ -12,7 +11,6 @@ import useSWR from "swr";
 import { getResearcherById } from "@/core/service/PesquisadorService";
 import { PesquisadorTabs } from "./PesquisadorTabs";
 import { Spinner } from "../LoadingSpin";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useViewPort } from "@/hooks/useViewPort";
@@ -64,13 +62,13 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                     </div>
                     <div className="flex w-full flex-col items-center gap-2 p-2 shadow-xs sm:flex-row">
                         <ImageDisplay
-                            src={researcher?.image!}
+                            src={researcher?.image || ""}
                             alt="Imagem do pesquisador"
                         />
 
                         <div className="flex h-full w-full flex-col items-start justify-start gap-1 px-2">
                             <DrawerTitle className="text-font-primary text-2xl">
-                                {researcher?.simcc && (
+                                {researcher?.simcc ? (
                                     <Link
                                         href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`}
                                         target="_blank"
@@ -82,6 +80,8 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                                             size={20}
                                         />
                                     </Link>
+                                ) : (
+                                    <h1 className="text-3xl">{researcher?.name}</h1>
                                 )}
                             </DrawerTitle>
                             <div className="flex w-full gap-4">

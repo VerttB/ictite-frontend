@@ -6,6 +6,7 @@ import { PersonStanding } from "lucide-react";
 import {
     createResearcher,
     deleteResearcher,
+    getResearcherById,
     getResearchers,
     updateResearcher,
 } from "@/core/service/PesquisadorService";
@@ -30,7 +31,6 @@ import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { getProjects } from "@/core/service/ProjetoService";
 
-import { ControlledMultiSelect } from "../forms-input/ControlledMultiSelect";
 import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 interface ResearcherAdmProps {
     params: ResearcherSearchParams;
@@ -49,6 +49,14 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
         createFn: createResearcher,
         updateFn: updateResearcher,
     });
+    const editingResearcherId = crud.editingItem?.id;
+    const { data: editingResearcher } = useSWR(
+        editingResearcherId ? ["researcher-edit", editingResearcherId] : null,
+        () => getResearcherById(editingResearcherId!)
+    );
+    const editingProjectIds = Object.values(editingResearcher?.projects || {})
+        .flat()
+        .map((project) => project.id);
 
     if (!pesquisadores) return null;
     return (
@@ -75,7 +83,7 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                 title="Adicionar Pesquisador"
                 schema={ResearcherCreateSchema}>
                 <InputField name="name" label="Nome do Pesquisador" />
-                <InputField name="lattes_id" label="Id do Lattes" maxLength={16} />
+                <InputField name="lattes_id" label="Id do Lattes (Opcional)" maxLength={16} />
                 <div className="flex w-full gap-2">
                     <ControlledSelect
                         className="w-full"
@@ -88,20 +96,20 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                     <ControlledSelect
                         className="w-full"
                         name="race"
-                        label="Raça"
+                        label="Raça (Opcional)"
                         options={Object.values(RaceTypes)}
                     />
                     <ControlledSelect
                         className="w-full"
                         name="gender"
-                        label="Gênero"
+                        label="Gênero (Opcional)"
                         options={Object.values(GenderTypes)}
                     />
                 </div>
                 <ControlledComboBox
                     className="w-full"
                     name="projects_ids"
-                    label="Projetos"
+                    label="Projetos (Opcional)"
                     isMulti={true}
                     options={projects?.items || []}
                 />
@@ -109,7 +117,7 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
             {crud.editingItem && (
                 <BaseFormModal<typeof ResearcherUpdateSchema, ResearcherUpdate>
                     open={!!crud.editingItem}
-                    key={crud.editingItem.id}
+                    key={`${crud.editingItem.id}-${editingProjectIds.join(",")}`}
                     onClose={crud.ui.closeEdit}
                     onSubmit={crud.actions.update}
                     title="Atualizar Pesquisador"
@@ -117,18 +125,15 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                     props={{
                         defaultValues: {
                             name: crud.editingItem?.name,
-                            race: crud.editingItem?.race,
+                            lattes_id: crud.editingItem?.lattes_id || undefined,
+                            race: crud.editingItem?.race || undefined,
                             type: crud.editingItem?.type,
-                            gender: crud.editingItem?.gender,
+                            gender: crud.editingItem?.gender || undefined,
+                            projects_ids: editingProjectIds,
                         },
                     }}>
                     <InputField name="name" label="Nome do Pesquisador" />
-                    <ControlledSelect
-                        className="w-full"
-                        name="race"
-                        label="Raça"
-                        options={Object.values(RaceTypes)}
-                    />
+                    <InputField name="lattes_id" label="Id do Lattes (Opcional)" maxLength={16} />
                     <div className="flex w-full gap-2">
                         <ControlledSelect
                             className="w-full"
@@ -136,13 +141,28 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                             label="Tipo de Pesquisador"
                             options={Object.values(ResearcherTypes)}
                         />
+                    </div>
+                    <div className="flex w-full gap-2">
+                        <ControlledSelect
+                            className="w-full"
+                            name="race"
+                            label="Raça (Opcional)"
+                            options={Object.values(RaceTypes)}
+                        />
                         <ControlledSelect
                             className="w-full"
                             name="gender"
-                            label="Gênero"
+                            label="Gênero (Opcional)"
                             options={Object.values(GenderTypes)}
                         />
                     </div>
+                    <ControlledComboBox
+                        className="w-full"
+                        name="projects_ids"
+                        label="Projetos (Opcional)"
+                        isMulti={true}
+                        options={projects?.items || []}
+                    />
                 </BaseFormModal>
             )}
 

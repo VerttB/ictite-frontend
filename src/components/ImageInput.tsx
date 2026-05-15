@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useId, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 import { ImageUpIcon, XIcon } from "lucide-react";
 import Image from "next/image";
@@ -19,14 +19,16 @@ interface ImageUploadInputProps extends OmitValue {
 
 export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputProps>(
     ({ label, errors, className, value = [], multiple, onChange, ...rest }, ref) => {
-        const [previews, setPreviews] = useState<string[]>([]);
+        const generatedId = useId();
+        const inputId = rest.id || generatedId;
+        const previews = useMemo(
+            () => value.map((file) => URL.createObjectURL(file)),
+            [value]
+        );
 
         useEffect(() => {
-            const urls = value.map((file) => URL.createObjectURL(file));
-            setPreviews(urls);
-
-            return () => urls.forEach((url) => URL.revokeObjectURL(url));
-        }, [value]);
+            return () => previews.forEach((url) => URL.revokeObjectURL(url));
+        }, [previews]);
 
         const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
             const files = Array.from(e.target.files || []);
@@ -63,13 +65,11 @@ export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputPro
                         className
                     )}
                     onClick={() => {
-                        const input = document.getElementById(
-                            rest.id || "image-upload-input"
-                        );
+                        const input = document.getElementById(inputId);
                         input?.click();
                     }}>
                     <input
-                        id={rest.id || "image-upload-input"}
+                        id={inputId}
                         type="file"
                         accept={ACCEPTED_IMAGE_TYPE.join(",")}
                         className="hidden"

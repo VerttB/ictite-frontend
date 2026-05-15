@@ -6,34 +6,38 @@ import z from "zod";
 import { ImageSchema } from "./Image";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 
+const OptionalLattesIdSchema = z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.string().length(16, "O ID do Lattes deve ter 16 caracteres").optional()
+);
+
 export const ResearcherSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "O nome não deve estar vazio"),
-    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido"),
-    race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida"),
+    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido").nullish(),
+    race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida").nullish(),
     type: z.enum(Object.values(ResearcherTypes), "Selecione um tipo válido"),
-    lattes_id: z.string().min(1, "O Lattes não deve estar vazio"),
-    image: z.url().optional(),
+    lattes_id: z.string().nullish(),
+    image: z.url().nullish(),
 });
 
 export const ResearcherCreateSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio"),
-    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido"),
-    race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida"),
+    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido").optional(),
+    race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida").optional(),
     type: z.enum(Object.values(ResearcherTypes), "Selecione um tipo válido"),
     projects_ids: z.string().array().optional(),
-    lattes_id: z
-        .string()
-        .min(1, "O Lattes não deve estar vazio")
-        .length(16, "O ID do Lattes deve ter 16 caracteres"),
+    lattes_id: OptionalLattesIdSchema,
 });
 
 export const ResearcherUpdateSchema = ResearcherCreateSchema.pick({
     name: true,
+    lattes_id: true,
     gender: true,
     race: true,
     type: true,
-});
+    projects_ids: true,
+}).partial();
 
 export const ResearcherSearchParamsSchema = z
     .object({
@@ -68,8 +72,8 @@ const ResearcherArticleSchema = z.object({
 });
 
 export const ResearcherFinalSchema = ResearcherSchema.extend({
-    simcc: ResearcherSimccSchema,
-    articles: ResearcherArticleSchema.array(),
+    simcc: ResearcherSimccSchema.nullish(),
+    articles: ResearcherArticleSchema.array().optional(),
     projects: z.record(
         z.string(),
         SimpleIdNameDescriptionSchema.array().and(

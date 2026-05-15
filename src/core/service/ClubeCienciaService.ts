@@ -92,6 +92,8 @@ export const updateClubeCiencias = async (
 export const deleteClubeCiencias = async (clubeId: string): Promise<void> => {
     await apiClient.delete(`/clubes-ciencia/${clubeId}`);
 };
-export const uploadClubImage = async (id: string, form: FormData) => {
-    return await apiClient.post(`/clubes-ciencia/${id}/images`, form);
+export const uploadClubImage = async (id: string, form: FormData, replace = false) => {
+    return await apiClient.post(`/clubes-ciencia/${id}/images`, form, {
+        params: replace ? { replace: true } : undefined,
+    });
 };

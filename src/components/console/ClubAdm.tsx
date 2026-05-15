@@ -52,13 +52,21 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
 
     const handleCreate = async (data: ScienceClubCreate) => {
         const { id } = await createClubeCiencias(data);
-        const form = new FormData();
-        data.images.forEach((file) => form.append("images", file));
-        await uploadClubImage(id, form);
+        if (data.images?.length) {
+            const form = new FormData();
+            data.images.forEach((file) => form.append("images", file));
+            await uploadClubImage(id, form);
+        }
     };
 
     const handleUpdate = async (id: string, data: ScienceClubUpdate) => {
-        await updateClubeCiencias(id, data);
+        const { images, ...clubData } = data;
+        await updateClubeCiencias(id, clubData);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((file) => form.append("images", file));
+            await uploadClubImage(id, form, true);
+        }
     };
     const filters: ItemFilterConfig<ScienceClubSearchParams>[] = [
         {
@@ -101,7 +109,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                 schema={ScienceClubCreateSchema}
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome do Clube de Ciências" />
-                <InputField name="description" label="Descrição" />
+                <InputField name="description" label="Descrição (Opcional)" />
                 <ControlledComboBox
                     className="w-full"
                     name="school_id"
@@ -110,7 +118,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                 />
                 <InputField name="instagram" label="Instagram (Opcional)" />
 
-                <ControlledImageUpload name="images" multiple={true} />
+                <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (
@@ -124,13 +132,15 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     props={{
                         defaultValues: {
                             name: crud.editingItem?.name,
-                            description: crud.editingItem?.description,
+                            description: crud.editingItem?.description || undefined,
                             instagram: crud.editingItem?.instagram,
+                            images: [],
                         },
                     }}>
                     <InputField name="name" label="Nome do Clube de Ciências" />
-                    <InputField name="description" label="Descrição" />
+                    <InputField name="description" label="Descrição (Opcional)" />
                     <InputField name="instagram" label="Instagram (Opcional)" />
+                    <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
                 </BaseFormModal>
             )}
 

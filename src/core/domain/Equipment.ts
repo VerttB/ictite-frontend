@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { SearchParamParser, SimpleIdNameSchema } from "../../schemas/Common";
-import { ImageCreateSchema, ImageSchema } from "./Image";
+import { ImageSchema, OptionalImageCreateSchema } from "./Image";
 
 export const EquipmentSchema = z.object({
     id: z.uuid(),
@@ -19,7 +19,7 @@ export const EquipmentCreateSchema = EquipmentSchema.omit({
     z.object({
         school_id: z.uuid("A escola não deve estar vazia"),
         type_equipment_id: z.uuid("O tipo de equipamento não deve estar vazio"),
-        images: z.any().pipe(ImageCreateSchema),
+        images: OptionalImageCreateSchema,
     })
 );
 
@@ -27,8 +27,11 @@ export const EquipmentSearchParamsSchema = z.object({
     name: SearchParamParser.string,
 });
 
-export const EquipmentUpdateSchema = EquipmentSchema.pick({
-    name: true,
+export const EquipmentUpdateSchema = z.object({
+    name: z.string().min(1, "Nome obrigatório").optional(),
+    school_id: z.uuid("A escola não deve estar vazia").optional(),
+    type_equipment_id: z.uuid("O tipo de equipamento não deve estar vazio").optional(),
+    images: OptionalImageCreateSchema.optional(),
 });
 
 export type Equipment = z.infer<typeof EquipmentSchema>;

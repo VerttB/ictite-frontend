@@ -29,7 +29,6 @@ import { Pagination } from "../Pagination";
 import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
-import { ControlledSelect } from "../forms-input/ControlledSelect";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
 import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 interface SchoolAdmProps {
@@ -60,7 +59,13 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         }
     };
     const handleUpdate = async (id: string, data: SchoolUpdate) => {
-        await updateSchool(id, data);
+        const { images, ...schoolData } = data;
+        await updateSchool(id, schoolData);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((img) => form.append("images", img));
+            await uploadSchoolImage(id, form, true);
+        }
     };
 
     const filters: ItemFilterConfig<SchoolSearchParams>[] = [
@@ -100,10 +105,10 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 <InputField name="instagram" label="Instagram (Opcional)" />
                 <ControlledComboBox
                     name="identity_territory_id"
-                    label="Território de Identidade"
+                    label="Território de Identidade (Opcional)"
                     options={territories || []}
                 />
-                <ControlledImageUpload name="images" multiple={true} />
+                <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
             </BaseFormModal>
 
             {crud.editingItem && (
@@ -119,11 +124,13 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                             name: crud.editingItem?.name,
                             description: crud.editingItem?.description,
                             instagram: crud.editingItem?.instagram,
+                            images: [],
                         },
                     }}>
                     <InputField name="name" label="Nome da Escola" />
                     <InputField name="description" label="Descrição" />
-                    <InputField name="instagram" label="Instagram" />
+                    <InputField name="instagram" label="Instagram (Opcional)" />
+                    <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
                 </BaseFormModal>
             )}
 

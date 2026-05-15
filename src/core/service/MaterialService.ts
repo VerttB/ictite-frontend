@@ -18,8 +18,14 @@ export const createMaterial = async (newMaterial: MaterialCreate): Promise<Mater
     return await apiClient.post<Material>("/material/", newMaterial);
 };
 
-export const uploadMaterialImages = async (materialId: string, images: FormData) => {
-    return await apiClient.post(`/material/${materialId}/images`, images);
+export const uploadMaterialImages = async (
+    materialId: string,
+    images: FormData,
+    replace = false
+) => {
+    return await apiClient.post(`/material/${materialId}/images`, images, {
+        params: replace ? { replace: true } : undefined,
+    });
 };
 
 export const updateMaterial = async (

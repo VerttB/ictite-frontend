@@ -49,6 +49,12 @@ export const deleteProject = async (projectId: string): Promise<void> => {
     await apiClient.delete(`/projects/${projectId}`);
 };
 
-export const uploadProjectImages = async (projectId: string, formData: FormData) => {
-    return await apiClient.post(`/projects/${projectId}/images`, formData);
+export const uploadProjectImages = async (
+    projectId: string,
+    formData: FormData,
+    replace = false
+) => {
+    return await apiClient.post(`/projects/${projectId}/images`, formData, {
+        params: replace ? { replace: true } : undefined,
+    });
 };

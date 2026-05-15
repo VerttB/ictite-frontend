@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <div className="text-4xl font-semibold">{project.name}</div>
                 </div>
                 <div>
-                    <div className="">{project.description}</div>
+                    {project.description && <div>{project.description}</div>}
                     <div className="flex gap-4">
                         <Link href={`/clubes/${project.clube.id}`}>
                             <div className="hover:text-primary mt-2 flex cursor-pointer flex-row items-center gap-2 text-gray-500 transition-all hover:underline">
@@ -44,10 +44,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                                 <span className="text-sm">{project.clube.name}</span>
                             </div>
                         </Link>
-                        <div className="mt-2 flex flex-row items-center gap-2 text-gray-500">
-                            <Calendar size={16} />
-                            <span className="text-sm">{project.year}</span>
-                        </div>
+                        {project.year && (
+                            <div className="mt-2 flex flex-row items-center gap-2 text-gray-500">
+                                <Calendar size={16} />
+                                <span className="text-sm">{project.year}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -94,8 +96,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         Descrição Longa do Projeto
                     </h2>
                     <p className="text-justify">
-                        {project.description_long ||
-                            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic? Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic? Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet illo ut non. Necessitatibus, iste? Odio molestiae autem nulla nisi, ex quia eum! Voluptas rerum sapiente suscipit dignissimos delectus nulla hic?"}
+                        {project.description_long || "Descrição longa não cadastrada."}
                     </p>
                 </div>
 

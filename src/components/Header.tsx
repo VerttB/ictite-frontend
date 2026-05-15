@@ -48,21 +48,22 @@ export const Header = () => {
                     {theme === "light" ? <MoonIcon /> : <SunIcon />}
                 </Button>
                 {isAuthenticated ? (
-                    <Link href={"/console/v2/escolas"}>
-                        <Button
-                            variant={"outline"}
-                            className="cursor-pointer px-10 py-1 text-xl">
+                    <Button
+                        asChild
+                        variant={"outline"}
+                        className="cursor-pointer px-10 py-1 text-xl">
+                        <Link href={"/console/v2/escolas"}>
                             <Bolt />
                             {isMobile ? "" : "Console"}
-                        </Button>
-                    </Link>
+                        </Link>
+                    </Button>
                 ) : (
-                    <Link href={"/login"}>
-                        <Button className="px-10 py-1 text-xl">
+                    <Button asChild className="px-10 py-1 text-xl">
+                        <Link href={"/login"}>
                             <CircleUserRound />
                             {isMobile ? "" : "Fazer Login"}
-                        </Button>
-                    </Link>
+                        </Link>
+                    </Button>
                 )}
             </div>
         </header>

@@ -14,7 +14,7 @@ interface BaseItem {
     id: string;
     name: string;
     images?: Image[];
-    image?: string;
+    image?: string | null;
 }
 
 interface SectionProps<T extends BaseItem> {

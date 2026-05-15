@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ImageCreateSchema, ImageSchema } from "./Image";
+import { ImageSchema, OptionalImageCreateSchema } from "./Image";
 import {
     SearchParamParser,
     SimpleIdNameDescriptionSchema,
@@ -35,16 +35,17 @@ export const SchoolCreateSchema = SchoolSchema.pick({
                 return val.length === 8;
             }, "CEP inválido"),
 
-        images: z.any().pipe(ImageCreateSchema),
+        images: OptionalImageCreateSchema,
         identity_territory_id: z.uuid().optional(),
     })
 );
 
-export const SchoolUpdateSchema = SchoolSchema.pick({
-    name: true,
-    description: true,
-    instagram: true,
-}).partial();
+export const SchoolUpdateSchema = z.object({
+    name: z.string().min(1, "Nome obrigatório").optional(),
+    description: z.string().optional(),
+    instagram: z.string().optional(),
+    images: OptionalImageCreateSchema.optional(),
+});
 
 export const SchoolSearchParamsSchema = z
     .object({
