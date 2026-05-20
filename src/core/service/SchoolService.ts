@@ -12,6 +12,7 @@ import { Pagination } from "@/schemas/Pagination";
 import { apiClient } from "@/lib/api/client";
 import { Project } from "../domain/Project";
 import { Researcher } from "../domain/Researcher";
+import { CoordinatorWithClub } from "../domain/Coordinator";
 
 export const getSchoolGeoData = async (): Promise<SchoolGeoJson> => {
     return await apiClient.get<SchoolGeoJson>("/schools/geojson");
@@ -49,6 +50,10 @@ export const getSchoolProjects = async (school_id: string): Promise<Project[]> =
 export const getSchoolResearchers = async (school_id: string): Promise<Researcher[]> => {
     const data = await apiClient.get<Researcher[]>(`/schools/${school_id}/researchers`);
     return data || [];
+};
+
+export const getSchoolCoordinators = async (school_id: string): Promise<CoordinatorWithClub[]> => {
+    return (await apiClient.get<CoordinatorWithClub[]>(`/schools/${school_id}/coordinators`)) || [];
 };
 
 export const getSchoolStatistics = async (

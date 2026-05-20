@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
-import { Printer, PanelsTopLeft, Brain, BookOpen } from "lucide-react";
+import { Printer, PanelsTopLeft, Brain, BookOpen, NotebookText, ScrollText } from "lucide-react";
 import { useState } from "react";
 import {
     useSchoolEquipments,
@@ -15,13 +15,15 @@ import CardPesquisador from "../pesquisador/PesquisadorCard";
 import { School } from "@/core/domain/School";
 import useSWR from "swr";
 import ClubeCienciaCard from "../clubeCiencia/ClubeCienciaCard";
-import { getSchoolClubs } from "@/core/service/SchoolService";
+import { getSchoolClubs, getSchoolCoordinators } from "@/core/service/SchoolService";
 import { TabsConfig } from "@/core/interface/TabsConfig";
 import { TabsGrid } from "../ui/TabsGridGeneric";
 import { Project } from "@/core/domain/Project";
 import { Equipment } from "@/core/domain/Equipment";
 import { Researcher } from "@/core/domain/Researcher";
 import { ScienceClub } from "@/core/domain/Club";
+import { CoordinatorWithClub } from "@/core/domain/Coordinator";
+import CardCoordenador from "../card/CardCoordenador";
 
 interface EscolaTabsProps {
     school: School;
@@ -50,6 +52,12 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
         isLoading: loadingClube,
         error: errorClubs,
     } = useSWR("clube-by-school-" + school.id, () => getSchoolClubs(school.id));
+
+    const {
+        data: coordenadores,
+        isLoading: loadingCoord,
+        error: errorCoord,
+    } = useSWR("coordinators-by-school-" + school.id, () => getSchoolCoordinators(school.id));
 
     const tabsConfig: TabsConfig[] = [
         {
@@ -96,6 +104,24 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             data: projects || [],
             renderItem: (p: Project) => <CardProjeto key={p.id} project={p} />,
         },
+        {
+            value: "documentos",
+            label: "Documentos",
+            icon: NotebookText,
+            isLoading: false,
+            isError: false,
+            emptyMessage: "Nenhum documento encontrado para esta escola.",
+        },
+        {
+            value: "coordenadores",
+            label: "Coordenadores de Clube",
+            icon: ScrollText,
+            isLoading: false,
+            isError: false,
+            emptyMessage: "Nenhum coordenador de clube encontrado para esta escola.",
+            data: coordenadores || [],
+            renderItem: (coordenador: CoordinatorWithClub) => <CardCoordenador  key={coordenador.id} coordinator={coordenador}/>
+        }
     ];
     return (
         <>
