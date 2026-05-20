@@ -100,7 +100,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 schema={SchoolCreateSchema}
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome da Escola" />
-                <InputField name="description" label="Descrição" />
+                <InputField name="description" label="Descrição (Opcional)" />
                 <InputField name="cep" label="CEP" mask={mask.cep} />
                 <InputField name="instagram" label="Instagram (Opcional)" />
                 <ControlledComboBox
@@ -122,13 +122,13 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     props={{
                         defaultValues: {
                             name: crud.editingItem?.name,
-                            description: crud.editingItem?.description,
+                            description: crud.editingItem?.description || undefined,
                             instagram: crud.editingItem?.instagram,
                             images: [],
                         },
                     }}>
                     <InputField name="name" label="Nome da Escola" />
-                    <InputField name="description" label="Descrição" />
+                    <InputField name="description" label="Descrição (Opcional)" />
                     <InputField name="instagram" label="Instagram (Opcional)" />
                     <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
                 </BaseFormModal>

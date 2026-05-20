@@ -1,8 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-
 import { Popover, PopoverContent, PopoverAnchor } from "@/components/ui/popover";
 import { School } from "@/core/domain/School";
 import { Spinner } from "./LoadingSpin";

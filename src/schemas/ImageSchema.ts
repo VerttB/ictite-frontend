@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { MAX_IMAGE_SIZE, ACCEPTED_IMAGE_TYPE } from "@/core/constants/Image";
+import { MAX_IMAGE_SIZE, isAcceptedImageFile } from "@/core/constants/Image";
 export const ImageSchema = z
     .any()
     .transform<File[]>((files) => Array.from(files ?? []))
@@ -8,6 +8,6 @@ export const ImageSchema = z
     .refine((arr) => arr.length <= 5, "Máximo de 5 imagens") // opcional
     .refine((arr) => arr.every((f) => f.size <= MAX_IMAGE_SIZE), "Máx 5MB")
     .refine(
-        (arr) => arr.every((f) => ACCEPTED_IMAGE_TYPE.includes(f.type)),
+        (arr) => arr.every(isAcceptedImageFile),
         "Formato inválido"
     );

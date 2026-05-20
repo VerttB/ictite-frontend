@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ACCEPTED_IMAGE_TYPE, MAX_IMAGE_SIZE } from "../constants/Image";
+import { isAcceptedImageFile, MAX_IMAGE_SIZE } from "../constants/Image";
 
 export const ImageSchema = z.object({
   id: z.uuid(),
@@ -15,7 +15,7 @@ export const ImageCreateSchema = z
     .refine((arr) => arr.length <= 5, "Máximo de 5 imagens") // opcional
     .refine((arr) => arr.every((f) => f.size <= MAX_IMAGE_SIZE), "Máx 5MB")
     .refine(
-        (arr) => arr.every((f) => ACCEPTED_IMAGE_TYPE.includes(f.type)),
+        (arr) => arr.every(isAcceptedImageFile),
         "Formato inválido"
     );
 
@@ -25,6 +25,6 @@ export const OptionalImageCreateSchema = z
     .refine((arr) => arr.length <= 5, "Máximo de 5 imagens")
     .refine((arr) => arr.every((f) => f.size <= MAX_IMAGE_SIZE), "Máx 5MB")
     .refine(
-        (arr) => arr.every((f) => ACCEPTED_IMAGE_TYPE.includes(f.type)),
+        (arr) => arr.every(isAcceptedImageFile),
         "Formato inválido"
     );

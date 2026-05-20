@@ -24,6 +24,7 @@ interface ControlledComboBoxProps {
     isMulti?: boolean;
     options: SimpleIdName[] | string[] | number[];
     className?: string;
+    truncateLabels?: boolean;
 }
 
 export const ControlledComboBox = ({
@@ -32,6 +33,7 @@ export const ControlledComboBox = ({
     options,
     className = "",
     isMulti = false,
+    truncateLabels = false,
 }: ControlledComboBoxProps) => {
     const {
         control,
@@ -69,7 +71,7 @@ export const ControlledComboBox = ({
                 control={control}
                 render={({ field }) => {
                     const rhfValue = field.value;
-                    const displayValue = useMemo(() => {
+                    const displayValue = (() => {
                         if (isMulti) {
                             const arr = Array.isArray(rhfValue) ? rhfValue : [];
                             return arr.map(
@@ -92,7 +94,7 @@ export const ControlledComboBox = ({
                                 }
                             );
                         }
-                    }, [rhfValue, isMulti, normalizedOptions]);
+                    })();
 
                     return (
                         <Combobox
@@ -101,7 +103,7 @@ export const ControlledComboBox = ({
                             value={displayValue}
                             multiple={isMulti}
                             inputValue={searchValue}
-                            onInputValueChange={(arg1: any, arg2: any) => {
+                            onInputValueChange={(arg1: unknown, arg2: unknown) => {
                                 const text =
                                     typeof arg1 === "string"
                                         ? arg1
@@ -110,7 +112,7 @@ export const ControlledComboBox = ({
                                           : "";
                                 setSearchValue(text);
                             }}
-                            onValueChange={(val: any) => {
+                            onValueChange={(val: OptionType | OptionType[] | null) => {
                                 setSearchValue("");
 
                                 if (!val) {
@@ -119,10 +121,12 @@ export const ControlledComboBox = ({
                                 }
 
                                 if (isMulti) {
-                                    const ids = val.map((item: any) => item.value);
+                                    const ids = Array.isArray(val)
+                                        ? val.map((item) => item.value)
+                                        : [];
                                     field.onChange(ids);
                                 } else {
-                                    field.onChange(val.value);
+                                    field.onChange(Array.isArray(val) ? null : val.value);
                                 }
                             }}>
                             {isMulti ? (
@@ -134,9 +138,25 @@ export const ControlledComboBox = ({
                                             <>
                                                 {values.map((value) => (
                                                     <ComboboxChip
-                                                        className="text-font-primary"
+                                                        className={`text-font-primary ${
+                                                            truncateLabels
+                                                                ? "max-w-64 overflow-hidden"
+                                                                : ""
+                                                        }`}
+                                                        title={
+                                                            truncateLabels
+                                                                ? value.label
+                                                                : undefined
+                                                        }
                                                         key={value.value}>
-                                                        {value.label}
+                                                        <span
+                                                            className={
+                                                                truncateLabels
+                                                                    ? "truncate"
+                                                                    : undefined
+                                                            }>
+                                                            {value.label}
+                                                        </span>
                                                     </ComboboxChip>
                                                 ))}
                                                 <ComboboxChipsInput
@@ -164,9 +184,21 @@ export const ControlledComboBox = ({
                                         {filteredOptions.map((opt) => (
                                             <ComboboxItem
                                                 key={opt.value}
+                                                title={
+                                                    truncateLabels
+                                                        ? opt.label
+                                                        : undefined
+                                                }
                                                 value={opt}
                                                 onPointerDown={(e) => e.preventDefault()}>
-                                                {opt.label}
+                                                <span
+                                                    className={
+                                                        truncateLabels
+                                                            ? "block max-w-[24rem] truncate"
+                                                            : undefined
+                                                    }>
+                                                    {opt.label}
+                                                </span>
                                             </ComboboxItem>
                                         ))}
                                     </ComboboxList>

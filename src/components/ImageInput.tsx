@@ -4,7 +4,12 @@ import { forwardRef, useEffect, useId, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
 import { ImageUpIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { MAX_IMAGE_SIZE, ACCEPTED_IMAGE_TYPE } from "@/core/constants/Image";
+import {
+    ACCEPTED_IMAGE_FORMAT_LABEL,
+    ACCEPTED_IMAGE_INPUT_TYPES,
+    MAX_IMAGE_SIZE,
+    isAcceptedImageFile,
+} from "@/core/constants/Image";
 
 type OmitValue = Omit<React.InputHTMLAttributes<HTMLInputElement>, "value" | "onChange">;
 
@@ -35,7 +40,7 @@ export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputPro
             if (files.length === 0) return;
 
             const validFiles = files.filter((file) => {
-                const validType = ACCEPTED_IMAGE_TYPE.includes(file.type);
+                const validType = isAcceptedImageFile(file);
                 const validSize = file.size <= MAX_IMAGE_SIZE;
                 return validType && validSize;
             });
@@ -71,7 +76,7 @@ export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputPro
                     <input
                         id={inputId}
                         type="file"
-                        accept={ACCEPTED_IMAGE_TYPE.join(",")}
+                        accept={ACCEPTED_IMAGE_INPUT_TYPES}
                         className="hidden"
                         onChange={handleSelectFile}
                         multiple={multiple}
@@ -119,7 +124,7 @@ export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputPro
                                 Clique para selecionar
                             </p>
                             <p className="text-muted-foreground text-xs">
-                                Máximo 5MB • JPG/PNG/WEBP
+                                Máximo 5MB • {ACCEPTED_IMAGE_FORMAT_LABEL}
                             </p>
                         </div>
                     )}

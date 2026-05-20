@@ -111,6 +111,7 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                     name="projects_ids"
                     label="Projetos (Opcional)"
                     isMulti={true}
+                    truncateLabels={true}
                     options={projects?.items || []}
                 />
             </BaseFormModal>
@@ -161,6 +162,7 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                         name="projects_ids"
                         label="Projetos (Opcional)"
                         isMulti={true}
+                        truncateLabels={true}
                         options={projects?.items || []}
                     />
                 </BaseFormModal>

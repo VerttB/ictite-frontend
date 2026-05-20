@@ -13,7 +13,7 @@ export const SchoolSchema = z.object({
     name: z.string().min(1, "Nome obrigatório"),
     city: z.string(),
     cep: z.string().min(8, "CEP obrigatório"),
-    description: z.string().min(1, "Descrição obrigatória"),
+    description: z.string().nullish(),
     instagram: z.string().optional(),
     clubs: SimpleIdNameSchema.array(),
     images: ImageSchema.array(),
