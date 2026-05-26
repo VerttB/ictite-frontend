@@ -44,14 +44,14 @@ export const ScienceClubStatisticsAllSchema = z.object({
     total_clubes: z.number(),
     total_alunos: z.number(),
     total_professores: z.number(),
-    total_coordenadores: z.number(),
+    total_facilitadores: z.number(),
     total_projetos: z.number(),
 });
 
 export const ScienceClubStatisticsSchema = z.object({
     total_alunos: z.number(),
     total_professores: z.number(),
-    total_coordenadores: z.number(),
+    total_facilitadores: z.number(),
     total_projetos: z.number(),
 });
 

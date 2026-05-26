@@ -63,7 +63,7 @@ export const ProjectResearchersSchema = z.record(z.string(), ResearcherSchema.ar
 export const ProjectStatisticSchema = z.object({
     total_alunos: z.number().int().nonnegative(),
     total_professores: z.number().int().nonnegative(),
-    total_coordenadores: z.number().int().nonnegative(),
+    total_facilitadores: z.number().int().nonnegative(),
 });
 export type Project = z.infer<typeof ProjectSchema>;
 export type ProjectCreate = z.infer<typeof ProjectCreateSchema>;

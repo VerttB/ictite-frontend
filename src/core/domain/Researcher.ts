@@ -51,7 +51,7 @@ export const ResearcherSearchParamsSchema = z
 export const ResearcherByTypeSchema = z.object({
     aluno: ResearcherSchema.array(),
     professor: ResearcherSchema.array(),
-    coordenador: ResearcherSchema.array(),
+    facilitador: ResearcherSchema.array(),
 });
 
 const ResearcherSimccSchema = z.object({

@@ -117,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         <div className="flex gap-2">
                             <Handshake />
                             <span>
-                                Coordenadores: {projectStatistics.total_coordenadores}
+                                Facilitadores: {projectStatistics.total_facilitadores}
                             </span>
                         </div>
                     </div>

@@ -67,15 +67,15 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                             )}
                         </div>
 
-                        {/* COORDENADORES */}
+                        {/* FACILITADORES */}
                         <div className="flex flex-col gap-2 border-b pb-4">
-                            <h2 className="text-xl font-semibold">Coordenador</h2>
-                            {pesquisador?.coordenador?.length ? (
+                            <h2 className="text-xl font-semibold">Facilitador</h2>
+                            {pesquisador?.facilitador?.length ? (
                                 <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                                    {pesquisador?.coordenador.map((coordenador) => (
+                                    {pesquisador?.facilitador.map((facilitador) => (
                                         <CardPesquisador
-                                            key={coordenador.id}
-                                            researcher={coordenador}
+                                            key={facilitador.id}
+                                            researcher={facilitador}
                                         />
                                     ))}
                                 </div>
@@ -83,7 +83,7 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
                                 <div>
                                     <CardNaoEncontrado
                                         icon={HeartHandshake}
-                                        text="Nenhum coordenador cadastrado neste projeto."
+                                        text="Nenhum facilitador cadastrado neste projeto."
                                     />
                                 </div>
                             )}

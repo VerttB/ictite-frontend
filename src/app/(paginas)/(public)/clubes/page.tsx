@@ -75,8 +75,8 @@ export default function Clubes() {
             Icon: BookOpenText,
         },
         {
-            titulo: "Coordenadores",
-            valor: clubeCienciaStats?.total_coordenadores ?? 0,
+            titulo: "Facilitadores",
+            valor: clubeCienciaStats?.total_facilitadores ?? 0,
             Icon: HeartHandshake,
         },
         {

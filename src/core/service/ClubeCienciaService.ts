@@ -36,7 +36,7 @@ export const getClubeCienciaResearchers = async (
     const data = await apiClient.get<ResearcherByType>(
         `/clubes-ciencia/${id}/researchers`
     );
-    return data || { professor: [], aluno: [], coordenador: [] };
+    return data || { professor: [], aluno: [], facilitador: [] };
 };
 
 // |=======| GET TODOS OS PROJETOS DE UM CLUBE DE CIÊNCIAS |=======|
@@ -52,7 +52,7 @@ export const getClubeCienciaStats = async (
     return (
         (await apiClient.get(`/clubes-ciencia/${id}/statistics`)) || {
             total_alunos: 0,
-            total_coordenadores: 0,
+            total_facilitadores: 0,
             total_professores: 0,
             total_projetos: 0,
         }
@@ -69,7 +69,7 @@ export const getClubesCienciaStats = async (): Promise<ScienceClubStatisticsAll>
         data || {
             total_clubes: 0,
             total_alunos: 0,
-            total_coordenadores: 0,
+            total_facilitadores: 0,
             total_professores: 0,
             total_projetos: 0,
         }

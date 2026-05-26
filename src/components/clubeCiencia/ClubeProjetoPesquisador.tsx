@@ -88,22 +88,22 @@ export default function ClubeProjetoPesquisador({
                     )}
                 </div>
 
-                {/* COORDENADORES */}
+                {/* FACILITADORES */}
                 <div className="flex flex-col gap-2 border-b pb-4">
-                    <h2 className="text-xl font-semibold">Coordenador</h2>
-                    {Array.isArray(pesquisador.coordenador) &&
-                    pesquisador.coordenador.length > 0 ? (
+                    <h2 className="text-xl font-semibold">Facilitador</h2>
+                    {Array.isArray(pesquisador.facilitador) &&
+                    pesquisador.facilitador.length > 0 ? (
                         <div className="grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4">
-                            {pesquisador.coordenador.map((coordenador) => (
+                            {pesquisador.facilitador.map((facilitador) => (
                                 <CardPesquisador
-                                    key={coordenador.id}
-                                    researcher={coordenador}
+                                    key={facilitador.id}
+                                    researcher={facilitador}
                                 />
                             ))}
                         </div>
                     ) : (
                         <div>
-                            <CardNaoEncontrado icon={HeartHandshake} text="Nenhum Coordenador cadastrado neste clube."/>
+                            <CardNaoEncontrado icon={HeartHandshake} text="Nenhum Facilitador cadastrado neste clube."/>
                         </div>
                     )}
                 </div>

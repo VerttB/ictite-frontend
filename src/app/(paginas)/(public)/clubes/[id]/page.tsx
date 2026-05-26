@@ -59,8 +59,8 @@ export default async function OneClubeCiencia({
             Icon: BookOpenText,
         },
         {
-            titulo: "Coordenadores",
-            valor: statistics.total_coordenadores,
+            titulo: "Facilitadores",
+            valor: statistics.total_facilitadores,
             Icon: HeartHandshake,
         },
         {
