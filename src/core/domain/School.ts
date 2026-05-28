@@ -29,13 +29,18 @@ const CepSchema = z
         return val.length === 8;
     }, "CEP inválido");
 
+const OptionalCepSchema = z.preprocess(
+    (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
+    CepSchema.optional()
+);
+
 export const SchoolCreateSchema = SchoolSchema.pick({
     name: true,
     description: true,
     instagram: true,
 }).and(
     z.object({
-        cep: CepSchema,
+        cep: OptionalCepSchema,
 
         images: OptionalImageCreateSchema,
         identity_territory_id: z.uuid().optional(),
@@ -46,7 +51,7 @@ export const SchoolUpdateSchema = z.object({
     name: z.string().min(1, "Nome obrigatório").optional(),
     description: z.string().optional(),
     instagram: z.string().optional(),
-    cep: CepSchema.optional(),
+    cep: OptionalCepSchema,
     identity_territory_id: z.uuid().nullish(),
     images: OptionalImageCreateSchema.optional(),
 });

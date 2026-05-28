@@ -129,7 +129,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                 props={{ defaultValues: { images: [] } }}>
                 <InputField name="name" label="Nome da Escola" />
                 <InputField name="description" label="Descrição (Opcional)" />
-                <InputField name="cep" label="CEP" mask={mask.cep} />
+                <InputField name="cep" label="CEP (Opcional)" mask={mask.cep} />
                 <InputField name="instagram" label="Instagram (Opcional)" />
                 <ControlledComboBox
                     name="identity_territory_id"
@@ -162,7 +162,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     }}>
                     <InputField name="name" label="Nome da Escola" />
                     <InputField name="description" label="Descrição (Opcional)" />
-                    <InputField name="cep" label="CEP" mask={mask.cep} />
+                    <InputField name="cep" label="CEP (Opcional)" mask={mask.cep} />
                     <InputField name="instagram" label="Instagram (Opcional)" />
                     <ControlledComboBox
                         name="identity_territory_id"
