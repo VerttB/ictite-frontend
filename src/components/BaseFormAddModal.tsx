@@ -20,7 +20,7 @@ interface BaseFormModalProps<T extends z.ZodType<FieldValues, FieldValues>, TCon
     title: string;
     schema: T;
     props?: Omit<UseFormProps<z.input<T>, TContext, z.output<T>>, "resolver">;
-    onSubmit: (data: z.infer<T>) => Promise<void>;
+    onSubmit: (data: z.infer<T>) => Promise<void | boolean>;
     children: ReactNode;
 }
 
@@ -48,9 +48,29 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
     } = methods;
 
     const handleManualSubmit = async (data: z.infer<T>) => {
-        await onSubmit(data);
-        reset();
-        onClose();
+        try {
+            const success = await onSubmit(data);
+            if (success === false) return;
+            reset();
+            onClose();
+        } catch (error) {
+            toast.error(
+                error instanceof Error ? error.message : "Erro ao salvar os dados.",
+                {
+                    position: "top-center",
+                    duration: 5000,
+                    closeButton: true,
+                }
+            );
+        }
+    };
+
+    const handleInvalidSubmit = () => {
+        toast.error("Corrija os campos destacados antes de salvar.", {
+            position: "top-center",
+            duration: 5000,
+            closeButton: true,
+        });
     };
 
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +108,10 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
                     <TabsContent value="manual">
                         <FormProvider {...methods}>
                             <form
-                                onSubmit={handleSubmit(handleManualSubmit)}
+                                onSubmit={handleSubmit(
+                                    handleManualSubmit,
+                                    handleInvalidSubmit
+                                )}
                                 className="mt-2 space-y-4">
                                 {children}
 

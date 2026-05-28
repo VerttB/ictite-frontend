@@ -16,7 +16,7 @@ import {
     LucideIcon,
     BookOpen,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -29,13 +29,16 @@ import InfoBar from "@/components/InfoBar";
 import useSWR from "swr";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
 import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
+import { toast } from "sonner";
 
 export default function Escolas() {
 
     const [_search, setSearch] = useState("");
 
     const { data, isLoading, error } = useSWR("schools", () => getSchools());
-    const { data: territorios } = useSWR("territorios", () => getTerritories());
+    const { data: territorios, error: territoriesError } = useSWR("territorios", () =>
+        getTerritories()
+    );
     // FETCH DAS ESCOLAS
 
     // |=======| BUSCA INICIAL + BUSCA POR NOME |=======|
@@ -68,6 +71,24 @@ export default function Escolas() {
     const handleSearch = (query: string) => {
         setSearch(query);
     };
+
+    useEffect(() => {
+        if (!error) return;
+        toast.error(
+            error instanceof Error ? error.message : "Erro ao carregar escolas",
+            { position: "top-center", duration: 5000, closeButton: true }
+        );
+    }, [error]);
+
+    useEffect(() => {
+        if (!territoriesError) return;
+        toast.error(
+            territoriesError instanceof Error
+                ? territoriesError.message
+                : "Erro ao carregar territórios",
+            { position: "top-center", duration: 5000, closeButton: true }
+        );
+    }, [territoriesError]);
 
     if (error) {
         return (

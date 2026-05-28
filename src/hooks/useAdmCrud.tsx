@@ -10,6 +10,13 @@ interface UseAdmCrudProps<T, CreateDTO, UpdateDTO> {
     deleteFn?: (id: string) => Promise<void>;
 }
 
+const getErrorMessage = (error: unknown, fallback: string) => {
+    if (error instanceof ApiError || error instanceof Error) {
+        return error.message;
+    }
+    return fallback;
+};
+
 export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
     mutate,
     createFn,
@@ -36,16 +43,15 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
                 duration: 5000,
                 closeButton: true,
             });
+            return true;
         } catch (error) {
-            let message = "Erro ao criar o item.";
-            if (error instanceof ApiError) {
-                message = error.message;
-            }
+            const message = getErrorMessage(error, "Erro ao criar o item.");
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
                 closeButton: true,
             });
+            return false;
         }
     };
 
@@ -65,14 +71,15 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
                 duration: 5000,
                 closeButton: true,
             });
+            return true;
         } catch (error) {
-            const message =
-                error instanceof ApiError ? error.message : "Erro ao atualizar o item.";
+            const message = getErrorMessage(error, "Erro ao atualizar o item.");
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
                 closeButton: true,
             });
+            return false;
         }
     };
 
@@ -90,8 +97,7 @@ export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
                 closeButton: true,
             });
         } catch (error) {
-            const message =
-                error instanceof ApiError ? error.message : "Erro ao deletar o item.";
+            const message = getErrorMessage(error, "Erro ao deletar o item.");
             toast.error(message, {
                 position: "top-center",
                 duration: 5000,
