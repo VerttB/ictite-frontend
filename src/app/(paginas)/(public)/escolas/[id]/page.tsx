@@ -5,6 +5,7 @@ import {
     BrainCircuit,
     Instagram,
     LucideIcon,
+    Map,
     MapPin,
     PanelsTopLeft,
     Printer,
@@ -13,7 +14,6 @@ import { Downloader } from "@/components/Downloader";
 import { SchoolStatistics } from "@/core/domain/School";
 import InfoBar from "@/components/InfoBar";
 import Link from "next/link";
-import { Route } from "next";
 import { ImageDisplay } from "@/components/ui/ImageDisplay";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -75,6 +75,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                                 </div>
                             </Link>
                         )}
+                    </div>
+                    <div className="text-font-primary/60 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
+                        <div className="flex items-center gap-2">
+                            <Printer className="text-font-primary/60 size-4" />
+                            <span>CEP: {school.cep || "Não informado"}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Map className="text-font-primary/60 size-4" />
+                            <span>
+                                Território:{" "}
+                                {school.identityTerritory?.name || "Não definido"}
+                            </span>
+                        </div>
                     </div>
                     <div className="bg-foreground rounded-md border p-4">
                         <p className="text-font-primary/50 text-lg font-semibold">
