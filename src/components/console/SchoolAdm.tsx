@@ -2,6 +2,7 @@
 
 import { Section } from "../Section";
 import useSWR from "swr";
+import { useEffect } from "react";
 import {
     createSchool,
     deleteSchool,
@@ -31,24 +32,51 @@ import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
 import { ControlledComboBox } from "../forms-input/ControlledComboBox";
+import { toast } from "sonner";
 interface SchoolAdmProps {
     params: SchoolSearchParams;
 }
 
 export const SchoolAdm = ({ params }: SchoolAdmProps) => {
-    const { data: paginatedSchools, mutate } = useSWR(
+    const {
+        data: paginatedSchools,
+        mutate,
+        error: schoolsError,
+    } = useSWR(
         ["schools", params],
         ([, p]) => getSchools(p),
         {
             keepPreviousData: true,
         }
     );
-    const { data: territories } = useSWR("territories", () => getTerritories());
+    const { data: territories, error: territoriesError } = useSWR("territories", () =>
+        getTerritories()
+    );
     const crud = useAdmCrud<School, SchoolCreate, SchoolUpdate>({
         mutate,
         deleteFn: deleteSchool,
     });
     const { applyFilters, changePage } = useUrlPagination();
+
+    useEffect(() => {
+        if (!schoolsError) return;
+        toast.error(
+            schoolsError instanceof Error
+                ? schoolsError.message
+                : "Erro ao carregar escolas",
+            { position: "top-center", duration: 5000, closeButton: true }
+        );
+    }, [schoolsError]);
+
+    useEffect(() => {
+        if (!territoriesError) return;
+        toast.error(
+            territoriesError instanceof Error
+                ? territoriesError.message
+                : "Erro ao carregar territórios",
+            { position: "top-center", duration: 5000, closeButton: true }
+        );
+    }, [territoriesError]);
 
     const handleCreate = async (data: SchoolCreate) => {
         const { id } = await createSchool(data);
@@ -124,12 +152,23 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                             name: crud.editingItem?.name,
                             description: crud.editingItem?.description || undefined,
                             instagram: crud.editingItem?.instagram,
+                            cep: crud.editingItem?.cep
+                                ? mask.cep(crud.editingItem.cep)
+                                : undefined,
+                            identity_territory_id:
+                                crud.editingItem?.identityTerritory?.id || undefined,
                             images: [],
                         },
                     }}>
                     <InputField name="name" label="Nome da Escola" />
                     <InputField name="description" label="Descrição (Opcional)" />
+                    <InputField name="cep" label="CEP" mask={mask.cep} />
                     <InputField name="instagram" label="Instagram (Opcional)" />
+                    <ControlledComboBox
+                        name="identity_territory_id"
+                        label="Território de Identidade (Opcional)"
+                        options={territories || []}
+                    />
                     <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
                 </BaseFormModal>
             )}

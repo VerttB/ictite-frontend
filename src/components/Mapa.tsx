@@ -10,6 +10,7 @@ import { getSchoolGeoData } from "@/core/service/SchoolService";
 import { useSidebar } from "./ui/sidebar";
 import { useTheme } from "@/core/providers/ThemeProvider";
 import { Route } from "next";
+import { toast } from "sonner";
 
 type LngLatBoundsLike =
     | [[number, number], [number, number]]
@@ -21,7 +22,11 @@ export default function MapaRender() {
     const router = useRouter();
     const mapRef = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
-    const { data: geojsonData, isLoading: loading } = useSWR(
+    const {
+        data: geojsonData,
+        isLoading: loading,
+        error,
+    } = useSWR(
         "schools-geo-data",
         getSchoolGeoData,
         {
@@ -46,6 +51,14 @@ export default function MapaRender() {
         ],
         []
     );
+
+    useEffect(() => {
+        if (!error) return;
+        toast.error(
+            error instanceof Error ? error.message : "Erro ao carregar dados do mapa",
+            { position: "top-center", duration: 5000, closeButton: true }
+        );
+    }, [error]);
 
     useEffect(() => {
         if (
