@@ -167,11 +167,19 @@ export default function MapaRender() {
             });
 
             map.on("click", "unclustered-point", (e) => {
-                setPopoverOpen(false);
                 const feat = e.features?.[0];
                 if (!feat || feat.geometry.type !== "Point") return;
-                if (feat.properties && feat.properties.id)
-                    router.push(`escolas/${feat.properties.id}` as Route);
+
+                const coordinates = feat.geometry.coordinates.slice() as [
+                    number,
+                    number,
+                ];
+                const position = map.project(coordinates);
+                const school = feat.properties as School;
+
+                setPopoverContent([school]);
+                setPopoverPosition(position);
+                setPopoverOpen(true);
             });
 
             map.on("move", () => setPopoverOpen(false));
