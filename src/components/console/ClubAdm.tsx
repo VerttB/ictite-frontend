@@ -44,6 +44,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
     const { applyFilters, changePage } = useUrlPagination();
 
     const { data: escolas } = useSWR("escolas", () => getSchools());
+    const { data: coordinators } = useSWR("coordinators", () => getCoordinators());
 
     const crud = useAdmCrud<ScienceClub, ScienceClubCreate, ScienceClubUpdate>({
         mutate,
@@ -115,6 +116,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     name="school_id"
                     label="Escola"
                     options={escolas?.items || []}
+                />
+                <ControlledComboBox
+                    className="w-full"
+                    name="coordinators_ids"
+                    label="Coordenadores (Opcional)"
+                    isMulti={true}
+                    truncateLabels={true}
+                    options={coordinators?.items || []}
                 />
                 <InputField name="instagram" label="Instagram (Opcional)" />
 
