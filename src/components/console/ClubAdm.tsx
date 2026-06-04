@@ -28,7 +28,7 @@ import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
 import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { ControlledComboBox } from "../forms-input/ControlledComboBox";
-
+import { getCoordinators } from "@/core/service/CoordinatorService";
 interface ClubAdmProps {
     params?: ScienceClubSearchParams;
 }
@@ -127,7 +127,11 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                 />
                 <InputField name="instagram" label="Instagram (Opcional)" />
 
-                <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
+                <ControlledImageUpload
+                    name="images"
+                    label="Imagens (Opcional)"
+                    multiple={true}
+                />
             </BaseFormModal>
 
             {crud.editingItem && (
@@ -149,7 +153,11 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     <InputField name="name" label="Nome do Clube de Ciências" />
                     <InputField name="description" label="Descrição (Opcional)" />
                     <InputField name="instagram" label="Instagram (Opcional)" />
-                    <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
+                    <ControlledImageUpload
+                        name="images"
+                        label="Imagens (Opcional)"
+                        multiple={true}
+                    />
                 </BaseFormModal>
             )}
 
