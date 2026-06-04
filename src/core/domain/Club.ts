@@ -24,6 +24,7 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
         school_id: z.uuid(),
         images: OptionalImageCreateSchema,
         instagram: z.string().optional(),
+        coordinators_ids: z.string().uuid().array().optional(),
     })
 );
 
