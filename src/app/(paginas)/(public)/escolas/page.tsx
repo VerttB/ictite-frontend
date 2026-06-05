@@ -15,6 +15,8 @@ import {
     BrainCircuit,
     LucideIcon,
     BookOpen,
+    Trash,
+    Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -34,8 +36,14 @@ import { toast } from "sonner";
 export default function Escolas() {
 
     const [_search, setSearch] = useState("");
+    const [territory, setTerritory] = useState("");
 
-    const { data, isLoading, error } = useSWR(["schools", _search], () => getSchools({name: _search, page: 1}));
+    const { data, isLoading, error } = useSWR(["schools", _search, territory],
+        () => getSchools({
+            name: _search,
+            identity_territory_id: territory !== "" ? territory : undefined, 
+            page: 1
+        }));
     const { data: territorios, error: territoriesError } = useSWR("territorios", () =>
         getTerritories()
     );
@@ -70,7 +78,11 @@ export default function Escolas() {
 
     const handleSearch = (query: string) => {
         setSearch(query);
-        console.log(query);
+    };
+
+    const handleTerritory = (query: string) => {
+        setTerritory(query);
+        console.log(territory);
     };
 
     useEffect(() => {
@@ -140,13 +152,25 @@ export default function Escolas() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel>Território Identidade</DropdownMenuLabel>
+                        <DropdownMenuLabel className="flex justify-between items-center">
+                            <span>Território Identidade</span>
+                            {territory !== "" && (
+                                <div
+                                    onClick={() => handleTerritory("")}
+                                    className="flex gap-1 items-center cursor-pointer text-xs text-muted-foreground">
+                                    <Trash2 size={15} />
+                                    Limpar
+                                </div>
+                            )}
+                        </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {territorios?.length && territorios.length > 0 ? (
                             territorios.map((territorio) => (
                                 <DropdownMenuItem
                                     key={territorio.id}
-                                    className="hover:bg-primary cursor-pointer transition-all hover:text-white">
+                                    className="hover:bg-primary cursor-pointer transition-all hover:text-white"
+                                    onClick={() => handleTerritory(territorio.id)}
+                                >
                                     {territorio.name}
                                 </DropdownMenuItem>
                             ))

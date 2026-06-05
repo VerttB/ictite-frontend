@@ -58,8 +58,9 @@ export const SchoolUpdateSchema = z.object({
 
 export const SchoolSearchParamsSchema = z
     .object({
-        name: SearchParamParser.string,
-        city: SearchParamParser.string,
+        name                 : SearchParamParser.string,
+        city                 : SearchParamParser.string,
+        identity_territory_id: SearchParamParser.string,
     })
     .and(PaginationSearchParamsSchema);
 
