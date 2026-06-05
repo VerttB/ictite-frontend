@@ -56,23 +56,13 @@ export default function Escolas() {
     stats = [
         {
             titulo: "Escolas",
-            valor: 0,
+            valor: data?.total ?? 0,
             Icon: SchoolIcon,
         },
         {
             titulo: "Territórios",
-            valor: 0,
+            valor: territorios?.length ?? 0,
             Icon: MapIcon,
-        },
-        {
-            titulo: "Clubes por escola",
-            valor: 0,
-            Icon: BrainCircuit,
-        },
-        {
-            titulo: "Pesquisadores por escola",
-            valor: 0,
-            Icon: BookOpen,
         },
     ];
 
