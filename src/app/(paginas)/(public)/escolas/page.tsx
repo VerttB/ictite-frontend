@@ -35,7 +35,7 @@ export default function Escolas() {
 
     const [_search, setSearch] = useState("");
 
-    const { data, isLoading, error } = useSWR("schools", () => getSchools());
+    const { data, isLoading, error } = useSWR(["schools", _search], () => getSchools({name: _search, page: 1}));
     const { data: territorios, error: territoriesError } = useSWR("territorios", () =>
         getTerritories()
     );
@@ -70,6 +70,7 @@ export default function Escolas() {
 
     const handleSearch = (query: string) => {
         setSearch(query);
+        console.log(query);
     };
 
     useEffect(() => {
