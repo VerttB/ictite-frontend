@@ -81,7 +81,7 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                                         />
                                     </Link>
                                 ) : (
-                                    <h1 className="text-3xl">{researcher?.name}</h1>
+                                    <h2 className="text-3xl">{researcher?.name}</h2>
                                 )}
                             </DrawerTitle>
                             <div className="flex w-full gap-4">
