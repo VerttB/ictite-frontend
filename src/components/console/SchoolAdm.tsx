@@ -1,190 +1,172 @@
 "use client";
 
-import { Section } from "../Section";
-import useSWR from "swr";
-import { useEffect } from "react";
+import React from "react";
+import { EntityConsole } from "./generic/EntityConsole";
+import { SchoolForm } from "./forms/SchoolForm";
 import {
     createSchool,
     deleteSchool,
     getSchools,
     updateSchool,
     uploadSchoolImage,
+    getSchoolClubs,
+    getSchoolEquiments,
 } from "@/core/service/SchoolService";
-import { School2 } from "lucide-react";
-import { BaseFormModal } from "../BaseFormAddModal";
-import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
-import { InputField } from "../forms-input/InputField";
-import { mask } from "@/lib/maskBuilder";
-import { SchoolSearchParams } from "@/core/domain/School";
 import {
+    School,
     SchoolCreate,
     SchoolCreateSchema,
+    SchoolFormSchema,
+    SchoolUpdateFormSchema,
     SchoolUpdate,
-    SchoolUpdateSchema,
-    School,
+    SchoolSearchParams,
 } from "@/core/domain/School";
-import { SearchAndFilter } from "../SearchAndFilter";
-import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
-import { Pagination } from "../Pagination";
+import { AdminEntityConfig, ChildTabConfig } from "@/core/interface/AdminEntity";
+import { NestedEntityList } from "./generic/NestedEntityList";
+import {
+    getClubesCiencia,
+    createClubeCiencias,
+    updateClubeCiencias,
+    deleteClubeCiencias,
+    uploadClubImage,
+} from "@/core/service/ClubeCienciaService";
+import {
+    getEquipaments,
+    createEquipament,
+    updateEquipament,
+    deleteEquipament,
+    uploadEquipamentImages,
+} from "@/core/service/EquipamentoService";
+import { ScienceClubFormSchema, ScienceClubUpdateFormSchema } from "@/core/domain/Club";
+import { EquipmentFormSchema, EquipmentUpdateFormSchema } from "@/core/domain/Equipment";
+import { ClubForm } from "./forms/ClubForm";
+import { EquipmentForm } from "./forms/EquipmentForm";
 
-import { useUrlPagination } from "@/hooks/useUrlPagination";
-import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
-import { useAdmCrud } from "@/hooks/useAdmCrud";
-import { getTerritories } from "@/core/service/IdentityTerritoryService";
-import { ControlledComboBox } from "../forms-input/ControlledComboBox";
-import { toast } from "sonner";
 interface SchoolAdmProps {
     params: SchoolSearchParams;
 }
 
 export const SchoolAdm = ({ params }: SchoolAdmProps) => {
-    const {
-        data: paginatedSchools,
-        mutate,
-        error: schoolsError,
-    } = useSWR(
-        ["schools", params],
-        ([, p]) => getSchools(p),
-        {
-            keepPreviousData: true,
-        }
-    );
-    const { data: territories, error: territoriesError } = useSWR("territories", () =>
-        getTerritories()
-    );
-    const crud = useAdmCrud<School, SchoolCreate, SchoolUpdate>({
-        mutate,
-        deleteFn: deleteSchool,
-    });
-    const { applyFilters, changePage } = useUrlPagination();
-
-    useEffect(() => {
-        if (!schoolsError) return;
-        toast.error(
-            schoolsError instanceof Error
-                ? schoolsError.message
-                : "Erro ao carregar escolas",
-            { position: "top-center", duration: 5000, closeButton: true }
-        );
-    }, [schoolsError]);
-
-    useEffect(() => {
-        if (!territoriesError) return;
-        toast.error(
-            territoriesError instanceof Error
-                ? territoriesError.message
-                : "Erro ao carregar territórios",
-            { position: "top-center", duration: 5000, closeButton: true }
-        );
-    }, [territoriesError]);
-
-    const handleCreate = async (data: SchoolCreate) => {
-        const { id } = await createSchool(data);
-        if (data.images?.length) {
-            const form = new FormData();
-            data.images.forEach((img) => form.append("images", img));
-            await uploadSchoolImage(id, form);
-        }
-    };
-    const handleUpdate = async (id: string, data: SchoolUpdate) => {
-        const { images, ...schoolData } = data;
-        await updateSchool(id, schoolData);
+    const handleCreate = async (data: any): Promise<School> => {
+        const { images, ...payload } = data;
+        const school = await createSchool(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img) => form.append("images", img));
-            await uploadSchoolImage(id, form, true);
+            images.forEach((img: any) => form.append("images", img));
+            await uploadSchoolImage(school.id, form);
         }
+        return school;
     };
 
-    const filters: ItemFilterConfig<SchoolSearchParams>[] = [
-        { label: "Nome", type: "text", value: "", key: "name" },
-        { label: "Cidade", type: "text", value: "", key: "city" },
+    const handleUpdate = async (id: string, data: any): Promise<School> => {
+        const { images, ...payload } = data;
+        const school = await updateSchool(id, payload);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((img: any) => form.append("images", img));
+            await uploadSchoolImage(id, form, true);
+        }
+        return school;
+    };
+
+    const childTabs: ChildTabConfig[] = [
+        {
+            id: "clubes",
+            label: "Clubes de Ciências",
+            entityName: "clubes",
+            parentIdField: "school_id",
+            renderList: (parentId) => (
+                <NestedEntityList
+                    title="Clubes de Ciências"
+                    entityName="clubes"
+                    parentId={parentId}
+                    parentIdField="school_id"
+                    fetchFn={(params) => getSchoolClubs(params.school_id)}
+                    createFn={async (data: any) => {
+                        const { images, ...payload } = data;
+                        const club = await createClubeCiencias(payload);
+                        if (images?.length) {
+                            const form = new FormData();
+                            images.forEach((img: any) => form.append("images", img));
+                            await uploadClubImage(club.id, form);
+                        }
+                        return club;
+                    }}
+                    updateFn={async (id, data: any) => {
+                        const { images, ...payload } = data;
+                        const club = await updateClubeCiencias(id, payload);
+                        if (images?.length) {
+                            const form = new FormData();
+                            images.forEach((img: any) => form.append("images", img));
+                            await uploadClubImage(id, form, true);
+                        }
+                        return club;
+                    }}
+                    deleteFn={deleteClubeCiencias}
+                    schema={ScienceClubFormSchema}
+                    defaultValues={{ images: [] }}
+                    renderFields={(props) => <ClubForm {...props} />}
+                />
+            ),
+        },
+        {
+            id: "equipamentos",
+            label: "Equipamentos",
+            entityName: "equipment",
+            parentIdField: "school_id",
+            renderList: (parentId) => (
+                <NestedEntityList
+                    title="Equipamentos"
+                    entityName="equipment"
+                    parentId={parentId}
+                    parentIdField="school_id"
+                    fetchFn={(params) => getSchoolEquiments(params.school_id)}
+                    createFn={async (data: any) => {
+                        const { images, ...payload } = data;
+                        const eq = await createEquipament(payload);
+                        if (images?.length) {
+                            const form = new FormData();
+                            images.forEach((img: any) => form.append("images", img));
+                            await uploadEquipamentImages(eq.id, form);
+                        }
+                        return eq;
+                    }}
+                    updateFn={async (id, data: any) => {
+                        const { images, ...payload } = data;
+                        const eq = await updateEquipament(id, payload);
+                        if (images?.length) {
+                            const form = new FormData();
+                            images.forEach((img: any) => form.append("images", img));
+                            await uploadEquipamentImages(id, form, true);
+                        }
+                        return eq;
+                    }}
+                    deleteFn={deleteEquipament}
+                    schema={EquipmentFormSchema}
+                    defaultValues={{ images: [] }}
+                    renderFields={(props) => <EquipmentForm {...props} />}
+                />
+            ),
+        },
     ];
-    if (!paginatedSchools) return null;
 
-    return (
-        <div className="flex h-full w-full flex-col">
-            <Section<School>
-                title="Escolas"
-                items={paginatedSchools.items}
-                icon={<School2 />}
-                onAdd={crud.ui.openCreate}
-                onUpdate={crud.ui.openEdit}
-                onDelete={crud.ui.openDelete}>
-                <SearchAndFilter
-                    currentParams={params}
-                    applyParams={applyFilters}
-                    mainSearchKey="name"
-                    mainSearchPlaceholder="Buscar escolas"
-                    filters={filters}
-                />
-            </Section>
+    const config: AdminEntityConfig<
+        School,
+        any,
+        any,
+        typeof SchoolFormSchema
+    > = {
+        title: "Escolas",
+        entityName: "schools",
+        schema: SchoolFormSchema,
+        defaultValues: { images: [] },
+        renderForm: () => <SchoolForm />,
+        childTabs,
+        fetchFn: getSchools,
+        createFn: handleCreate,
+        updateFn: handleUpdate,
+        deleteFn: deleteSchool,
+    };
 
-            <BaseFormModal<typeof SchoolCreateSchema, SchoolCreate>
-                open={crud.isCreating}
-                onClose={crud.ui.closeCreate}
-                onSubmit={(data) => crud.actions.create(data, handleCreate)}
-                title="Adicionar Escola"
-                schema={SchoolCreateSchema}
-                props={{ defaultValues: { images: [] } }}>
-                <InputField name="name" label="Nome da Escola" />
-                <InputField name="description" label="Descrição (Opcional)" />
-                <InputField name="cep" label="CEP (Opcional)" mask={mask.cep} />
-                <InputField name="instagram" label="Instagram (Opcional)" />
-                <ControlledComboBox
-                    name="identity_territory_id"
-                    label="Território de Identidade (Opcional)"
-                    options={territories || []}
-                />
-                <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
-            </BaseFormModal>
-
-            {crud.editingItem && (
-                <BaseFormModal<typeof SchoolUpdateSchema, SchoolUpdate>
-                    open={!!crud.editingItem}
-                    key={crud.editingItem.id}
-                    onClose={crud.ui.closeEdit}
-                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
-                    title="Atualizar Escola"
-                    schema={SchoolUpdateSchema}
-                    props={{
-                        defaultValues: {
-                            name: crud.editingItem?.name,
-                            description: crud.editingItem?.description || undefined,
-                            instagram: crud.editingItem?.instagram,
-                            cep: crud.editingItem?.cep
-                                ? mask.cep(crud.editingItem.cep)
-                                : undefined,
-                            identity_territory_id:
-                                crud.editingItem?.identityTerritory?.id || undefined,
-                            images: [],
-                        },
-                    }}>
-                    <InputField name="name" label="Nome da Escola" />
-                    <InputField name="description" label="Descrição (Opcional)" />
-                    <InputField name="cep" label="CEP (Opcional)" mask={mask.cep} />
-                    <InputField name="instagram" label="Instagram (Opcional)" />
-                    <ControlledComboBox
-                        name="identity_territory_id"
-                        label="Território de Identidade (Opcional)"
-                        options={territories || []}
-                    />
-                    <ControlledImageUpload name="images" label="Imagens (Opcional)" multiple={true} />
-                </BaseFormModal>
-            )}
-
-            <DeleteConfirmationModal
-                open={!!crud.deletingItem}
-                onClose={crud.ui.closeDelete}
-                onConfirm={crud.actions.delete}
-                title={`Deseja excluir ${crud.deletingItem?.name}?`}
-                description="Essa ação não pode ser desfeita."
-            />
-            <Pagination
-                currentPage={paginatedSchools.page}
-                onLoadMore={changePage}
-                totalPages={paginatedSchools.total_pages}
-            />
-        </div>
-    );
+    return <EntityConsole config={config} params={params} />;
 };

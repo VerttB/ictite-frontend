@@ -1,139 +1,68 @@
 "use client";
 
-import { Section } from "../Section";
-import useSWR from "swr";
-import { getSchools } from "@/core/service/SchoolService";
+import React from "react";
+import { EntityConsole } from "./generic/EntityConsole";
+import { EquipmentForm } from "./forms/EquipmentForm";
 import {
-    createEquipament,
     getEquipaments,
-    uploadEquipamentImages,
+    createEquipament,
     updateEquipament,
     deleteEquipament,
+    uploadEquipamentImages,
 } from "@/core/service/EquipamentoService";
-import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
-import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../forms-input/InputField";
-import { ControlledSelect } from "../forms-input/ControlledSelect";
-import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import {
     Equipment,
-    EquipmentCreateSchema,
     EquipmentCreate,
+    EquipmentFormSchema,
     EquipmentUpdate,
-    EquipmentUpdateSchema,
     EquipmentSearchParams,
 } from "@/core/domain/Equipment";
-import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
-import { useAdmCrud } from "@/hooks/useAdmCrud";
-import { ControlledComboBox } from "../forms-input/ControlledComboBox";
-interface EquipmentAdmProps {
-    params?: EquipmentSearchParams;
+import { AdminEntityConfig } from "@/core/interface/AdminEntity";
+
+interface EquipamentAdmProps {
+    params: EquipmentSearchParams;
 }
-export const EquipmentAdm = ({ params }: EquipmentAdmProps) => {
-    const { data: equipamentos, mutate } = useSWR(["equipaments", params], ([, p]) =>
-        getEquipaments(p)
-    );
 
-    const { data: escolas } = useSWR("escolas", () => getSchools());
-    const { data: equipamentosTipos } = useSWR("equipaments-types", () =>
-        getEquipamentTypes()
-    );
-
-    const crud = useAdmCrud<Equipment, EquipmentCreate, EquipmentUpdate>({
-        mutate,
-        deleteFn: deleteEquipament,
-    });
-
-    const handleCreate = async (data: EquipmentCreate) => {
-        const { id } = await createEquipament(data);
-        if (data.images?.length) {
-            const form = new FormData();
-            data.images.forEach((file) => form.append("images", file));
-            await uploadEquipamentImages(id, form);
-        }
-    };
-
-    const handleUpdate = async (id: string, data: EquipmentUpdate) => {
-        const { images, ...equipmentData } = data;
-        await updateEquipament(id, equipmentData);
+export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
+    const handleCreate = async (data: any): Promise<Equipment> => {
+        const { images, ...payload } = data;
+        const eq = await createEquipament(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((file) => form.append("images", file));
-            await uploadEquipamentImages(id, form, true);
+            images.forEach((img: any) => form.append("images", img));
+            await uploadEquipamentImages(eq.id, form);
         }
+        return eq;
     };
 
-    if (!equipamentos || !equipamentosTipos || !escolas) return null;
-    return (
-        <>
-            <Section<Equipment>
-                title="Equipamentos"
-                items={equipamentos.items}
-                icon={null}
-                onAdd={crud.ui.openCreate}
-                onUpdate={crud.ui.openEdit}
-                onDelete={crud.ui.openDelete}
-            />
+    const handleUpdate = async (id: string, data: any): Promise<Equipment> => {
+        const { images, ...payload } = data;
+        const eq = await updateEquipament(id, payload);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((img: any) => form.append("images", img));
+            await uploadEquipamentImages(id, form, true);
+        }
+        return eq;
+    };
 
-            <BaseFormModal<typeof EquipmentCreateSchema, EquipmentCreate>
-                open={crud.isCreating}
-                onClose={crud.ui.closeCreate}
-                onSubmit={(data) => crud.actions.create(data, handleCreate)}
-                title="Adicionar Equipamento"
-                schema={EquipmentCreateSchema}
-                props={{ defaultValues: { images: [] } }}>
-                <InputField name="name" label="Nome do Equipamento" />
-                <ControlledSelect
-                    name="type_equipment_id"
-                    label="Tipo de Equipamento"
-                    options={equipamentosTipos}
-                />
-                <ControlledComboBox
-                    name="school_id"
-                    label="Escola"
-                    options={escolas.items}
-                />
-                <ControlledImageUpload name="images" label="Imagem (Opcional)" />
-            </BaseFormModal>
+    const config: AdminEntityConfig<
+        Equipment,
+        any,
+        any,
+        typeof EquipmentFormSchema
+    > = {
+        title: "Equipamentos",
+        entityName: "equipment",
+        schema: EquipmentFormSchema,
+        defaultValues: { images: [] },
+        renderForm: (props) => <EquipmentForm {...props} />,
+        childTabs: [],
+        fetchFn: getEquipaments,
+        createFn: handleCreate,
+        updateFn: handleUpdate,
+        deleteFn: deleteEquipament,
+    };
 
-            {crud.editingItem && (
-                <BaseFormModal<typeof EquipmentUpdateSchema, EquipmentUpdate>
-                    open={!!crud.editingItem}
-                    key={crud.editingItem.id}
-                    onClose={crud.ui.closeEdit}
-                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
-                    title="Atualizar Equipamento"
-                    schema={EquipmentUpdateSchema}
-                    props={{
-                        defaultValues: {
-                            name: crud.editingItem?.name,
-                            type_equipment_id: crud.editingItem?.type_equipment?.id,
-                            school_id: crud.editingItem?.school?.id,
-                            images: [],
-                        },
-                    }}>
-                    <InputField name="name" label="Nome do Equipamento" />
-                    <ControlledSelect
-                        name="type_equipment_id"
-                        label="Tipo de Equipamento"
-                        options={equipamentosTipos}
-                    />
-                    <ControlledComboBox
-                        name="school_id"
-                        label="Escola"
-                        options={escolas.items}
-                    />
-                    <ControlledImageUpload name="images" label="Imagem (Opcional)" />
-                </BaseFormModal>
-            )}
-
-            <DeleteConfirmationModal
-                open={!!crud.deletingItem}
-                onClose={crud.ui.closeDelete}
-                onConfirm={crud.actions.delete}
-                title={`Deseja excluir ${crud.deletingItem?.name}?`}
-                description="Essa ação não pode ser desfeita."
-            />
-        </>
-    );
+    return <EntityConsole config={config} params={params} />;
 };

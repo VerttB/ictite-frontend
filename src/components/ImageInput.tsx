@@ -18,21 +18,36 @@ interface ImageUploadInputProps extends OmitValue {
     errors?: string;
     className?: string;
     multiple?: boolean;
-    value?: File[];
-    onChange?: (files: File[]) => void;
+    value?: any[];
+    onChange?: (files: any[]) => void;
 }
 
 export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputProps>(
     ({ label, errors, className, value = [], multiple, onChange, ...rest }, ref) => {
         const generatedId = useId();
         const inputId = rest.id || generatedId;
-        const previews = useMemo(
-            () => value.map((file) => URL.createObjectURL(file)),
-            [value]
-        );
+        
+        const previews = useMemo(() => {
+            return value.map((item) => {
+                if (item instanceof File) {
+                    return { src: URL.createObjectURL(item), isFile: true };
+                } else if (typeof item === "string") {
+                    return { src: item, isFile: false };
+                } else if (item && typeof item === "object" && item.url) {
+                    return { src: item.url, isFile: false };
+                }
+                return { src: "", isFile: false };
+            });
+        }, [value]);
 
         useEffect(() => {
-            return () => previews.forEach((url) => URL.revokeObjectURL(url));
+            return () => {
+                previews.forEach((p) => {
+                    if (p.isFile && p.src) {
+                        URL.revokeObjectURL(p.src);
+                    }
+                });
+            };
         }, [previews]);
 
         const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +105,7 @@ export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputPro
                                 "flex w-full flex-wrap gap-2",
                                 multiple ? "" : "justify-center"
                             )}>
-                            {previews.map((src, i) => (
+                            {previews.map((preview, i) => (
                                 <div
                                     key={i}
                                     className={twMerge(
@@ -98,7 +113,7 @@ export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputPro
                                         multiple ? "" : "mx-auto size-44"
                                     )}>
                                     <Image
-                                        src={src}
+                                        src={preview.src}
                                         alt="Preview"
                                         fill
                                         className="object-cover"

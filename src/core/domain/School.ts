@@ -41,9 +41,13 @@ export const SchoolCreateSchema = SchoolSchema.pick({
 }).and(
     z.object({
         cep: OptionalCepSchema,
-
-        images: OptionalImageCreateSchema,
         identity_territory_id: z.uuid().optional(),
+    })
+);
+
+export const SchoolFormSchema = SchoolCreateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema,
     })
 );
 
@@ -53,8 +57,13 @@ export const SchoolUpdateSchema = z.object({
     instagram: z.string().optional(),
     cep: OptionalCepSchema,
     identity_territory_id: z.uuid().nullish(),
-    images: OptionalImageCreateSchema.optional(),
 });
+
+export const SchoolUpdateFormSchema = SchoolUpdateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema.optional(),
+    })
+);
 
 export const SchoolSearchParamsSchema = z
     .object({

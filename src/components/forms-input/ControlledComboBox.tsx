@@ -25,6 +25,8 @@ interface ControlledComboBoxProps {
     options: SimpleIdName[] | string[] | number[];
     className?: string;
     truncateLabels?: boolean;
+    disabled?: boolean;
+    lockedValue?: OptionType | null;
 }
 
 export const ControlledComboBox = ({
@@ -34,6 +36,8 @@ export const ControlledComboBox = ({
     className = "",
     isMulti = false,
     truncateLabels = false,
+    disabled = false,
+    lockedValue = null,
 }: ControlledComboBoxProps) => {
     const {
         control,
@@ -41,7 +45,7 @@ export const ControlledComboBox = ({
     } = useFormContext();
     const anchor = useComboboxAnchor();
 
-    const [searchValue, setSearchValue] = useState("");
+    const [searchValue, setSearchValue] = useState(lockedValue ? lockedValue.label : "");
 
     const normalizedOptions: OptionType[] = useMemo(() => {
         return options.map((opt) => {
@@ -85,6 +89,9 @@ export const ControlledComboBox = ({
                             );
                         } else {
                             if (!rhfValue) return null;
+                            if (lockedValue) {
+                                return lockedValue;
+                            } // Se tiver valor travado, usar ele como display
                             return (
                                 normalizedOptions.find(
                                     (o) => o.value === rhfValue?.toString()
@@ -131,7 +138,7 @@ export const ControlledComboBox = ({
                             }}>
                             {isMulti ? (
                                 <ComboboxChips
-                                    className="text-font-primary border-slate-300"
+                                    className="text-font-primary border-slate-300 text-lg"
                                     ref={anchor}>
                                     <ComboboxValue>
                                         {(values: typeof normalizedOptions) => (
@@ -161,6 +168,7 @@ export const ControlledComboBox = ({
                                                 ))}
                                                 <ComboboxChipsInput
                                                     placeholder={`Selecione ${label.toLowerCase()}`}
+                                                    disabled={disabled}
                                                 />
                                             </>
                                         )}
@@ -169,6 +177,7 @@ export const ControlledComboBox = ({
                             ) : (
                                 <ComboboxInput
                                     placeholder={`Selecione ${label.toLowerCase()}`}
+                                    disabled={disabled}
                                 />
                             )}
 
@@ -185,9 +194,7 @@ export const ControlledComboBox = ({
                                             <ComboboxItem
                                                 key={opt.value}
                                                 title={
-                                                    truncateLabels
-                                                        ? opt.label
-                                                        : undefined
+                                                    truncateLabels ? opt.label : undefined
                                                 }
                                                 value={opt}
                                                 onPointerDown={(e) => e.preventDefault()}>
