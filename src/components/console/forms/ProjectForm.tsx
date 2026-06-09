@@ -32,6 +32,14 @@ export const ProjectForm = ({ parentId, parentIdField }: AdminFormProps) => {
                     label="Clube de Ciência"
                     options={clubOptions}
                     disabled={isClubLocked}
+                    lockedValue={
+                        isClubLocked && parentClub
+                            ? {
+                                  value: parentClub.id.toString(),
+                                  label: parentClub.name,
+                              }
+                            : null
+                    }
                 />
             </div>
             <ControlledImageUpload

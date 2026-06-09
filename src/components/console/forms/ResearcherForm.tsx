@@ -48,6 +48,14 @@ export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
                 truncateLabels={true}
                 options={projectOptions}
                 disabled={isProjectLocked}
+                lockedValue={
+                    isProjectLocked && parentProject
+                        ? {
+                              value: parentProject.id.toString(),
+                              label: parentProject.name,
+                          }
+                        : null
+                }
             />
         </>
     );

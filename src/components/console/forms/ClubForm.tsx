@@ -30,6 +30,14 @@ export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
                     label="Escola"
                     options={schoolOptions}
                     disabled={isSchoolLocked}
+                    lockedValue={
+                        isSchoolLocked && parentSchool
+                            ? {
+                                  value: parentSchool.id.toString(),
+                                  label: parentSchool.name,
+                              }
+                            : null
+                    }
                 />
                 <InputField name="instagram" label="Instagram (Opcional)" />
             </div>

@@ -166,24 +166,26 @@ export const EntityConsole = <
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList
-                    className="grid w-full"
-                    style={{
-                        gridTemplateColumns: `repeat(${crud.editingItem && config.childTabs?.length ? config.childTabs.length + 1 : 1}, 1fr)`,
-                    }}>
-                    <TabsTrigger className="text-font-primary" value="dados-gerais">
-                        Dados Gerais
-                    </TabsTrigger>
-                    {crud.editingItem &&
-                        config.childTabs?.map((tab) => (
-                            <TabsTrigger
-                                className="text-font-primary"
-                                key={tab.id}
-                                value={tab.id}>
-                                {tab.label}
-                            </TabsTrigger>
-                        ))}
-                </TabsList>
+                <div className="overflow-x-auto pb-2">
+                    <TabsList
+                        className="inline-flex w-full min-w-max md:grid"
+                        style={{
+                            gridTemplateColumns: `repeat(${crud.editingItem && config.childTabs?.length ? config.childTabs.length + 1 : 1}, 1fr)`,
+                        }}>
+                        <TabsTrigger className="text-font-primary px-4" value="dados-gerais">
+                            Dados Gerais
+                        </TabsTrigger>
+                        {crud.editingItem &&
+                            config.childTabs?.map((tab) => (
+                                <TabsTrigger
+                                    className="text-font-primary px-4"
+                                    key={tab.id}
+                                    value={tab.id}>
+                                    {tab.label}
+                                </TabsTrigger>
+                            ))}
+                    </TabsList>
+                </div>
 
                 <TabsContent value="dados-gerais" className="mt-6">
                     <Card>

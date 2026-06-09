@@ -90,7 +90,7 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
 
     return (
         <Dialog open={open} onOpenChange={(s) => !s && onClose()}>
-            <DialogContent className="max-w-md">
+            <DialogContent className={cn("max-w-md", className)}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>

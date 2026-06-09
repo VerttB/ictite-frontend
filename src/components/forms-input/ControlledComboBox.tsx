@@ -77,6 +77,7 @@ export const ControlledComboBox = ({
                     const rhfValue = field.value;
                     const displayValue = (() => {
                         if (isMulti) {
+                            if (lockedValue) return [lockedValue];
                             const arr = Array.isArray(rhfValue) ? rhfValue : [];
                             return arr.map(
                                 (id) =>
