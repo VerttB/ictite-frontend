@@ -3,11 +3,16 @@ import { ImageSchema, OptionalImageCreateSchema } from "./Image";
 import { SearchParamParser } from "../../schemas/Common";
 import { MaterialType } from "../constants/materialType";
 
+const OptionalUrlSchema = z.preprocess(
+    (val) => (val === "" ? undefined : val),
+    z.string().url("Link inválido").optional()
+);
+
 export const MaterialSchema = z.object({
     id: z.uuid(),
     name: z.string().min(1, "Nome obrigatório"),
     description: z.string().min(1, "Descrição obrigatória"),
-    link: z.string().url("Link inválido").optional(),
+    link: OptionalUrlSchema,
     type: z.enum(Object.values(MaterialType), "Tipo inválido"),
     images: ImageSchema.array(),
 });
@@ -30,7 +35,7 @@ export const MaterialSearchParamsSchema = z.object({
 export const MaterialUpdateSchema = z.object({
     name: z.string().min(1, "Nome obrigatório").optional(),
     description: z.string().optional(),
-    link: z.string().url("Link inválido").optional(),
+    link: OptionalUrlSchema,
     type: z.enum(Object.values(MaterialType), "Tipo inválido").optional(),
 });
 

@@ -29,8 +29,14 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         const magazine = await createRevista(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadMagazineImage(magazine.id, form);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadMagazineImage(magazine.id, form);
+            }
         }
         return magazine;
     };
@@ -40,8 +46,14 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         const magazine = await updateRevista(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadMagazineImage(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadMagazineImage(id, form, true);
+            }
         }
         return magazine;
     };
@@ -50,6 +62,8 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         title: "Revistas",
         entityName: "magazines",
         schema: MagazineFormSchema,
+        createSchema: MagazineFormSchema,
+        updateSchema: MagazineUpdateFormSchema,
         defaultValues: { images: [] },
         renderForm: () => <MagazineForm />,
         childTabs: [],

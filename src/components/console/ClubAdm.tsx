@@ -41,8 +41,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         const club = await createClubeCiencias(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadClubImage(club.id, form);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadClubImage(club.id, form);
+            }
         }
         return club;
     };
@@ -52,8 +58,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         const club = await updateClubeCiencias(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadClubImage(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadClubImage(id, form, true);
+            }
         }
         return club;
     };
@@ -76,8 +88,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         const project = await createProject(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => form.append("images", img));
-                            await uploadProjectImages(project.id, form);
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadProjectImages(project.id, form);
+                            }
                         }
                         return project;
                     }}
@@ -86,13 +104,21 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         const project = await updateProject(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((file: any) => form.append("images", file));
-                            await uploadProjectImages(id, form, true);
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadProjectImages(id, form, true);
+                            }
                         }
                         return project;
                     }}
                     deleteFn={deleteProject}
                     schema={ProjectFormSchema}
+                    createSchema={ProjectFormSchema}
+                    updateSchema={ProjectUpdateFormSchema}
                     defaultValues={{ images: [] }}
                     mapToFormValues={(item: any) => ({
                         ...item,
@@ -109,6 +135,8 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
             title: "Clubes de Ciências",
             entityName: "clubes",
             schema: ScienceClubFormSchema,
+            createSchema: ScienceClubFormSchema,
+            updateSchema: ScienceClubUpdateFormSchema,
             defaultValues: { images: [] },
             mapToFormValues: (item: any) => ({
                 ...item,

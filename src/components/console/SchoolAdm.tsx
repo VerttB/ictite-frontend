@@ -52,8 +52,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         const school = await createSchool(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadSchoolImage(school.id, form);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadSchoolImage(school.id, form);
+            }
         }
         return school;
     };
@@ -63,8 +69,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         const school = await updateSchool(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadSchoolImage(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadSchoolImage(id, form, true);
+            }
         }
         return school;
     };
@@ -87,8 +99,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const club = await createClubeCiencias(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => form.append("images", img));
-                            await uploadClubImage(club.id, form);
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadClubImage(club.id, form);
+                            }
                         }
                         return club;
                     }}
@@ -97,13 +115,21 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const club = await updateClubeCiencias(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => form.append("images", img));
-                            await uploadClubImage(id, form, true);
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadClubImage(id, form, true);
+                            }
                         }
                         return club;
                     }}
                     deleteFn={deleteClubeCiencias}
                     schema={ScienceClubFormSchema}
+                    createSchema={ScienceClubFormSchema}
+                    updateSchema={ScienceClubUpdateFormSchema}
                     defaultValues={{ images: [] }}
                     mapToFormValues={(item: any) => ({
                         ...item,
@@ -131,8 +157,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const eq = await createEquipament(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => form.append("images", img));
-                            await uploadEquipamentImages(eq.id, form);
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadEquipamentImages(eq.id, form);
+                            }
                         }
                         return eq;
                     }}
@@ -141,13 +173,21 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const eq = await updateEquipament(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => form.append("images", img));
-                            await uploadEquipamentImages(id, form, true);
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadEquipamentImages(id, form, true);
+                            }
                         }
                         return eq;
                     }}
                     deleteFn={deleteEquipament}
                     schema={EquipmentFormSchema}
+                    createSchema={EquipmentFormSchema}
+                    updateSchema={EquipmentUpdateFormSchema}
                     defaultValues={{ images: [] }}
                     mapToFormValues={(item: any) => ({
                         ...item,
@@ -169,6 +209,8 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         title: "Escolas",
         entityName: "schools",
         schema: SchoolFormSchema,
+        createSchema: SchoolFormSchema,
+        updateSchema: SchoolUpdateFormSchema,
         defaultValues: { images: [] },
         mapToFormValues: (item: any) => ({
             ...item,

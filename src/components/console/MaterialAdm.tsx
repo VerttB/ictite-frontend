@@ -15,8 +15,8 @@ import {
     MaterialCreate,
     MaterialFormSchema,
     MaterialUpdate,
+    MaterialUpdateFormSchema,
     MaterialSearchParams,
-    MaterialCreateSchema,
 } from "@/core/domain/Material";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 
@@ -30,8 +30,14 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         const material = await createMaterial(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadMaterialImages(material.id, form);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadMaterialImages(material.id, form);
+            }
         }
         return material;
     };
@@ -41,8 +47,15 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         const material = await updateMaterial(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadMaterialImages(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            
+            if (form.has("images")) {
+                await uploadMaterialImages(id, form, true);
+            }
         }
         return material;
     };
@@ -51,11 +64,13 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         Material,
         MaterialCreate,
         MaterialUpdate,
-        typeof MaterialCreateSchema
+        typeof MaterialFormSchema
     > = {
         title: "Materiais",
         entityName: "materials",
-        schema: MaterialCreateSchema,
+        schema: MaterialFormSchema,
+        createSchema: MaterialFormSchema,
+        updateSchema: MaterialUpdateFormSchema,
         defaultValues: { images: [] },
         renderForm: () => <MaterialForm />,
         childTabs: [],

@@ -30,8 +30,14 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         const project = await createProject(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadProjectImages(project.id, form);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadProjectImages(project.id, form);
+            }
         }
         return project;
     };
@@ -41,8 +47,14 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         const project = await updateProject(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadProjectImages(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadProjectImages(id, form, true);
+            }
         }
         return project;
     };
@@ -51,6 +63,8 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         title: "Projetos",
         entityName: "projects",
         schema: ProjectFormSchema,
+        createSchema: ProjectFormSchema,
+        updateSchema: ProjectUpdateFormSchema,
         defaultValues: { images: [] },
         mapToFormValues: (item: any) => ({
             ...item,

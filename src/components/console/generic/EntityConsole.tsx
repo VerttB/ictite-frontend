@@ -67,8 +67,15 @@ export const EntityConsole = <
         return base;
     }, [config.title, config.entityName, view, crud.editingItem]);
 
+    const activeSchema = useMemo(() => {
+        if (crud.editingItem) {
+            return config.updateSchema || config.schema;
+        }
+        return config.createSchema || config.schema;
+    }, [crud.editingItem, config.schema, config.createSchema, config.updateSchema]);
+
     const methods = useForm({
-        resolver: zodResolver(config.schema),
+        resolver: zodResolver(activeSchema),
         defaultValues: config.defaultValues as any,
     });
 
@@ -104,16 +111,22 @@ export const EntityConsole = <
         if (crud.editingItem) {
             success = await crud.actions.update(data);
         } else {
-            const result = await config.createFn(data as any);
-            if (result && result.id) {
-                await mutate();
-                if ((result as any)._redirectToList) {
-                    onBackToList();
-                } else {
-                    crud.ui.openEdit(result); // Switch to edit mode after creation to unlock tabs
+            // Manual call to config.createFn because we need the result object (with ID)
+            // to potentially switch to edit mode or redirect.
+            try {
+                const result = await config.createFn(data as any);
+                if (result && result.id) {
+                    await mutate();
+                    if ((result as any)._redirectToList) {
+                        onBackToList();
+                    } else {
+                        crud.ui.openEdit(result); // Switch to edit mode after creation to unlock tabs
+                    }
+                    success = true;
+                    toast.success("Item criado com sucesso!");
                 }
-                success = true;
-                toast.success("Item criado com sucesso!");
+            } catch (error: any) {
+                toast.error(error.message || "Erro ao criar o item.");
             }
         }
         return success;

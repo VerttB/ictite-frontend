@@ -29,8 +29,14 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         const eq = await createEquipament(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadEquipamentImages(eq.id, form);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadEquipamentImages(eq.id, form);
+            }
         }
         return eq;
     };
@@ -40,8 +46,14 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         const eq = await updateEquipament(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => form.append("images", img));
-            await uploadEquipamentImages(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadEquipamentImages(id, form, true);
+            }
         }
         return eq;
     };
@@ -55,6 +67,8 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         title: "Equipamentos",
         entityName: "equipment",
         schema: EquipmentFormSchema,
+        createSchema: EquipmentFormSchema,
+        updateSchema: EquipmentUpdateFormSchema,
         defaultValues: { images: [] },
         mapToFormValues: (item: any) => ({
             ...item,
