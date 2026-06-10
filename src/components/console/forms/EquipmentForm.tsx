@@ -12,7 +12,7 @@ import { AdminFormProps } from "@/core/interface/AdminEntity";
 export const EquipmentForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isSchoolLocked = parentIdField === "school_id" && !!parentId;
 
-    const { data: schools } = useSWR("schools-all", () => getSchools());
+    const { data: schools } = useSWR("schools-all", () => getSchools({ size: 0 }));
     const { data: types } = useSWR("types-equipment-all", () => getEquipamentTypes());
     const { data: parentSchool } = useSWR(
         isSchoolLocked ? ["school", parentId] : null,

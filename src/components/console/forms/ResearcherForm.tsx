@@ -14,7 +14,7 @@ import { AdminFormProps } from "@/core/interface/AdminEntity";
 export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isProjectLocked = parentIdField === "projects_ids" && !!parentId;
 
-    const { data: projects } = useSWR("projects-all", () => getProjects());
+    const { data: projects } = useSWR("projects-all", () => getProjects({ size: 0 }));
     const { data: parentProject } = useSWR(isProjectLocked ? ["project", parentId] : null, () => getProjectById(parentId!));
 
     const projectOptions = isProjectLocked && parentProject ? [parentProject] : (projects?.items || []);

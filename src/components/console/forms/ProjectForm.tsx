@@ -13,7 +13,7 @@ import { mask } from "@/lib/maskBuilder";
 export const ProjectForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isClubLocked = parentIdField === "clube_ciencia_id" && !!parentId;
 
-    const { data: clubes } = useSWR("clubes-all", () => getClubesCiencia());
+    const { data: clubes } = useSWR("clubes-all", () => getClubesCiencia({ size: 0 }));
     const { data: parentClub } = useSWR(isClubLocked ? ["club", parentId] : null, () => getClubeCienciaById(parentId!));
 
     const clubOptions = isClubLocked && parentClub ? [parentClub] : (clubes?.items || []);

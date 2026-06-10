@@ -13,8 +13,8 @@ import { AdminFormProps } from "@/core/interface/AdminEntity";
 export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isSchoolLocked = parentIdField === "school_id" && !!parentId;
 
-    const { data: schools } = useSWR("schools-all", () => getSchools());
-    const { data: coordinators } = useSWR("coordinators-all", () => getCoordinators());
+    const { data: schools } = useSWR("schools-all", () => getSchools({ size: 0 }));
+    const { data: coordinators } = useSWR("coordinators-all", () => getCoordinators({ size: 0 }));
     const { data: parentSchool } = useSWR(isSchoolLocked ? ["school", parentId] : null, () => getSchoolById(parentId!));
 
     const schoolOptions = isSchoolLocked && parentSchool ? [parentSchool] : (schools?.items || []);

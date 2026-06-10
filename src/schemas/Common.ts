@@ -10,13 +10,16 @@ export const SimpleIdNameDescriptionSchema = SimpleIdNameSchema.extend({
 });
 export const SearchParamParser = {
     string: z.string().optional().catch(undefined),
-    page: z.coerce.number().min(1).optional().default(1).catch(1),
+    page: z.coerce.number().min(1).default(1).catch(1).optional(),
     number: z.coerce.number().min(0).optional().catch(undefined),
-    array: z.preprocess((val) => {
-        if (val === undefined || val === null) return undefined;
-        if (Array.isArray(val)) return val;
-        return [val];
-    }, z.array(z.string()).optional().default([])),
+    array: z
+        .preprocess((val) => {
+            if (val === undefined || val === null) return undefined;
+            if (Array.isArray(val)) return val;
+            return [val];
+        }, z.array(z.string()))
+        .optional()
+        .default([]),
 };
 
 export type SimpleIdName = z.infer<typeof SimpleIdNameSchema>;

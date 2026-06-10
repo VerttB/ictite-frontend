@@ -55,8 +55,8 @@ export const deleteProject = async (projectId: string): Promise<void> => {
     await apiClient.delete(`/projects/${projectId}`);
 };
 
-export const addResearcherToProject = async (projectId: string, researcherId: string): Promise<Project> => {
-    return await apiClient.post<Project>(`/projects/${projectId}/researchers`, { researcher_id: researcherId });
+export const addResearchersToProject = async (projectId: string, researcherIds: string[]): Promise<Project> => {
+    return await apiClient.post<Project>(`/projects/${projectId}/researchers`, { researcher_ids: researcherIds });
 };
 
 export const removeResearcherFromProject = async (projectId: string, researcherId: string): Promise<void> => {

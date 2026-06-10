@@ -14,24 +14,22 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
-    getProjectResearchers,
+    getProjects,
+    addResearcherToProject,
     removeResearcherFromProject,
-    addResearchersToProject,
 } from "@/core/service/ProjetoService";
-import { getResearchers } from "@/core/service/PesquisadorService";
+import { getResearcherProjects } from "@/core/service/PesquisadorService";
 import { LoaderCircle, Check, Search } from "lucide-react";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
 
-export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
-    const { data: members, mutate } = useSWR(["project-members", projectId], () =>
-        getProjectResearchers(projectId)
+export const ResearcherProjectsList = ({ researcherId }: { researcherId: string }) => {
+    const { data: projects, mutate } = useSWR(["researcher-projects", researcherId], () =>
+        getResearcherProjects(researcherId)
     );
 
-    const { data: allResearchers } = useSWR("all-researchers", () =>
-        getResearchers({ size: 0 })
-    );
+    const { data: allProjects } = useSWR("all-projects", () => getProjects({ size: 0 }));
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [searchTerm, setSearchValue] = useState("");
@@ -39,44 +37,42 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
 
     const crud = useAdmCrud<any, any, any>({
         mutate: mutate as any,
-        deleteFn: async (researcherId) => {
+        deleteFn: async (projectId) => {
             await removeResearcherFromProject(projectId, researcherId);
         },
     });
 
-    const flattenedMembers = React.useMemo(() => {
-        if (!members) return [];
-        return Object.values(members).flat();
-    }, [members]);
+    const existingProjectIds = React.useMemo(() => {
+        if (!projects) return [];
+        return projects.map((p) => p.id);
+    }, [projects]);
 
-    const existingMemberIds = React.useMemo(() => {
-        return flattenedMembers.map((m) => m.id);
-    }, [flattenedMembers]);
-
-    const filteredResearchers = React.useMemo(() => {
-        if (!allResearchers?.items) return [];
-        return allResearchers.items.filter((r) =>
-            r.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredProjects = React.useMemo(() => {
+        if (!allProjects?.items) return [];
+        return allProjects.items.filter((p) =>
+            p.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
-    }, [allResearchers, searchTerm]);
+    }, [allProjects, searchTerm]);
 
-    const toggleResearcher = (id: string) => {
+    const toggleProject = (id: string) => {
         setSelectedIds((prev) =>
             prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
         );
     };
 
-    const handleSaveMembers = async () => {
+    const handleSaveProjects = async () => {
         if (selectedIds.length === 0) return;
 
         setIsSaving(true);
         try {
-            await addResearchersToProject(projectId, selectedIds);
+            for (const projectId of selectedIds) {
+                await addResearchersToProject(projectId, [researcherId]);
+            }
             await mutate();
-            toast.success(`${selectedIds.length} pesquisadores adicionados com sucesso!`);
+            toast.success(`${selectedIds.length} projetos vinculados com sucesso!`);
             handleClose();
         } catch (error) {
-            toast.error("Erro ao adicionar alguns pesquisadores.");
+            toast.error("Erro ao vincular alguns projetos.");
         } finally {
             setIsSaving(false);
         }
@@ -91,8 +87,8 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
     return (
         <div className="flex flex-col gap-4">
             <Section<any>
-                title="Membros do Projeto"
-                items={flattenedMembers}
+                title="Projetos Vinculados"
+                items={projects || []}
                 onAdd={crud.ui.openCreate}
                 onDelete={(item) => crud.ui.openDelete(item)}
             />
@@ -101,7 +97,7 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                 <DialogContent className="flex max-h-[90vh] flex-col sm:w-640 sm:max-w-7xl">
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold">
-                            Gerenciar Membros do Projeto
+                            Vincular a Projetos
                         </DialogTitle>
                     </DialogHeader>
 
@@ -111,8 +107,8 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                             size={20}
                         />
                         <Input
-                            placeholder="Buscar pesquisadores para adicionar..."
-                            className="h-14 pl-12 text-lg"
+                            placeholder="Buscar projetos pelo nome..."
+                            className="h-14 w-full pl-12 text-lg"
                             value={searchTerm}
                             onChange={(e) => setSearchValue(e.target.value)}
                         />
@@ -120,18 +116,21 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
 
                     <div className="min-h-[500px] flex-1 overflow-y-auto p-2 pr-4">
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {filteredResearchers.map((researcher) => {
-                                const isAlreadyAdded = existingMemberIds.includes(
-                                    researcher.id
+                            {filteredProjects.map((project) => {
+                                const isAlreadyAdded = existingProjectIds.includes(
+                                    project.id
                                 );
-                                const isSelected = selectedIds.includes(researcher.id);
+                                const isSelected = selectedIds.includes(project.id);
+                                const imageUrl =
+                                    project.images && project.images.length > 0
+                                        ? project.images[0].url
+                                        : null;
 
                                 return (
                                     <div
-                                        key={researcher.id}
+                                        key={project.id}
                                         onClick={() =>
-                                            !isAlreadyAdded &&
-                                            toggleResearcher(researcher.id)
+                                            !isAlreadyAdded && toggleProject(project.id)
                                         }
                                         className={`relative flex min-w-[260px] cursor-pointer items-center rounded-2xl border-2 p-5 transition-all ${
                                             isAlreadyAdded
@@ -141,16 +140,16 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                                                   : "hover:border-primary/40 border-gray-200 hover:bg-gray-50 hover:shadow-md"
                                         }`}>
                                         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-md">
-                                            {researcher.image ? (
+                                            {imageUrl ? (
                                                 <Image
-                                                    src={researcher.image}
-                                                    alt={researcher.name}
+                                                    src={imageUrl}
+                                                    alt={project.name}
                                                     fill
                                                     className="object-cover"
                                                 />
                                             ) : (
                                                 <div className="bg-muted text-muted-foreground flex h-full w-full items-center justify-center font-bold">
-                                                    {researcher.name.charAt(0)}
+                                                    {project.name.charAt(0)}
                                                 </div>
                                             )}
                                             {isAlreadyAdded && (
@@ -177,25 +176,25 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                                         <div className="ml-4 flex flex-col overflow-hidden">
                                             <span
                                                 className="text-foreground truncate text-base leading-tight font-semibold"
-                                                title={researcher.name}>
-                                                {researcher.name}
+                                                title={project.name}>
+                                                {project.name}
                                             </span>
                                             <span className="text-muted-foreground mt-1 truncate text-xs font-medium tracking-wider uppercase">
-                                                {researcher.type}
+                                                {project.clube?.name || "Sem Clube"}
                                             </span>
                                             {isAlreadyAdded && (
                                                 <span className="mt-1.5 flex items-center text-[11px] font-bold text-green-600 uppercase">
                                                     <span className="mr-1 h-1.5 w-1.5 rounded-full bg-green-600"></span>
-                                                    Membro Ativo
+                                                    Vinculado
                                                 </span>
                                             )}
                                         </div>
                                     </div>
                                 );
                             })}
-                            {filteredResearchers.length === 0 && (
+                            {filteredProjects.length === 0 && (
                                 <div className="col-span-full py-10 text-center text-gray-500">
-                                    Nenhum pesquisador encontrado.
+                                    Nenhum projeto encontrado.
                                 </div>
                             )}
                         </div>
@@ -209,13 +208,13 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                             Cancelar
                         </Button>
                         <Button
-                            onClick={handleSaveMembers}
+                            onClick={handleSaveProjects}
                             disabled={selectedIds.length === 0 || isSaving}
                             className="min-w-[100px]">
                             {isSaving ? (
                                 <LoaderCircle className="animate-spin" size={18} />
                             ) : (
-                                "Adicionar Selecionados"
+                                "Vincular Selecionados"
                             )}
                         </Button>
                     </DialogFooter>
@@ -226,8 +225,8 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                 open={!!crud.deletingItem}
                 onClose={crud.ui.closeDelete}
                 onConfirm={() => crud.actions.delete()}
-                title={`Remover ${crud.deletingItem?.name} do projeto?`}
-                description="O pesquisador continuará cadastrado no sistema."
+                title={`Desvincular do projeto ${crud.deletingItem?.name}?`}
+                description="O projeto continuará existindo no sistema."
             />
         </div>
     );
