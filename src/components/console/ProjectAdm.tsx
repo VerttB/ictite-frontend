@@ -16,6 +16,7 @@ import {
     ProjectFormSchema,
     ProjectUpdate,
     ProjectSearchParams,
+    ProjectUpdateFormSchema,
 } from "@/core/domain/Project";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 import { ProjectMembersList } from "./ProjectMembersList";

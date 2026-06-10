@@ -112,7 +112,7 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                         />
                         <Input
                             placeholder="Buscar pesquisadores para adicionar..."
-                            className="h-14 pl-12 text-lg"
+                            className="h-14 w-full rounded-md border-1 pl-12 text-lg"
                             value={searchTerm}
                             onChange={(e) => setSearchValue(e.target.value)}
                         />
@@ -176,7 +176,7 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                                         </div>
                                         <div className="ml-4 flex flex-col overflow-hidden">
                                             <span
-                                                className="text-foreground truncate text-base leading-tight font-semibold"
+                                                className="text-font-primary truncate text-base leading-tight font-semibold"
                                                 title={researcher.name}>
                                                 {researcher.name}
                                             </span>
@@ -201,23 +201,25 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
                         </div>
                     </div>
 
-                    <DialogFooter className="mt-4 gap-2 border-t pt-4 sm:gap-0">
+                    <DialogFooter className="mt-4 gap-4 border-t pt-4 sm:gap-0">
                         <div className="mr-auto flex items-center text-sm text-gray-600">
                             {selectedIds.length} selecionado(s)
                         </div>
-                        <Button variant="outline" onClick={handleClose}>
-                            Cancelar
-                        </Button>
-                        <Button
-                            onClick={handleSaveMembers}
-                            disabled={selectedIds.length === 0 || isSaving}
-                            className="min-w-[100px]">
-                            {isSaving ? (
-                                <LoaderCircle className="animate-spin" size={18} />
-                            ) : (
-                                "Adicionar Selecionados"
-                            )}
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" onClick={handleClose}>
+                                Cancelar
+                            </Button>
+                            <Button
+                                onClick={handleSaveMembers}
+                                disabled={selectedIds.length === 0 || isSaving}
+                                className="min-w-[100px]">
+                                {isSaving ? (
+                                    <LoaderCircle className="animate-spin" size={18} />
+                                ) : (
+                                    "Adicionar Selecionados"
+                                )}
+                            </Button>
+                        </div>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

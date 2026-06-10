@@ -16,6 +16,7 @@ import {
     MagazineFormSchema,
     MagazineUpdate,
     MagazineSearchParams,
+    MagazineUpdateFormSchema,
 } from "@/core/domain/Magazine";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 

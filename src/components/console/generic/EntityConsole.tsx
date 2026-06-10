@@ -109,7 +109,21 @@ export const EntityConsole = <
     const handleFormSubmit = async (data: any) => {
         let success = false;
         if (crud.editingItem) {
-            success = await crud.actions.update(data);
+            try {
+                const result = await config.updateFn(crud.editingItem.id, data);
+                if (result) {
+                    await mutate();
+                    // Stay in edit mode with updated data
+                    crud.ui.openEdit(result);
+                    const formValues = config.mapToFormValues ? config.mapToFormValues(result) : result;
+                    reset(formValues as any);
+                    
+                    success = true;
+                    toast.success("Item atualizado com sucesso!");
+                }
+            } catch (error: any) {
+                toast.error(error.message || "Erro ao atualizar o item.");
+            }
         } else {
             // Manual call to config.createFn because we need the result object (with ID)
             // to potentially switch to edit mode or redirect.
@@ -121,6 +135,8 @@ export const EntityConsole = <
                         onBackToList();
                     } else {
                         crud.ui.openEdit(result); // Switch to edit mode after creation to unlock tabs
+                        const formValues = config.mapToFormValues ? config.mapToFormValues(result) : result;
+                        reset(formValues as any);
                     }
                     success = true;
                     toast.success("Item criado com sucesso!");
@@ -173,7 +189,7 @@ export const EntityConsole = <
                     <Breadcrumbs items={breadcrumbs} />
                     <h1 className="text-2xl font-bold">
                         {crud.editingItem
-                            ? `Editar ${config.title}`
+                            ? (crud.editingItem as any).name || `Editar ${config.title}`
                             : `Novo ${config.title}`}
                     </h1>
                 </div>

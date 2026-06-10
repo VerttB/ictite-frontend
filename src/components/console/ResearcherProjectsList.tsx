@@ -15,8 +15,8 @@ import {
 import { Button } from "@/components/ui/button";
 import {
     getProjects,
-    addResearcherToProject,
     removeResearcherFromProject,
+    addResearchersToProject,
 } from "@/core/service/ProjetoService";
 import { getResearcherProjects } from "@/core/service/PesquisadorService";
 import { LoaderCircle, Check, Search } from "lucide-react";
@@ -59,26 +59,26 @@ export const ResearcherProjectsList = ({ researcherId }: { researcherId: string 
             prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
         );
     };
-const handleSaveProjects = async () => {
-    if (selectedIds.length === 0) return;
+    const handleSaveProjects = async () => {
+        if (selectedIds.length === 0) return;
 
-    setIsSaving(true);
-    try {
-        // The backend endpoint f07e6c9e-ab81-460b-b349-9fa47f026464/researchers expects a payload with researcher_ids list
-        await Promise.all(
-            selectedIds.map((projectId) =>
-                addResearchersToProject(projectId, [researcherId])
-            )
-        );
-        await mutate();
-        toast.success(`${selectedIds.length} projetos vinculados com sucesso!`);
-        handleClose();
-    } catch (error) {
-        toast.error("Erro ao vincular alguns projetos.");
-    } finally {
-        setIsSaving(false);
-    }
-};
+        setIsSaving(true);
+        try {
+            // The backend endpoint f07e6c9e-ab81-460b-b349-9fa47f026464/researchers expects a payload with researcher_ids list
+            await Promise.all(
+                selectedIds.map((projectId) =>
+                    addResearchersToProject(projectId, [researcherId])
+                )
+            );
+            await mutate();
+            toast.success(`${selectedIds.length} projetos vinculados com sucesso!`);
+            handleClose();
+        } catch (error) {
+            toast.error("Erro ao vincular alguns projetos.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
     const handleClose = () => {
         setSelectedIds([]);
         setSearchValue("");
@@ -109,7 +109,7 @@ const handleSaveProjects = async () => {
                         />
                         <Input
                             placeholder="Buscar projetos pelo nome..."
-                            className="h-14 w-full pl-12 text-lg"
+                            className="h-14 w-full rounded-md border-1 pl-12 text-lg"
                             value={searchTerm}
                             onChange={(e) => setSearchValue(e.target.value)}
                         />
@@ -176,7 +176,7 @@ const handleSaveProjects = async () => {
                                         </div>
                                         <div className="ml-4 flex flex-col overflow-hidden">
                                             <span
-                                                className="text-foreground truncate text-base leading-tight font-semibold"
+                                                className="text-font-primary truncate text-base leading-tight font-semibold"
                                                 title={project.name}>
                                                 {project.name}
                                             </span>
@@ -205,19 +205,21 @@ const handleSaveProjects = async () => {
                         <div className="mr-auto flex items-center text-sm text-gray-600">
                             {selectedIds.length} selecionado(s)
                         </div>
-                        <Button variant="outline" onClick={handleClose}>
-                            Cancelar
-                        </Button>
-                        <Button
-                            onClick={handleSaveProjects}
-                            disabled={selectedIds.length === 0 || isSaving}
-                            className="min-w-[100px]">
-                            {isSaving ? (
-                                <LoaderCircle className="animate-spin" size={18} />
-                            ) : (
-                                "Vincular Selecionados"
-                            )}
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" onClick={handleClose}>
+                                Cancelar
+                            </Button>
+                            <Button
+                                onClick={handleSaveProjects}
+                                disabled={selectedIds.length === 0 || isSaving}
+                                className="min-w-[100px]">
+                                {isSaving ? (
+                                    <LoaderCircle className="animate-spin" size={18} />
+                                ) : (
+                                    "Vincular Selecionados"
+                                )}
+                            </Button>
+                        </div>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

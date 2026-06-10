@@ -17,6 +17,7 @@ import {
     ScienceClubFormSchema,
     ScienceClubUpdate,
     ScienceClubSearchParams,
+    ScienceClubUpdateFormSchema,
 } from "@/core/domain/Club";
 import { AdminEntityConfig, ChildTabConfig } from "@/core/interface/AdminEntity";
 import { NestedEntityList } from "./generic/NestedEntityList";
@@ -28,7 +29,7 @@ import {
     uploadProjectImages,
     getProjectbyClube,
 } from "@/core/service/ProjetoService";
-import { ProjectFormSchema } from "@/core/domain/Project";
+import { ProjectFormSchema, ProjectUpdateFormSchema } from "@/core/domain/Project";
 import { ProjectForm } from "./forms/ProjectForm";
 
 interface ClubAdmProps {

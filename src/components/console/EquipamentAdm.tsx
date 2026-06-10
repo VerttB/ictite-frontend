@@ -16,6 +16,7 @@ import {
     EquipmentFormSchema,
     EquipmentUpdate,
     EquipmentSearchParams,
+    EquipmentUpdateFormSchema,
 } from "@/core/domain/Equipment";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 
@@ -58,12 +59,7 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         return eq;
     };
 
-    const config: AdminEntityConfig<
-        Equipment,
-        any,
-        any,
-        typeof EquipmentFormSchema
-    > = {
+    const config: AdminEntityConfig<Equipment, any, any, typeof EquipmentFormSchema> = {
         title: "Equipamentos",
         entityName: "equipment",
         schema: EquipmentFormSchema,
