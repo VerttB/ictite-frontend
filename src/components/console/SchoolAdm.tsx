@@ -105,6 +105,11 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     deleteFn={deleteClubeCiencias}
                     schema={ScienceClubFormSchema}
                     defaultValues={{ images: [] }}
+                    mapToFormValues={(item: any) => ({
+                        ...item,
+                        school_id: item.school?.id,
+                        coordinators_ids: item.coordinators?.map((c: any) => c.id) || [],
+                    })}
                     renderFields={(props) => <ClubForm {...props} />}
                 />
             ),
@@ -144,6 +149,11 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     deleteFn={deleteEquipament}
                     schema={EquipmentFormSchema}
                     defaultValues={{ images: [] }}
+                    mapToFormValues={(item: any) => ({
+                        ...item,
+                        school_id: item.school?.id,
+                        type_equipment_id: item.type_equipment?.id,
+                    })}
                     renderFields={(props) => <EquipmentForm {...props} />}
                 />
             ),
@@ -160,6 +170,10 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         entityName: "schools",
         schema: SchoolFormSchema,
         defaultValues: { images: [] },
+        mapToFormValues: (item: any) => ({
+            ...item,
+            identity_territory_id: item.identityTerritory?.id,
+        }),
         renderForm: () => <SchoolForm />,
         childTabs,
         fetchFn: getSchools,

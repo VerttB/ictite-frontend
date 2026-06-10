@@ -52,6 +52,10 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         entityName: "projects",
         schema: ProjectFormSchema,
         defaultValues: { images: [] },
+        mapToFormValues: (item: any) => ({
+            ...item,
+            clube_ciencia_id: item.clube?.id,
+        }),
         renderForm: (props) => <ProjectForm {...props} />,
         childTabs: [
             {

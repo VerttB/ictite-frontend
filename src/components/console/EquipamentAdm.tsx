@@ -56,10 +56,18 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         entityName: "equipment",
         schema: EquipmentFormSchema,
         defaultValues: { images: [] },
+        mapToFormValues: (item: any) => ({
+            ...item,
+            school_id: item.school?.id,
+            type_equipment_id: item.type_equipment?.id,
+        }),
         renderForm: (props) => <EquipmentForm {...props} />,
         childTabs: [],
         fetchFn: getEquipaments,
-        createFn: handleCreate,
+        createFn: async (data) => {
+            const eq = await handleCreate(data);
+            return { ...eq, _redirectToList: true } as any;
+        },
         updateFn: handleUpdate,
         deleteFn: deleteEquipament,
     };

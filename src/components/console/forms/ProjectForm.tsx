@@ -14,16 +14,19 @@ export const ProjectForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isClubLocked = parentIdField === "clube_ciencia_id" && !!parentId;
 
     const { data: clubes } = useSWR("clubes-all", () => getClubesCiencia({ size: 0 }));
-    const { data: parentClub } = useSWR(isClubLocked ? ["club", parentId] : null, () => getClubeCienciaById(parentId!));
+    const { data: parentClub } = useSWR(
+        isClubLocked ? ["club", parentId] : null,
+        () => getClubeCienciaById(parentId!)
+    );
 
-    const clubOptions = isClubLocked && parentClub ? [parentClub] : (clubes?.items || []);
+    const clubOptions = isClubLocked && parentClub ? [parentClub] : clubes?.items || [];
 
     return (
         <>
             <InputField name="name" label="Nome do Projeto" />
             <TextField name="description" label="Descrição (Opcional)" />
             <TextField name="description_long" label="Descrição Longa (Opcional)" />
-            
+
             <div className="grid grid-cols-2 gap-4">
                 <InputField name="year" label="Ano (Opcional)" mask={mask.onlyDigits} />
                 <ControlledComboBox

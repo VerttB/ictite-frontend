@@ -16,6 +16,7 @@ import {
     MaterialFormSchema,
     MaterialUpdate,
     MaterialSearchParams,
+    MaterialCreateSchema,
 } from "@/core/domain/Material";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 
@@ -46,15 +47,23 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         return material;
     };
 
-    const config: AdminEntityConfig<Material, any, any, typeof MaterialFormSchema> = {
+    const config: AdminEntityConfig<
+        Material,
+        MaterialCreate,
+        MaterialUpdate,
+        typeof MaterialCreateSchema
+    > = {
         title: "Materiais",
         entityName: "materials",
-        schema: MaterialFormSchema,
+        schema: MaterialCreateSchema,
         defaultValues: { images: [] },
         renderForm: () => <MaterialForm />,
         childTabs: [],
         fetchFn: getMaterials,
-        createFn: handleCreate,
+        createFn: async (data) => {
+            const material = await handleCreate(data);
+            return { ...material, _redirectToList: true } as any;
+        },
         updateFn: handleUpdate,
         deleteFn: deleteMaterial,
     };

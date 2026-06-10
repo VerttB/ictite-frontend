@@ -27,6 +27,7 @@ export interface AdminEntityConfig<
     createSchema?: TSchema;
     updateSchema?: TSchema;
     defaultValues: Partial<T | CreateDTO | UpdateDTO>;
+    mapToFormValues?: (item: T) => Partial<CreateDTO | UpdateDTO>;
     renderForm: (props: AdminFormProps) => React.ReactNode;
     childTabs?: ChildTabConfig[];
     

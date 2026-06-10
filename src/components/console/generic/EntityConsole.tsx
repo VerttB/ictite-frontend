@@ -86,7 +86,8 @@ export const EntityConsole = <
     };
 
     const onOpenEdit = (item: T) => {
-        reset(item as any);
+        const formValues = config.mapToFormValues ? config.mapToFormValues(item) : item;
+        reset(formValues as any);
         crud.ui.openEdit(item);
         setView("edit");
         setActiveTab("dados-gerais");
@@ -101,12 +102,16 @@ export const EntityConsole = <
     const handleFormSubmit = async (data: any) => {
         let success = false;
         if (crud.editingItem) {
-            success = (await crud.actions.update(data)) || false;
+            success = await crud.actions.update(data);
         } else {
             const result = await config.createFn(data as any);
             if (result && result.id) {
                 await mutate();
-                crud.ui.openEdit(result); // Switch to edit mode after creation to unlock tabs
+                if ((result as any)._redirectToList) {
+                    onBackToList();
+                } else {
+                    crud.ui.openEdit(result); // Switch to edit mode after creation to unlock tabs
+                }
                 success = true;
                 toast.success("Item criado com sucesso!");
             }

@@ -54,7 +54,10 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         renderForm: () => <MagazineForm />,
         childTabs: [],
         fetchFn: getRevistas,
-        createFn: handleCreate,
+        createFn: async (data) => {
+            const magazine = await handleCreate(data);
+            return { ...magazine, _redirectToList: true } as any;
+        },
         updateFn: handleUpdate,
         deleteFn: deleteRevista,
     };

@@ -59,25 +59,26 @@ export const ResearcherProjectsList = ({ researcherId }: { researcherId: string 
             prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
         );
     };
+const handleSaveProjects = async () => {
+    if (selectedIds.length === 0) return;
 
-    const handleSaveProjects = async () => {
-        if (selectedIds.length === 0) return;
-
-        setIsSaving(true);
-        try {
-            for (const projectId of selectedIds) {
-                await addResearchersToProject(projectId, [researcherId]);
-            }
-            await mutate();
-            toast.success(`${selectedIds.length} projetos vinculados com sucesso!`);
-            handleClose();
-        } catch (error) {
-            toast.error("Erro ao vincular alguns projetos.");
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
+    setIsSaving(true);
+    try {
+        // The backend endpoint f07e6c9e-ab81-460b-b349-9fa47f026464/researchers expects a payload with researcher_ids list
+        await Promise.all(
+            selectedIds.map((projectId) =>
+                addResearchersToProject(projectId, [researcherId])
+            )
+        );
+        await mutate();
+        toast.success(`${selectedIds.length} projetos vinculados com sucesso!`);
+        handleClose();
+    } catch (error) {
+        toast.error("Erro ao vincular alguns projetos.");
+    } finally {
+        setIsSaving(false);
+    }
+};
     const handleClose = () => {
         setSelectedIds([]);
         setSearchValue("");

@@ -21,17 +21,12 @@ export const SchoolSchema = z.object({
     createdAt: z.date(),
 });
 
-const CepSchema = z
-    .string()
-    .length(9, "CEP deve ter 8 dígitos numericos")
-    .transform((val) => mask.onlyDigits(val))
-    .refine((val) => {
-        return val.length === 8;
-    }, "CEP inválido");
-
 const OptionalCepSchema = z.preprocess(
     (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
-    CepSchema.optional()
+    z.string()
+        .transform((val) => mask.onlyDigits(val))
+        .refine((val) => val === "" || val.length === 8, "CEP inválido")
+        .optional()
 );
 
 export const SchoolCreateSchema = SchoolSchema.pick({

@@ -9,6 +9,7 @@ import {
     updateClubeCiencias,
     deleteClubeCiencias,
     uploadClubImage,
+    getClubeCienciaProjects,
 } from "@/core/service/ClubeCienciaService";
 import {
     ScienceClub,
@@ -19,7 +20,14 @@ import {
 } from "@/core/domain/Club";
 import { AdminEntityConfig, ChildTabConfig } from "@/core/interface/AdminEntity";
 import { NestedEntityList } from "./generic/NestedEntityList";
-import { getProjects, createProject, updateProject, deleteProject, uploadProjectImages, getProjectbyClube } from "@/core/service/ProjetoService";
+import {
+    getProjects,
+    createProject,
+    updateProject,
+    deleteProject,
+    uploadProjectImages,
+    getProjectbyClube,
+} from "@/core/service/ProjetoService";
 import { ProjectFormSchema } from "@/core/domain/Project";
 import { ProjectForm } from "./forms/ProjectForm";
 
@@ -62,7 +70,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     entityName="projetos"
                     parentId={parentId}
                     parentIdField="clube_ciencia_id"
-                    fetchFn={(params) => getProjectbyClube(params.clube_ciencia_id)}
+                    fetchFn={(params) => getClubeCienciaProjects(params.clube_ciencia_id)}
                     createFn={async (data: any) => {
                         const { images, ...payload } = data;
                         const project = await createProject(payload);
@@ -86,24 +94,34 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     deleteFn={deleteProject}
                     schema={ProjectFormSchema}
                     defaultValues={{ images: [] }}
+                    mapToFormValues={(item: any) => ({
+                        ...item,
+                        clube_ciencia_id: item.clube?.id,
+                    })}
                     renderFields={(props) => <ProjectForm {...props} />}
                 />
             ),
         },
     ];
 
-    const config: AdminEntityConfig<ScienceClub, any, any, typeof ScienceClubFormSchema> = {
-        title: "Clubes de Ciências",
-        entityName: "clubes",
-        schema: ScienceClubFormSchema,
-        defaultValues: { images: [] },
-        renderForm: (props) => <ClubForm {...props} />,
-        childTabs,
-        fetchFn: getClubesCiencia,
-        createFn: handleCreate,
-        updateFn: handleUpdate,
-        deleteFn: deleteClubeCiencias,
-    };
+    const config: AdminEntityConfig<ScienceClub, any, any, typeof ScienceClubFormSchema> =
+        {
+            title: "Clubes de Ciências",
+            entityName: "clubes",
+            schema: ScienceClubFormSchema,
+            defaultValues: { images: [] },
+            mapToFormValues: (item: any) => ({
+                ...item,
+                school_id: item.school?.id,
+                coordinators_ids: item.coordinators?.map((c: any) => c.id) || [],
+            }),
+            renderForm: (props) => <ClubForm {...props} />,
+            childTabs,
+            fetchFn: getClubesCiencia,
+            createFn: handleCreate,
+            updateFn: handleUpdate,
+            deleteFn: deleteClubeCiencias,
+        };
 
     return <EntityConsole config={config} params={params} />;
 };

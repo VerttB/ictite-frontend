@@ -20,6 +20,7 @@ interface NestedEntityListProps<T extends { id: string }, CreateDTO extends Fiel
     deleteFn: (id: string) => Promise<void>;
     schema: TSchema;
     defaultValues: Partial<CreateDTO>;
+    mapToFormValues?: (item: T) => Partial<CreateDTO | UpdateDTO>;
     renderFields: (props: import("@/core/interface/AdminEntity").AdminFormProps) => React.ReactNode;
 }
 
@@ -34,6 +35,7 @@ export const NestedEntityList = <T extends { id: string }, CreateDTO extends Fie
     deleteFn,
     schema,
     defaultValues,
+    mapToFormValues,
     renderFields,
 }: NestedEntityListProps<T, CreateDTO, UpdateDTO, TSchema>) => {
     const { data: paginatedData, mutate } = useSWR(
@@ -80,7 +82,7 @@ export const NestedEntityList = <T extends { id: string }, CreateDTO extends Fie
                     onSubmit={crud.actions.update as any}
                     title={`Editar ${title}`}
                     schema={schema}
-                    props={{ defaultValues: crud.editingItem as any }}>
+                    props={{ defaultValues: mapToFormValues ? mapToFormValues(crud.editingItem) as any : crud.editingItem as any }}>
                     {renderFields({ methods: null, parentId, parentIdField })}
                 </BaseFormModal>
             )}

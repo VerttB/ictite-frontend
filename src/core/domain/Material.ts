@@ -30,7 +30,8 @@ export const MaterialSearchParamsSchema = z.object({
 export const MaterialUpdateSchema = z.object({
     name: z.string().min(1, "Nome obrigatório").optional(),
     description: z.string().optional(),
-    link: z.url("Link inválido").optional(),
+    link: z.string().url("Link inválido").optional(),
+    type: z.enum(Object.values(MaterialType), "Tipo inválido").optional(),
 });
 
 export const MaterialUpdateFormSchema = MaterialUpdateSchema.and(

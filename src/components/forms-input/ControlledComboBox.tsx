@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/combobox";
 
 import { SimpleIdName } from "@/schemas/Common";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 type OptionType = { value: string; label: string };
 
@@ -42,6 +42,7 @@ export const ControlledComboBox = ({
     const {
         control,
         formState: { errors },
+        getValues,
     } = useFormContext();
     const anchor = useComboboxAnchor();
 
@@ -64,6 +65,21 @@ export const ControlledComboBox = ({
         );
     }, [normalizedOptions, searchValue]);
 
+    const rhfValue = getValues(name);
+
+    // Sync search value with selected label when editing (initial load or value change)
+    // Only for single select
+    React.useEffect(() => {
+        if (!isMulti && rhfValue) {
+            const selected = normalizedOptions.find(
+                (o) => o.value === rhfValue.toString()
+            );
+            if (selected && !searchValue) {
+                setSearchValue(selected.label);
+            }
+        }
+    }, [rhfValue, normalizedOptions, isMulti]);
+
     return (
         <div className={`${className}`}>
             <label className="mb-1 block text-sm font-medium text-slate-700">
@@ -74,11 +90,13 @@ export const ControlledComboBox = ({
                 name={name}
                 control={control}
                 render={({ field }) => {
-                    const rhfValue = field.value;
+                    const currentFieldValue = field.value;
                     const displayValue = (() => {
                         if (isMulti) {
                             if (lockedValue) return [lockedValue];
-                            const arr = Array.isArray(rhfValue) ? rhfValue : [];
+                            const arr = Array.isArray(currentFieldValue)
+                                ? currentFieldValue
+                                : [];
                             return arr.map(
                                 (id) =>
                                     normalizedOptions.find(
@@ -89,16 +107,16 @@ export const ControlledComboBox = ({
                                     }
                             );
                         } else {
-                            if (!rhfValue) return null;
+                            if (!currentFieldValue) return null;
                             if (lockedValue) {
                                 return lockedValue;
                             } // Se tiver valor travado, usar ele como display
                             return (
                                 normalizedOptions.find(
-                                    (o) => o.value === rhfValue?.toString()
+                                    (o) => o.value === currentFieldValue?.toString()
                                 ) || {
-                                    value: rhfValue?.toString(),
-                                    label: rhfValue?.toString(),
+                                    value: currentFieldValue?.toString(),
+                                    label: currentFieldValue?.toString(),
                                 }
                             );
                         }
