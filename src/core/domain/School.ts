@@ -80,10 +80,18 @@ export const SchoolGeoJsonSchema = z.object({
                 type: z.literal("Point"),
                 coordinates: z.tuple([z.number(), z.number()]),
             }),
-            properties: SimpleIdNameDescriptionSchema,
+            properties: z.object({
+                id  : z.string().uuid(),
+                name: z.string(),
+                city: z.string(),
+                description: z.string().nullish(),
+                identity_territory_name  : z.string().nullish(),
+                identity_territory_number: z.string().nullish(),
+            }),
         })
     ),
 });
+
 export type School = z.infer<typeof SchoolSchema>;
 export type SchoolCreate = z.infer<typeof SchoolCreateSchema>;
 export type SchoolUpdate = z.infer<typeof SchoolUpdateSchema>;
