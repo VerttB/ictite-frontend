@@ -19,20 +19,31 @@ export const EquipmentCreateSchema = EquipmentSchema.omit({
     z.object({
         school_id: z.uuid("A escola não deve estar vazia"),
         type_equipment_id: z.uuid("O tipo de equipamento não deve estar vazio"),
+    })
+);
+
+export const EquipmentFormSchema = EquipmentCreateSchema.and(
+    z.object({
         images: OptionalImageCreateSchema,
     })
 );
 
 export const EquipmentSearchParamsSchema = z.object({
     name: SearchParamParser.string,
+    school_id: SearchParamParser.string,
 });
 
 export const EquipmentUpdateSchema = z.object({
     name: z.string().min(1, "Nome obrigatório").optional(),
     school_id: z.uuid("A escola não deve estar vazia").optional(),
     type_equipment_id: z.uuid("O tipo de equipamento não deve estar vazio").optional(),
-    images: OptionalImageCreateSchema.optional(),
 });
+
+export const EquipmentUpdateFormSchema = EquipmentUpdateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema.optional(),
+    })
+);
 
 export type Equipment = z.infer<typeof EquipmentSchema>;
 export type EquipmentCreate = z.infer<typeof EquipmentCreateSchema>;

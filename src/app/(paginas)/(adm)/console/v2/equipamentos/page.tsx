@@ -1,4 +1,4 @@
-import { EquipmentAdm } from "@/components/console/EquipamentAdm";
+import { EquipamentAdm } from "@/components/console/EquipamentAdm";
 import { EquipmentSearchParamsSchema } from "@/core/domain/Equipment";
 
 interface EquipmentPageProps {
@@ -8,5 +8,7 @@ interface EquipmentPageProps {
 export default async function Page({ searchParams }: EquipmentPageProps) {
     const params = await searchParams;
     const parsedParams = EquipmentSearchParamsSchema.parse(params);
-    return <EquipmentAdm params={parsedParams} />;
+
+    return <EquipamentAdm params={parsedParams} />;
 }
+

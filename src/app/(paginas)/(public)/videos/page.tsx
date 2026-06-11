@@ -5,9 +5,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { Calendar, ChevronLeft, PlayCircleIcon, PlaySquare } from "lucide-react";
-import Link from "next/link";
+import { Calendar, PlayCircleIcon, PlaySquare } from "lucide-react";
 
 export default function Videos() {
     const videosMock = [

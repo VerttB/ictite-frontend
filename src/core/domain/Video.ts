@@ -14,11 +14,12 @@ export const VideoSchema = z.object({
 export const VideoCreateSchema = VideoSchema.omit({ 
     id: true,
     images: true,
-}).and(
+});
+
+export const VideoFormSchema = VideoCreateSchema.and(
     z.object({
         images: z.any().pipe(ImageCreateSchema),
     })
-    
 );
 export const VideoSearchParamsSchema = z.object({
     name: SearchParamParser.string,

@@ -1,179 +1,170 @@
 "use client";
 
-import { Section } from "../Section";
-import useSWR from "swr";
-import { getSchools } from "@/core/service/SchoolService";
+import { EntityConsole } from "./generic/EntityConsole";
+import { ClubForm } from "./forms/ClubForm";
 import {
     getClubesCiencia,
     createClubeCiencias,
-    uploadClubImage,
     updateClubeCiencias,
     deleteClubeCiencias,
+    uploadClubImage,
+    getClubeCienciaProjects,
+    getClubeCienciaById,
 } from "@/core/service/ClubeCienciaService";
-import { BaseFormModal } from "../BaseFormAddModal";
-import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
-import { InputField } from "../forms-input/InputField";
 import {
     ScienceClub,
-    ScienceClubCreate,
-    ScienceClubCreateSchema,
-    ScienceClubUpdate,
-    ScienceClubUpdateSchema,
+    ScienceClubFormSchema,
     ScienceClubSearchParams,
+    ScienceClubUpdateFormSchema,
 } from "@/core/domain/Club";
-import { Pagination } from "../Pagination";
-import { useUrlPagination } from "@/hooks/useUrlPagination";
-import { SearchAndFilter } from "../SearchAndFilter";
-import { ItemFilterConfig } from "@/core/interface/ItemFilterConfig";
-import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
-import { useAdmCrud } from "@/hooks/useAdmCrud";
-import { ControlledComboBox } from "../forms-input/ControlledComboBox";
-import { getCoordinators } from "@/core/service/CoordinatorService";
+import { AdminEntityConfig, ChildTabConfig } from "@/core/interface/AdminEntity";
+import { NestedEntityList } from "./generic/NestedEntityList";
+import {
+    createProject,
+    updateProject,
+    deleteProject,
+    uploadProjectImages,
+    getProjectById,
+} from "@/core/service/ProjetoService";
+import { ProjectFormSchema, ProjectUpdateFormSchema } from "@/core/domain/Project";
+import { ProjectForm } from "./forms/ProjectForm";
+import z from "zod";
+
 interface ClubAdmProps {
-    params?: ScienceClubSearchParams;
+    params: ScienceClubSearchParams;
 }
 
 export const ClubAdm = ({ params }: ClubAdmProps) => {
-    const { data: clubes, mutate } = useSWR(
-        ["clubes", params],
-        ([, p]) => getClubesCiencia(p),
-        {
-            keepPreviousData: true,
-        }
-    );
-    const { applyFilters, changePage } = useUrlPagination();
-
-    const { data: escolas } = useSWR("escolas", () => getSchools());
-    const { data: coordinators } = useSWR("coordinators", () => getCoordinators());
-
-    const crud = useAdmCrud<ScienceClub, ScienceClubCreate, ScienceClubUpdate>({
-        mutate,
-        deleteFn: deleteClubeCiencias,
-    });
-
-    const handleCreate = async (data: ScienceClubCreate) => {
-        const { id } = await createClubeCiencias(data);
-        if (data.images?.length) {
-            const form = new FormData();
-            data.images.forEach((file) => form.append("images", file));
-            await uploadClubImage(id, form);
-        }
-    };
-
-    const handleUpdate = async (id: string, data: ScienceClubUpdate) => {
-        const { images, ...clubData } = data;
-        await updateClubeCiencias(id, clubData);
+    const handleCreate = async (
+        data: z.infer<typeof ScienceClubFormSchema>
+    ): Promise<ScienceClub> => {
+        const { images, ...payload } = data;
+        const club = await createClubeCiencias(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((file) => form.append("images", file));
-            await uploadClubImage(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadClubImage(club.id, form);
+                return await getClubeCienciaById(club.id);
+            }
         }
+        return club;
     };
-    const filters: ItemFilterConfig<ScienceClubSearchParams>[] = [
+
+    const handleUpdate = async (
+        id: string,
+        data: z.infer<typeof ScienceClubUpdateFormSchema>
+    ): Promise<ScienceClub> => {
+        const { images, ...payload } = data;
+        const club = await updateClubeCiencias(id, payload);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadClubImage(id, form, true);
+                return await getClubeCienciaById(id);
+            }
+        }
+        return club;
+    };
+
+    const childTabs: ChildTabConfig[] = [
         {
-            label: "Nome",
-            type: "text",
-            value: "",
-            key: "name",
-        },
-        {
-            label: "Escola",
-            type: "array",
-            value: "",
-            key: "school",
+            id: "projetos",
+            label: "Projetos",
+            entityName: "projetos",
+            parentIdField: "clube_ciencia_id",
+            renderList: (parentId) => (
+                <NestedEntityList
+                    title="Projetos"
+                    entityName="projetos"
+                    parentId={parentId}
+                    parentIdField="clube_ciencia_id"
+                    fetchFn={(params) => getClubeCienciaProjects(params.clube_ciencia_id)}
+                    createFn={async (data: z.infer<typeof ProjectFormSchema>) => {
+                        const { images, ...payload } = data;
+                        const project = await createProject(payload);
+                        if (images?.length) {
+                            const form = new FormData();
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadProjectImages(project.id, form);
+                                return await getProjectById(project.id);
+                            }
+                        }
+                        return project;
+                    }}
+                    updateFn={async (
+                        id,
+                        data: z.infer<typeof ProjectUpdateFormSchema>
+                    ) => {
+                        const { images, ...payload } = data;
+                        const project = await updateProject(id, payload);
+                        if (images?.length) {
+                            const form = new FormData();
+                            images.forEach((img: any) => {
+                                if (img instanceof File) {
+                                    form.append("images", img);
+                                }
+                            });
+                            if (form.has("images")) {
+                                await uploadProjectImages(id, form, true);
+                                return await getProjectById(id);
+                            }
+                        }
+                        return project;
+                    }}
+                    deleteFn={deleteProject}
+                    schema={ProjectFormSchema}
+                    createSchema={ProjectFormSchema}
+                    updateSchema={ProjectUpdateFormSchema}
+                    defaultValues={{ images: [] }}
+                    mapToFormValues={(item: any) => ({
+                        ...item,
+                        clube_ciencia_id: item.clube?.id,
+                    })}
+                    renderFields={(props) => <ProjectForm {...props} />}
+                />
+            ),
         },
     ];
-    if (!clubes) return null;
-    return (
-        <div className="flex h-full w-full flex-col">
-            <Section<ScienceClub>
-                title="Clubes de Ciências"
-                items={clubes.items}
-                icon={null}
-                onAdd={crud.ui.openCreate}
-                onUpdate={crud.ui.openEdit}
-                onDelete={crud.ui.openDelete}>
-                <SearchAndFilter
-                    currentParams={params || {}}
-                    applyParams={applyFilters}
-                    mainSearchKey="name"
-                    mainSearchPlaceholder="Buscar projetos"
-                    filters={filters}
-                />
-            </Section>
 
-            <BaseFormModal<typeof ScienceClubCreateSchema, ScienceClubCreate>
-                open={crud.isCreating}
-                onClose={crud.ui.closeCreate}
-                onSubmit={(data) => crud.actions.create(data, handleCreate)}
-                title="Adicionar Clube de Ciências"
-                schema={ScienceClubCreateSchema}
-                props={{ defaultValues: { images: [] } }}>
-                <InputField name="name" label="Nome do Clube de Ciências" />
-                <InputField name="description" label="Descrição (Opcional)" />
-                <ControlledComboBox
-                    className="w-full"
-                    name="school_id"
-                    label="Escola"
-                    options={escolas?.items || []}
-                />
-                <ControlledComboBox
-                    className="w-full"
-                    name="coordinators_ids"
-                    label="Coordenadores (Opcional)"
-                    isMulti={true}
-                    truncateLabels={true}
-                    options={coordinators?.items || []}
-                />
-                <InputField name="instagram" label="Instagram (Opcional)" />
+    const config: AdminEntityConfig<
+        ScienceClub,
+        z.infer<typeof ScienceClubFormSchema>,
+        z.infer<typeof ScienceClubUpdateFormSchema>,
+        typeof ScienceClubFormSchema,
+        typeof ScienceClubUpdateFormSchema
+    > = {
+        title: "Clubes de Ciências",
+        entityName: "clubes",
+        createSchema: ScienceClubFormSchema,
+        updateSchema: ScienceClubUpdateFormSchema,
+        defaultValues: { images: [] },
+        mapToFormValues: (item: any) => ({
+            ...item,
+            school_id: item.school?.id,
+            coordinators_ids: item.coordinators?.map((c: any) => c.id) || [],
+        }),
+        renderForm: (props) => <ClubForm {...props} />,
+        childTabs,
+        fetchFn: getClubesCiencia,
+        createFn: handleCreate,
+        updateFn: handleUpdate,
+        deleteFn: deleteClubeCiencias,
+    };
 
-                <ControlledImageUpload
-                    name="images"
-                    label="Imagens (Opcional)"
-                    multiple={true}
-                />
-            </BaseFormModal>
-
-            {crud.editingItem && (
-                <BaseFormModal<typeof ScienceClubUpdateSchema, ScienceClubUpdate>
-                    open={!!crud.editingItem}
-                    key={crud.editingItem.id}
-                    onClose={crud.ui.closeEdit}
-                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
-                    title="Atualizar Clube de Ciências"
-                    schema={ScienceClubUpdateSchema}
-                    props={{
-                        defaultValues: {
-                            name: crud.editingItem?.name,
-                            description: crud.editingItem?.description || undefined,
-                            instagram: crud.editingItem?.instagram,
-                            images: [],
-                        },
-                    }}>
-                    <InputField name="name" label="Nome do Clube de Ciências" />
-                    <InputField name="description" label="Descrição (Opcional)" />
-                    <InputField name="instagram" label="Instagram (Opcional)" />
-                    <ControlledImageUpload
-                        name="images"
-                        label="Imagens (Opcional)"
-                        multiple={true}
-                    />
-                </BaseFormModal>
-            )}
-
-            <DeleteConfirmationModal
-                open={!!crud.deletingItem}
-                onClose={crud.ui.closeDelete}
-                onConfirm={crud.actions.delete}
-                title={`Deseja excluir ${crud.deletingItem?.name}?`}
-                description="Essa ação não pode ser desfeita."
-            />
-
-            <Pagination
-                totalPages={clubes.total_pages}
-                currentPage={clubes.page}
-                onLoadMore={changePage}
-            />
-        </div>
-    );
+    return <EntityConsole config={config} params={params} />;
 };

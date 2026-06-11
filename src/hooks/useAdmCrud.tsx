@@ -1,9 +1,11 @@
 import { ApiError } from "@/lib/api/error";
 import { Pagination } from "@/schemas/Pagination";
 import { useState } from "react";
+import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import { KeyedMutator } from "swr";
-interface UseAdmCrudProps<T, CreateDTO, UpdateDTO> {
+
+interface UseAdmCrudProps<T, CreateDTO extends FieldValues, UpdateDTO extends FieldValues> {
     mutate: KeyedMutator<Pagination<T>>;
     createFn?: (data: CreateDTO) => Promise<T | void>;
     updateFn?: (id: string, data: UpdateDTO) => Promise<T | void>;
@@ -17,7 +19,11 @@ const getErrorMessage = (error: unknown, fallback: string) => {
     return fallback;
 };
 
-export const useAdmCrud = <T extends { id: string }, CreateDTO, UpdateDTO>({
+export const useAdmCrud = <
+    T extends { id: string; name?: string },
+    CreateDTO extends FieldValues,
+    UpdateDTO extends FieldValues,
+>({
     mutate,
     createFn,
     updateFn,

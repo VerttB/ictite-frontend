@@ -156,8 +156,8 @@ export class ApiClient {
         return this.request<T>(endpoint, "PATCH", body, options);
     }
 
-    public delete<T = void>(endpoint: string, options?: ApiRequestOptions) {
-        return this.request<T>(endpoint, "DELETE", undefined, options);
+    public delete<T = void, K = unknown>(endpoint: string, body?: K, options?: ApiRequestOptions) {
+        return this.request<T>(endpoint, "DELETE", body, options);
     }
 }
 

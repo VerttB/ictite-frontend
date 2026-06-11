@@ -9,3 +9,7 @@ export const getVideos = async (): Promise<Required<Video>[]> => {
 export const createVideo = async (videoData: Omit<Video, "id">) => {
     return await apiClient.post("/video/", videoData);
 };
+
+export const deleteVideo = async (videoId: string): Promise<void> => {
+    await apiClient.delete(`/video/${videoId}`);
+};

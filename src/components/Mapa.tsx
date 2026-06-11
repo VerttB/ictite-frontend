@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import { Popover, PopoverContent, PopoverAnchor } from "@/components/ui/popover";
-import { School } from "@/core/domain/School";
 import { Spinner } from "./LoadingSpin";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
@@ -11,6 +10,11 @@ import { useSidebar } from "./ui/sidebar";
 import { useTheme } from "@/core/providers/ThemeProvider";
 import { Route } from "next";
 import { toast } from "sonner";
+import { Map, MapPin } from "lucide-react";
+import { SchoolGeoJson } from "@/core/domain/School";
+
+// Extrai o tipo exato de dentro da lista de propriedades do Feature do GeoJSON
+type SchoolMapProperties = SchoolGeoJson["features"][number]["properties"];
 
 type LngLatBoundsLike =
     | [[number, number], [number, number]]
@@ -36,12 +40,17 @@ export default function MapaRender() {
             dedupingInterval: 60000,
         }
     );
+
+    console.log(geojsonData);
+
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [popoverPosition, setPopoverPosition] = useState<{
         x: number;
         y: number;
     }>({ x: 0, y: 0 });
-    const [popoverContent, setPopoverContent] = useState<School[]>([]);
+    
+    // Ajustado para usar as propriedades limpas vindas do GeoJSON do mapa
+    const [popoverContent, setPopoverContent] = useState<SchoolMapProperties[]>([]);
     const { open } = useSidebar();
     const { theme } = useTheme();
     const brazilBounds = useMemo<LngLatBoundsLike>(
@@ -159,8 +168,8 @@ export default function MapaRender() {
                     }
 
                     const position = map.project(coordinates);
-                    const School = leaves.map((leaf) => leaf.properties as School);
-                    setPopoverContent(School);
+                    const schools = leaves.map((leaf) => leaf.properties as SchoolMapProperties);
+                    setPopoverContent(schools);
                     setPopoverPosition(position);
                     setPopoverOpen(true);
                 });
@@ -175,7 +184,7 @@ export default function MapaRender() {
                     number,
                 ];
                 const position = map.project(coordinates);
-                const school = feat.properties as School;
+                const school = feat.properties as SchoolMapProperties;
 
                 setPopoverContent([school]);
                 setPopoverPosition(position);
@@ -243,7 +252,7 @@ export default function MapaRender() {
                             </p>
                         </div>
                         <div className="max-h-60 overflow-y-auto">
-                            <ul>
+                            <ul className="space-y-2">
                                 {popoverContent.map((school) => (
                                     <li
                                         onClick={() => {
@@ -251,8 +260,33 @@ export default function MapaRender() {
                                             router.push(`escolas/${school.id}` as Route);
                                         }}
                                         key={school.id}
-                                        className="hover:bg-primary cursor-pointer rounded-md border-b p-2 text-sm hover:text-white">
-                                        {school.name}
+                                        className="hover:bg-primary border-muted group cursor-pointer rounded-md border p-3 text-sm transition-colors"
+                                    >
+                                        {/* Nome da Escola */}
+                                        <div className="font-semibold group-hover:text-white transition-colors">
+                                            {school.name}
+                                        </div>
+                                        
+                                        {/* Cidade */}
+                                        {school.city && (
+                                            <div className="flex items-center text-xs group-hover:text-white line-clamp-1 text-muted-foreground">
+                                                <MapPin size={15}/>
+                                                <div className=" mt-0.5 text-xs">
+                                                    {school.city}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Bloco de Território de Identidade condicional */}
+                                        {school.identity_territory_name && (
+                                            <div className="flex gap-1 items-center group-hover:text-white bg-muted/50 text-muted-foreground mt-2 rounded px-2 py-1 text-[11px] font-medium w-fit">
+                                                <Map size={15} />
+                                                <div className="">
+                                                    TI: {school.identity_territory_number ? `${school.identity_territory_number} - ` : ""}
+                                                    {school.identity_territory_name}
+                                                </div>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

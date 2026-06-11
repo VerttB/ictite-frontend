@@ -21,17 +21,12 @@ export const SchoolSchema = z.object({
     createdAt: z.date(),
 });
 
-const CepSchema = z
-    .string()
-    .length(9, "CEP deve ter 8 dígitos numericos")
-    .transform((val) => mask.onlyDigits(val))
-    .refine((val) => {
-        return val.length === 8;
-    }, "CEP inválido");
-
 const OptionalCepSchema = z.preprocess(
     (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
-    CepSchema.optional()
+    z.string()
+        .transform((val) => mask.onlyDigits(val))
+        .refine((val) => val === "" || val.length === 8, "CEP inválido")
+        .optional()
 );
 
 export const SchoolCreateSchema = SchoolSchema.pick({
@@ -41,9 +36,13 @@ export const SchoolCreateSchema = SchoolSchema.pick({
 }).and(
     z.object({
         cep: OptionalCepSchema,
-
-        images: OptionalImageCreateSchema,
         identity_territory_id: z.uuid().optional(),
+    })
+);
+
+export const SchoolFormSchema = SchoolCreateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema,
     })
 );
 
@@ -53,8 +52,13 @@ export const SchoolUpdateSchema = z.object({
     instagram: z.string().optional(),
     cep: OptionalCepSchema,
     identity_territory_id: z.uuid().nullish(),
-    images: OptionalImageCreateSchema.optional(),
 });
+
+export const SchoolUpdateFormSchema = SchoolUpdateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema.optional(),
+    })
+);
 
 export const SchoolSearchParamsSchema = z
     .object({
@@ -80,10 +84,18 @@ export const SchoolGeoJsonSchema = z.object({
                 type: z.literal("Point"),
                 coordinates: z.tuple([z.number(), z.number()]),
             }),
-            properties: SimpleIdNameDescriptionSchema,
+            properties: z.object({
+                id  : z.string().uuid(),
+                name: z.string(),
+                city: z.string(),
+                description: z.string().nullish(),
+                identity_territory_name  : z.string().nullish(),
+                identity_territory_number: z.string().nullish(),
+            }),
         })
     ),
 });
+
 export type School = z.infer<typeof SchoolSchema>;
 export type SchoolCreate = z.infer<typeof SchoolCreateSchema>;
 export type SchoolUpdate = z.infer<typeof SchoolUpdateSchema>;

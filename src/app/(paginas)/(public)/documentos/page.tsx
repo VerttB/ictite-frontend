@@ -1,11 +1,14 @@
 import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
 import { getAssetPrefix } from "@/core/utils/api";
-import { Calendar, ChevronLeft, FileText } from "lucide-react";
+import { Calendar, FileText } from "lucide-react";
 
 export default function Projeto() {
-
     const documentos = [
         {
             id: "1",
@@ -27,9 +30,8 @@ export default function Projeto() {
             description: "Documento que descreve o projeto de ponta a ponta",
             type: "Institucional",
             data: "2023",
-        }
-    ]
-
+        },
+    ];
 
     return (
         <div className="flex flex-col gap-8 py-4 sm:px-8">
@@ -45,8 +47,9 @@ export default function Projeto() {
                     </h2>
                 </div>
                 <p className="text-sm sm:text-base">
-                    Acesse a base documental completa do Mais Ciência Na Escola Bahia. Aqui você encontra desde o estatuto de 
-                    fundação até os guias práticos de conduta técnica e relatórios de impacto social.
+                    Acesse a base documental completa do Mais Ciência Na Escola Bahia.
+                    Aqui você encontra desde o estatuto de fundação até os guias práticos
+                    de conduta técnica e relatórios de impacto social.
                 </p>
             </div>
 
@@ -54,24 +57,30 @@ export default function Projeto() {
             <div className="mx-2 flex flex-col gap-2 sm:mx-28">
                 <Accordion type="multiple">
                     {documentos.map((documento) => (
-                        <AccordionItem key={documento.id} title={documento.title} value={documento.id} className="my-2">
-                            <AccordionTrigger className="border rounded-lg p-2">
-                                <div className="flex gap-2 ">
-                                    <div className="p-3 rounded-lg bg-primary text-white flex items-center">
+                        <AccordionItem
+                            key={documento.id}
+                            title={documento.title}
+                            value={documento.id}
+                            className="my-2">
+                            <AccordionTrigger className="rounded-lg border p-2">
+                                <div className="flex gap-2">
+                                    <div className="bg-primary flex items-center rounded-lg p-3 text-white">
                                         <FileText />
                                     </div>
                                     <div className="flex flex-col gap-0.5">
-                                        <div className="flex gap-2 text-xs items-center">
-                                            <div className="py-1 px-2 rounded-md bg-secondary/70 text-white">
+                                        <div className="flex items-center gap-2 text-xs">
+                                            <div className="bg-secondary/70 rounded-md px-2 py-1 text-white">
                                                 {documento.type}
                                             </div>
-                                            <div className="flex gap-0.5 items-center">
-                                                <Calendar size={12}/>
+                                            <div className="flex items-center gap-0.5">
+                                                <Calendar size={12} />
                                                 <p>{documento.data}</p>
                                             </div>
                                         </div>
                                         <h3 className="text-xl">{documento.title}</h3>
-                                        <p className="text-sm font-normal">{documento.description}</p>
+                                        <p className="text-sm font-normal">
+                                            {documento.description}
+                                        </p>
                                     </div>
                                 </div>
                             </AccordionTrigger>
@@ -84,8 +93,6 @@ export default function Projeto() {
                     ))}
                 </Accordion>
             </div>
-
-            
         </div>
     );
 }
