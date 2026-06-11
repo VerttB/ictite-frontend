@@ -1,139 +1,97 @@
 "use client";
 
-import { Section } from "../Section";
-import useSWR from "swr";
-import { getSchools } from "@/core/service/SchoolService";
+import { EntityConsole } from "./generic/EntityConsole";
+import { EquipmentForm } from "./forms/EquipmentForm";
 import {
-    createEquipament,
     getEquipaments,
-    uploadEquipamentImages,
+    createEquipament,
     updateEquipament,
     deleteEquipament,
+    uploadEquipamentImages,
+    getEquipamentById,
 } from "@/core/service/EquipamentoService";
-import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
-import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../forms-input/InputField";
-import { ControlledSelect } from "../forms-input/ControlledSelect";
-import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import {
     Equipment,
-    EquipmentCreateSchema,
-    EquipmentCreate,
-    EquipmentUpdate,
-    EquipmentUpdateSchema,
+    EquipmentFormSchema,
     EquipmentSearchParams,
+    EquipmentUpdateFormSchema,
 } from "@/core/domain/Equipment";
-import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
-import { useAdmCrud } from "@/hooks/useAdmCrud";
-import { ControlledComboBox } from "../forms-input/ControlledComboBox";
-interface EquipmentAdmProps {
-    params?: EquipmentSearchParams;
+import { AdminEntityConfig } from "@/core/interface/AdminEntity";
+import z from "zod";
+
+interface EquipamentAdmProps {
+    params: EquipmentSearchParams;
 }
-export const EquipmentAdm = ({ params }: EquipmentAdmProps) => {
-    const { data: equipamentos, mutate } = useSWR(["equipaments", params], ([, p]) =>
-        getEquipaments(p)
-    );
 
-    const { data: escolas } = useSWR("escolas", () => getSchools());
-    const { data: equipamentosTipos } = useSWR("equipaments-types", () =>
-        getEquipamentTypes()
-    );
-
-    const crud = useAdmCrud<Equipment, EquipmentCreate, EquipmentUpdate>({
-        mutate,
-        deleteFn: deleteEquipament,
-    });
-
-    const handleCreate = async (data: EquipmentCreate) => {
-        const { id } = await createEquipament(data);
-        if (data.images?.length) {
-            const form = new FormData();
-            data.images.forEach((file) => form.append("images", file));
-            await uploadEquipamentImages(id, form);
-        }
-    };
-
-    const handleUpdate = async (id: string, data: EquipmentUpdate) => {
-        const { images, ...equipmentData } = data;
-        await updateEquipament(id, equipmentData);
+export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
+    const handleCreate = async (
+        data: z.infer<typeof EquipmentFormSchema>
+    ): Promise<Equipment> => {
+        const { images, ...payload } = data;
+        const eq = await createEquipament(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((file) => form.append("images", file));
-            await uploadEquipamentImages(id, form, true);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadEquipamentImages(eq.id, form);
+                return await getEquipamentById(eq.id);
+            }
         }
+        return eq;
     };
 
-    if (!equipamentos || !equipamentosTipos || !escolas) return null;
-    return (
-        <>
-            <Section<Equipment>
-                title="Equipamentos"
-                items={equipamentos.items}
-                icon={null}
-                onAdd={crud.ui.openCreate}
-                onUpdate={crud.ui.openEdit}
-                onDelete={crud.ui.openDelete}
-            />
+    const handleUpdate = async (
+        id: string,
+        data: z.infer<typeof EquipmentUpdateFormSchema>
+    ): Promise<Equipment> => {
+        const { images, ...payload } = data;
+        const eq = await updateEquipament(id, payload);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadEquipamentImages(id, form, true);
+                return await getEquipamentById(id);
+            }
+        }
+        return eq;
+    };
 
-            <BaseFormModal<typeof EquipmentCreateSchema, EquipmentCreate>
-                open={crud.isCreating}
-                onClose={crud.ui.closeCreate}
-                onSubmit={(data) => crud.actions.create(data, handleCreate)}
-                title="Adicionar Equipamento"
-                schema={EquipmentCreateSchema}
-                props={{ defaultValues: { images: [] } }}>
-                <InputField name="name" label="Nome do Equipamento" />
-                <ControlledSelect
-                    name="type_equipment_id"
-                    label="Tipo de Equipamento"
-                    options={equipamentosTipos}
-                />
-                <ControlledComboBox
-                    name="school_id"
-                    label="Escola"
-                    options={escolas.items}
-                />
-                <ControlledImageUpload name="images" label="Imagem (Opcional)" />
-            </BaseFormModal>
+    const config: AdminEntityConfig<
+        Equipment,
+        z.infer<typeof EquipmentFormSchema>,
+        z.infer<typeof EquipmentUpdateFormSchema>,
+        typeof EquipmentFormSchema,
+        typeof EquipmentUpdateFormSchema
+    > = {
+        title: "Equipamentos",
+        entityName: "equipment",
+        createSchema: EquipmentFormSchema,
+        updateSchema: EquipmentUpdateFormSchema,
+        defaultValues: { images: [] },
+        mapToFormValues: (item: any) => ({
+            ...item,
+            school_id: item.school?.id,
+            type_equipment_id: item.type_equipment?.id,
+        }),
+        renderForm: (props) => <EquipmentForm {...props} />,
+        childTabs: [],
+        fetchFn: getEquipaments,
+        createFn: async (data) => {
+            const eq = await handleCreate(data);
+            return { ...eq, _redirectToList: true } as any;
+        },
+        updateFn: handleUpdate,
+        deleteFn: deleteEquipament,
+    };
 
-            {crud.editingItem && (
-                <BaseFormModal<typeof EquipmentUpdateSchema, EquipmentUpdate>
-                    open={!!crud.editingItem}
-                    key={crud.editingItem.id}
-                    onClose={crud.ui.closeEdit}
-                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
-                    title="Atualizar Equipamento"
-                    schema={EquipmentUpdateSchema}
-                    props={{
-                        defaultValues: {
-                            name: crud.editingItem?.name,
-                            type_equipment_id: crud.editingItem?.type_equipment?.id,
-                            school_id: crud.editingItem?.school?.id,
-                            images: [],
-                        },
-                    }}>
-                    <InputField name="name" label="Nome do Equipamento" />
-                    <ControlledSelect
-                        name="type_equipment_id"
-                        label="Tipo de Equipamento"
-                        options={equipamentosTipos}
-                    />
-                    <ControlledComboBox
-                        name="school_id"
-                        label="Escola"
-                        options={escolas.items}
-                    />
-                    <ControlledImageUpload name="images" label="Imagem (Opcional)" />
-                </BaseFormModal>
-            )}
-
-            <DeleteConfirmationModal
-                open={!!crud.deletingItem}
-                onClose={crud.ui.closeDelete}
-                onConfirm={crud.actions.delete}
-                title={`Deseja excluir ${crud.deletingItem?.name}?`}
-                description="Essa ação não pode ser desfeita."
-            />
-        </>
-    );
+    return <EntityConsole config={config} params={params} />;
 };

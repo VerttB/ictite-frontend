@@ -13,7 +13,9 @@ export const MagazineSchema = z.object({
 export const MagazineCreateSchema = MagazineSchema.omit({
     id: true,
     images: true,
-}).and(
+});
+
+export const MagazineFormSchema = MagazineCreateSchema.and(
     z.object({
         images: OptionalImageCreateSchema,
     })
@@ -23,8 +25,13 @@ export const MagazineUpdateSchema = z.object({
     name: z.string().min(1, "Nome obrigatório").optional(),
     description: z.string().optional(),
     link: z.url("Link inválido").optional(),
-    images: OptionalImageCreateSchema.optional(),
 });
+
+export const MagazineUpdateFormSchema = MagazineUpdateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema.optional(),
+    })
+);
 export const MagazineSearchParamsSchema = z.object({
     name: SearchParamParser.string,
     page: SearchParamParser.page,

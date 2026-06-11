@@ -19,7 +19,7 @@ export const CardGenerico = ({
         return (
             <Button
                 onClick={onClick}
-                className="flex h-40 w-40 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200">
+                className="flex h-40 w-full max-w-40 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200">
                 <Plus className="text-primary size-16 font-light" />
             </Button>
         );
@@ -28,7 +28,7 @@ export const CardGenerico = ({
     return (
         <div
             style={{ boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}
-            className="group relative h-40 w-40 cursor-pointer overflow-hidden rounded-md shadow-xs">
+            className="group relative h-40 w-full max-w-40 cursor-pointer overflow-hidden rounded-md shadow-xs">
             {image && (
                 <Image
                     src={image}

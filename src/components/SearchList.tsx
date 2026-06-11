@@ -65,7 +65,7 @@ export default function SearchClient() {
                         resultados.clubes.length === 0 ? (
                             <div className="py-8 text-center">
                                 <p className="text-muted-foreground text-lg">
-                                    Nenhum resultado encontrado para a busca "{query}"
+                                    Nenhum resultado encontrado para a busca &quot;{query}&quot;
                                 </p>
                             </div>
                         ) : null}

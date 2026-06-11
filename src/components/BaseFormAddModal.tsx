@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { ReactNode } from "react";
 import * as z from "zod";
 import { LoaderCircle } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 
 interface BaseFormModalProps<T extends z.ZodType<FieldValues, FieldValues>, TContext> {
     open: boolean;
@@ -90,7 +91,7 @@ export function BaseFormModal<T extends z.ZodType<FieldValues, FieldValues>, TCo
 
     return (
         <Dialog open={open} onOpenChange={(s) => !s && onClose()}>
-            <DialogContent className="max-w-md">
+            <DialogContent className={twMerge("max-w-md")}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>

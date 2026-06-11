@@ -80,16 +80,24 @@ export const Section = <T extends BaseItem>({
                     </Button>
                 </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
+            <div
+                className={
+                    layout === "grid"
+                        ? "grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8"
+                        : "flex flex-col gap-2"
+                }>
                 {items.map((item, i) => (
                     <DropdownMenu key={item.name + i}>
-                        <DropdownMenuTrigger>
-                            <CardGenerico title={item.name} image={resolveImage(item)} />
+                        <DropdownMenuTrigger asChild>
+                            <div className="flex justify-center">
+                                <CardGenerico title={item.name} image={resolveImage(item)} />
+                            </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent side="bottom" sideOffset={4}>
                             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
+                            <DropdownMenuSeparator className="my-1 h-px bg-slate-200" />
                             <DropdownMenuItem
+                                className="cursor-pointer"
                                 onClick={() => {
                                     setTimeout(() => {
                                         if (onUpdate) onUpdate(item);
@@ -98,6 +106,7 @@ export const Section = <T extends BaseItem>({
                                 Editar
                             </DropdownMenuItem>
                             <DropdownMenuItem
+                                className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
                                 onClick={() => {
                                     setTimeout(() => {
                                         if (onDelete) onDelete(item);
@@ -108,7 +117,11 @@ export const Section = <T extends BaseItem>({
                         </DropdownMenuContent>
                     </DropdownMenu>
                 ))}
-                {onAdd && <CardGenerico isAddButton onClick={onAdd} />}
+                {onAdd && (
+                    <div className="flex justify-center">
+                        <CardGenerico isAddButton onClick={onAdd} />
+                    </div>
+                )}
             </div>
         </section>
     );

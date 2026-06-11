@@ -2,7 +2,14 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
-import { Printer, PanelsTopLeft, Brain, BookOpen, NotebookText, ScrollText } from "lucide-react";
+import {
+    Printer,
+    PanelsTopLeft,
+    Brain,
+    BookOpen,
+    NotebookText,
+    ScrollText,
+} from "lucide-react";
 import { useState } from "react";
 import {
     useSchoolEquipments,
@@ -53,11 +60,9 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
         error: errorClubs,
     } = useSWR("clube-by-school-" + school.id, () => getSchoolClubs(school.id));
 
-    const {
-        data: coordenadores,
-        isLoading: loadingCoord,
-        error: errorCoord,
-    } = useSWR("coordinators-by-school-" + school.id, () => getSchoolCoordinators(school.id));
+    const { data: coordenadores } = useSWR("coordinators-by-school-" + school.id, () =>
+        getSchoolCoordinators(school.id)
+    );
 
     const tabsConfig: TabsConfig[] = [
         {
@@ -120,8 +125,10 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             isError: false,
             emptyMessage: "Nenhum coordenador de clube encontrado para esta escola.",
             data: coordenadores || [],
-            renderItem: (coordenador: CoordinatorWithClub) => <CardCoordenador  key={coordenador.id} coordinator={coordenador}/>
-        }
+            renderItem: (coordenador: CoordinatorWithClub) => (
+                <CardCoordenador key={coordenador.id} coordinator={coordenador} />
+            ),
+        },
     ];
     return (
         <>

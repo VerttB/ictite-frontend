@@ -1,116 +1,92 @@
 "use client";
-import { Section } from "../Section";
+
+import { EntityConsole } from "./generic/EntityConsole";
+import { MagazineForm } from "./forms/MagazineForm";
 import {
-    createRevista,
     getRevistas,
-    uploadMagazineImage,
+    createRevista,
     updateRevista,
     deleteRevista,
+    uploadMagazineImage,
+    getRevistaById,
 } from "@/core/service/RevistaService";
-import { Book } from "lucide-react";
-import useSWR from "swr";
-import { BaseFormModal } from "../BaseFormAddModal";
-import { InputField } from "../forms-input/InputField";
-import { ControlledImageUpload } from "../forms-input/ControlledImageInput";
 import {
     Magazine,
-    MagazineCreate,
-    MagazineCreateSchema,
-    MagazineUpdate,
-    MagazineUpdateSchema,
+    MagazineFormSchema,
     MagazineSearchParams,
+    MagazineUpdateFormSchema,
 } from "@/core/domain/Magazine";
-import { DeleteConfirmationModal } from "../DeleteConfirmationModal";
-import { useAdmCrud } from "@/hooks/useAdmCrud";
+import { AdminEntityConfig } from "@/core/interface/AdminEntity";
+import z from "zod";
 
 interface MagazineAdmProps {
-    params?: MagazineSearchParams;
+    params: MagazineSearchParams;
 }
+
 export const MagazineAdm = ({ params }: MagazineAdmProps) => {
-    const { data: revistas, mutate } = useSWR(["magazines", params], ([, p]) =>
-        getRevistas(p)
-    );
-
-    const crud = useAdmCrud<Magazine, MagazineCreate, MagazineUpdate>({
-        mutate,
-        deleteFn: deleteRevista,
-    });
-
-    const handleCreate = async (data: MagazineCreate) => {
-        const { id } = await createRevista(data);
-        if (data.images?.length) {
-            const form = new FormData();
-            for (const file of data.images) {
-                form.append("images", file);
-            }
-            await uploadMagazineImage(id, form);
-        }
-    };
-
-    const handleUpdate = async (id: string, data: MagazineUpdate) => {
-        const { images, ...magazineData } = data;
-        await updateRevista(id, magazineData);
+    const handleCreate = async (
+        data: z.infer<typeof MagazineFormSchema>
+    ): Promise<Magazine> => {
+        const { images, ...payload } = data;
+        const magazine = await createRevista(payload);
         if (images?.length) {
             const form = new FormData();
-            for (const file of images) {
-                form.append("images", file);
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadMagazineImage(magazine.id, form);
+                return await getRevistaById(magazine.id);
             }
-            await uploadMagazineImage(id, form, true);
         }
+        return magazine;
     };
-    return (
-        <>
-            <Section<Magazine>
-                title="Revistas"
-                items={revistas?.items || []}
-                onAdd={crud.ui.openCreate}
-                onUpdate={crud.ui.openEdit}
-                onDelete={crud.ui.openDelete}
-                icon={<Book />}
-            />
-            <BaseFormModal<typeof MagazineCreateSchema, MagazineCreate>
-                open={crud.isCreating}
-                onClose={crud.ui.closeCreate}
-                onSubmit={(data) => crud.actions.create(data, handleCreate)}
-                schema={MagazineCreateSchema}
-                title="Adicionar Revista"
-                props={{ defaultValues: { images: [] } }}>
-                <InputField name="name" label="Título da Revista" />
-                <InputField name="description" label="Descrição" />
-                <InputField name="link" label="Link da Revista" />
-                <ControlledImageUpload name="images" label="Imagem (Opcional)" />
-            </BaseFormModal>
 
-            {crud.editingItem && (
-                <BaseFormModal<typeof MagazineUpdateSchema, MagazineUpdate>
-                    open={!!crud.editingItem}
-                    key={crud.editingItem.id}
-                    onClose={crud.ui.closeEdit}
-                    onSubmit={(data) => crud.actions.update(data, handleUpdate)}
-                    title="Atualizar Revista"
-                    schema={MagazineUpdateSchema}
-                    props={{
-                        defaultValues: {
-                            name: crud.editingItem?.name,
-                            description: crud.editingItem?.description,
-                            link: crud.editingItem?.link,
-                            images: [],
-                        },
-                    }}>
-                    <InputField name="name" label="Título da Revista" />
-                    <InputField name="description" label="Descrição" />
-                    <InputField name="link" label="Link da Revista" />
-                    <ControlledImageUpload name="images" label="Imagem (Opcional)" />
-                </BaseFormModal>
-            )}
+    const handleUpdate = async (
+        id: string,
+        data: z.infer<typeof MagazineUpdateFormSchema>
+    ): Promise<Magazine> => {
+        const { images, ...payload } = data;
+        const magazine = await updateRevista(id, payload);
+        if (images?.length) {
+            const form = new FormData();
+            images.forEach((img: any) => {
+                if (img instanceof File) {
+                    form.append("images", img);
+                }
+            });
+            if (form.has("images")) {
+                await uploadMagazineImage(id, form, true);
+                return await getRevistaById(id);
+            }
+        }
+        return magazine;
+    };
 
-            <DeleteConfirmationModal
-                open={!!crud.deletingItem}
-                onClose={crud.ui.closeDelete}
-                onConfirm={crud.actions.delete}
-                title={`Deseja excluir ${crud.deletingItem?.name}?`}
-                description="Essa ação não pode ser desfeita."
-            />
-        </>
-    );
+    const config: AdminEntityConfig<
+        Magazine,
+        z.infer<typeof MagazineFormSchema>,
+        z.infer<typeof MagazineUpdateFormSchema>,
+        typeof MagazineFormSchema,
+        typeof MagazineUpdateFormSchema
+    > = {
+        title: "Revistas",
+        entityName: "magazines",
+        createSchema: MagazineFormSchema,
+        updateSchema: MagazineUpdateFormSchema,
+        defaultValues: { images: [] },
+        renderForm: () => <MagazineForm />,
+        childTabs: [],
+        fetchFn: getRevistas,
+        createFn: async (data) => {
+            const magazine = await handleCreate(data);
+            return { ...magazine, _redirectToList: true } as any;
+        },
+        updateFn: handleUpdate,
+        deleteFn: deleteRevista,
+    };
+
+    return <EntityConsole config={config} params={params} />;
 };

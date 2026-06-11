@@ -22,9 +22,14 @@ export const ScienceClubCreateSchema = ScienceClubSchema.omit({
 }).and(
     z.object({
         school_id: z.uuid(),
-        images: OptionalImageCreateSchema,
         instagram: z.string().optional(),
         coordinators_ids: z.string().uuid().array().optional(),
+    })
+);
+
+export const ScienceClubFormSchema = ScienceClubCreateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema,
     })
 );
 
@@ -32,12 +37,18 @@ export const ScienceClubUpdateSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio").optional(),
     description: z.string().optional(),
     instagram: z.string().optional(),
-    images: OptionalImageCreateSchema.optional(),
 });
+
+export const ScienceClubUpdateFormSchema = ScienceClubUpdateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema.optional(),
+    })
+);
 export const ScienceClubSearchParamsSchema = z
     .object({
         name: SearchParamParser.string,
         school: SearchParamParser.string,
+        school_id: SearchParamParser.string,
     })
     .and(PaginationSearchParamsSchema);
 

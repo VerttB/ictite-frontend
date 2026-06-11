@@ -43,3 +43,7 @@ export const updateEquipament = async (
 export const deleteEquipament = async (equipmentId: string): Promise<void> => {
     await apiClient.delete(`/equipment/${equipmentId}/`);
 };
+
+export const getEquipamentById = async (equipmentId: string): Promise<Equipment> => {
+    return await apiClient.get<Equipment>(`/equipment/${equipmentId}/`);
+};

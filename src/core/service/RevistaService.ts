@@ -45,3 +45,7 @@ export const updateRevista = async (
 export const deleteRevista = async (magazineId: string): Promise<void> => {
     return await apiClient.delete(`/magazine/${magazineId}`);
 };
+
+export const getRevistaById = async (magazineId: string): Promise<Magazine> => {
+    return await apiClient.get<Magazine>(`/magazine/${magazineId}`);
+};

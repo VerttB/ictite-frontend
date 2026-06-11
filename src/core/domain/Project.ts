@@ -38,6 +38,11 @@ export const ProjectCreateSchema = ProjectSchema.pick({
         description_long: z.string().optional(),
         year: OptionalProjectYearSchema,
         clube_ciencia_id: z.uuid(),
+    })
+);
+
+export const ProjectFormSchema = ProjectCreateSchema.and(
+    z.object({
         images: OptionalImageCreateSchema,
     })
 );
@@ -48,13 +53,19 @@ export const ProjectUpdateSchema = z.object({
     description_long: z.string().optional(),
     year: OptionalProjectYearSchema,
     clube_ciencia_id: z.uuid().optional(),
-    images: OptionalImageCreateSchema.optional(),
 });
+
+export const ProjectUpdateFormSchema = ProjectUpdateSchema.and(
+    z.object({
+        images: OptionalImageCreateSchema.optional(),
+    })
+);
 
 export const ProjectSearchParamsSchema = z
     .object({
         name: SearchParamParser.string,
         clube: SearchParamParser.string,
+        clube_ciencia_id: SearchParamParser.string,
     })
     .and(PaginationSearchParamsSchema);
 

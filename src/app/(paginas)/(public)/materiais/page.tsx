@@ -1,8 +1,7 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import CardMateriais from "@/components/card/CardMateriais";
-import { Button } from "@/components/ui/button";
-import { BookText, ChevronLeft } from "lucide-react";
+import { BookText } from "lucide-react";
 import CardCategoriaMateriais from "@/components/card/CardCategoriaMateriais";
 import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 

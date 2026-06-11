@@ -1,9 +1,6 @@
 import CardRevista from "@/components/card/CardRevista";
 import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
-import { Button } from "@/components/ui/button";
 import { Magazine } from "@/core/domain/Magazine";
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
 
 export default function Revistas() {
     const revistasFecibaMock: Magazine[] = [
@@ -139,10 +136,7 @@ export default function Revistas() {
                         </h2>
                         <div className="grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 xl:grid-cols-4">
                             {revistasFecibaMock.map((revista) => (
-                                <CardRevista
-                                    key={revista.id}
-                                    revista={revista}
-                                />
+                                <CardRevista key={revista.id} revista={revista} />
                             ))}
                         </div>
                     </div>
@@ -159,10 +153,7 @@ export default function Revistas() {
                         </h2>
                         <div className="grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 xl:grid-cols-4">
                             {revistasOutrasMock.map((revista) => (
-                                <CardRevista
-                                    key={revista.id}
-                                    revista={revista}
-                                />
+                                <CardRevista key={revista.id} revista={revista} />
                             ))}
                         </div>
                     </div>
