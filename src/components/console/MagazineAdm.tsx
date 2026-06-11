@@ -8,6 +8,7 @@ import {
     updateRevista,
     deleteRevista,
     uploadMagazineImage,
+    getRevistaById,
 } from "@/core/service/RevistaService";
 import {
     Magazine,
@@ -30,13 +31,14 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         const magazine = await createRevista(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadMagazineImage(magazine.id, form);
+                return await getRevistaById(magazine.id);
             }
         }
         return magazine;
@@ -50,13 +52,14 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         const magazine = await updateRevista(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadMagazineImage(id, form, true);
+                return await getRevistaById(id);
             }
         }
         return magazine;
@@ -66,11 +69,11 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         Magazine,
         z.infer<typeof MagazineFormSchema>,
         z.infer<typeof MagazineUpdateFormSchema>,
-        typeof MagazineFormSchema
+        typeof MagazineFormSchema,
+        typeof MagazineUpdateFormSchema
     > = {
         title: "Revistas",
         entityName: "magazines",
-        schema: MagazineFormSchema,
         createSchema: MagazineFormSchema,
         updateSchema: MagazineUpdateFormSchema,
         defaultValues: { images: [] },

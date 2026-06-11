@@ -8,6 +8,7 @@ import {
     updateEquipament,
     deleteEquipament,
     uploadEquipamentImages,
+    getEquipamentById,
 } from "@/core/service/EquipamentoService";
 import {
     Equipment,
@@ -30,13 +31,14 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         const eq = await createEquipament(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadEquipamentImages(eq.id, form);
+                return await getEquipamentById(eq.id);
             }
         }
         return eq;
@@ -50,13 +52,14 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         const eq = await updateEquipament(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadEquipamentImages(id, form, true);
+                return await getEquipamentById(id);
             }
         }
         return eq;
@@ -66,11 +69,11 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         Equipment,
         z.infer<typeof EquipmentFormSchema>,
         z.infer<typeof EquipmentUpdateFormSchema>,
-        typeof EquipmentFormSchema
+        typeof EquipmentFormSchema,
+        typeof EquipmentUpdateFormSchema
     > = {
         title: "Equipamentos",
         entityName: "equipment",
-        schema: EquipmentFormSchema,
         createSchema: EquipmentFormSchema,
         updateSchema: EquipmentUpdateFormSchema,
         defaultValues: { images: [] },

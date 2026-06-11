@@ -16,20 +16,21 @@ export interface AdminFormProps {
 }
 
 export interface AdminEntityConfig<
-    T extends { id: string },
+    T extends { id: string; name?: string },
     CreateDTO extends FieldValues,
     UpdateDTO extends FieldValues,
-    TSchema extends ZodType<any, any, any>,
+    TCreateSchema extends ZodType<any, any, any>,
+    TUpdateSchema extends ZodType<any, any, any> = TCreateSchema,
 > {
     title: string;
     entityName: string;
-    schema: TSchema;
-    createSchema?: TSchema;
-    updateSchema?: TSchema;
-    defaultValues: Partial<T | CreateDTO | UpdateDTO>;
+    schema?: TCreateSchema; // Legacy, kept for compatibility if needed
+    createSchema: TCreateSchema;
+    updateSchema: TUpdateSchema;
+    defaultValues: Partial<CreateDTO>;
     mapToFormValues?: (item: T) => Partial<CreateDTO | UpdateDTO>;
     renderForm: (props: AdminFormProps) => React.ReactNode;
-    childTabs?: ChildTabConfig[];
+    childTabs: ChildTabConfig[];
 
     // API Functions
     fetchFn: (params: any) => Promise<any>;

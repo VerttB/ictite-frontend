@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { SchoolForm } from "./forms/SchoolForm";
 import {
@@ -10,6 +11,7 @@ import {
     uploadSchoolImage,
     getSchoolClubs,
     getSchoolEquiments,
+    getSchoolById,
 } from "@/core/service/SchoolService";
 import {
     School,
@@ -24,12 +26,14 @@ import {
     updateClubeCiencias,
     deleteClubeCiencias,
     uploadClubImage,
+    getClubeCienciaById,
 } from "@/core/service/ClubeCienciaService";
 import {
     createEquipament,
     updateEquipament,
     deleteEquipament,
     uploadEquipamentImages,
+    getEquipamentById,
 } from "@/core/service/EquipamentoService";
 import { ScienceClubFormSchema, ScienceClubUpdateFormSchema } from "@/core/domain/Club";
 import { EquipmentFormSchema, EquipmentUpdateFormSchema } from "@/core/domain/Equipment";
@@ -49,13 +53,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         const school = await createSchool(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File[]) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadSchoolImage(school.id, form);
+                return await getSchoolById(school.id);
             }
         }
         return school;
@@ -69,13 +74,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         const school = await updateSchool(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadSchoolImage(id, form, true);
+                return await getSchoolById(id);
             }
         }
         return school;
@@ -99,13 +105,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const club = await createClubeCiencias(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: File) => {
+                            images.forEach((img: any) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
                             });
                             if (form.has("images")) {
                                 await uploadClubImage(club.id, form);
+                                return await getClubeCienciaById(club.id);
                             }
                         }
                         return club;
@@ -118,13 +125,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const club = await updateClubeCiencias(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: File) => {
+                            images.forEach((img: any) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
                             });
                             if (form.has("images")) {
                                 await uploadClubImage(id, form, true);
+                                return await getClubeCienciaById(id);
                             }
                         }
                         return club;
@@ -160,13 +168,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const eq = await createEquipament(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: File) => {
+                            images.forEach((img: any) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
                             });
                             if (form.has("images")) {
                                 await uploadEquipamentImages(eq.id, form);
+                                return await getEquipamentById(eq.id);
                             }
                         }
                         return eq;
@@ -179,13 +188,14 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const eq = await updateEquipament(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: File) => {
+                            images.forEach((img: any) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
                             });
                             if (form.has("images")) {
                                 await uploadEquipamentImages(id, form, true);
+                                return await getEquipamentById(id);
                             }
                         }
                         return eq;
@@ -206,10 +216,15 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         },
     ];
 
-    const config: AdminEntityConfig<School, any, any, typeof SchoolFormSchema> = {
+    const config: AdminEntityConfig<
+        School,
+        z.infer<typeof SchoolFormSchema>,
+        z.infer<typeof SchoolUpdateFormSchema>,
+        typeof SchoolFormSchema,
+        typeof SchoolUpdateFormSchema
+    > = {
         title: "Escolas",
         entityName: "schools",
-        schema: SchoolFormSchema,
         createSchema: SchoolFormSchema,
         updateSchema: SchoolUpdateFormSchema,
         defaultValues: { images: [] },

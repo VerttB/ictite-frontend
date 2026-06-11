@@ -67,11 +67,11 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         Material,
         z.infer<typeof MaterialFormSchema>,
         z.infer<typeof MaterialUpdateFormSchema>,
-        typeof MaterialFormSchema
+        typeof MaterialFormSchema,
+        typeof MaterialUpdateFormSchema
     > = {
         title: "Materiais",
         entityName: "materials",
-        schema: MaterialFormSchema,
         createSchema: MaterialFormSchema,
         updateSchema: MaterialUpdateFormSchema,
         defaultValues: { images: [] },

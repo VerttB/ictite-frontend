@@ -23,24 +23,24 @@ export const VideoAdm = ({ params }: VideoAdmProps) => {
         return video;
     };
 
-    const config: AdminEntityConfig<Video, VideoCreate, Video, typeof VideoCreateSchema> =
-        {
-            title: "Vídeos",
-            entityName: "videos",
-            schema: VideoCreateSchema,
-            defaultValues: { images: [] },
-            renderForm: () => <VideoForm />,
-            childTabs: [],
-            fetchFn: getVideos,
-            createFn: async (data) => {
-                const video = await createVideo(data);
-                return { ...video, _redirectToList: true } as any;
-            },
-            updateFn: async () => {
-                throw new Error("Update not implemented for videos");
-            },
-            deleteFn: deleteVideo,
-        };
+    // const config: AdminEntityConfig<Video, VideoCreate, Video, typeof VideoCreateSchema> =
+    //     {
+    //         title: "Vídeos",
+    //         entityName: "videos",
+    //         schema: VideoCreateSchema,
+    //         defaultValues: { images: [] },
+    //         renderForm: () => <VideoForm />,
+    //         childTabs: [],
+    //         fetchFn: getVideos,
+    //         createFn: async (data) => {
+    //             const video = await createVideo(data);
+    //             return { ...video, _redirectToList: true } as any;
+    //         },
+    //         updateFn: async () => {
+    //             throw new Error("Update not implemented for videos");
+    //         },
+    //         deleteFn: deleteVideo,
+    //     };
 
-    return <EntityConsole config={config} params={params} />;
+    // return <EntityConsole config={config} params={params} />;
 };

@@ -16,11 +16,11 @@ interface BreadcrumbsProps {
 
 export const Breadcrumbs = ({ items, className }: BreadcrumbsProps) => {
     return (
-        <nav className={cn("flex mb-4", className)} aria-label="Breadcrumb">
+        <nav className={cn("mb-4 flex", className)} aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2">
                 <li>
                     <Link
-                        href="/console/v2"
+                        href={"/console/v2" as Route}
                         className="text-muted-foreground hover:text-foreground flex items-center transition-colors">
                         <Home size={16} className="mr-1" />
                         <span className="sr-only">Console</span>

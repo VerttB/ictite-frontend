@@ -13,31 +13,33 @@ import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { Pagination } from "../../Pagination";
 import { SearchAndFilter } from "../../SearchAndFilter";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { DeleteConfirmationModal } from "../../DeleteConfirmationModal";
 
 interface EntityConsoleProps<
-    T extends { id: string },
-    CreateDTO,
-    UpdateDTO,
-    TSchema extends ZodType<any, any, any>,
+    T extends { id: string; name?: string },
+    CreateDTO extends FieldValues,
+    UpdateDTO extends FieldValues,
+    TCreateSchema extends ZodType<any, any, any>,
+    TUpdateSchema extends ZodType<any, any, any>,
 > {
-    config: AdminEntityConfig<T, CreateDTO, UpdateDTO, TSchema>;
+    config: AdminEntityConfig<T, CreateDTO, UpdateDTO, TCreateSchema, TUpdateSchema>;
     params: any;
 }
 
 export const EntityConsole = <
-    T extends { id: string },
-    CreateDTO,
-    UpdateDTO,
-    TSchema extends ZodType<any, any, any>,
+    T extends { id: string; name?: string },
+    CreateDTO extends FieldValues,
+    UpdateDTO extends FieldValues,
+    TCreateSchema extends ZodType<any, any, any>,
+    TUpdateSchema extends ZodType<any, any, any>,
 >({
     config,
     params,
-}: EntityConsoleProps<T, CreateDTO, UpdateDTO, TSchema>) => {
+}: EntityConsoleProps<T, CreateDTO, UpdateDTO, TCreateSchema, TUpdateSchema>) => {
     const [view, setView] = useState<"list" | "edit">("list");
     const [activeTab, setActiveTab] = useState("dados-gerais");
 
@@ -68,11 +70,8 @@ export const EntityConsole = <
     }, [config.title, config.entityName, view, crud.editingItem]);
 
     const activeSchema = useMemo(() => {
-        if (crud.editingItem) {
-            return config.updateSchema || config.schema;
-        }
-        return config.createSchema || config.schema;
-    }, [crud.editingItem, config.schema, config.createSchema, config.updateSchema]);
+        return crud.editingItem ? config.updateSchema : config.createSchema;
+    }, [crud.editingItem, config.createSchema, config.updateSchema]);
 
     const methods = useForm({
         resolver: zodResolver(activeSchema),

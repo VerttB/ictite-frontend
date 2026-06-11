@@ -15,6 +15,7 @@ import {
     ResearcherCreateSchema,
     ResearcherUpdate,
     ResearcherSearchParams,
+    ResearcherUpdateSchema,
 } from "@/core/domain/Researcher";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 
@@ -27,11 +28,13 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
         Researcher,
         ResearcherCreate,
         ResearcherUpdate,
-        typeof ResearcherCreateSchema
+        typeof ResearcherCreateSchema,
+        typeof ResearcherUpdateSchema
     > = {
         title: "Pesquisadores",
         entityName: "researchers",
-        schema: ResearcherCreateSchema,
+        createSchema: ResearcherCreateSchema,
+        updateSchema: ResearcherUpdateSchema,
         defaultValues: { projects_ids: [] },
         renderForm: (props) => <ResearcherForm {...props} />,
         childTabs: [

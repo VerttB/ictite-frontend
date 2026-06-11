@@ -9,6 +9,7 @@ import {
     deleteClubeCiencias,
     uploadClubImage,
     getClubeCienciaProjects,
+    getClubeCienciaById,
 } from "@/core/service/ClubeCienciaService";
 import {
     ScienceClub,
@@ -23,6 +24,7 @@ import {
     updateProject,
     deleteProject,
     uploadProjectImages,
+    getProjectById,
 } from "@/core/service/ProjetoService";
 import { ProjectFormSchema, ProjectUpdateFormSchema } from "@/core/domain/Project";
 import { ProjectForm } from "./forms/ProjectForm";
@@ -40,13 +42,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         const club = await createClubeCiencias(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadClubImage(club.id, form);
+                return await getClubeCienciaById(club.id);
             }
         }
         return club;
@@ -60,13 +63,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         const club = await updateClubeCiencias(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadClubImage(id, form, true);
+                return await getClubeCienciaById(id);
             }
         }
         return club;
@@ -90,13 +94,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         const project = await createProject(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: File) => {
+                            images.forEach((img: any) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
                             });
                             if (form.has("images")) {
                                 await uploadProjectImages(project.id, form);
+                                return await getProjectById(project.id);
                             }
                         }
                         return project;
@@ -109,13 +114,14 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         const project = await updateProject(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: File) => {
+                            images.forEach((img: any) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
                             });
                             if (form.has("images")) {
                                 await uploadProjectImages(id, form, true);
+                                return await getProjectById(id);
                             }
                         }
                         return project;
@@ -135,26 +141,30 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         },
     ];
 
-    const config: AdminEntityConfig<ScienceClub, any, any, typeof ScienceClubFormSchema> =
-        {
-            title: "Clubes de Ciências",
-            entityName: "clubes",
-            schema: ScienceClubFormSchema,
-            createSchema: ScienceClubFormSchema,
-            updateSchema: ScienceClubUpdateFormSchema,
-            defaultValues: { images: [] },
-            mapToFormValues: (item: any) => ({
-                ...item,
-                school_id: item.school?.id,
-                coordinators_ids: item.coordinators?.map((c: any) => c.id) || [],
-            }),
-            renderForm: (props) => <ClubForm {...props} />,
-            childTabs,
-            fetchFn: getClubesCiencia,
-            createFn: handleCreate,
-            updateFn: handleUpdate,
-            deleteFn: deleteClubeCiencias,
-        };
+    const config: AdminEntityConfig<
+        ScienceClub,
+        z.infer<typeof ScienceClubFormSchema>,
+        z.infer<typeof ScienceClubUpdateFormSchema>,
+        typeof ScienceClubFormSchema,
+        typeof ScienceClubUpdateFormSchema
+    > = {
+        title: "Clubes de Ciências",
+        entityName: "clubes",
+        createSchema: ScienceClubFormSchema,
+        updateSchema: ScienceClubUpdateFormSchema,
+        defaultValues: { images: [] },
+        mapToFormValues: (item: any) => ({
+            ...item,
+            school_id: item.school?.id,
+            coordinators_ids: item.coordinators?.map((c: any) => c.id) || [],
+        }),
+        renderForm: (props) => <ClubForm {...props} />,
+        childTabs,
+        fetchFn: getClubesCiencia,
+        createFn: handleCreate,
+        updateFn: handleUpdate,
+        deleteFn: deleteClubeCiencias,
+    };
 
     return <EntityConsole config={config} params={params} />;
 };

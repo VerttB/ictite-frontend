@@ -8,6 +8,7 @@ import {
     updateProject,
     deleteProject,
     uploadProjectImages,
+    getProjectById,
 } from "@/core/service/ProjetoService";
 import {
     Project,
@@ -31,13 +32,14 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         const project = await createProject(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadProjectImages(project.id, form);
+                return await getProjectById(project.id);
             }
         }
         return project;
@@ -51,13 +53,14 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         const project = await updateProject(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img: any) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
             if (form.has("images")) {
                 await uploadProjectImages(id, form, true);
+                return await getProjectById(id);
             }
         }
         return project;
@@ -67,11 +70,11 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         Project,
         z.infer<typeof ProjectFormSchema>,
         z.infer<typeof ProjectUpdateFormSchema>,
-        typeof ProjectFormSchema
+        typeof ProjectFormSchema,
+        typeof ProjectUpdateFormSchema
     > = {
         title: "Projetos",
         entityName: "projects",
-        schema: ProjectFormSchema,
         createSchema: ProjectFormSchema,
         updateSchema: ProjectUpdateFormSchema,
         defaultValues: { images: [] },

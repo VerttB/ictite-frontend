@@ -17,9 +17,7 @@ export const SearchParamParser = {
             if (val === undefined || val === null) return undefined;
             if (Array.isArray(val)) return val;
             return [val];
-        }, z.array(z.string()))
-        .optional()
-        .default([]),
+        }, z.array(z.string()).optional()),
 };
 
 export type SimpleIdName = z.infer<typeof SimpleIdNameSchema>;
