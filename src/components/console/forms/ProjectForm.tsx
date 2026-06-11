@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
 import { InputField } from "../../forms-input/InputField";
 import { TextField } from "../../forms-input/TextField";
 import { ControlledComboBox } from "../../forms-input/ControlledComboBox";
 import { ControlledImageUpload } from "../../forms-input/ControlledImageInput";
 import useSWR from "swr";
-import { getClubesCiencia, getClubeCienciaById } from "@/core/service/ClubeCienciaService";
+import {
+    getClubesCiencia,
+    getClubeCienciaById,
+} from "@/core/service/ClubeCienciaService";
 import { AdminFormProps } from "@/core/interface/AdminEntity";
 import { mask } from "@/lib/maskBuilder";
 
@@ -14,9 +16,8 @@ export const ProjectForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isClubLocked = parentIdField === "clube_ciencia_id" && !!parentId;
 
     const { data: clubes } = useSWR("clubes-all", () => getClubesCiencia({ size: 0 }));
-    const { data: parentClub } = useSWR(
-        isClubLocked ? ["club", parentId] : null,
-        () => getClubeCienciaById(parentId!)
+    const { data: parentClub } = useSWR(isClubLocked ? ["club", parentId] : null, () =>
+        getClubeCienciaById(parentId!)
     );
 
     const clubOptions = isClubLocked && parentClub ? [parentClub] : clubes?.items || [];

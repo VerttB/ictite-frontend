@@ -2,13 +2,13 @@ import { z } from "zod";
 import { isAcceptedImageFile, MAX_IMAGE_SIZE } from "../constants/Image";
 
 export const ImageSchema = z.object({
-  id: z.uuid(),
-  url: z.url(),
+    id: z.uuid(),
+    url: z.url(),
 });
 
 export type Image = z.infer<typeof ImageSchema>;
 
-const isValidFile = (f: any) => {
+const isValidFile = (f: unknown) => {
     // If it's an existing image object from backend, we consider it valid
     if (f && typeof f === "object" && !("size" in f) && ("url" in f || "id" in f)) {
         return true;
@@ -20,14 +20,14 @@ const isValidFile = (f: any) => {
     return false;
 };
 
-const isSizeValid = (f: any) => {
+const isSizeValid = (f: unknown) => {
     if (f && typeof f === "object" && !("size" in f) && ("url" in f || "id" in f)) {
         return true;
     }
     return f instanceof File && f.size <= MAX_IMAGE_SIZE;
 };
 
-const isFormatValid = (f: any) => {
+const isFormatValid = (f: unknown) => {
     if (f && typeof f === "object" && !("name" in f) && ("url" in f || "id" in f)) {
         return true;
     }
@@ -48,4 +48,3 @@ export const OptionalImageCreateSchema = z
     .refine((arr) => arr.length <= 5, "Máximo de 5 imagens")
     .refine((arr) => arr.every(isSizeValid), "Máx 5MB")
     .refine((arr) => arr.every(isFormatValid), "Formato inválido");
-

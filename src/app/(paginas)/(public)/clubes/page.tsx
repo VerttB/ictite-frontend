@@ -4,7 +4,6 @@ import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
 import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
-import { Button } from "@/components/ui/button";
 import {
     getClubesCiencia,
     getClubesCienciaStats,
@@ -14,7 +13,6 @@ import {
     BookOpenText,
     BrainCircuit,
     ChartBar,
-    ChevronLeft,
     Cpu,
     FlaskConical,
     Goal,
@@ -22,12 +20,9 @@ import {
     LucideIcon,
     Users2,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
 export default function Clubes() {
-    const router = useRouter();
-
     const { data: clubesCiencia } = useSWR("clubes-ciencia", () =>
         getClubesCiencia().then((res) => res.items)
     );

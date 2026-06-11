@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { MaterialForm } from "./forms/MaterialForm";
 import {
@@ -12,25 +11,26 @@ import {
 } from "@/core/service/MaterialService";
 import {
     Material,
-    MaterialCreate,
     MaterialFormSchema,
-    MaterialUpdate,
     MaterialUpdateFormSchema,
     MaterialSearchParams,
 } from "@/core/domain/Material";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
+import z from "zod";
 
 interface MaterialAdmProps {
     params: MaterialSearchParams;
 }
 
 export const MaterialAdm = ({ params }: MaterialAdmProps) => {
-    const handleCreate = async (data: any): Promise<Material> => {
+    const handleCreate = async (
+        data: z.infer<typeof MaterialFormSchema>
+    ): Promise<Material> => {
         const { images, ...payload } = data;
         const material = await createMaterial(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -42,17 +42,20 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         return material;
     };
 
-    const handleUpdate = async (id: string, data: any): Promise<Material> => {
+    const handleUpdate = async (
+        id: string,
+        data: z.infer<typeof MaterialUpdateFormSchema>
+    ): Promise<Material> => {
         const { images, ...payload } = data;
         const material = await updateMaterial(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
             });
-            
+
             if (form.has("images")) {
                 await uploadMaterialImages(id, form, true);
             }
@@ -62,8 +65,8 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
 
     const config: AdminEntityConfig<
         Material,
-        MaterialCreate,
-        MaterialUpdate,
+        z.infer<typeof MaterialFormSchema>,
+        z.infer<typeof MaterialUpdateFormSchema>,
         typeof MaterialFormSchema
     > = {
         title: "Materiais",

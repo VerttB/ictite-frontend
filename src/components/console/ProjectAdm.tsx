@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { ProjectForm } from "./forms/ProjectForm";
 import {
@@ -12,26 +11,27 @@ import {
 } from "@/core/service/ProjetoService";
 import {
     Project,
-    ProjectCreate,
     ProjectFormSchema,
-    ProjectUpdate,
     ProjectSearchParams,
     ProjectUpdateFormSchema,
 } from "@/core/domain/Project";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 import { ProjectMembersList } from "./ProjectMembersList";
+import z from "zod";
 
 interface ProjectAdmProps {
     params: ProjectSearchParams;
 }
 
 export const ProjectAdm = ({ params }: ProjectAdmProps) => {
-    const handleCreate = async (data: any): Promise<Project> => {
+    const handleCreate = async (
+        data: z.infer<typeof ProjectFormSchema>
+    ): Promise<Project> => {
         const { images, ...payload } = data;
         const project = await createProject(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -43,12 +43,15 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         return project;
     };
 
-    const handleUpdate = async (id: string, data: any): Promise<Project> => {
+    const handleUpdate = async (
+        id: string,
+        data: z.infer<typeof ProjectUpdateFormSchema>
+    ): Promise<Project> => {
         const { images, ...payload } = data;
         const project = await updateProject(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -60,7 +63,12 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         return project;
     };
 
-    const config: AdminEntityConfig<Project, any, any, typeof ProjectFormSchema> = {
+    const config: AdminEntityConfig<
+        Project,
+        z.infer<typeof ProjectFormSchema>,
+        z.infer<typeof ProjectUpdateFormSchema>,
+        typeof ProjectFormSchema
+    > = {
         title: "Projetos",
         entityName: "projects",
         schema: ProjectFormSchema,

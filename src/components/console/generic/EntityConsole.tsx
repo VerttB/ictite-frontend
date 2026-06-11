@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import useSWR from "swr";
 import { ZodType } from "zod";
 import { Breadcrumbs, BreadcrumbItem } from "./Breadcrumbs";
@@ -8,7 +8,7 @@ import { Section } from "../../Section";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowLeft, LoaderCircle } from "lucide-react";
+import { ArrowLeft, LoaderCircle } from "lucide-react";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { Pagination } from "../../Pagination";
@@ -41,13 +41,13 @@ export const EntityConsole = <
     const [view, setView] = useState<"list" | "edit">("list");
     const [activeTab, setActiveTab] = useState("dados-gerais");
 
-    const {
-        data: paginatedData,
-        mutate,
-        error,
-    } = useSWR([config.entityName, params], ([, p]) => config.fetchFn(p), {
-        keepPreviousData: true,
-    });
+    const { data: paginatedData, mutate } = useSWR(
+        [config.entityName, params],
+        ([, p]) => config.fetchFn(p),
+        {
+            keepPreviousData: true,
+        }
+    );
 
     const { applyFilters, changePage } = useUrlPagination();
 
@@ -115,9 +115,11 @@ export const EntityConsole = <
                     await mutate();
                     // Stay in edit mode with updated data
                     crud.ui.openEdit(result);
-                    const formValues = config.mapToFormValues ? config.mapToFormValues(result) : result;
+                    const formValues = config.mapToFormValues
+                        ? config.mapToFormValues(result)
+                        : result;
                     reset(formValues as any);
-                    
+
                     success = true;
                     toast.success("Item atualizado com sucesso!");
                 }
@@ -135,7 +137,9 @@ export const EntityConsole = <
                         onBackToList();
                     } else {
                         crud.ui.openEdit(result); // Switch to edit mode after creation to unlock tabs
-                        const formValues = config.mapToFormValues ? config.mapToFormValues(result) : result;
+                        const formValues = config.mapToFormValues
+                            ? config.mapToFormValues(result)
+                            : result;
                         reset(formValues as any);
                     }
                     success = true;
@@ -206,7 +210,9 @@ export const EntityConsole = <
                         style={{
                             gridTemplateColumns: `repeat(${crud.editingItem && config.childTabs?.length ? config.childTabs.length + 1 : 1}, 1fr)`,
                         }}>
-                        <TabsTrigger className="text-font-primary px-4" value="dados-gerais">
+                        <TabsTrigger
+                            className="text-font-primary px-4"
+                            value="dados-gerais">
                             Dados Gerais
                         </TabsTrigger>
                         {crud.editingItem &&

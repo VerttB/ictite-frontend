@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { VideoForm } from "./forms/VideoForm";
 import { getVideos, createVideo, deleteVideo } from "@/core/service/VideoService";
@@ -8,7 +7,6 @@ import {
     Video,
     VideoCreate,
     VideoCreateSchema,
-    VideoFormSchema,
     VideoSearchParams,
 } from "@/core/domain/Video";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";

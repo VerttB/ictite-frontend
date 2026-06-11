@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { ResearcherForm } from "./forms/ResearcherForm";
 import { ResearcherProjectsList } from "./ResearcherProjectsList";
@@ -24,7 +23,12 @@ interface ResearcherAdmProps {
 }
 
 export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
-    const config: AdminEntityConfig<Researcher, ResearcherCreate, ResearcherUpdate, typeof ResearcherCreateSchema> = {
+    const config: AdminEntityConfig<
+        Researcher,
+        ResearcherCreate,
+        ResearcherUpdate,
+        typeof ResearcherCreateSchema
+    > = {
         title: "Pesquisadores",
         entityName: "researchers",
         schema: ResearcherCreateSchema,
@@ -36,7 +40,9 @@ export const ResearcherAdm = ({ params }: ResearcherAdmProps) => {
                 label: "Projetos",
                 entityName: "projetos",
                 parentIdField: "researcher_id",
-                renderList: (parentId) => <ResearcherProjectsList researcherId={parentId} />,
+                renderList: (parentId) => (
+                    <ResearcherProjectsList researcherId={parentId} />
+                ),
             },
         ],
         fetchFn: getResearchers,

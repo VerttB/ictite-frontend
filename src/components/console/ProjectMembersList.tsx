@@ -76,7 +76,10 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
             toast.success(`${selectedIds.length} pesquisadores adicionados com sucesso!`);
             handleClose();
         } catch (error) {
-            toast.error("Erro ao adicionar alguns pesquisadores.");
+            toast.error(
+                "Erro ao adicionar alguns pesquisadores." +
+                    (error instanceof Error ? error.message : "")
+            );
         } finally {
             setIsSaving(false);
         }

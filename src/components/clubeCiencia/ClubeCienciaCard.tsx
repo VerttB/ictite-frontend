@@ -1,7 +1,6 @@
 import { ScienceClub } from "@/core/domain/Club";
 import { School } from "lucide-react";
 import Link from "next/link";
-import { ImageDisplay } from "../ui/ImageDisplay";
 import Image from "next/image";
 
 interface ClubeCienciaCardProps {

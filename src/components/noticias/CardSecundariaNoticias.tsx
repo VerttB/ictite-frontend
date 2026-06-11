@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { InstagramPost } from "@/core/domain/Instagram";
 

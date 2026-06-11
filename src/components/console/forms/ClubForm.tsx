@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { InputField } from "../../forms-input/InputField";
 import { TextField } from "../../forms-input/TextField";
 import { ControlledComboBox } from "../../forms-input/ControlledComboBox";
@@ -14,10 +13,16 @@ export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isSchoolLocked = parentIdField === "school_id" && !!parentId;
 
     const { data: schools } = useSWR("schools-all", () => getSchools({ size: 0 }));
-    const { data: coordinators } = useSWR("coordinators-all", () => getCoordinators({ size: 0 }));
-    const { data: parentSchool } = useSWR(isSchoolLocked ? ["school", parentId] : null, () => getSchoolById(parentId!));
+    const { data: coordinators } = useSWR("coordinators-all", () =>
+        getCoordinators({ size: 0 })
+    );
+    const { data: parentSchool } = useSWR(
+        isSchoolLocked ? ["school", parentId] : null,
+        () => getSchoolById(parentId!)
+    );
 
-    const schoolOptions = isSchoolLocked && parentSchool ? [parentSchool] : (schools?.items || []);
+    const schoolOptions =
+        isSchoolLocked && parentSchool ? [parentSchool] : schools?.items || [];
 
     return (
         <>

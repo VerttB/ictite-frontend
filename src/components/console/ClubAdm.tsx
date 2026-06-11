@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { ClubForm } from "./forms/ClubForm";
 import {
@@ -13,36 +12,35 @@ import {
 } from "@/core/service/ClubeCienciaService";
 import {
     ScienceClub,
-    ScienceClubCreate,
     ScienceClubFormSchema,
-    ScienceClubUpdate,
     ScienceClubSearchParams,
     ScienceClubUpdateFormSchema,
 } from "@/core/domain/Club";
 import { AdminEntityConfig, ChildTabConfig } from "@/core/interface/AdminEntity";
 import { NestedEntityList } from "./generic/NestedEntityList";
 import {
-    getProjects,
     createProject,
     updateProject,
     deleteProject,
     uploadProjectImages,
-    getProjectbyClube,
 } from "@/core/service/ProjetoService";
 import { ProjectFormSchema, ProjectUpdateFormSchema } from "@/core/domain/Project";
 import { ProjectForm } from "./forms/ProjectForm";
+import z from "zod";
 
 interface ClubAdmProps {
     params: ScienceClubSearchParams;
 }
 
 export const ClubAdm = ({ params }: ClubAdmProps) => {
-    const handleCreate = async (data: any): Promise<ScienceClub> => {
+    const handleCreate = async (
+        data: z.infer<typeof ScienceClubFormSchema>
+    ): Promise<ScienceClub> => {
         const { images, ...payload } = data;
         const club = await createClubeCiencias(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -54,12 +52,15 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         return club;
     };
 
-    const handleUpdate = async (id: string, data: any): Promise<ScienceClub> => {
+    const handleUpdate = async (
+        id: string,
+        data: z.infer<typeof ScienceClubUpdateFormSchema>
+    ): Promise<ScienceClub> => {
         const { images, ...payload } = data;
         const club = await updateClubeCiencias(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -84,12 +85,12 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     parentId={parentId}
                     parentIdField="clube_ciencia_id"
                     fetchFn={(params) => getClubeCienciaProjects(params.clube_ciencia_id)}
-                    createFn={async (data: any) => {
+                    createFn={async (data: z.infer<typeof ProjectFormSchema>) => {
                         const { images, ...payload } = data;
                         const project = await createProject(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img: File) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -100,12 +101,15 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         }
                         return project;
                     }}
-                    updateFn={async (id, data: any) => {
+                    updateFn={async (
+                        id,
+                        data: z.infer<typeof ProjectUpdateFormSchema>
+                    ) => {
                         const { images, ...payload } = data;
                         const project = await updateProject(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img: File) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }

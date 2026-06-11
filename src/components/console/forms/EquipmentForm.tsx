@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { InputField } from "../../forms-input/InputField";
 import { ControlledComboBox } from "../../forms-input/ControlledComboBox";
 import { ControlledImageUpload } from "../../forms-input/ControlledImageInput";

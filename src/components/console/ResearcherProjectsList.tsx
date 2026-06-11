@@ -23,6 +23,7 @@ import { LoaderCircle, Check, Search } from "lucide-react";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
+import { Project, ProjectUpdate } from "@/core/domain/Project";
 
 export const ResearcherProjectsList = ({ researcherId }: { researcherId: string }) => {
     const { data: projects, mutate } = useSWR(["researcher-projects", researcherId], () =>
@@ -35,7 +36,7 @@ export const ResearcherProjectsList = ({ researcherId }: { researcherId: string 
     const [searchTerm, setSearchValue] = useState("");
     const [isSaving, setIsSaving] = useState(false);
 
-    const crud = useAdmCrud<any, any, any>({
+    const crud = useAdmCrud<Project, any, ProjectUpdate>({
         mutate: mutate as any,
         deleteFn: async (projectId) => {
             await removeResearcherFromProject(projectId, researcherId);
@@ -74,7 +75,10 @@ export const ResearcherProjectsList = ({ researcherId }: { researcherId: string 
             toast.success(`${selectedIds.length} projetos vinculados com sucesso!`);
             handleClose();
         } catch (error) {
-            toast.error("Erro ao vincular alguns projetos.");
+            toast.error(
+                "Erro ao vincular alguns projetos." +
+                    (error instanceof Error ? error.message : "")
+            );
         } finally {
             setIsSaving(false);
         }
@@ -87,7 +91,7 @@ export const ResearcherProjectsList = ({ researcherId }: { researcherId: string 
 
     return (
         <div className="flex flex-col gap-4">
-            <Section<any>
+            <Section<Project>
                 title="Projetos Vinculados"
                 items={projects || []}
                 onAdd={crud.ui.openCreate}

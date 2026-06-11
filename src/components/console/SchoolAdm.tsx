@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { SchoolForm } from "./forms/SchoolForm";
 import {
@@ -14,24 +13,19 @@ import {
 } from "@/core/service/SchoolService";
 import {
     School,
-    SchoolCreate,
-    SchoolCreateSchema,
     SchoolFormSchema,
     SchoolUpdateFormSchema,
-    SchoolUpdate,
     SchoolSearchParams,
 } from "@/core/domain/School";
 import { AdminEntityConfig, ChildTabConfig } from "@/core/interface/AdminEntity";
 import { NestedEntityList } from "./generic/NestedEntityList";
 import {
-    getClubesCiencia,
     createClubeCiencias,
     updateClubeCiencias,
     deleteClubeCiencias,
     uploadClubImage,
 } from "@/core/service/ClubeCienciaService";
 import {
-    getEquipaments,
     createEquipament,
     updateEquipament,
     deleteEquipament,
@@ -41,18 +35,21 @@ import { ScienceClubFormSchema, ScienceClubUpdateFormSchema } from "@/core/domai
 import { EquipmentFormSchema, EquipmentUpdateFormSchema } from "@/core/domain/Equipment";
 import { ClubForm } from "./forms/ClubForm";
 import { EquipmentForm } from "./forms/EquipmentForm";
+import z from "zod";
 
 interface SchoolAdmProps {
     params: SchoolSearchParams;
 }
 
 export const SchoolAdm = ({ params }: SchoolAdmProps) => {
-    const handleCreate = async (data: any): Promise<School> => {
+    const handleCreate = async (
+        data: z.infer<typeof SchoolFormSchema>
+    ): Promise<School> => {
         const { images, ...payload } = data;
         const school = await createSchool(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File[]) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -64,12 +61,15 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         return school;
     };
 
-    const handleUpdate = async (id: string, data: any): Promise<School> => {
+    const handleUpdate = async (
+        id: string,
+        data: z.infer<typeof SchoolUpdateFormSchema>
+    ): Promise<School> => {
         const { images, ...payload } = data;
         const school = await updateSchool(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img: File) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -94,12 +94,12 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     parentId={parentId}
                     parentIdField="school_id"
                     fetchFn={(params) => getSchoolClubs(params.school_id)}
-                    createFn={async (data: any) => {
+                    createFn={async (data: z.infer<typeof ScienceClubFormSchema>) => {
                         const { images, ...payload } = data;
                         const club = await createClubeCiencias(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img: File) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -110,12 +110,15 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         }
                         return club;
                     }}
-                    updateFn={async (id, data: any) => {
+                    updateFn={async (
+                        id,
+                        data: z.infer<typeof ScienceClubUpdateFormSchema>
+                    ) => {
                         const { images, ...payload } = data;
                         const club = await updateClubeCiencias(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img: File) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -152,12 +155,12 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     parentId={parentId}
                     parentIdField="school_id"
                     fetchFn={(params) => getSchoolEquiments(params.school_id)}
-                    createFn={async (data: any) => {
+                    createFn={async (data: z.infer<typeof EquipmentFormSchema>) => {
                         const { images, ...payload } = data;
                         const eq = await createEquipament(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img: File) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -168,12 +171,15 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         }
                         return eq;
                     }}
-                    updateFn={async (id, data: any) => {
+                    updateFn={async (
+                        id,
+                        data: z.infer<typeof EquipmentUpdateFormSchema>
+                    ) => {
                         const { images, ...payload } = data;
                         const eq = await updateEquipament(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img: File) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -200,12 +206,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         },
     ];
 
-    const config: AdminEntityConfig<
-        School,
-        any,
-        any,
-        typeof SchoolFormSchema
-    > = {
+    const config: AdminEntityConfig<School, any, any, typeof SchoolFormSchema> = {
         title: "Escolas",
         entityName: "schools",
         schema: SchoolFormSchema,

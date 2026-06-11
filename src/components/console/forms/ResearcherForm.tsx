@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { InputField } from "../../forms-input/InputField";
 import { ControlledComboBox } from "../../forms-input/ControlledComboBox";
 import { ControlledSelect } from "../../forms-input/ControlledSelect";
@@ -15,9 +14,13 @@ export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isProjectLocked = parentIdField === "projects_ids" && !!parentId;
 
     const { data: projects } = useSWR("projects-all", () => getProjects({ size: 0 }));
-    const { data: parentProject } = useSWR(isProjectLocked ? ["project", parentId] : null, () => getProjectById(parentId!));
+    const { data: parentProject } = useSWR(
+        isProjectLocked ? ["project", parentId] : null,
+        () => getProjectById(parentId!)
+    );
 
-    const projectOptions = isProjectLocked && parentProject ? [parentProject] : (projects?.items || []);
+    const projectOptions =
+        isProjectLocked && parentProject ? [parentProject] : projects?.items || [];
 
     return (
         <>
@@ -27,7 +30,10 @@ export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
                 <ControlledSelect
                     name="type"
                     label="Tipo de Pesquisador"
-                    options={Object.values(ResearcherTypes).map((t) => ({ id: t, name: t }))}
+                    options={Object.values(ResearcherTypes).map((t) => ({
+                        id: t,
+                        name: t,
+                    }))}
                 />
                 <ControlledSelect
                     name="gender"

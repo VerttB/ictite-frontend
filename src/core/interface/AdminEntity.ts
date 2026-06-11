@@ -1,5 +1,5 @@
 import { ZodType } from "zod";
-import { UseFormProps, FieldValues } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 
 export interface ChildTabConfig {
     id: string;
@@ -19,7 +19,7 @@ export interface AdminEntityConfig<
     T extends { id: string },
     CreateDTO extends FieldValues,
     UpdateDTO extends FieldValues,
-    TSchema extends ZodType<any, any, any>
+    TSchema extends ZodType<any, any, any>,
 > {
     title: string;
     entityName: string;
@@ -30,7 +30,7 @@ export interface AdminEntityConfig<
     mapToFormValues?: (item: T) => Partial<CreateDTO | UpdateDTO>;
     renderForm: (props: AdminFormProps) => React.ReactNode;
     childTabs?: ChildTabConfig[];
-    
+
     // API Functions
     fetchFn: (params: any) => Promise<any>;
     createFn: (data: CreateDTO) => Promise<T>;

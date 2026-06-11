@@ -7,15 +7,11 @@ import { getSchools } from "@/core/service/SchoolService";
 
 import {
     Building2,
-    ChevronLeft,
     Filter,
     School as SchoolIcon,
     Loader2,
     MapIcon,
-    BrainCircuit,
     LucideIcon,
-    BookOpen,
-    Trash,
     Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -34,16 +30,16 @@ import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 import { toast } from "sonner";
 
 export default function Escolas() {
-
     const [_search, setSearch] = useState("");
     const [territory, setTerritory] = useState("");
 
-    const { data, isLoading, error } = useSWR(["schools", _search, territory],
-        () => getSchools({
+    const { data, isLoading, error } = useSWR(["schools", _search, territory], () =>
+        getSchools({
             name: _search,
-            identity_territory_id: territory !== "" ? territory : undefined, 
-            page: 1
-        }));
+            identity_territory_id: territory !== "" ? territory : undefined,
+            page: 1,
+        })
+    );
     const { data: territorios, error: territoriesError } = useSWR("territorios", () =>
         getTerritories()
     );
@@ -77,10 +73,11 @@ export default function Escolas() {
 
     useEffect(() => {
         if (!error) return;
-        toast.error(
-            error instanceof Error ? error.message : "Erro ao carregar escolas",
-            { position: "top-center", duration: 5000, closeButton: true }
-        );
+        toast.error(error instanceof Error ? error.message : "Erro ao carregar escolas", {
+            position: "top-center",
+            duration: 5000,
+            closeButton: true,
+        });
     }, [error]);
 
     useEffect(() => {
@@ -142,12 +139,12 @@ export default function Escolas() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel className="flex justify-between items-center">
+                        <DropdownMenuLabel className="flex items-center justify-between">
                             <span>Território Identidade</span>
                             {territory !== "" && (
                                 <div
                                     onClick={() => handleTerritory("")}
-                                    className="flex gap-1 items-center cursor-pointer text-xs text-muted-foreground">
+                                    className="text-muted-foreground flex cursor-pointer items-center gap-1 text-xs">
                                     <Trash2 size={15} />
                                     Limpar
                                 </div>
@@ -159,8 +156,7 @@ export default function Escolas() {
                                 <DropdownMenuItem
                                     key={territorio.id}
                                     className="hover:bg-primary cursor-pointer transition-all hover:text-white"
-                                    onClick={() => handleTerritory(territorio.id)}
-                                >
+                                    onClick={() => handleTerritory(territorio.id)}>
                                     {territorio.name}
                                 </DropdownMenuItem>
                             ))
