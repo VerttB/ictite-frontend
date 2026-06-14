@@ -4,7 +4,7 @@ import { SearchParamParser } from "../../schemas/Common";
 import { MaterialType } from "../constants/materialType";
 
 const OptionalUrlSchema = z.preprocess(
-    (val) => (val === "" ? undefined : val),
+    (val) => (val === "" || val === null || val === undefined ? undefined : val),
     z.string().url("Link inválido").optional()
 );
 

@@ -7,7 +7,7 @@ import { ImageSchema } from "./Image";
 import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 
 const OptionalLattesIdSchema = z.preprocess(
-    (value) => (value === "" ? undefined : value),
+    (value) => (value === "" || value === null || value === undefined ? undefined : value),
     z.string().length(16, "O ID do Lattes deve ter 16 caracteres").optional()
 );
 

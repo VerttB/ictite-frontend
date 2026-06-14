@@ -35,8 +35,8 @@ export const ScienceClubFormSchema = ScienceClubCreateSchema.and(
 
 export const ScienceClubUpdateSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio").optional(),
-    description: z.string().optional(),
-    instagram: z.string().optional(),
+    description: z.string().nullish(),
+    instagram: z.string().nullish(),
 });
 
 export const ScienceClubUpdateFormSchema = ScienceClubUpdateSchema.and(
