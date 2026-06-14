@@ -6,7 +6,10 @@ import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 import { yearValidation } from "../constants/validation";
 
 const OptionalProjectYearSchema = z.preprocess(
-    (value) => (value === "" || value === null ? undefined : value),
+    (value) => {
+        if (value === "" || value === null || value === undefined) return undefined;
+        return String(value);
+    },
     z
         .string()
         .length(4, "Ano deve ter 4 dígitos")
@@ -34,8 +37,8 @@ export const ProjectCreateSchema = ProjectSchema.pick({
     name: true,
 }).and(
     z.object({
-        description: z.string().optional(),
-        description_long: z.string().optional(),
+        description: z.string().nullish(),
+        description_long: z.string().nullish(),
         year: OptionalProjectYearSchema,
         clube_ciencia_id: z.uuid(),
     })
@@ -49,8 +52,8 @@ export const ProjectFormSchema = ProjectCreateSchema.and(
 
 export const ProjectUpdateSchema = z.object({
     name: z.string().min(1, "Nome obrigatório").optional(),
-    description: z.string().optional(),
-    description_long: z.string().optional(),
+    description: z.string().nullish(),
+    description_long: z.string().nullish(),
     year: OptionalProjectYearSchema,
     clube_ciencia_id: z.uuid().optional(),
 });

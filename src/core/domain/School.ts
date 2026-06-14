@@ -22,7 +22,10 @@ export const SchoolSchema = z.object({
 });
 
 const OptionalCepSchema = z.preprocess(
-    (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
+    (val) => {
+        if (val === null || val === undefined || (typeof val === "string" && val.trim() === "")) return undefined;
+        return val;
+    },
     z.string()
         .transform((val) => mask.onlyDigits(val))
         .refine((val) => val === "" || val.length === 8, "CEP inválido")
@@ -48,8 +51,8 @@ export const SchoolFormSchema = SchoolCreateSchema.and(
 
 export const SchoolUpdateSchema = z.object({
     name: z.string().min(1, "Nome obrigatório").optional(),
-    description: z.string().optional(),
-    instagram: z.string().optional(),
+    description: z.string().nullish(),
+    instagram: z.string().nullish(),
     cep: OptionalCepSchema,
     identity_territory_id: z.uuid().nullish(),
 });
