@@ -30,6 +30,7 @@ export const ProjectSchema = z.object({
     description_long: z.string().nullish(),
     year: z.union([z.string(), z.number()]).nullish(),
     clube: SimpleIdNameSchema,
+    school: SimpleIdNameSchema.nullish(),
     images: ImageSchema.array(),
 });
 
@@ -69,6 +70,7 @@ export const ProjectSearchParamsSchema = z
         name: SearchParamParser.string,
         clube: SearchParamParser.string,
         clube_ciencia_id: SearchParamParser.string,
+        school_id: SearchParamParser.string,
     })
     .and(PaginationSearchParamsSchema);
 

@@ -1,4 +1,4 @@
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext, Controller, useWatch } from "react-hook-form";
 import {
     Combobox,
     ComboboxContent,
@@ -27,6 +27,7 @@ interface ControlledComboBoxProps {
     truncateLabels?: boolean;
     disabled?: boolean;
     lockedValue?: OptionType | null;
+    onSearchChange?: (value: string) => void;
 }
 
 export const ControlledComboBox = ({
@@ -38,11 +39,11 @@ export const ControlledComboBox = ({
     truncateLabels = false,
     disabled = false,
     lockedValue = null,
+    onSearchChange,
 }: ControlledComboBoxProps) => {
     const {
         control,
         formState: { errors },
-        getValues,
     } = useFormContext();
     const anchor = useComboboxAnchor();
 
@@ -65,20 +66,34 @@ export const ControlledComboBox = ({
         );
     }, [normalizedOptions, searchValue]);
 
-    const rhfValue = getValues(name);
+    const rhfValue = useWatch({ name, control });
 
-    // Sync search value with selected label when editing (initial load or value change)
-    // Only for single select
+    // Sync search value with selected label when editing or reset
     React.useEffect(() => {
+        // If value is cleared (reset), clear the search text
+        if (!rhfValue || (Array.isArray(rhfValue) && rhfValue.length === 0)) {
+            if (!lockedValue) {
+                setSearchValue("");
+            }
+            return;
+        }
+
+        // If single select and we have a value, sync the label if not already typing
         if (!isMulti && rhfValue) {
             const selected = normalizedOptions.find(
                 (o) => o.value === rhfValue.toString()
             );
-            if (selected && !searchValue) {
+            
+            // Only sync if the search text is empty (initial load) or 
+            // if it's completely different from the current value's label 
+            // (meaning the value changed externally)
+            if (selected && (!searchValue || searchValue !== selected.label)) {
+                // If the user just cleared the input manually but didn't select a new value yet, 
+                // we might want to be careful here, but usually reset() is the main case.
                 setSearchValue(selected.label);
             }
         }
-    }, [rhfValue, normalizedOptions, isMulti]);
+    }, [rhfValue, normalizedOptions, isMulti, lockedValue]);
 
     return (
         <div className={`${className}`}>
@@ -137,6 +152,7 @@ export const ControlledComboBox = ({
                                           ? arg2
                                           : "";
                                 setSearchValue(text);
+                                if (onSearchChange) onSearchChange(text);
                             }}
                             onValueChange={(val: OptionType | OptionType[] | null) => {
                                 setSearchValue("");
