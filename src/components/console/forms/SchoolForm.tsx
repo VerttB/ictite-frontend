@@ -10,7 +10,10 @@ import { getTerritories } from "@/core/service/IdentityTerritoryService";
 
 export const SchoolForm = () => {
     const { data: territories } = useSWR("territories", () => getTerritories());
-
+    const normalizedTerritories = territories?.map((territory) => ({
+        name: `${territory.code} - ${territory.name}`,
+        id: territory.id,
+    }));
     return (
         <>
             <InputField name="name" label="Nome da Escola" />
@@ -22,7 +25,7 @@ export const SchoolForm = () => {
             <ControlledComboBox
                 name="identity_territory_id"
                 label="Território de Identidade (Opcional)"
-                options={territories || []}
+                options={normalizedTerritories || []}
             />
             <ControlledImageUpload
                 name="images"
