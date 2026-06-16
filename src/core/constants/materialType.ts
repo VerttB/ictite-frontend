@@ -1,6 +1,5 @@
 export const MaterialType = {
-    VIDEO: "Video",
-    ARTICLE: "Artigo",
     BOOK: "Livro",
-    WEBSITE: "Website",
+    ARTICLE: "Artigo",
+    OTHER: "Outro",
 } as const;

@@ -90,10 +90,17 @@ export default async function OneClubeCiencia({
                                 {clubeCiencia.school.name}
                             </Link>
                         </div>
-                        <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:pl-5 md:pr-5 md:border-r">
-                            <Instagram size={20} />
-                            <p>@instagram_clube</p>
-                        </div>
+                        {
+                            clubeCiencia.instagram && (
+                                <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:pl-5 md:pr-5 md:border-r">
+                                    <Link target="_blank" href={`https://instagram.com/${clubeCiencia.instagram}`}>
+                                        <Instagram size={20} />
+                                        <p>@{clubeCiencia.instagram}</p>
+                                    </Link>
+                                </div>
+                            )
+                        }
+                            
                         { clubeCiencia.coordinators.length > 0 &&
                         <div className="text-primary flex items-center gap-2 hover:cursor-pointer md:pl-5">
                             <ScrollText size={20} />
