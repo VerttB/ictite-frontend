@@ -52,10 +52,10 @@ export const Section = <T extends BaseItem>({
     return (
         <section className="flex-1 px-4">
             <div className="mb-4 flex items-center justify-between border-b-2 border-gray-300">
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                     {icon}
                     <h2 className="text-lg font-semibold">{title}</h2>
-                    <p className="bg-primary ml-4 rounded-md px-1 py-0.5 text-sm text-white">
+                    <p className="bg-primary w-18 rounded-md py-2 text-center text-sm text-white">
                         Total: {items.length}
                     </p>
                 </div>
@@ -90,7 +90,10 @@ export const Section = <T extends BaseItem>({
                     <DropdownMenu key={item.name + i}>
                         <DropdownMenuTrigger asChild>
                             <div className="flex justify-center">
-                                <CardGenerico title={item.name} image={resolveImage(item)} />
+                                <CardGenerico
+                                    title={item.name}
+                                    image={resolveImage(item)}
+                                />
                             </div>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent side="bottom" sideOffset={4}>
