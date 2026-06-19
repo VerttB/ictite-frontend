@@ -8,11 +8,15 @@ import { useTheme } from "@/core/providers/ThemeProvider";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useViewPort } from "@/hooks/useViewPort";
 import { useUserContext } from "@/providers/UserContext";
+import { usePathname } from "next/navigation";
 
 export const Header = () => {
     const { theme, toggleTheme } = useTheme();
     const { isAuthenticated } = useUserContext();
     const { isMobile } = useViewPort();
+
+    const pathname = usePathname();
+    const isInConsole = pathname.startsWith("/console");
 
     const logoSrc =
         theme === "dark"
@@ -50,7 +54,7 @@ export const Header = () => {
                 {isAuthenticated ? (
                     <Button
                         asChild
-                        variant={"outline"}
+                        variant={ isInConsole ? "default" : "outline"}
                         className="cursor-pointer px-10 py-1 text-xl">
                         <Link href={"/console/v2/escolas"}>
                             <Bolt />
