@@ -56,7 +56,7 @@ export const Header = () => {
                         asChild
                         variant={ isInConsole ? "default" : "outline"}
                         className="cursor-pointer px-10 py-1 text-xl">
-                        <Link href={"/console/v2/escolas"}>
+                        <Link href={"/console/v2"}>
                             <Bolt />
                             {isMobile ? "" : "Console"}
                         </Link>

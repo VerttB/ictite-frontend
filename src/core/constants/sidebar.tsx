@@ -1,9 +1,11 @@
 import {
+    Book,
     BookOpen,
     ChartSpline,
     Handshake,
     Home,
     Newspaper,
+    Printer,
     School,
     SquareChartGantt,
     Video,
@@ -34,13 +36,13 @@ export const admItems = [
     {
         title: "Escolas",
         url: "/console/v2/escolas",
-        icon: Home,
+        icon: School,
         allowedRoles: ["admin"],
     },
     {
         title: "Equipamentos",
         url: "/console/v2/equipamentos",
-        icon: Handshake,
+        icon: Printer,
         allowedRoles: ["admin"],
     },
     {
@@ -64,7 +66,7 @@ export const admItems = [
     {
         title: "Pesquisadores",
         url: "/console/v2/pesquisadores",
-        icon: Handshake,
+        icon: Book,
         allowedRoles: ["admin"],
     },
     {
