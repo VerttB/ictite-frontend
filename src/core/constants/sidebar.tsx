@@ -23,30 +23,6 @@ export const baseItems = [
         allowedRoles: ["guest", "admin"],
     },
     {
-        title: "Documentos ICTITE",
-        url: "/documentos",
-        icon: SquareChartGantt,
-        allowedRoles: ["guest", "admin"],
-    },
-    {
-        title: "Revistas",
-        url: "/revistas",
-        icon: Newspaper,
-        allowedRoles: ["guest", "admin"],
-    },
-    {
-        title: "Vídeos",
-        url: "/videos",
-        icon: Video,
-        allowedRoles: ["guest", "admin"],
-    },
-    {
-        title: "Material Didático",
-        url: "/materiais",
-        icon: BookOpen,
-        allowedRoles: ["guest", "admin"],
-    },
-    {
         title: "Gráficos Estatísticos",
         url: "/materiais",
         icon: ChartSpline,
