@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Button } from "./ui/button";
@@ -13,18 +13,27 @@ interface SearchBarProps {
 export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBarProps) {
     const [value, setValue] = useState(initialValue);
     const deboucedValue = useDebounce(value, 300);
+    const lastSearchedRef = useRef(initialValue);
 
     useEffect(() => {
-        if (deboucedValue === initialValue) return;
+        setValue(initialValue);
+        lastSearchedRef.current = initialValue;
+    }, [initialValue]);
+
+    useEffect(() => {
+        if (deboucedValue === lastSearchedRef.current) return;
         if (deboucedValue.length >= 2) {
             onSearch(deboucedValue);
-        } else if (deboucedValue.length < 2) {
+            lastSearchedRef.current = deboucedValue;
+        } else {
             onSearch("");
+            lastSearchedRef.current = "";
         }
-    }, [deboucedValue, onSearch, initialValue]);
+    }, [deboucedValue, onSearch]);
 
     const submitSearch = () => {
         onSearch(value);
+        lastSearchedRef.current = value;
     };
     return (
         <div className="relative w-full flex-grow">

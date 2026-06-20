@@ -110,14 +110,6 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             renderItem: (p: Project) => <CardProjeto key={p.id} project={p} />,
         },
         {
-            value: "documentos",
-            label: "Documentos",
-            icon: NotebookText,
-            isLoading: false,
-            isError: false,
-            emptyMessage: "Nenhum documento encontrado para esta escola.",
-        },
-        {
             value: "coordenadores",
             label: "Coordenadores de Clube",
             icon: ScrollText,

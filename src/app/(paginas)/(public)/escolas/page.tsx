@@ -4,6 +4,7 @@ import EscolaCard from "@/components/escola/EscolaCard";
 import { SearchBar } from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { getSchools } from "@/core/service/SchoolService";
+import { Pagination } from "@/components/Pagination";
 
 import {
     Building2,
@@ -30,22 +31,24 @@ import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 import { toast } from "sonner";
 
 export default function Escolas() {
-    const [_search, setSearch] = useState("");
+    const [search, setSearch] = useState("");
     const [territory, setTerritory] = useState("");
+    const [page, setPage] = useState(1);
 
-    const { data, isLoading, error } = useSWR(["schools", _search, territory], () =>
-        getSchools({
-            name: _search,
-            identity_territory_id: territory !== "" ? territory : undefined,
-            page: 1,
-        })
+    const { data, isLoading, error } = useSWR(
+        ["schools", search, territory, page],
+        () =>
+            getSchools({
+                name: search,
+                identity_territory_id: territory !== "" ? territory : undefined,
+                page,
+                size: 12,
+            }),
+        { keepPreviousData: true }
     );
     const { data: territorios, error: territoriesError } = useSWR("territorios", () =>
         getTerritories()
     );
-    // FETCH DAS ESCOLAS
-
-    // |=======| BUSCA INICIAL + BUSCA POR NOME |=======|
 
     let stats: { titulo: string; valor: number; Icon: LucideIcon }[] = [];
 
@@ -64,11 +67,12 @@ export default function Escolas() {
 
     const handleSearch = (query: string) => {
         setSearch(query);
+        setPage(1);
     };
 
     const handleTerritory = (query: string) => {
         setTerritory(query);
-        console.log(territory);
+        setPage(1);
     };
 
     useEffect(() => {
@@ -189,17 +193,26 @@ export default function Escolas() {
                         <p>Carregando unidades...</p>
                     </div>
                 ) : (
-                    <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {data?.items.length && data.items.length > 0 ? (
-                            data.items.map((escola) => (
-                                <EscolaCard key={escola.id} escola={escola} />
-                            ))
-                        ) : (
-                            <p className="col-span-full py-10 text-center text-slate-500">
-                                Nenhuma escola encontrada para sua busca.
-                            </p>
+                    <>
+                        <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            {data?.items.length && data.items.length > 0 ? (
+                                data.items.map((escola) => (
+                                    <EscolaCard key={escola.id} escola={escola} />
+                                ))
+                            ) : (
+                                <p className="col-span-full py-10 text-center text-slate-500">
+                                    Nenhuma escola encontrada para sua busca.
+                                </p>
+                            )}
+                        </div>
+                        {data && data.total_pages > 1 && (
+                            <Pagination
+                                currentPage={page}
+                                totalPages={data.total_pages}
+                                onLoadMore={setPage}
+                            />
                         )}
-                    </div>
+                    </>
                 )}
             </div>
         </div>

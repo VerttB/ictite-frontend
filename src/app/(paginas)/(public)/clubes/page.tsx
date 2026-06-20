@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import ClubeCienciaCard from "@/components/clubeCiencia/ClubeCienciaCard";
 import ObjetivoClubeCard from "@/components/clubeCiencia/ObjetivoClubeCard";
 import InfoBar from "@/components/InfoBar";
 import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
+import { SearchBar } from "@/components/SearchBar";
+import { Pagination } from "@/components/Pagination";
 import {
     getClubesCiencia,
     getClubesCienciaStats,
@@ -17,14 +20,27 @@ import {
     FlaskConical,
     Goal,
     HeartHandshake,
+    Loader2,
     LucideIcon,
     Users2,
 } from "lucide-react";
 import useSWR from "swr";
 
 export default function Clubes() {
-    const { data: clubesCiencia } = useSWR("clubes-ciencia", () =>
-        getClubesCiencia().then((res) => res.items)
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+
+    const { data, isLoading } = useSWR(
+        ["clubes-ciencia", search, page],
+        () =>
+            getClubesCiencia({
+                name: search,
+                page,
+                size: 12,
+            }),
+        {
+            keepPreviousData: true,
+        }
     );
     const { data: clubeCienciaStats } = useSWR("clubes-ciencia-stats", () =>
         getClubesCienciaStats()
@@ -81,6 +97,11 @@ export default function Clubes() {
         },
     ];
 
+    const handleSearch = (query: string) => {
+        setSearch(query);
+        setPage(1);
+    };
+
     return (
         <div className="flex w-full flex-col gap-8 py-4 sm:px-8">
             {/* |=======| MENU SUPERIOR DA PÁGINA |=======| */}
@@ -112,25 +133,49 @@ export default function Clubes() {
                 <InfoBar data={stats} />
             </div>
 
+            {/* |=======| BUSCA |=======| */}
+            <div className="px-4 sm:px-0">
+                <SearchBar
+                    onSearch={handleSearch}
+                    placeholder="Buscar clube por nome..."
+                />
+            </div>
+
             {/* |=======| LISTAGEM DOS CLUBES DE CIÊNCIA |=======| */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-4 sm:px-0">
                 <div>
                     <h2 className="text-2xl font-semibold">Clubes de Ciência:</h2>
                 </div>
-                <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {clubesCiencia ? (
-                        clubesCiencia.map((clubeCiencia) => (
-                            <ClubeCienciaCard
-                                key={clubeCiencia.id}
-                                clubeCiencia={clubeCiencia}
-                            />
-                        ))
-                    ) : (
-                        <div>
-                            <p>Carregando...</p>
+                {isLoading ? (
+                    <div className="flex flex-col items-center justify-center py-20 opacity-50">
+                        <Loader2 className="mb-2 animate-spin" size={40} />
+                        <p>Carregando clubes...</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            {data?.items.length && data.items.length > 0 ? (
+                                data.items.map((clubeCiencia) => (
+                                    <ClubeCienciaCard
+                                        key={clubeCiencia.id}
+                                        clubeCiencia={clubeCiencia}
+                                    />
+                                ))
+                            ) : (
+                                <p className="col-span-full py-10 text-center text-slate-500">
+                                    Nenhum clube encontrado para sua busca.
+                                </p>
+                            )}
                         </div>
-                    )}
-                </div>
+                        {data && data.total_pages > 1 && (
+                            <Pagination
+                                currentPage={page}
+                                totalPages={data.total_pages}
+                                onLoadMore={setPage}
+                            />
+                        )}
+                    </>
+                )}
             </div>
         </div>
     );
