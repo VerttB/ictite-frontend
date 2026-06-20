@@ -45,24 +45,24 @@ export const admItems = [
         icon: Printer,
         allowedRoles: ["admin"],
     },
-    {
-        title: "Materiais",
-        url: "/console/v2/materiais",
-        icon: BookOpen,
-        allowedRoles: ["admin"],
-    },
-    {
-        title: "Vídeos",
-        url: "/console/v2/videos",
-        icon: Video,
-        allowedRoles: ["admin"],
-    },
-    {
-        title: "Revistas",
-        url: "/console/v2/revistas",
-        icon: Newspaper,
-        allowedRoles: ["admin"],
-    },
+    // {
+    //     title: "Materiais",
+    //     url: "/console/v2/materiais",
+    //     icon: BookOpen,
+    //     allowedRoles: ["admin"],
+    // },
+    // {
+    //     title: "Vídeos",
+    //     url: "/console/v2/videos",
+    //     icon: Video,
+    //     allowedRoles: ["admin"],
+    // },
+    // {
+    //     title: "Revistas",
+    //     url: "/console/v2/revistas",
+    //     icon: Newspaper,
+    //     allowedRoles: ["admin"],
+    // },
     {
         title: "Pesquisadores",
         url: "/console/v2/pesquisadores",
