@@ -83,12 +83,12 @@ export const ControlledComboBox = ({
             const selected = normalizedOptions.find(
                 (o) => o.value === rhfValue.toString()
             );
-            
-            // Only sync if the search text is empty (initial load) or 
-            // if it's completely different from the current value's label 
+
+            // Only sync if the search text is empty (initial load) or
+            // if it's completely different from the current value's label
             // (meaning the value changed externally)
             if (selected && (!searchValue || searchValue !== selected.label)) {
-                // If the user just cleared the input manually but didn't select a new value yet, 
+                // If the user just cleared the input manually but didn't select a new value yet,
                 // we might want to be careful here, but usually reset() is the main case.
                 setSearchValue(selected.label);
             }
