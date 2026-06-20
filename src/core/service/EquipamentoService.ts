@@ -35,15 +35,15 @@ export const updateEquipament = async (
     updatedEquipament: Partial<EquipmentUpdate>
 ): Promise<Equipment> => {
     return await apiClient.patch<Equipment>(
-        `/equipment/${equipmentId}/`,
+        `/equipment/${equipmentId}`,
         updatedEquipament
     );
 };
 
 export const deleteEquipament = async (equipmentId: string): Promise<void> => {
-    await apiClient.delete(`/equipment/${equipmentId}/`);
+    await apiClient.delete(`/equipment/${equipmentId}`);
 };
 
 export const getEquipamentById = async (equipmentId: string): Promise<Equipment> => {
-    return await apiClient.get<Equipment>(`/equipment/${equipmentId}/`);
+    return await apiClient.get<Equipment>(`/equipment/${equipmentId}`);
 };

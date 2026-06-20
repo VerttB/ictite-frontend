@@ -30,25 +30,19 @@ export default function MapaRender() {
         data: geojsonData,
         isLoading: loading,
         error,
-    } = useSWR(
-        "schools-geo-data",
-        getSchoolGeoData,
-        {
-            keepPreviousData: true,
-            revalidateOnFocus: false,
-            revalidadeOnReconnect: false,
-            dedupingInterval: 60000,
-        }
-    );
-
-    console.log(geojsonData);
+    } = useSWR("schools-geo-data", getSchoolGeoData, {
+        keepPreviousData: true,
+        revalidateOnFocus: false,
+        revalidadeOnReconnect: false,
+        dedupingInterval: 60000,
+    });
 
     const [popoverOpen, setPopoverOpen] = useState(false);
     const [popoverPosition, setPopoverPosition] = useState<{
         x: number;
         y: number;
     }>({ x: 0, y: 0 });
-    
+
     // Ajustado para usar as propriedades limpas vindas do GeoJSON do mapa
     const [popoverContent, setPopoverContent] = useState<SchoolMapProperties[]>([]);
     const { open } = useSidebar();
@@ -168,7 +162,9 @@ export default function MapaRender() {
                     }
 
                     const position = map.project(coordinates);
-                    const schools = leaves.map((leaf) => leaf.properties as SchoolMapProperties);
+                    const schools = leaves.map(
+                        (leaf) => leaf.properties as SchoolMapProperties
+                    );
                     setPopoverContent(schools);
                     setPopoverPosition(position);
                     setPopoverOpen(true);
@@ -179,10 +175,7 @@ export default function MapaRender() {
                 const feat = e.features?.[0];
                 if (!feat || feat.geometry.type !== "Point") return;
 
-                const coordinates = feat.geometry.coordinates.slice() as [
-                    number,
-                    number,
-                ];
+                const coordinates = feat.geometry.coordinates.slice() as [number, number];
                 const position = map.project(coordinates);
                 const school = feat.properties as SchoolMapProperties;
 
@@ -260,18 +253,17 @@ export default function MapaRender() {
                                             router.push(`escolas/${school.id}` as Route);
                                         }}
                                         key={school.id}
-                                        className="hover:bg-primary border-muted group cursor-pointer rounded-md border p-3 text-sm transition-colors"
-                                    >
+                                        className="hover:bg-primary border-muted group cursor-pointer rounded-md border p-3 text-sm transition-colors">
                                         {/* Nome da Escola */}
-                                        <div className="font-semibold group-hover:text-white transition-colors">
+                                        <div className="font-semibold transition-colors group-hover:text-white">
                                             {school.name}
                                         </div>
-                                        
+
                                         {/* Cidade */}
                                         {school.city && (
-                                            <div className="flex items-center text-xs group-hover:text-white line-clamp-1 text-muted-foreground">
-                                                <MapPin size={15}/>
-                                                <div className=" mt-0.5 text-xs">
+                                            <div className="text-muted-foreground line-clamp-1 flex items-center text-xs group-hover:text-white">
+                                                <MapPin size={15} />
+                                                <div className="mt-0.5 text-xs">
                                                     {school.city}
                                                 </div>
                                             </div>
@@ -279,10 +271,13 @@ export default function MapaRender() {
 
                                         {/* Bloco de Território de Identidade condicional */}
                                         {school.identity_territory_name && (
-                                            <div className="flex gap-1 items-center group-hover:text-white bg-muted/50 text-muted-foreground mt-2 rounded px-2 py-1 text-[11px] font-medium w-fit">
+                                            <div className="bg-muted/50 text-muted-foreground mt-2 flex w-fit items-center gap-1 rounded px-2 py-1 text-[11px] font-medium group-hover:text-white">
                                                 <Map size={15} />
                                                 <div className="">
-                                                    TI: {school.identity_territory_number ? `${school.identity_territory_number} - ` : ""}
+                                                    TI:{" "}
+                                                    {school.identity_territory_number
+                                                        ? `${school.identity_territory_number} - `
+                                                        : ""}
                                                     {school.identity_territory_name}
                                                 </div>
                                             </div>
