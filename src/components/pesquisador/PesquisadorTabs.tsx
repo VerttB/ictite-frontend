@@ -100,7 +100,7 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
                     <TabsContent
                         key={tabs.value}
                         value={tabs.value}
-                        className="flex min-h-0 flex-1 flex-col">
+                        className="scroll-both scroll-thumb scroll-color scroll-thin flex min-h-0 flex-1 flex-col overflow-hidden hover:overflow-auto">
                         {tabs.children ? (
                             tabs.children
                         ) : (

@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { DeleteConfirmationModal } from "../../DeleteConfirmationModal";
+import { ConsolePageSize } from "@/core/constants/pagination";
 
 interface EntityConsoleProps<
     T extends { id: string; name?: string },
@@ -43,8 +44,15 @@ export const EntityConsole = <
     const [view, setView] = useState<"list" | "edit">("list");
     const [activeTab, setActiveTab] = useState("dados-gerais");
 
+    const consoleParams = useMemo(() => {
+        return {
+            ...params,
+            size: params.size ?? ConsolePageSize,
+        };
+    }, [params]);
+
     const { data: paginatedData, mutate } = useSWR(
-        [config.entityName, params],
+        [config.entityName, consoleParams],
         ([, p]) => config.fetchFn(p),
         {
             keepPreviousData: true,

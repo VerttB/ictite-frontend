@@ -116,7 +116,7 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                     </div>
                 </DrawerHeader>
 
-                <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-6 py-2">
+                <div className="flex min-h-0 flex-1 flex-col px-6 py-2">
                     {isLoading ? (
                         <div className="flex h-full flex-col items-center justify-center gap-2">
                             <div className="border-primary h-6 w-6 animate-spin rounded-full border-b-2" />
