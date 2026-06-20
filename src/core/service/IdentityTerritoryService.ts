@@ -19,7 +19,7 @@ export const createTerritory = async (
 };
 
 export const deleteTerritory = async (territoryId: string): Promise<void> => {
-    await apiClient.delete(`/identity-territories/${territoryId}/`);
+    await apiClient.delete(`/identity-territories/${territoryId}`);
 };
 
 export const updateTerritory = async (
@@ -27,7 +27,7 @@ export const updateTerritory = async (
     updatedData: IdentityTerritoryUpdate
 ): Promise<IdentityTerritory> => {
     return await apiClient.patch<IdentityTerritory>(
-        `/identity-territories/${territoryId}/`,
+        `/identity-territories/${territoryId}`,
         updatedData
     );
 };
