@@ -21,18 +21,11 @@ export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBa
     }, [initialValue]);
 
     useEffect(() => {
-        console.log(
-            "SearchBar - Debounced Value:",
-            deboucedValue,
-            "Last Searched Value:",
-            lastSearchedRef.current
-        );
         if (deboucedValue === lastSearchedRef.current) return;
         if (deboucedValue.length >= 2) {
             onSearch(deboucedValue);
             lastSearchedRef.current = deboucedValue;
         } else {
-            console.log("SearchBar - Clearing search due to short length");
             onSearch("");
             lastSearchedRef.current = "";
         }
