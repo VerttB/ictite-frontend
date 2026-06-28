@@ -175,6 +175,7 @@ export const EntityConsole = <
                         mainSearchKey="name"
                         mainSearchPlaceholder={`Buscar ${config.title.toLowerCase()}`}
                         filters={[]}
+                        renderFilters={config.renderFilters}
                     />
                 </Section>
                 <Pagination
