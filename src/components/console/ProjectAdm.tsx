@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect, useMemo } from "react";
+import useSWR from "swr";
 import { EntityConsole } from "./generic/EntityConsole";
 import { ProjectForm } from "./forms/ProjectForm";
 import {
@@ -16,9 +18,244 @@ import {
     ProjectSearchParams,
     ProjectUpdateFormSchema,
 } from "@/core/domain/Project";
+import { getSchools } from "@/core/service/SchoolService";
+import { getClubesCiencia } from "@/core/service/ClubeCienciaService";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
 import { ProjectMembersList } from "./ProjectMembersList";
+import {
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
+} from "@/components/ui/combobox";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
 import z from "zod";
+
+const ProjectFiltersModal = ({
+    currentParams,
+    applyParams,
+    closeFilters,
+}: {
+    currentParams: any;
+    applyParams: (params: any) => void;
+    closeFilters: () => void;
+}) => {
+    const [selectedSchool, setSelectedSchool] = useState<string>("");
+    const [selectedClub, setSelectedClub] = useState<string>("");
+    const [selectedYear, setSelectedYear] = useState<string>("");
+
+    const [schoolSearchValue, setSchoolSearchValue] = useState<string>("");
+    const [clubSearchValue, setClubSearchValue] = useState<string>("");
+
+    // Fetch lists dynamically
+    const { data: schoolsData } = useSWR("all-schools-filter-projects", () =>
+        getSchools({ size: 0 })
+    );
+
+    const { data: clubsData } = useSWR("all-clubs-filter-projects", () =>
+        getClubesCiencia({ size: 0 })
+    );
+
+    const schoolOptions = useMemo(() => {
+        const list = schoolsData?.items || [];
+        const opts = list.map((s) => ({ value: s.id, label: s.name }));
+        return [{ value: "all", label: "Todas as Escolas" }, ...opts];
+    }, [schoolsData]);
+
+    const clubOptions = useMemo(() => {
+        const clubs = clubsData?.items || [];
+        const list = selectedSchool
+            ? clubs.filter((c) => c.school?.id === selectedSchool)
+            : clubs;
+        const opts = list.map((c) => ({ value: c.id, label: c.name }));
+        return [{ value: "all", label: "Todos os Clubes" }, ...opts];
+    }, [clubsData, selectedSchool]);
+
+    // Reset local states to query parameters when modal opens
+    useEffect(() => {
+        setSelectedSchool((currentParams.school_id as string) || "");
+        setSelectedClub((currentParams.clube_ciencia_id as string) || "");
+        setSelectedYear(currentParams.year ? String(currentParams.year) : "");
+    }, [currentParams]);
+
+    // Sync input search values with selection
+    useEffect(() => {
+        const matched = schoolsData?.items?.find((s) => s.id === selectedSchool);
+        setSchoolSearchValue(matched ? matched.name : "");
+    }, [selectedSchool, schoolsData]);
+
+    useEffect(() => {
+        const matched = clubsData?.items?.find((c) => c.id === selectedClub);
+        setClubSearchValue(matched ? matched.name : "");
+    }, [selectedClub, clubsData]);
+
+    // Filter lists case-insensitively
+    const filteredSchoolOptions = useMemo(() => {
+        if (!schoolSearchValue) return schoolOptions;
+        return schoolOptions.filter((o) =>
+            o.label.toLowerCase().includes(schoolSearchValue.toLowerCase())
+        );
+    }, [schoolOptions, schoolSearchValue]);
+
+    const filteredClubOptions = useMemo(() => {
+        if (!clubSearchValue) return clubOptions;
+        return clubOptions.filter((o) =>
+            o.label.toLowerCase().includes(clubSearchValue.toLowerCase())
+        );
+    }, [clubOptions, clubSearchValue]);
+
+    const handleApply = () => {
+        const newParams = { ...currentParams };
+
+        if (selectedSchool) {
+            newParams.school_id = selectedSchool;
+        } else {
+            delete newParams.school_id;
+        }
+
+        if (selectedClub) {
+            newParams.clube_ciencia_id = selectedClub;
+        } else {
+            delete newParams.clube_ciencia_id;
+        }
+
+        if (selectedYear) {
+            newParams.year = Number(selectedYear);
+        } else {
+            delete newParams.year;
+        }
+
+        applyParams(newParams);
+        closeFilters();
+    };
+
+    const handleClear = () => {
+        setSelectedSchool("");
+        setSelectedClub("");
+        setSelectedYear("");
+
+        const newParams = { ...currentParams };
+        delete newParams.school_id;
+        delete newParams.clube_ciencia_id;
+        delete newParams.year;
+
+        applyParams(newParams);
+        closeFilters();
+    };
+
+    return (
+        <>
+            <div className="grid gap-4 py-4">
+                {/* Escola Field (Dynamic: Combobox) */}
+                <div className="grid gap-2">
+                    <label className="text-sm font-medium">Escola</label>
+                    <Combobox
+                        items={filteredSchoolOptions}
+                        value={schoolOptions.find((o) => o.value === selectedSchool) || null}
+                        inputValue={schoolSearchValue}
+                        onInputValueChange={(arg1) => {
+                            const text = typeof arg1 === "string" ? arg1 : "";
+                            setSchoolSearchValue(text);
+                            if (text === "") {
+                                setSelectedSchool("");
+                                setSelectedClub("");
+                            }
+                        }}
+                        onValueChange={(val: any) => {
+                            if (!val) {
+                                setSelectedSchool("");
+                                setSelectedClub("");
+                                setSchoolSearchValue("");
+                            } else {
+                                setSelectedSchool(val.value === "all" ? "" : val.value);
+                                setSchoolSearchValue(val.value === "all" ? "" : val.label);
+                                setSelectedClub("");
+                            }
+                        }}
+                    >
+                        <ComboboxInput placeholder="Todas as Escolas" />
+                        <ComboboxContent className="pointer-events-auto z-[9999]">
+                            {filteredSchoolOptions.length === 0 ? (
+                                <ComboboxEmpty>Nenhuma opção encontrada</ComboboxEmpty>
+                            ) : (
+                                <ComboboxList>
+                                    {filteredSchoolOptions.map((opt) => (
+                                        <ComboboxItem key={opt.value} value={opt}>
+                                            {opt.label}
+                                        </ComboboxItem>
+                                    ))}
+                                </ComboboxList>
+                            )}
+                        </ComboboxContent>
+                    </Combobox>
+                </div>
+
+                {/* Clube Field (Dynamic: Combobox) */}
+                <div className="grid gap-2">
+                    <label className="text-sm font-medium">Clube de Ciência</label>
+                    <Combobox
+                        items={filteredClubOptions}
+                        value={clubOptions.find((o) => o.value === selectedClub) || null}
+                        inputValue={clubSearchValue}
+                        onInputValueChange={(arg1) => {
+                            const text = typeof arg1 === "string" ? arg1 : "";
+                            setClubSearchValue(text);
+                            if (text === "") setSelectedClub("");
+                        }}
+                        onValueChange={(val: any) => {
+                            if (!val) {
+                                setSelectedClub("");
+                                setClubSearchValue("");
+                            } else {
+                                setSelectedClub(val.value === "all" ? "" : val.value);
+                                setClubSearchValue(val.value === "all" ? "" : val.label);
+                            }
+                        }}
+                    >
+                        <ComboboxInput placeholder="Todos os Clubes" />
+                        <ComboboxContent className="pointer-events-auto z-[9999]">
+                            {filteredClubOptions.length === 0 ? (
+                                <ComboboxEmpty>Nenhuma opção encontrada</ComboboxEmpty>
+                            ) : (
+                                <ComboboxList>
+                                    {filteredClubOptions.map((opt) => (
+                                        <ComboboxItem key={opt.value} value={opt}>
+                                            {opt.label}
+                                        </ComboboxItem>
+                                    ))}
+                                </ComboboxList>
+                            )}
+                        </ComboboxContent>
+                    </Combobox>
+                </div>
+
+                {/* Ano Field (Input number) */}
+                <div className="grid gap-2">
+                    <label className="text-sm font-medium">Ano</label>
+                    <Input
+                        type="number"
+                        placeholder="Digite o ano (Ex: 2026)"
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                    />
+                </div>
+            </div>
+
+            <DialogFooter className="flex sm:justify-between gap-2">
+                <Button variant="outline" onClick={handleClear}>
+                    Limpar Filtros
+                </Button>
+                <Button onClick={handleApply}>
+                    Aplicar
+                </Button>
+            </DialogFooter>
+        </>
+    );
+};
 
 interface ProjectAdmProps {
     params: ProjectSearchParams;
@@ -83,6 +320,7 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
             clube_ciencia_id: item.clube?.id,
         }),
         renderForm: (props) => <ProjectForm {...props} />,
+        renderFilters: (props) => <ProjectFiltersModal {...props} />,
         childTabs: [
             {
                 id: "pesquisadores",

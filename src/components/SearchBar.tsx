@@ -26,7 +26,9 @@ export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBa
             onSearch(deboucedValue);
             lastSearchedRef.current = deboucedValue;
         } else {
-            onSearch("");
+            if (lastSearchedRef.current !== "") {
+                onSearch("");
+            }
             lastSearchedRef.current = "";
         }
     }, [deboucedValue, onSearch]);
