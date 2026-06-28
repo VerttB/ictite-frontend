@@ -71,6 +71,7 @@ export const ProjectSearchParamsSchema = z
         clube: SearchParamParser.string,
         clube_ciencia_id: SearchParamParser.string,
         school_id: SearchParamParser.string,
+        year: SearchParamParser.number,
     })
     .and(PaginationSearchParamsSchema);
 
