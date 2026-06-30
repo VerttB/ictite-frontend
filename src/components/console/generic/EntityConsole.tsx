@@ -159,6 +159,16 @@ export const EntityConsole = <
         return success;
     };
 
+    const getTooltipText = (item: any) => {
+        if (config.entityName === "projects") {
+            const schoolName = item.school?.name || "Sem Escola";
+            const year = item.year || "Sem Ano";
+            const fullName = item.name || "";
+            return `Nome: ${fullName} | Escola: ${schoolName} | Ano: ${year}`;
+        }
+        return undefined;
+    };
+
     if (view === "list") {
         return (
             <div className="flex h-full w-full flex-col">
@@ -168,7 +178,9 @@ export const EntityConsole = <
                     items={paginatedData?.items || []}
                     onAdd={onOpenCreate}
                     onUpdate={onOpenEdit}
-                    onDelete={crud.ui.openDelete}>
+                    onDelete={crud.ui.openDelete}
+                    tooltipText={getTooltipText}
+                    fallbackImage={config.entityName === "researchers" ? `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/images/DefaultResearcherImage.jpg` : undefined}>
                     <SearchAndFilter
                         currentParams={params}
                         applyParams={applyFilters}
