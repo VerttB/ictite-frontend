@@ -12,7 +12,7 @@ interface CardPesquisadorProps {
 
 export default function CardPesquisador({ onClick, researcher }: CardPesquisadorProps) {
     const [openDrawer, setOpenDrawer] = useState(false);
-    const defaultImage = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/images/DefaultResearcherImage.jpg`;
+    const defaultImage = `${process.env.NEXT_PUBLIC_BASE_URL}/images/DefaultResearcherImage.jpg`;
     const [imgSrc, setImgSrc] = useState(researcher.image || defaultImage);
 
     useEffect(() => {

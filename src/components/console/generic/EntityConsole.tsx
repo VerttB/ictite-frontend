@@ -180,7 +180,11 @@ export const EntityConsole = <
                     onUpdate={onOpenEdit}
                     onDelete={crud.ui.openDelete}
                     tooltipText={getTooltipText}
-                    fallbackImage={config.entityName === "researchers" ? `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/images/DefaultResearcherImage.jpg` : undefined}>
+                    fallbackImage={
+                        config.entityName === "researchers"
+                            ? `${process.env.NEXT_PUBLIC_BASE_URL}/images/DefaultResearcherImage.jpg`
+                            : undefined
+                    }>
                     <SearchAndFilter
                         currentParams={params}
                         applyParams={applyFilters}
