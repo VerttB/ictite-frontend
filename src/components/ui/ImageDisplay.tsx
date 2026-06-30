@@ -1,4 +1,5 @@
 "use client";
+import { getAssetPrefix } from "@/core/utils/api";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -35,15 +36,15 @@ export const ImageDisplay = ({
                 className
             )}>
             <Image
-                src={imgSrc || "/logoImagem.png"}
+                src={imgSrc || `${getAssetPrefix()}/logoImagem.png`}
                 alt={alt}
                 fill
                 className="rounded-lg border-white/60 object-scale-down p-2 shadow-xs"
                 onError={() => {
                     if (imgSrc !== fallbackImage && fallbackImage) {
                         setImgSrc(fallbackImage);
-                    } else if (imgSrc !== "/logoImagem.png") {
-                        setImgSrc("/logoImagem.png");
+                    } else if (imgSrc !== `${getAssetPrefix()}/logoImagem.png`) {
+                        setImgSrc(`${getAssetPrefix()}/logoImagem.png`);
                     }
                 }}
             />
