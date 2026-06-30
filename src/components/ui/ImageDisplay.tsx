@@ -1,22 +1,33 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export const ImageDisplay = ({
     src,
     alt,
     className,
+    fallbackImage,
 }: {
-    src: string;
+    src?: string;
     alt: string;
     className?: string;
+    fallbackImage?: string;
 }) => {
-    if (!src) {
+    const [imgSrc, setImgSrc] = useState<string | undefined>(src || fallbackImage);
+
+    useEffect(() => {
+        setImgSrc(src || fallbackImage);
+    }, [src, fallbackImage]);
+
+    if (!src && !fallbackImage) {
         return (
             <div className="flex h-72 w-92 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100 text-gray-500">
                 Sem imagem disponível
             </div>
         );
     }
+
     return (
         <div
             className={twMerge(
@@ -24,10 +35,17 @@ export const ImageDisplay = ({
                 className
             )}>
             <Image
-                src={src}
+                src={imgSrc || "/logoImagem.png"}
                 alt={alt}
                 fill
                 className="rounded-lg border-white/60 object-scale-down p-2 shadow-xs"
+                onError={() => {
+                    if (imgSrc !== fallbackImage && fallbackImage) {
+                        setImgSrc(fallbackImage);
+                    } else if (imgSrc !== "/logoImagem.png") {
+                        setImgSrc("/logoImagem.png");
+                    }
+                }}
             />
         </div>
     );
