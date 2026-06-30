@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
+import { getAssetPrefix } from "@/core/utils/api";
 type CardProps = {
     title?: string;
     image?: string;
@@ -49,7 +50,7 @@ export const CardGenerico = ({
             ) : (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
                     <Image
-                        src="/logoImagem.png"
+                        src={`${getAssetPrefix()}/logoImagem.png`}
                         alt="Default logo"
                         width={64}
                         height={64}
