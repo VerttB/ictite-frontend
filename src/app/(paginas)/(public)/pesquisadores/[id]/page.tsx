@@ -9,7 +9,7 @@ import { ImageDisplay } from "@/components/ui/ImageDisplay";
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const researcher = await getResearcherById(id);
-    const defaultImage = `${process.env.NEXT_PUBLIC_API_URL}/images/DefaultResearcherImage.jpg`;
+    const defaultImage = `${process.env.NEXT_PUBLIC_BASE_URL}/images/DefaultResearcherImage.jpg`;
     if (!researcher) {
         return (
             <div className="flex w-full flex-col gap-4 overflow-x-hidden p-4">
