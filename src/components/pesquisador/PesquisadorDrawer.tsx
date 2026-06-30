@@ -30,7 +30,7 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
         () => getResearcherById(researcherId)
     );
     const { isMobile } = useViewPort();
-    const defaultImage = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/images/DefaultResearcherImage.jpg`;
+    const defaultImage = `${process.env.NEXT_PUBLIC_BASE_URL}/images/DefaultResearcherImage.jpg`;
 
     if (!researcherId) return null;
 
