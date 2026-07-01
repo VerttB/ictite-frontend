@@ -2,7 +2,7 @@
 import { Researcher } from "@/core/domain/Researcher";
 import { Book } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Pesquisador from "./PesquisadorDrawer";
 
 interface CardPesquisadorProps {
@@ -12,6 +12,12 @@ interface CardPesquisadorProps {
 
 export default function CardPesquisador({ onClick, researcher }: CardPesquisadorProps) {
     const [openDrawer, setOpenDrawer] = useState(false);
+    const defaultImage = `${process.env.NEXT_PUBLIC_BASE_URL}/images/DefaultResearcherImage.jpg`;
+    const [imgSrc, setImgSrc] = useState(researcher.image || defaultImage);
+
+    useEffect(() => {
+        setImgSrc(researcher.image || defaultImage);
+    }, [researcher.image, defaultImage]);
 
     return (
         <>
@@ -24,11 +30,10 @@ export default function CardPesquisador({ onClick, researcher }: CardPesquisador
                         fill
                         alt="Imagem do pesquisador"
                         className="rounded-t-lg object-cover"
-                        src={
-                            researcher.image
-                                ? `${researcher.image}`
-                                : "https://picsum.photos/100/100"
-                        }
+                        src={imgSrc}
+                        onError={() => {
+                            setImgSrc(defaultImage);
+                        }}
                     />
                 </div>
 

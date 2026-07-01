@@ -10,6 +10,7 @@ import { DropdownMenuLabel, DropdownMenuSeparator } from "@radix-ui/react-dropdo
 import { useState } from "react";
 import { Grid, List } from "lucide-react";
 import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 interface BaseItem {
     id: string;
     name: string;
@@ -25,6 +26,8 @@ interface SectionProps<T extends BaseItem> {
     onAdd?: () => void;
     onUpdate?: (item: T) => void;
     onDelete?: (item: T) => void;
+    tooltipText?: (item: T) => string | undefined;
+    fallbackImage?: string;
 }
 
 const resolveImage = (item: BaseItem) => {
@@ -47,6 +50,8 @@ export const Section = <T extends BaseItem>({
     onUpdate,
     onDelete,
     children,
+    tooltipText,
+    fallbackImage,
 }: SectionProps<T>) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
     return (
@@ -86,40 +91,61 @@ export const Section = <T extends BaseItem>({
                         ? "grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8"
                         : "flex flex-col gap-2"
                 }>
-                {items.map((item, i) => (
-                    <DropdownMenu key={item.name + i}>
-                        <DropdownMenuTrigger asChild>
+                <TooltipProvider>
+                    {items.map((item, i) => {
+                        const cardElement = (
                             <div className="flex justify-center">
                                 <CardGenerico
                                     title={item.name}
                                     image={resolveImage(item)}
+                                    fallbackImage={fallbackImage || ""}
                                 />
                             </div>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent side="bottom" sideOffset={4}>
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuSeparator className="my-1 h-px bg-slate-200" />
-                            <DropdownMenuItem
-                                className="cursor-pointer"
-                                onClick={() => {
-                                    setTimeout(() => {
-                                        if (onUpdate) onUpdate(item);
-                                    }, 100);
-                                }}>
-                                Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
-                                onClick={() => {
-                                    setTimeout(() => {
-                                        if (onDelete) onDelete(item);
-                                    }, 100);
-                                }}>
-                                Excluir
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                ))}
+                        );
+
+                        const wrappedCard =
+                            tooltipText && tooltipText(item) ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <div>{cardElement}</div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>{tooltipText(item)}</TooltipContent>
+                                </Tooltip>
+                            ) : (
+                                cardElement
+                            );
+
+                        return (
+                            <DropdownMenu key={item.name + i}>
+                                <DropdownMenuTrigger asChild>
+                                    {wrappedCard}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" sideOffset={4}>
+                                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                                    <DropdownMenuSeparator className="my-1 h-px bg-slate-200" />
+                                    <DropdownMenuItem
+                                        className="cursor-pointer"
+                                        onClick={() => {
+                                            setTimeout(() => {
+                                                if (onUpdate) onUpdate(item);
+                                            }, 100);
+                                        }}>
+                                        Editar
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        className="cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600"
+                                        onClick={() => {
+                                            setTimeout(() => {
+                                                if (onDelete) onDelete(item);
+                                            }, 100);
+                                        }}>
+                                        Excluir
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        );
+                    })}
+                </TooltipProvider>
                 {onAdd && (
                     <div className="flex justify-center">
                         <CardGenerico isAddButton onClick={onAdd} />

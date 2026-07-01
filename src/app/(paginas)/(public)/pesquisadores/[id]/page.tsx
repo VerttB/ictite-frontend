@@ -9,7 +9,7 @@ import { ImageDisplay } from "@/components/ui/ImageDisplay";
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const researcher = await getResearcherById(id);
-
+    const defaultImage = `${process.env.NEXT_PUBLIC_BASE_URL}/images/DefaultResearcherImage.jpg`;
     if (!researcher) {
         return (
             <div className="flex w-full flex-col gap-4 overflow-x-hidden p-4">
@@ -20,7 +20,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     return (
         <div className="flex w-full flex-col gap-4 overflow-x-hidden p-4">
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                <ImageDisplay src={researcher.image || ""} alt="Imagem do pesquisador" />
+                <ImageDisplay
+                    src={researcher.image || undefined}
+                    alt="Imagem do pesquisador"
+                    fallbackImage={defaultImage}
+                />
 
                 <div className="w-full">
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
@@ -31,10 +35,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                                 className="flex cursor-pointer"
                                 title="Ver no SIMCC">
                                 <h1 className="text-3xl">{researcher.name}</h1>
-                                <ExternalLink
-                                    className="mb-2 ml-1 inline"
-                                    size={20}
-                                />
+                                <ExternalLink className="mb-2 ml-1 inline" size={20} />
                             </Link>
                         ) : (
                             <h1 className="text-3xl">{researcher.name}</h1>

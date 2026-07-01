@@ -30,6 +30,11 @@ export interface AdminEntityConfig<
     defaultValues: Partial<CreateDTO>;
     mapToFormValues?: (item: T) => Partial<CreateDTO | UpdateDTO>;
     renderForm: (props: AdminFormProps) => React.ReactNode;
+    renderFilters?: (props: {
+        currentParams: any;
+        applyParams: (params: any) => void;
+        closeFilters: () => void;
+    }) => React.ReactNode;
     childTabs: ChildTabConfig[];
 
     // API Functions

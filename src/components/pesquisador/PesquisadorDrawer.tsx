@@ -30,6 +30,7 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
         () => getResearcherById(researcherId)
     );
     const { isMobile } = useViewPort();
+    const defaultImage = `${process.env.NEXT_PUBLIC_BASE_URL}/images/DefaultResearcherImage.jpg`;
 
     if (!researcherId) return null;
 
@@ -64,6 +65,7 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                         <ImageDisplay
                             src={researcher?.image || ""}
                             alt="Imagem do pesquisador"
+                            fallbackImage={defaultImage}
                         />
 
                         <div className="flex h-full w-full flex-col items-start justify-start gap-1 px-2">
@@ -81,7 +83,7 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                                         />
                                     </Link>
                                 ) : (
-                                    <h2 className="text-3xl">{researcher?.name}</h2>
+                                    researcher?.name
                                 )}
                             </DrawerTitle>
                             <div className="flex w-full gap-4">
