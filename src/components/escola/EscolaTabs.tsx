@@ -118,7 +118,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             emptyMessage: "Nenhum coordenador de clube encontrado para esta escola.",
             data: coordenadores || [],
             renderItem: (coordenador: CoordinatorWithClub) => (
-                <CardCoordenador key={coordenador.id} coordinator={coordenador} />
+                <CardCoordenador key={coordenador.id} name={coordenador.name} clube={coordenador.clube.name} />
             ),
         },
     ];

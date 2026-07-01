@@ -25,6 +25,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ImageDisplay } from "@/components/ui/ImageDisplay";
+import CardCoordenador from "@/components/card/CardCoordenador";
 
 export default async function OneClubeCiencia({
     params,
@@ -138,6 +139,18 @@ export default async function OneClubeCiencia({
                                     width={1000}></Image>
                             </PopoverContent>
                         </Popover>
+                    ))}
+                </div>
+            </div>
+            
+            <div className="flex border-t pt-4">
+                <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
+                    {clubeCiencia.coordinators.map((coordinator) => (
+                        <CardCoordenador
+                            key={coordinator.id}
+                            name={coordinator.name}
+                            clube={clubeCiencia.name}
+                        />
                     ))}
                 </div>
             </div>
