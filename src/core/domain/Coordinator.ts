@@ -9,37 +9,31 @@ const ScienceClubMinSchema = z.object({
 
 export const CoordinatorSchema = z.object({
     id: z.string().uuid(),
-    name: z.string().min(1, "O nome não deve estar vazio"),
-    area: z.string().min(1, "A área não deve estar vazia"),
-    clube_id: z.string().uuid().nullable(),
+    clube_id: z.string().uuid(),
+    researcher_id: z.string().uuid("Selecione um professor válido"),
+    name: z.string(), 
 });
 
 export const CoordinatorWithClubSchema = CoordinatorSchema.extend({
     clube: ScienceClubMinSchema
 });
 
-export const CoordinatorCreateSchema = CoordinatorSchema.omit({
-    id: true,
+export const CoordinatorCreateSchema = z.object({
+    clube_id: z.string().uuid(),
+    researcher_id: z.string().uuid("Selecione um professor válido"),
 });
 
-export const CoordinatorUpdateSchema = CoordinatorSchema.pick({
-    name: true,
-    area: true,
-    clube_id: true,
-}).partial();
+export const CoordinatorUpdateSchema = CoordinatorCreateSchema.partial();
 
 export const CoordinatorSearchParamsSchema = z
     .object({
-        name: SearchParamParser.string,
-        area: SearchParamParser.string,
         clube_id: SearchParamParser.string,
     })
     .and(PaginationSearchParamsSchema);
 
-// Schema simplificado para retorno dentro do Clube
-export const CoordinatorSimplifiedSchema = CoordinatorSchema.pick({
-    id: true,
-    name: true,
+export const CoordinatorSimplifiedSchema = z.object({
+    id: z.string().uuid(),
+    name: z.string(),
 });
 
 export type Coordinator = z.infer<typeof CoordinatorSchema>;
