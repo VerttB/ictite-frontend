@@ -29,6 +29,9 @@ import {
 import { ProjectFormSchema, ProjectUpdateFormSchema } from "@/core/domain/Project";
 import { ProjectForm } from "./forms/ProjectForm";
 import z from "zod";
+import { createCoordinator, deleteCoordinator, getCoordinators, updateCoordinator } from "@/core/service/CoordinatorService";
+import { CoordinatorCreateSchema, CoordinatorSchema, CoordinatorUpdateSchema } from "@/core/domain/Coordinator";
+import { CoordinatorForm } from "./forms/CoordinatorForm";
 
 interface ClubAdmProps {
     params: ScienceClubSearchParams;
@@ -138,6 +141,37 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     renderFields={(props) => <ProjectForm {...props} />}
                 />
             ),
+        },
+        {
+            id: "Coordenadores",
+            label: "Coordenadores",
+            entityName: "coordinators",
+            parentIdField: "clube_id",
+            renderList: (parentId) => (
+                <NestedEntityList
+                    title="Coordenadores"
+                    entityName="coordinators"
+                    parentId={parentId}
+                    parentIdField="clube_id"
+                    fetchFn={(params) => getCoordinators({ clube_id: params.clube_id })}
+                    createFn={async (data) => {
+                        return await createCoordinator({ ...data, clube_id: parentId });
+                    }}
+                    updateFn={async (id, data) => {
+                        return await updateCoordinator(id, data);
+                    }}
+                    deleteFn={deleteCoordinator}
+                    schema={CoordinatorSchema}
+                    createSchema={CoordinatorCreateSchema} 
+                    updateSchema={CoordinatorUpdateSchema}
+                    defaultValues={{ researcher_id: "", clube_id: parentId }}
+                    mapToFormValues={(item: any) => ({
+                        clube_id: item.clube_id,
+                        researcher_id: item.researcher_id,
+                    })}
+                    renderFields={(props) => <CoordinatorForm {...props} parentId={parentId} />}
+                />
+            )
         },
     ];
 
