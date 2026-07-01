@@ -94,31 +94,32 @@ export const Section = <T extends BaseItem>({
                 <TooltipProvider>
                     {items.map((item, i) => {
                         const cardElement = (
-                            <div className="flex justify-center">
-                                <CardGenerico
-                                    title={item.name}
-                                    image={resolveImage(item)}
-                                    fallbackImage={fallbackImage || ""}
-                                />
-                            </div>
+                            <CardGenerico
+                                title={item.name}
+                                image={resolveImage(item)}
+                                fallbackImage={fallbackImage}
+                            />
                         );
-
-                        const wrappedCard =
-                            tooltipText && tooltipText(item) ? (
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <div>{cardElement}</div>
-                                    </TooltipTrigger>
-                                    <TooltipContent>{tooltipText(item)}</TooltipContent>
-                                </Tooltip>
-                            ) : (
-                                cardElement
-                            );
 
                         return (
                             <DropdownMenu key={item.name + i}>
                                 <DropdownMenuTrigger asChild>
-                                    {wrappedCard}
+                                    <div className="flex justify-center cursor-pointer w-full">
+                                        {tooltipText && tooltipText(item) ? (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <div className="w-full flex justify-center">
+                                                        {cardElement}
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {tooltipText(item)}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        ) : (
+                                            cardElement
+                                        )}
+                                    </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent side="bottom" sideOffset={4}>
                                     <DropdownMenuLabel>Ações</DropdownMenuLabel>
