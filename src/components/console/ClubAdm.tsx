@@ -29,8 +29,17 @@ import {
 import { ProjectFormSchema, ProjectUpdateFormSchema } from "@/core/domain/Project";
 import { ProjectForm } from "./forms/ProjectForm";
 import z from "zod";
-import { createCoordinator, deleteCoordinator, getCoordinators, updateCoordinator } from "@/core/service/CoordinatorService";
-import { CoordinatorCreateSchema, CoordinatorSchema, CoordinatorUpdateSchema } from "@/core/domain/Coordinator";
+import {
+    createCoordinator,
+    deleteCoordinator,
+    getCoordinators,
+    updateCoordinator,
+} from "@/core/service/CoordinatorService";
+import {
+    CoordinatorCreateSchema,
+    CoordinatorSchema,
+    CoordinatorUpdateSchema,
+} from "@/core/domain/Coordinator";
 import { CoordinatorForm } from "./forms/CoordinatorForm";
 
 interface ClubAdmProps {
@@ -162,16 +171,18 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     }}
                     deleteFn={deleteCoordinator}
                     schema={CoordinatorSchema}
-                    createSchema={CoordinatorCreateSchema} 
+                    createSchema={CoordinatorCreateSchema}
                     updateSchema={CoordinatorUpdateSchema}
                     defaultValues={{ researcher_id: "", clube_id: parentId }}
                     mapToFormValues={(item: any) => ({
                         clube_id: item.clube_id,
                         researcher_id: item.researcher_id,
                     })}
-                    renderFields={(props) => <CoordinatorForm {...props} parentId={parentId} />}
+                    renderFields={(props) => (
+                        <CoordinatorForm {...props} parentId={parentId} />
+                    )}
                 />
-            )
+            ),
         },
     ];
 

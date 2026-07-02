@@ -13,14 +13,14 @@ import { AdminFormProps } from "@/core/interface/AdminEntity";
 export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isProjectLocked = parentIdField === "projects_ids" && !!parentId;
 
-    const { data: projects } = useSWR("projects-all", () => getProjects({ size: 0 }));
-    const { data: parentProject } = useSWR(
-        isProjectLocked ? ["project", parentId] : null,
-        () => getProjectById(parentId!)
-    );
+    // const { data: projects } = useSWR("projects-all", () => getProjects({ size: 0 }));
+    // const { data: parentProject } = useSWR(
+    //     isProjectLocked ? ["project", parentId] : null,
+    //     () => getProjectById(parentId!)
+    // );
 
-    const projectOptions =
-        isProjectLocked && parentProject ? [parentProject] : projects?.items || [];
+    // const projectOptions =
+    //     isProjectLocked && parentProject ? [parentProject] : projects?.items || [];
 
     return (
         <>
@@ -46,7 +46,7 @@ export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
                     options={Object.values(RaceTypes).map((t) => ({ id: t, name: t }))}
                 />
             </div>
-            <ControlledComboBox
+            {/* <ControlledComboBox
                 className="w-full"
                 name="projects_ids"
                 label="Projetos"
@@ -62,7 +62,7 @@ export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
                           }
                         : null
                 }
-            />
+            /> */}
         </>
     );
 };

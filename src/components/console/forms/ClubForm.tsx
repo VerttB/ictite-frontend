@@ -13,9 +13,7 @@ export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isSchoolLocked = parentIdField === "school_id" && !!parentId;
 
     const { data: schools } = useSWR("schools-all", () => getSchools({ size: 0 }));
-    const { data: coordinators } = useSWR("coordinators-all", () =>
-        getCoordinators({ size: 0 })
-    );
+
     const { data: parentSchool } = useSWR(
         isSchoolLocked ? ["school", parentId] : null,
         () => getSchoolById(parentId!)
@@ -46,14 +44,7 @@ export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
                 />
                 <InputField name="instagram" label="Instagram (Opcional)" />
             </div>
-            <ControlledComboBox
-                className="w-full"
-                name="coordinators_ids"
-                label="Coordenadores (Opcional)"
-                isMulti={true}
-                truncateLabels={true}
-                options={coordinators?.items || []}
-            />
+
             <ControlledImageUpload
                 name="images"
                 label="Imagens (Opcional)"
