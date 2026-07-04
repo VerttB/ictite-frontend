@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 // Criamos uma interface específica para o pesquisador estendendo a base
 interface ResearcherSugestion extends SugestionBase {
-    lattes_id?: string;
+    lattes_id?: string | null;
 }
 
 interface GenericListProps {
@@ -34,10 +34,11 @@ export const PesquisadorGenericoCard = ({ searchResult, icon }: GenericListProps
                     </div>
                     <div>
                         {/* 💡 Corrigido para lattes_id (com dois 't's) */}
-                        <Link 
-                            href={`https://simcc.uesc.br/researcher?lattes_id=${result.lattes_id}` as Route} 
-                            target="_blank"
-                        >
+                        <Link
+                            href={
+                                `https://simcc.uesc.br/researcher?lattes_id=${result.lattes_id}` as Route
+                            }
+                            target="_blank">
                             <Button size={"icon"} className="cursor-pointer">
                                 <ChevronRight />
                             </Button>
