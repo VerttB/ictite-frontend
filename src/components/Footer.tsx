@@ -21,7 +21,7 @@ export const Footer = () => {
                 className="inline-block object-contain"
             />
             <Image
-                src={`${getAssetPrefix()}/apoios/governoDoEstadoLogo.png`}
+                src={`${getAssetPrefix()}/apoios/Logoestadodabahia.svg`}
                 alt="Logo"
                 width={96}
                 height={96}
@@ -55,7 +55,8 @@ export const Footer = () => {
                 height={96}
                 className="inline-block object-contain"
             />
-            <Dialog>
+            
+            {/*<Dialog>
                 <DialogTrigger asChild>
                     <Button>
                         <Plus size={30} className="font-bold" />
@@ -74,7 +75,7 @@ export const Footer = () => {
                         />
                     </div>
                 </DialogContent>
-            </Dialog>
+            </Dialog>*/}
         </footer>
     );
 };
