@@ -6,18 +6,16 @@ import { SugestionBase } from "@/core/interface/SugestionBase";
 import { Route } from "next";
 import { Button } from "../ui/button";
 
-// Criamos uma interface específica para o pesquisador estendendo a base
 interface ResearcherSugestion extends SugestionBase {
-    lattes_id?: string;
+    lattes_id?: string | null;
 }
 
 interface GenericListProps {
-    searchResult: ResearcherSugestion[]; // Atualizado para usar a interface com lattes_id
+    searchResult: ResearcherSugestion[]; 
     icon: React.ReactNode;
 }
 
 export const PesquisadorGenericoCard = ({ searchResult, icon }: GenericListProps) => {
-    // Verificação de segurança obrigatória antes de renderizar ou mapear
     if (!Array.isArray(searchResult) || searchResult.length === 0) {
         return <div className="p-3 text-gray-500">Nenhum resultado encontrado</div>;
     }
@@ -33,7 +31,6 @@ export const PesquisadorGenericoCard = ({ searchResult, icon }: GenericListProps
                         <span className="line-clamp-1 text-lg">{result.name}</span>
                     </div>
                     <div>
-                        {/* 💡 Corrigido para lattes_id (com dois 't's) */}
                         <Link 
                             href={`https://simcc.uesc.br/researcher?lattes_id=${result.lattes_id}` as Route} 
                             target="_blank"
