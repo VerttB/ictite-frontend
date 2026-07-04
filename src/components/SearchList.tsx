@@ -13,6 +13,7 @@ import { SchoolSearchParamsSchema } from "@/core/domain/School";
 import { ResearcherSearchParamsSchema } from "@/core/domain/Researcher";
 import { ProjectSearchParamsSchema } from "@/core/domain/Project";
 import { ScienceClubSearchParamsSchema } from "@/core/domain/Club";
+import { PesquisadorGenericoCard } from "./pesquisador/PesquisadorGenericoCard";
 
 const fetcher = async (query: string) => {
     if (!query) {
@@ -80,9 +81,8 @@ export default function SearchClient() {
                         <SearchStats
                             title="Pesquisadores"
                             count={resultados.pesquisadores.length}>
-                            <GenericList
+                            <PesquisadorGenericoCard
                                 searchResult={resultados.pesquisadores}
-                                path="pesquisadores"
                                 icon={
                                     <PersonStanding size={24} className="text-primary" />
                                 }
