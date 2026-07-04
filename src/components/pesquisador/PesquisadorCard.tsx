@@ -4,6 +4,7 @@ import { Book } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Pesquisador from "./PesquisadorDrawer";
+import Link from "next/link";
 
 interface CardPesquisadorProps {
     onClick?: () => void;
@@ -20,10 +21,10 @@ export default function CardPesquisador({ onClick, researcher }: CardPesquisador
     }, [researcher.image, defaultImage]);
 
     return (
-        <>
+        <Link href={`https://simcc.uesc.br/researcher?lattes_id=${researcher.lattes_id}`} target="_blank">
             <div
                 className="group relative flex h-full min-h-[300px] cursor-pointer flex-col overflow-hidden rounded-md border-2 bg-black p-2"
-                onClick={onClick ? onClick : () => setOpenDrawer(true)}>
+                /*onClick={onClick ? onClick : () => setOpenDrawer(true)}*/>
                 <div
                     className={`absolute inset-0 bg-cover bg-center opacity-70 transition-opacity duration-300 group-hover:opacity-45`}>
                     <Image
@@ -58,6 +59,6 @@ export default function CardPesquisador({ onClick, researcher }: CardPesquisador
                     />
                 )}
             </div>
-        </>
+        </ Link>
     );
 }
