@@ -91,30 +91,29 @@ export default async function OneClubeCiencia({
                                 {clubeCiencia.school.name}
                             </Link>
                         </div>
-                        {
-                            clubeCiencia.instagram && (
-                                <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:pl-5 md:pr-5 md:border-r">
-                                    <Link target="_blank" href={`https://instagram.com/${clubeCiencia.instagram}`}>
-                                        <Instagram size={20} />
-                                        <p>@{clubeCiencia.instagram}</p>
-                                    </Link>
-                                </div>
-                            )
-                        }
-                            
-                        { clubeCiencia.coordinators.length > 0 &&
-                        <div className="text-primary flex items-center gap-2 hover:cursor-pointer md:pl-5">
-                            <ScrollText size={20} />
-                            <div className="flex flex-col md:flex-row gap-2">
-                                {clubeCiencia.coordinators.map((coordinator) => (
-                                    <p key={coordinator.id} className="line-clamp-1">
-                                        {coordinator.name},
-                                    </p>
-                                ))}
+                        {clubeCiencia.instagram && (
+                            <div className="text-primary flex items-center gap-2 hover:cursor-pointer hover:underline md:border-r md:pr-5 md:pl-5">
+                                <Link
+                                    target="_blank"
+                                    href={`https://instagram.com/${clubeCiencia.instagram}`}>
+                                    <Instagram size={20} />
+                                    <p>@{clubeCiencia.instagram}</p>
+                                </Link>
                             </div>
-                            
-                        </div>
-                        }       
+                        )}
+
+                        {clubeCiencia.coordinators.length > 0 && (
+                            <div className="text-primary flex items-center gap-2 hover:cursor-pointer md:pl-5">
+                                <ScrollText size={20} />
+                                <div className="flex flex-col gap-2 md:flex-row">
+                                    {clubeCiencia.coordinators.map((coordinator) => (
+                                        <p key={coordinator.id} className="line-clamp-1">
+                                            {coordinator.name},
+                                        </p>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -142,7 +141,7 @@ export default async function OneClubeCiencia({
                     ))}
                 </div>
             </div>
-            
+
             <div className="flex border-t pt-4">
                 <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
                     {clubeCiencia.coordinators.map((coordinator) => (
@@ -158,7 +157,7 @@ export default async function OneClubeCiencia({
             {/* |=======| DESCRICAO DO CLUBE DE CIÊNCIA |=======| */}
             <div className="bg-foreground flex flex-col gap-2 rounded-md border p-3">
                 <p className="border-b pb-2 text-xl font-semibold">Descrição:</p>
-                <p className="">{clubeCiencia.description}</p>
+                <p className="text-lg">{clubeCiencia.description}</p>
             </div>
 
             {/* |=======| ESTATÍSTICAS DO CLUBE DE CIÊNCIA |=======| */}
