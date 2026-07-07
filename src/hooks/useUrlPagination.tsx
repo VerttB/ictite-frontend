@@ -11,8 +11,8 @@ export const useUrlPagination = (defaultPage = 1) => {
     const currentPage = Number(searchParams.get("page")) || defaultPage;
     const updateUrl = useCallback(
         (newParams: SearchParams) => {
-            const query = buildSearchParameters(newParams);
-            router.replace(`${pathname}?${query.toString()}` as Route);
+            const query = buildSearchParameters(newParams, searchParams);
+            router.replace(`${pathname}?${query}` as Route);
         },
         [pathname, router, searchParams]
     );

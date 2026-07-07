@@ -26,7 +26,7 @@ export const baseItems = [
     },
     {
         title: "Gráficos Estatísticos",
-        url: "/materiais",
+        url: "/estatisticas",
         icon: ChartSpline,
         allowedRoles: ["guest", "admin"],
     },

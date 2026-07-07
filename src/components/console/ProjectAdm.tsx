@@ -107,23 +107,9 @@ const ProjectFiltersModal = ({
     const handleApply = () => {
         const newParams = { ...currentParams };
 
-        if (selectedSchool) {
-            newParams.school_id = selectedSchool;
-        } else {
-            delete newParams.school_id;
-        }
-
-        if (selectedClub) {
-            newParams.clube_ciencia_id = selectedClub;
-        } else {
-            delete newParams.clube_ciencia_id;
-        }
-
-        if (selectedYear) {
-            newParams.year = Number(selectedYear);
-        } else {
-            delete newParams.year;
-        }
+        newParams.school_id = selectedSchool || undefined;
+        newParams.clube_ciencia_id = selectedClub || undefined;
+        newParams.year = selectedYear ? Number(selectedYear) : undefined;
 
         applyParams(newParams);
         closeFilters();
@@ -135,9 +121,9 @@ const ProjectFiltersModal = ({
         setSelectedYear("");
 
         const newParams = { ...currentParams };
-        delete newParams.school_id;
-        delete newParams.clube_ciencia_id;
-        delete newParams.year;
+        newParams.school_id = undefined;
+        newParams.clube_ciencia_id = undefined;
+        newParams.year = undefined;
 
         applyParams(newParams);
         closeFilters();
