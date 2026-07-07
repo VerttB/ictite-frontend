@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import useSWR from "swr";
 import { EntityConsole } from "./generic/EntityConsole";
 import { SchoolForm } from "./forms/SchoolForm";
 import {
@@ -39,7 +40,129 @@ import { ScienceClubFormSchema, ScienceClubUpdateFormSchema } from "@/core/domai
 import { EquipmentFormSchema, EquipmentUpdateFormSchema } from "@/core/domain/Equipment";
 import { ClubForm } from "./forms/ClubForm";
 import { EquipmentForm } from "./forms/EquipmentForm";
+import { getTerritories } from "@/core/service/IdentityTerritoryService";
+import {
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
+} from "@/components/ui/combobox";
+import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
 import z from "zod";
+
+const SchoolFiltersModal = ({
+    currentParams,
+    applyParams,
+    closeFilters,
+}: {
+    currentParams: any;
+    applyParams: (params: any) => void;
+    closeFilters: () => void;
+}) => {
+    const [selectedTerritory, setSelectedTerritory] = useState<string>("");
+    const [territorySearchValue, setTerritorySearchValue] = useState<string>("");
+
+    const { data: territoriesData } = useSWR("all-territories-filter", () =>
+        getTerritories()
+    );
+
+    const territoryOptions = useMemo(() => {
+        const list = territoriesData || [];
+        const opts = list.map((t) => ({ value: t.id, label: t.name }));
+        return [{ value: "all", label: "Todos os Territórios" }, ...opts];
+    }, [territoriesData]);
+
+    useEffect(() => {
+        setSelectedTerritory((currentParams.identity_territory_id as string) || "");
+    }, [currentParams]);
+
+    useEffect(() => {
+        const matched = territoriesData?.find((t) => t.id === selectedTerritory);
+        setTerritorySearchValue(matched ? matched.name : "");
+    }, [selectedTerritory, territoriesData]);
+
+    const filteredTerritoryOptions = useMemo(() => {
+        if (!territorySearchValue) return territoryOptions;
+        return territoryOptions.filter((o) =>
+            o.label.toLowerCase().includes(territorySearchValue.toLowerCase())
+        );
+    }, [territoryOptions, territorySearchValue]);
+
+    const handleApply = () => {
+        const newParams = { ...currentParams };
+
+        newParams.identity_territory_id = selectedTerritory || undefined;
+
+        applyParams(newParams);
+        closeFilters();
+    };
+
+    const handleClear = () => {
+        setSelectedTerritory("");
+        const newParams = { ...currentParams };
+        newParams.identity_territory_id = undefined;
+
+        applyParams(newParams);
+        closeFilters();
+    };
+
+    return (
+        <>
+            <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                    <label className="text-sm font-medium">Território de Identidade</label>
+                    <Combobox
+                        items={filteredTerritoryOptions}
+                        value={
+                            territoryOptions.find((o) => o.value === selectedTerritory) || null
+                        }
+                        inputValue={territorySearchValue}
+                        onInputValueChange={(arg1) => {
+                            const text = typeof arg1 === "string" ? arg1 : "";
+                            setTerritorySearchValue(text);
+                            if (text === "") setSelectedTerritory("");
+                        }}
+                        onValueChange={(val: any) => {
+                            if (!val) {
+                                setSelectedTerritory("");
+                                setTerritorySearchValue("");
+                            } else {
+                                setSelectedTerritory(val.value === "all" ? "" : val.value);
+                                setTerritorySearchValue(
+                                    val.value === "all" ? "" : val.label
+                                );
+                            }
+                        }}>
+                        <ComboboxInput placeholder="Todos os Territórios" />
+                        <ComboboxContent className="pointer-events-auto z-[9999]">
+                            {filteredTerritoryOptions.length === 0 ? (
+                                <ComboboxEmpty>Nenhuma opção encontrada</ComboboxEmpty>
+                            ) : (
+                                <ComboboxList>
+                                    {filteredTerritoryOptions.map((opt) => (
+                                        <ComboboxItem key={opt.value} value={opt}>
+                                            {opt.label}
+                                        </ComboboxItem>
+                                    ))}
+                                </ComboboxList>
+                            )}
+                        </ComboboxContent>
+                    </Combobox>
+                </div>
+            </div>
+
+            <DialogFooter className="flex gap-2 sm:justify-between">
+                <Button variant="outline" onClick={handleClear}>
+                    Limpar Filtros
+                </Button>
+                <Button onClick={handleApply}>Aplicar</Button>
+            </DialogFooter>
+        </>
+    );
+};
 
 interface SchoolAdmProps {
     params: SchoolSearchParams;
@@ -233,6 +356,13 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
             identity_territory_id: item.identityTerritory?.id,
         }),
         renderForm: () => <SchoolForm />,
+        renderFilters: ({ currentParams, applyParams, closeFilters }) => (
+            <SchoolFiltersModal
+                currentParams={currentParams}
+                applyParams={applyParams}
+                closeFilters={closeFilters}
+            />
+        ),
         childTabs,
         fetchFn: getSchools,
         createFn: handleCreate,
