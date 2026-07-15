@@ -23,8 +23,8 @@ export const ResearcherSchema = z.object({
 
 export const ResearcherCreateSchema = z.object({
     name: z.string().min(1, "O nome não deve estar vazio"),
-    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido").optional(),
-    race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida").optional(),
+    gender: z.enum(Object.values(GenderTypes), "Selecione um gênero válido").optional().default(GenderTypes.NAO_INFORMADO),
+    race: z.enum(Object.values(RaceTypes), "Selecione uma raça válida").optional().default(RaceTypes.NAO_INFORMADO),
     type: z.enum(Object.values(ResearcherTypes), "Selecione um tipo válido"),
     projects_ids: z.string().array().optional(),
     lattes_id: OptionalLattesIdSchema,

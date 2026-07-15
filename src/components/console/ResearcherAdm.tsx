@@ -65,23 +65,9 @@ const ResearcherFiltersModal = ({
     const handleApply = () => {
         const newParams = { ...currentParams };
 
-        if (selectedType) {
-            newParams.type = selectedType;
-        } else {
-            delete newParams.type;
-        }
-
-        if (selectedGender) {
-            newParams.gender = selectedGender;
-        } else {
-            delete newParams.gender;
-        }
-
-        if (selectedRace) {
-            newParams.race = selectedRace;
-        } else {
-            delete newParams.race;
-        }
+        newParams.type = selectedType || undefined;
+        newParams.gender = selectedGender || undefined;
+        newParams.race = selectedRace || undefined;
 
         applyParams(newParams);
         closeFilters();
@@ -93,9 +79,9 @@ const ResearcherFiltersModal = ({
         setSelectedRace("");
 
         const newParams = { ...currentParams };
-        delete newParams.type;
-        delete newParams.gender;
-        delete newParams.race;
+        newParams.type = undefined;
+        newParams.gender = undefined;
+        newParams.race = undefined;
 
         applyParams(newParams);
         closeFilters();
@@ -107,10 +93,10 @@ const ResearcherFiltersModal = ({
                 <div className="grid gap-2">
                     <label className="text-sm font-medium">Tipo de Pesquisador</label>
                     <Select
-                        value={selectedType || "all"}
-                        onValueChange={(val) =>
-                            setSelectedType(val === "all" ? "" : val)
-                        }>
+                         value={selectedType || "all"}
+                         onValueChange={(val) =>
+                             setSelectedType(val === "all" ? "" : val)
+                         }>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Todos os tipos" />
                         </SelectTrigger>
@@ -126,10 +112,10 @@ const ResearcherFiltersModal = ({
                 <div className="grid gap-2">
                     <label className="text-sm font-medium">Gênero</label>
                     <Select
-                        value={selectedGender || "all"}
-                        onValueChange={(val) =>
-                            setSelectedGender(val === "all" ? "" : val)
-                        }>
+                         value={selectedGender || "all"}
+                         onValueChange={(val) =>
+                             setSelectedGender(val === "all" ? "" : val)
+                         }>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Todos os gêneros" />
                         </SelectTrigger>
@@ -138,6 +124,7 @@ const ResearcherFiltersModal = ({
                             <SelectItem value="Masculino">Masculino</SelectItem>
                             <SelectItem value="Feminino">Feminino</SelectItem>
                             <SelectItem value="Outro">Outro</SelectItem>
+                            <SelectItem value="Não informado">Não informado</SelectItem>
                             <SelectItem value="Prefiro não informar">
                                 Prefiro não informar
                             </SelectItem>
@@ -148,10 +135,10 @@ const ResearcherFiltersModal = ({
                 <div className="grid gap-2">
                     <label className="text-sm font-medium">Raça / Cor</label>
                     <Select
-                        value={selectedRace || "all"}
-                        onValueChange={(val) =>
-                            setSelectedRace(val === "all" ? "" : val)
-                        }>
+                         value={selectedRace || "all"}
+                         onValueChange={(val) =>
+                             setSelectedRace(val === "all" ? "" : val)
+                         }>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Todas as raças/cores" />
                         </SelectTrigger>
@@ -162,6 +149,7 @@ const ResearcherFiltersModal = ({
                             <SelectItem value="Parda">Parda</SelectItem>
                             <SelectItem value="Amarela">Amarela</SelectItem>
                             <SelectItem value="Indígena">Indígena</SelectItem>
+                            <SelectItem value="Não informado">Não informado</SelectItem>
                             <SelectItem value="Prefiro não informar">
                                 Prefiro não informar
                             </SelectItem>
