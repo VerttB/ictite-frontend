@@ -4,5 +4,6 @@ export const RaceTypes = {
     PARDA: "Parda",
     AMARELA: "Amarela",
     INDIGENA: "Indígena",
-    PREFIRO_NAO_INFORMAR: "Prefiro não informar",
+    NAO_INFORMADO: "Não informado",
+    PREF_NAO_INFORMAR: "Prefiro não informar",
 } as const;
