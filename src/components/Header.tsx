@@ -1,33 +1,34 @@
 "use client";
+
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Bolt, ChevronRight, CircleUserRound } from "lucide-react";
+import { Bolt, ChevronRight, CircleUserRound, MoonIcon, SunIcon } from "lucide-react";
 import Link from "next/link";
 import { getAssetPrefix } from "@/core/utils/api";
 import { useTheme } from "@/core/providers/ThemeProvider";
-import { MoonIcon, SunIcon } from "lucide-react";
 import { useViewPort } from "@/hooks/useViewPort";
 import { useUserContext } from "@/providers/UserContext";
 import { usePathname } from "next/navigation";
 
 export const Header = () => {
     const { theme, toggleTheme } = useTheme();
-    const { isAuthenticated } = useUserContext();
+    const { isAuthenticated, user } = useUserContext();
     const { isMobile } = useViewPort();
 
     const pathname = usePathname();
-    const isInConsole = pathname.startsWith("/console");
+    const isInConsole = pathname.startsWith("/console") || pathname.startsWith("/school/console");
+    const consolePath = user?.role === "SCHOOL_ADMIN" ? "/school/console" : "/console/v2";
 
     const logoSrc =
         theme === "dark"
-            ? `${getAssetPrefix()}/nova_logo_ictite_branca.png` // logo branca para tema escuro
-            : `${getAssetPrefix()}/nova_logo_ictite.png`; // logo normal para tema claro
+            ? `${getAssetPrefix()}/nova_logo_ictite_branca.png`
+            : `${getAssetPrefix()}/nova_logo_ictite.png`;
 
     return (
         <header className="bg-foreground flex w-full items-center justify-between p-3">
             <div className="flex h-full w-full flex-col sm:flex-row sm:gap-2">
                 <div className="relative h-16 w-32 sm:w-48">
-                    <Image src={logoSrc} alt="Logo" fill className="object-contain" />
+                    <Image src={logoSrc} alt="Logo" fill className="object-contain" priority />
                 </div>
                 <p className="flex items-end text-sm text-gray-500">Versão 2.3.1</p>
             </div>
@@ -56,7 +57,7 @@ export const Header = () => {
                         asChild
                         variant={ isInConsole ? "default" : "outline"}
                         className="cursor-pointer px-10 py-1 text-xl">
-                        <Link href={"/console/v2"}>
+                        <Link href={consolePath}>
                             <Bolt />
                             {isMobile ? "" : "Console"}
                         </Link>

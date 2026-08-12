@@ -1,12 +1,12 @@
 import z from "zod";
 
 export const UserSchema = z.object({
-    id: z.string().uuid(),
-    username: z.string().min(1, "Username obrigatório"),
+    id: z.string(),
+    username: z.string().optional(),
     email: z.string().email("Email inválido"),
-    created_at: z.string().refine((date) => !isNaN(Date.parse(date)), {
-        message: "Data inválida",
-    }),
+    role: z.string().optional(),
+    school_id: z.string().nullable().optional(),
+    created_at: z.string().optional(),
 });
 
 export const UserLoginSchema = z.object({
