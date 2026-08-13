@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
-import { Handshake, SquareChartGantt, Book, Printer, Plus } from "lucide-react";
+import { Handshake, SquareChartGantt, Book, Printer, Plus, ChevronsUp, ChevronsDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SchoolFormDraftData } from "@/schemas/schoolSubmissionSchema";
@@ -36,22 +36,23 @@ export function SchoolSubEntitiesTabs({
 
     const isItemExpanded = (id: string) => expandedItems[id] !== false;
 
-    const { fields: clubFields, append: appendClub, remove: removeClub } = useFieldArray({
+    // Use prepend so newly added items appear at the TOP of the list
+    const { fields: clubFields, prepend: prependClub, remove: removeClub } = useFieldArray({
         control,
         name: "clubs",
     });
 
-    const { fields: projectFields, append: appendProject, remove: removeProject } = useFieldArray({
+    const { fields: projectFields, prepend: prependProject, remove: removeProject } = useFieldArray({
         control,
         name: "projects",
     });
 
-    const { fields: researcherFields, append: appendResearcher, remove: removeResearcher } = useFieldArray({
+    const { fields: researcherFields, prepend: prependResearcher, remove: removeResearcher } = useFieldArray({
         control,
         name: "researchers",
     });
 
-    const { fields: equipmentFields, append: appendEquipment, remove: removeEquipment } = useFieldArray({
+    const { fields: equipmentFields, prepend: prependEquipment, remove: removeEquipment } = useFieldArray({
         control,
         name: "equipments",
     });
@@ -59,15 +60,40 @@ export function SchoolSubEntitiesTabs({
     const currentClubs = watch("clubs") || [];
     const currentProjects = watch("projects") || [];
 
+    const getActiveFields = () => {
+        switch (activeTab) {
+            case "clubs":
+                return clubFields;
+            case "projects":
+                return projectFields;
+            case "researchers":
+                return researcherFields;
+            case "equipments":
+                return equipmentFields;
+        }
+    };
+
+    const activeFields = getActiveFields();
+    const allExpanded = activeFields.length > 0 && activeFields.every((f) => isItemExpanded(f.id));
+
+    const toggleExpandAll = () => {
+        const nextState = !allExpanded;
+        const updated: Record<string, boolean> = { ...expandedItems };
+        activeFields.forEach((f) => {
+            updated[f.id] = nextState;
+        });
+        setExpandedItems(updated);
+    };
+
     const handleAddClub = () => {
         const id = crypto.randomUUID();
-        appendClub({ id, name: "", instagram_url: "" });
+        prependClub({ id, name: "", instagram_url: "" });
         setExpandedItems((prev) => ({ ...prev, [id]: true }));
     };
 
     const handleAddProject = () => {
         const id = crypto.randomUUID();
-        appendProject({
+        prependProject({
             id,
             name: "",
             description: "",
@@ -79,7 +105,7 @@ export function SchoolSubEntitiesTabs({
 
     const handleAddResearcher = () => {
         const id = crypto.randomUUID();
-        appendResearcher({
+        prependResearcher({
             id,
             name: "",
             type: "Aluno",
@@ -93,7 +119,7 @@ export function SchoolSubEntitiesTabs({
 
     const handleAddEquipment = () => {
         const id = crypto.randomUUID();
-        appendEquipment({
+        prependEquipment({
             id,
             name: "",
             quantity: 1,
@@ -127,16 +153,31 @@ export function SchoolSubEntitiesTabs({
                     <h3 className="text-base font-bold text-gray-800">{headerInfo.title}</h3>
                 </div>
 
-                {!readOnly && (
-                    <Button
-                        type="button"
-                        onClick={headerInfo.onAdd}
-                        className="bg-[#088077] hover:bg-[#088077]/90 text-white rounded-full text-xs font-semibold px-4 py-2 gap-1.5 shadow-xs"
-                    >
-                        <Plus size={16} />
-                        Adicionar
-                    </Button>
-                )}
+                <div className="flex items-center gap-2">
+                    {/* Botão Global de Expandir / Recolher Todos */}
+                    {activeFields.length > 1 && (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={toggleExpandAll}
+                            className="rounded-full text-xs font-semibold px-3 py-1.5 gap-1.5 text-gray-600 border-gray-200 hover:bg-gray-50 transition-all"
+                        >
+                            {allExpanded ? <ChevronsUp size={15} /> : <ChevronsDown size={15} />}
+                            {allExpanded ? "Recolher Todos" : "Expandir Todos"}
+                        </Button>
+                    )}
+
+                    {!readOnly && (
+                        <Button
+                            type="button"
+                            onClick={headerInfo.onAdd}
+                            className="bg-[#088077] hover:bg-[#088077]/90 text-white rounded-full text-xs font-semibold px-4 py-2 gap-1.5 shadow-xs"
+                        >
+                            <Plus size={16} />
+                            Adicionar
+                        </Button>
+                    )}
+                </div>
             </div>
 
             {/* Conteúdo por Aba Ativa */}

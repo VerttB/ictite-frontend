@@ -5,6 +5,7 @@ import {
     FileText,
     CheckCircle2,
     AlertCircle,
+    AlertTriangle,
     Handshake,
     SquareChartGantt,
     Book,
@@ -27,15 +28,44 @@ export function SchoolFormOverviewSection({ form, submission }: SchoolFormOvervi
     const researchers = values.researchers || [];
     const equipments = values.equipments || [];
 
-    // Form Completion Checklist
-    const hasSchoolData = !!values.school?.name && values.school.name.trim().length >= 2;
-    const hasClubs = clubs.length > 0;
-    const hasProjects = projects.length > 0;
-    const hasResearchers = researchers.length > 0;
-    const isReady = hasSchoolData && hasClubs && hasProjects && hasResearchers;
+    // --- Strict Section Validation ---
 
-    const completedSectionsCount = [hasSchoolData, hasClubs, hasProjects, hasResearchers].filter(Boolean).length;
-    const completionPercentage = Math.round((completedSectionsCount / 4) * 100);
+    // 1. Escola
+    const isSchoolValid = !!values.school?.name && values.school.name.trim().length >= 2;
+
+    // 2. Clubes de Ciência
+    const incompleteClubsCount = clubs.filter(
+        (c) => !c.name || c.name.trim().length < 2
+    ).length;
+    const isClubsValid = clubs.length > 0 && incompleteClubsCount === 0;
+
+    // 3. Projetos de Pesquisa
+    const incompleteProjectsCount = projects.filter(
+        (p) => !p.name || p.name.trim().length < 2 || !p.clube_ciencia_id || p.clube_ciencia_id === "disabled"
+    ).length;
+    const isProjectsValid = projects.length > 0 && incompleteProjectsCount === 0;
+
+    // 4. Pesquisadores
+    const incompleteResearchersCount = researchers.filter(
+        (r) => !r.name || r.name.trim().length < 2 || !r.type
+    ).length;
+    const isResearchersValid = researchers.length > 0 && incompleteResearchersCount === 0;
+
+    // 5. Equipamentos
+    const incompleteEquipmentsCount = equipments.filter(
+        (e) => !e.name || e.name.trim().length < 2 || !e.type_equipment_id || !e.quantity
+    ).length;
+    const isEquipmentsValid = equipments.length === 0 || incompleteEquipmentsCount === 0;
+
+    // Overall completion percentage calculation based on actual field completeness
+    const validSections = [
+        isSchoolValid,
+        isClubsValid,
+        isProjectsValid,
+        isResearchersValid,
+        isEquipmentsValid,
+    ].filter(Boolean).length;
+    const completionPercentage = Math.round((validSections / 5) * 100);
 
     return (
         <div className="flex w-full flex-col gap-6 animate-fade-in">
@@ -80,54 +110,84 @@ export function SchoolFormOverviewSection({ form, submission }: SchoolFormOvervi
                     </h3>
 
                     <div className="space-y-3 text-xs font-semibold">
+                        {/* 1. Escola */}
                         <div className="flex items-center justify-between rounded-2xl bg-gray-50 p-3.5 border border-gray-100">
                             <span className="text-gray-700">1. Cadastro da Escola</span>
-                            {hasSchoolData ? (
+                            {isSchoolValid ? (
                                 <span className="text-emerald-600 font-bold flex items-center gap-1">
                                     <CheckCircle2 size={15} /> OK ({schoolName})
                                 </span>
                             ) : (
                                 <span className="text-amber-600 font-bold flex items-center gap-1">
-                                    <AlertCircle size={15} /> Pendente
+                                    <AlertTriangle size={15} /> Nome da escola pendente
                                 </span>
                             )}
                         </div>
 
+                        {/* 2. Clubes de Ciência */}
                         <div className="flex items-center justify-between rounded-2xl bg-gray-50 p-3.5 border border-gray-100">
                             <span className="text-gray-700">2. Clubes de Ciência</span>
-                            {hasClubs ? (
-                                <span className="text-emerald-600 font-bold flex items-center gap-1">
-                                    <CheckCircle2 size={15} /> OK ({clubs.length} cadastrado{clubs.length > 1 ? "s" : ""})
+                            {clubs.length === 0 ? (
+                                <span className="text-amber-600 font-bold flex items-center gap-1">
+                                    <AlertTriangle size={15} /> Nenhum clube cadastrado
+                                </span>
+                            ) : incompleteClubsCount > 0 ? (
+                                <span className="text-amber-600 font-bold flex items-center gap-1">
+                                    <AlertTriangle size={15} /> {incompleteClubsCount} de {clubs.length} pendente(s)
                                 </span>
                             ) : (
-                                <span className="text-amber-600 font-bold flex items-center gap-1">
-                                    <AlertCircle size={15} /> Nenhum clube cadastrado
+                                <span className="text-emerald-600 font-bold flex items-center gap-1">
+                                    <CheckCircle2 size={15} /> OK ({clubs.length} completo{clubs.length > 1 ? "s" : ""})
                                 </span>
                             )}
                         </div>
 
+                        {/* 3. Projetos de Pesquisa */}
                         <div className="flex items-center justify-between rounded-2xl bg-gray-50 p-3.5 border border-gray-100">
                             <span className="text-gray-700">3. Projetos de Pesquisa</span>
-                            {hasProjects ? (
-                                <span className="text-emerald-600 font-bold flex items-center gap-1">
-                                    <CheckCircle2 size={15} /> OK ({projects.length} projeto{projects.length > 1 ? "s" : ""})
+                            {projects.length === 0 ? (
+                                <span className="text-amber-600 font-bold flex items-center gap-1">
+                                    <AlertTriangle size={15} /> Nenhum projeto cadastrado
+                                </span>
+                            ) : incompleteProjectsCount > 0 ? (
+                                <span className="text-amber-600 font-bold flex items-center gap-1">
+                                    <AlertTriangle size={15} /> {incompleteProjectsCount} de {projects.length} pendente(s)
                                 </span>
                             ) : (
-                                <span className="text-amber-600 font-bold flex items-center gap-1">
-                                    <AlertCircle size={15} /> Nenhum projeto cadastrado
+                                <span className="text-emerald-600 font-bold flex items-center gap-1">
+                                    <CheckCircle2 size={15} /> OK ({projects.length} completo{projects.length > 1 ? "s" : ""})
                                 </span>
                             )}
                         </div>
 
+                        {/* 4. Pesquisadores */}
                         <div className="flex items-center justify-between rounded-2xl bg-gray-50 p-3.5 border border-gray-100">
                             <span className="text-gray-700">4. Pesquisadores</span>
-                            {hasResearchers ? (
-                                <span className="text-emerald-600 font-bold flex items-center gap-1">
-                                    <CheckCircle2 size={15} /> OK ({researchers.length} pesquisador{researchers.length > 1 ? "es" : ""})
+                            {researchers.length === 0 ? (
+                                <span className="text-amber-600 font-bold flex items-center gap-1">
+                                    <AlertTriangle size={15} /> Nenhum pesquisador cadastrado
+                                </span>
+                            ) : incompleteResearchersCount > 0 ? (
+                                <span className="text-amber-600 font-bold flex items-center gap-1">
+                                    <AlertTriangle size={15} /> {incompleteResearchersCount} de {researchers.length} pendente(s)
                                 </span>
                             ) : (
+                                <span className="text-emerald-600 font-bold flex items-center gap-1">
+                                    <CheckCircle2 size={15} /> OK ({researchers.length} completo{researchers.length > 1 ? "s" : ""})
+                                </span>
+                            )}
+                        </div>
+
+                        {/* 5. Equipamentos */}
+                        <div className="flex items-center justify-between rounded-2xl bg-gray-50 p-3.5 border border-gray-100">
+                            <span className="text-gray-700">5. Equipamentos Laboratoriais</span>
+                            {incompleteEquipmentsCount > 0 ? (
                                 <span className="text-amber-600 font-bold flex items-center gap-1">
-                                    <AlertCircle size={15} /> Nenhum pesquisador cadastrado
+                                    <AlertTriangle size={15} /> {incompleteEquipmentsCount} de {equipments.length} pendente(s)
+                                </span>
+                            ) : (
+                                <span className="text-emerald-600 font-bold flex items-center gap-1">
+                                    <CheckCircle2 size={15} /> OK ({equipments.length} item{equipments.length !== 1 ? "s" : ""})
                                 </span>
                             )}
                         </div>
