@@ -135,7 +135,7 @@ export default function SchoolConsolePage() {
                                         className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-all disabled:opacity-50"
                                     >
                                         <RefreshCw size={16} />
-                                        Recarregar do Banco
+                                        Redefinir Mudanças
                                     </button>
 
                                     {submission?.status === "REJEITADO" && (

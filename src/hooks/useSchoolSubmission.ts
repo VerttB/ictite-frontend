@@ -37,7 +37,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
     const form = useForm<SchoolFormDraftData>({
         resolver: zodResolver(SchoolFormDraftDataSchema),
         defaultValues: {
-            school: { name: "", city: "", cep: "" },
+            school: { name: "", city: "", cep: "", description: "", instagram_url: "" },
             clubs: [],
             projects: [],
             researchers: [],

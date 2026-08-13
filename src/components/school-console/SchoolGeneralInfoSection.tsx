@@ -11,6 +11,8 @@ import {
     Book,
     Printer,
     BadgeCheck,
+    Instagram,
+    FileText,
 } from "lucide-react";
 import { SchoolFormDraftData, SchoolFormSubmission } from "@/schemas/schoolSubmissionSchema";
 
@@ -24,6 +26,8 @@ export function SchoolGeneralInfoSection({ form, submission }: SchoolGeneralInfo
     const schoolName = values.school?.name || "Escola não nomeada";
     const city = values.school?.city || "Bahia";
     const cep = values.school?.cep || "Não informado";
+    const instagramUrl = values.school?.instagram_url;
+    const description = values.school?.description;
 
     const clubsCount = values.clubs?.length || 0;
     const projectsCount = values.projects?.length || 0;
@@ -69,12 +73,30 @@ export function SchoolGeneralInfoSection({ form, submission }: SchoolGeneralInfo
                             <span className="flex items-center gap-1">
                                 <Building2 size={14} className="text-[#088077]" /> CEP: {cep}
                             </span>
+                            {instagramUrl && (
+                                <a
+                                    href={instagramUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="flex items-center gap-1 text-[#088077] hover:underline font-semibold"
+                                >
+                                    <Instagram size={14} /> Instagram
+                                </a>
+                            )}
                             <span className="flex items-center gap-1">
                                 <Calendar size={14} className="text-[#088077]" /> Atualizado em: {formatDate(submission?.updated_at)}
                             </span>
                         </div>
                     </div>
                 </div>
+
+                {/* Descrição da Instituição */}
+                {description && (
+                    <div className="flex items-start gap-3 rounded-2xl bg-gray-50 p-4 border border-gray-100 text-xs text-gray-700">
+                        <FileText size={18} className="text-[#088077] shrink-0 mt-0.5" />
+                        <p className="leading-relaxed">{description}</p>
+                    </div>
+                )}
 
                 {/* Estatísticas Gerais da Instituição */}
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 pt-2">

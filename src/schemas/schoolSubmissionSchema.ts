@@ -1,79 +1,83 @@
 import { z } from "zod";
 
-export const SchoolDraftSchema = z.object({
-    name: z.string().min(2, "Nome da escola é obrigatório"),
-    city: z.string().nullable().optional(),
-    cep: z.string().nullable().optional(),
+export const SchoolDraftDataSchema = z.object({
+    name: z.string().min(2, "Nome da escola deve ter no mínimo 2 caracteres"),
+    city: z.string().optional(),
+    cep: z.string().optional(),
+    description: z.string().optional(),
+    instagram_url: z.string().optional(),
 });
 
-export const ClubDraftSchema = z.object({
-    id: z.string(),
-    name: z.string().min(2, "Nome do clube é obrigatório"),
-    instagram_url: z.string().nullable().optional(),
+export const ClubDraftDataSchema = z.object({
+    id: z.string().uuid("ID inválido"),
+    name: z.string().min(2, "Nome do clube deve ter no mínimo 2 caracteres"),
+    instagram_url: z.string().optional(),
 });
 
-export const ProjectDraftSchema = z.object({
-    id: z.string(),
-    name: z.string().min(2, "Nome do projeto é obrigatório"),
-    description: z.string().nullable().optional(),
-    clube_ciencia_id: z.string().min(1, "Clube vinculado é obrigatório"),
-    year: z.number().nullable().optional(),
+export const ProjectDraftDataSchema = z.object({
+    id: z.string().uuid("ID inválido"),
+    name: z.string().min(2, "Nome do projeto deve ter no mínimo 2 caracteres"),
+    description: z.string().optional(),
+    clube_ciencia_id: z.string().uuid("Selecione um clube válido"),
+    year: z.number().int().optional(),
 });
 
-export const ResearcherDraftSchema = z.object({
-    id: z.string(),
-    name: z.string().min(2, "Nome completo do pesquisador é obrigatório"),
+export const ResearcherDraftDataSchema = z.object({
+    id: z.string().uuid("ID inválido"),
+    name: z.string().min(2, "Nome completo é obrigatório"),
     type: z.enum(["Aluno", "Professor", "Facilitador"]),
-    gender: z.string().nullable().optional(),
-    race: z.string().nullable().optional(),
-    lattes_id: z.string().nullable().optional(),
-    project_ids: z.array(z.string()),
+    gender: z.string().optional(),
+    race: z.string().optional(),
+    lattes_id: z.string().optional(),
+    project_ids: z.array(z.string().uuid()).default([]),
 });
 
-export const EquipmentDraftSchema = z.object({
-    id: z.string(),
+export const EquipmentDraftDataSchema = z.object({
+    id: z.string().uuid("ID inválido"),
     name: z.string().min(2, "Nome do equipamento é obrigatório"),
-    quantity: z.number().min(1, "Quantidade mínima é 1"),
-    type_equipment_id: z.string().min(1, "Tipo de equipamento é obrigatório"),
+    quantity: z.number().min(1, "Quantidade deve ser no mínimo 1"),
+    type_equipment_id: z.string().uuid("ID do tipo de equipamento inválido"),
 });
 
 export const SchoolFormDraftDataSchema = z.object({
-    school: SchoolDraftSchema,
-    clubs: z.array(ClubDraftSchema),
-    projects: z.array(ProjectDraftSchema),
-    researchers: z.array(ResearcherDraftSchema),
-    equipments: z.array(EquipmentDraftSchema),
-});
-
-export const SchoolFormSubmissionSchema = z.object({
-    id: z.string(),
-    school_id: z.string(),
-    status: z.enum(["RASCUNHO", "PENDENTE", "APROVADO", "REJEITADO"]),
-    version: z.number(),
-    data: SchoolFormDraftDataSchema,
-    base_timestamp: z.string(),
-    has_conflict: z.boolean().default(false),
-    submitted_by: z.string().nullable().optional(),
-    rejection_reason: z.string().nullable().optional(),
-    custom_deadline: z.string().nullable().optional(),
-    extension_requested_at: z.string().nullable().optional(),
-    requested_deadline: z.string().nullable().optional(),
-    extension_reason: z.string().nullable().optional(),
-    extension_status: z.enum(["Pendente", "Aprovado", "Rejeitado"]).nullable().optional(),
-    created_at: z.string().optional(),
-    updated_at: z.string().optional(),
+    school: SchoolDraftDataSchema,
+    clubs: z.array(ClubDraftDataSchema).default([]),
+    projects: z.array(ProjectDraftDataSchema).default([]),
+    researchers: z.array(ResearcherDraftDataSchema).default([]),
+    equipments: z.array(EquipmentDraftDataSchema).default([]),
 });
 
 export const RequestDeadlineExtensionSchema = z.object({
-    requested_deadline: z.string().min(1, "Selecione a data limite desejada"),
-    reason: z.string().min(10, "A justificativa deve ter no mínimo 10 caracteres").max(500, "Máximo 500 caracteres"),
+    requested_deadline: z.string().min(1, "Selecione uma data limite válida"),
+    reason: z
+        .string()
+        .min(5, "Informe a justificativa com no mínimo 5 caracteres")
+        .max(500, "A justificativa deve ter no máximo 500 caracteres"),
 });
 
-export type SchoolDraft = z.infer<typeof SchoolDraftSchema>;
-export type ClubDraft = z.infer<typeof ClubDraftSchema>;
-export type ProjectDraft = z.infer<typeof ProjectDraftSchema>;
-export type ResearcherDraft = z.infer<typeof ResearcherDraftSchema>;
-export type EquipmentDraft = z.infer<typeof EquipmentDraftSchema>;
+export type SchoolDraftData = z.infer<typeof SchoolDraftDataSchema>;
+export type ClubDraftData = z.infer<typeof ClubDraftDataSchema>;
+export type ProjectDraftData = z.infer<typeof ProjectDraftDataSchema>;
+export type ResearcherDraftData = z.infer<typeof ResearcherDraftDataSchema>;
+export type EquipmentDraftData = z.infer<typeof EquipmentDraftDataSchema>;
 export type SchoolFormDraftData = z.infer<typeof SchoolFormDraftDataSchema>;
-export type SchoolFormSubmission = z.infer<typeof SchoolFormSubmissionSchema>;
 export type RequestDeadlineExtension = z.infer<typeof RequestDeadlineExtensionSchema>;
+
+export interface SchoolFormSubmission {
+    id: string;
+    school_id: string;
+    status: "RASCUNHO" | "PENDENTE" | "APROVADO" | "REJEITADO";
+    version: number;
+    data: SchoolFormDraftData;
+    base_timestamp: string;
+    has_conflict: boolean;
+    submitted_by?: string | null;
+    rejection_reason?: string | null;
+    custom_deadline?: string | null;
+    extension_requested_at?: string | null;
+    requested_deadline?: string | null;
+    extension_reason?: string | null;
+    extension_status?: "PENDENTE" | "APROVADO" | "REJEITADO" | null;
+    created_at: string;
+    updated_at: string;
+}
