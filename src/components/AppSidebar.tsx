@@ -13,7 +13,6 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import { useUserContext } from "@/providers/UserContext";
-import { Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -23,7 +22,7 @@ import {
     DropdownMenuContent,
     DropdownMenuLabel,
 } from "./ui/dropdown-menu";
-import { admItems, baseItems } from "@/core/constants/sidebar";
+import { admItems, baseItems, homeItem } from "@/core/constants/sidebar";
 import { cn } from "@/lib/utils";
 import { Route } from "next";
 
@@ -32,15 +31,12 @@ export function AppSidebar() {
     const { open } = useSidebar();
     const { isAuthenticated, user, logoutUser } = useUserContext();
     const isConsole = path.startsWith("/console");
-    const items = [
-        {
-            title: "Página Inicial",
-            url: "/",
-            icon: Home,
-            allowedRoles: ["guest", "admin"],
-        },
-        ...(isConsole ? admItems : baseItems),
-    ];
+    const role = user?.role;
+
+    const allItems = [homeItem, ...(isConsole ? admItems : baseItems)];
+    const items = allItems.filter(
+        (item) => !role || item.allowedRoles.includes(role)
+    );
     return (
         <Sidebar collapsible="icon">
             <SidebarContent>

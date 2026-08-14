@@ -1,34 +1,33 @@
 import {
     Book,
-    BookOpen,
     ChartSpline,
     Handshake,
     Home,
-    Newspaper,
     Printer,
     School,
     SquareChartGantt,
-    Video,
 } from "lucide-react";
+
+const ANY_ROLE = ["ADMIN", "SCHOOL_ADMIN", "MANAGER", "VIEWER"];
 
 export const baseItems = [
     {
         title: "Clubes de Ciência",
         url: "/clubes",
         icon: Handshake,
-        allowedRoles: ["guest", "admin"],
+        allowedRoles: ANY_ROLE,
     },
     {
         title: "Escolas",
         url: "/escolas",
         icon: School,
-        allowedRoles: ["guest", "admin"],
+        allowedRoles: ANY_ROLE,
     },
     {
         title: "Gráficos Estatísticos",
         url: "/estatisticas",
         icon: ChartSpline,
-        allowedRoles: ["guest", "admin"],
+        allowedRoles: ANY_ROLE,
     },
 ];
 
@@ -37,48 +36,37 @@ export const admItems = [
         title: "Escolas",
         url: "/console/v2/escolas",
         icon: School,
-        allowedRoles: ["admin"],
+        allowedRoles: ["ADMIN", "SCHOOL_ADMIN"],
     },
     {
         title: "Equipamentos",
         url: "/console/v2/equipamentos",
         icon: Printer,
-        allowedRoles: ["admin"],
+        allowedRoles: ["ADMIN"],
     },
-    // {
-    //     title: "Materiais",
-    //     url: "/console/v2/materiais",
-    //     icon: BookOpen,
-    //     allowedRoles: ["admin"],
-    // },
-    // {
-    //     title: "Vídeos",
-    //     url: "/console/v2/videos",
-    //     icon: Video,
-    //     allowedRoles: ["admin"],
-    // },
-    // {
-    //     title: "Revistas",
-    //     url: "/console/v2/revistas",
-    //     icon: Newspaper,
-    //     allowedRoles: ["admin"],
-    // },
     {
         title: "Pesquisadores",
         url: "/console/v2/pesquisadores",
         icon: Book,
-        allowedRoles: ["admin"],
+        allowedRoles: ["ADMIN"],
     },
     {
         title: "Projetos",
         url: "/console/v2/projetos",
         icon: SquareChartGantt,
-        allowedRoles: ["admin"],
+        allowedRoles: ["ADMIN"],
     },
     {
         title: "Clubes de Ciências",
         url: "/console/v2/clubes",
         icon: Handshake,
-        allowedRoles: ["admin"],
+        allowedRoles: ["ADMIN"],
     },
 ];
+
+export const homeItem = {
+    title: "Página Inicial",
+    url: "/",
+    icon: Home,
+    allowedRoles: ANY_ROLE,
+};
