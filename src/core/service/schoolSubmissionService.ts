@@ -6,6 +6,10 @@ export const schoolSubmissionService = {
         return apiClient.get<SchoolFormSubmission>("/submissions/current");
     },
 
+    async getLatestSubmission(): Promise<SchoolFormSubmission> {
+        return apiClient.get<SchoolFormSubmission>("/submissions/latest");
+    },
+
     async createDraft(): Promise<SchoolFormSubmission> {
         return apiClient.post<SchoolFormSubmission>("/submissions/", {});
     },

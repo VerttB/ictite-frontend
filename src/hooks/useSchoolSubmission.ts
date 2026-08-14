@@ -56,13 +56,25 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         } catch (error) {
             if (error instanceof ApiError && error.status === 404) {
                 try {
-                    const newSub = await schoolSubmissionService.createDraft();
-                    setSubmission(newSub);
-                    if (newSub && newSub.data) {
-                        form.reset(newSub.data);
+                    const latestSub = await schoolSubmissionService.getLatestSubmission();
+                    setSubmission(latestSub);
+                    if (latestSub && latestSub.data) {
+                        form.reset(latestSub.data);
                     }
-                } catch (_createErr) {
-                    toast.error("Erro ao criar o rascunho inicial do formulário.");
+                } catch (latestError) {
+                    if (latestError instanceof ApiError && latestError.status === 404) {
+                        try {
+                            const newSub = await schoolSubmissionService.createDraft();
+                            setSubmission(newSub);
+                            if (newSub && newSub.data) {
+                                form.reset(newSub.data);
+                            }
+                        } catch (_createErr) {
+                            toast.error("Erro ao criar o rascunho inicial do formulário.");
+                        }
+                    } else {
+                        toast.error("Erro ao consultar a última submissão da escola.");
+                    }
                 }
             } else {
                 toast.error("Erro ao carregar o formulário da escola.");
