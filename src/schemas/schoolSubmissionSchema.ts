@@ -77,7 +77,7 @@ export interface SchoolFormSubmission {
     extension_requested_at?: string | null;
     requested_deadline?: string | null;
     extension_reason?: string | null;
-    extension_status?: "PENDENTE" | "APROVADO" | "REJEITADO" | null;
+    extension_status?: "Pendente" | "Aprovado" | "Rejeitado" | null;
     created_at: string;
     updated_at: string;
 }
