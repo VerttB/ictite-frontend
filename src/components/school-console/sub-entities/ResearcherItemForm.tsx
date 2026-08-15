@@ -238,24 +238,51 @@ export function ResearcherItemForm({
                         <label className="block text-xs font-semibold text-gray-700 mb-1">
                             Projetos Vinculados
                         </label>
-                        <div className="flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-3.5 text-sm">
-                            {projects.length === 0 ? (
-                                <span className="text-xs text-gray-400">Nenhum projeto cadastrado ainda.</span>
-                            ) : (
-                                projects.map((p) => (
-                                    <label key={p.id} className="flex items-center gap-2 cursor-pointer text-xs font-medium">
-                                        <input
-                                            type="checkbox"
-                                            disabled={readOnly}
-                                            value={p.id}
-                                            {...register(`researchers.${index}.project_ids`)}
-                                            className="rounded text-[#088077] focus:ring-[#088077]"
-                                        />
-                                        <span>{p.name}</span>
-                                    </label>
-                                ))
-                            )}
-                        </div>
+                        <Controller
+                            control={control}
+                            name={`researchers.${index}.project_ids`}
+                            render={({ field }) => {
+                                const selectedProjectIds = Array.isArray(field.value)
+                                    ? field.value
+                                    : field.value
+                                      ? [field.value]
+                                      : [];
+
+                                return (
+                                    <div className="flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-3.5 text-sm">
+                                        {projects.length === 0 ? (
+                                            <span className="text-xs text-gray-400">
+                                                Nenhum projeto cadastrado ainda.
+                                            </span>
+                                        ) : (
+                                            projects.map((p) => (
+                                                <label
+                                                    key={p.id}
+                                                    className="flex items-center gap-2 cursor-pointer text-xs font-medium"
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        disabled={readOnly}
+                                                        value={p.id}
+                                                        checked={selectedProjectIds.includes(p.id)}
+                                                        onChange={(event) => {
+                                                            const nextProjectIds = event.target.checked
+                                                                ? [...selectedProjectIds, p.id]
+                                                                : selectedProjectIds.filter(
+                                                                      (projectId) => projectId !== p.id
+                                                                  );
+                                                            field.onChange(nextProjectIds);
+                                                        }}
+                                                        className="rounded text-[#088077] focus:ring-[#088077]"
+                                                    />
+                                                    <span>{p.name}</span>
+                                                </label>
+                                            ))
+                                        )}
+                                    </div>
+                                );
+                            }}
+                        />
                     </div>
                 </div>
             )}
