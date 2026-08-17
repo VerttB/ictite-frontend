@@ -1,6 +1,7 @@
 import {
     Book,
     ChartSpline,
+    ClipboardList,
     Handshake,
     Home,
     Printer,
@@ -32,6 +33,12 @@ export const baseItems = [
 ];
 
 export const admItems = [
+    {
+        title: "Submissões",
+        url: "/console/v2/submissions",
+        icon: ClipboardList,
+        allowedRoles: ["admin"],
+    },
     {
         title: "Escolas",
         url: "/console/v2/escolas",

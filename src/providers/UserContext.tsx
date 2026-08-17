@@ -69,7 +69,11 @@ export default function UserProvider({
             await login(loginRequest);
             const userData = await me();
             setUser(userData);
-            router.push("/");
+            if (userData?.role === "SCHOOL_ADMIN") {
+                router.push("/school/console");
+            } else {
+                router.push("/console/v2");
+            }
             return true;
         } catch (error) {
             console.error("Erro no login:", error);

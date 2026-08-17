@@ -8,13 +8,12 @@ export const UserRoleSchema = z.enum([
 ]);
 
 export const UserSchema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
+    username: z.string().optional(),
     email: z.string().email("Email inválido"),
-    role: UserRoleSchema,
-    school_id: z.string().uuid().nullable().default(null),
-    created_at: z.string().refine((date) => !isNaN(Date.parse(date)), {
-        message: "Data inválida",
-    }),
+    role: role: UserRoleSchema,
+    school_id: z.string().nullable().optional(),
+    created_at: z.string().optional(),
 });
 
 export const UserLoginSchema = z.object({
