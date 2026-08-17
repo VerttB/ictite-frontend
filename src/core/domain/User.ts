@@ -1,10 +1,17 @@
 import z from "zod";
 
+export const UserRoleSchema = z.enum([
+    "MANAGER",
+    "ADMIN",
+    "VIEWER",
+    "SCHOOL_ADMIN",
+]);
+
 export const UserSchema = z.object({
     id: z.string(),
     username: z.string().optional(),
     email: z.string().email("Email inválido"),
-    role: z.string().optional(),
+    role: role: UserRoleSchema,
     school_id: z.string().nullable().optional(),
     created_at: z.string().optional(),
 });
@@ -16,3 +23,4 @@ export const UserLoginSchema = z.object({
 
 export type User = z.infer<typeof UserSchema>;
 export type UserLogin = z.infer<typeof UserLoginSchema>;
+export type UserRole = z.infer<typeof UserRoleSchema>;

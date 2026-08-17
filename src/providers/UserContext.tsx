@@ -1,17 +1,25 @@
 "use client";
 
-import { login, me, logout } from "@/core/service/AuthService";
+import {
+    login,
+    me,
+    logout,
+    registerInvited,
+} from "@/core/service/AuthService";
 import { useRouter } from "next/navigation";
 import { createContext, useState, useContext, useEffect } from "react";
-import { User } from "@/core/domain/User";
-import { UserLogin } from "@/core/domain/User";
+import { User, UserLogin } from "@/core/domain/User";
+import { RegisterInvitedRequest } from "@/core/domain/Invite";
 
 type UserContextType = {
     user: User | null;
     isLoading: boolean;
     isAuthenticated: boolean;
+    isAdmin: boolean;
+    isSchoolAdmin: boolean;
     loginUser: (loginRequest: UserLogin) => Promise<boolean>;
     logoutUser: () => void;
+    registerInvitedUser: (payload: RegisterInvitedRequest) => Promise<boolean>;
     error: string | null;
 };
 
@@ -34,6 +42,8 @@ export default function UserProvider({
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const isAuthenticated = !!user;
+    const isAdmin = user?.role === "ADMIN";
+    const isSchoolAdmin = user?.role === "SCHOOL_ADMIN";
     const router = useRouter();
 
     useEffect(() => {
@@ -89,12 +99,35 @@ export default function UserProvider({
         }
     };
 
+    const registerInvitedUser = async (
+        payload: RegisterInvitedRequest
+    ): Promise<boolean> => {
+        setIsLoading(true);
+        try {
+            await registerInvited(payload);
+            const userData = await me();
+            setUser(userData);
+            router.push("/console/v2");
+            return true;
+        } catch (error) {
+            console.error("Erro no autocadastro:", error);
+            setError(error instanceof Error ? error.message : String(error));
+            setUser(null);
+            return false;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const contextValue = {
         user,
         isLoading,
         isAuthenticated,
+        isAdmin,
+        isSchoolAdmin,
         loginUser,
         logoutUser,
+        registerInvitedUser,
         error,
     };
 

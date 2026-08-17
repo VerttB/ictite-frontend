@@ -35,6 +35,7 @@ export interface AdminEntityConfig<
         applyParams: (params: any) => void;
         closeFilters: () => void;
     }) => React.ReactNode;
+    renderEditActions?: (item: T) => React.ReactNode;
     childTabs: ChildTabConfig[];
 
     // API Functions
