@@ -37,7 +37,7 @@ export const admItems = [
         title: "Submissões",
         url: "/console/v2/submissions",
         icon: ClipboardList,
-        allowedRoles: ["admin"],
+        allowedRoles: ["ADMIN"],
     },
     {
         title: "Escolas",
@@ -45,6 +45,12 @@ export const admItems = [
         icon: School,
         allowedRoles: ["ADMIN", "SCHOOL_ADMIN"],
     },
+    // {
+    //     title: "Submissões",
+    //     url: "/console/v2/submissions",
+    //     icon: ClipboardList,
+    //     allowedRoles: ["ADMIN"],
+    // },
     {
         title: "Equipamentos",
         url: "/console/v2/equipamentos",
