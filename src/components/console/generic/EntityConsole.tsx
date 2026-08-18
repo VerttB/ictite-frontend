@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, LoaderCircle } from "lucide-react";
 import { useAdmCrud } from "@/hooks/useAdmCrud";
 import { useUrlPagination } from "@/hooks/useUrlPagination";
+import { useUserContext } from "@/providers/UserContext";
 import { Pagination } from "../../Pagination";
 import { SearchAndFilter } from "../../SearchAndFilter";
 import { FormProvider, useForm, FieldValues } from "react-hook-form";
@@ -43,13 +44,16 @@ export const EntityConsole = <
 }: EntityConsoleProps<T, CreateDTO, UpdateDTO, TCreateSchema, TUpdateSchema>) => {
     const [view, setView] = useState<"list" | "edit">("list");
     const [activeTab, setActiveTab] = useState("dados-gerais");
+    const { user, isSchoolAdmin } = useUserContext();
+    const scopedSchoolId = isSchoolAdmin ? user?.school_id : undefined;
 
     const consoleParams = useMemo(() => {
         return {
             ...params,
             size: params.size ?? ConsolePageSize,
+            ...(scopedSchoolId ? { school_id: scopedSchoolId } : {}),
         };
-    }, [params]);
+    }, [params, scopedSchoolId]);
 
     const { data: paginatedData, mutate } = useSWR(
         [config.entityName, consoleParams],
@@ -176,7 +180,7 @@ export const EntityConsole = <
                 <Section<any>
                     title={config.title}
                     items={paginatedData?.items || []}
-                    onAdd={onOpenCreate}
+                    onAdd={isSchoolAdmin ? undefined : onOpenCreate}
                     onUpdate={onOpenEdit}
                     onDelete={crud.ui.openDelete}
                     tooltipText={getTooltipText}
@@ -191,7 +195,7 @@ export const EntityConsole = <
                         mainSearchKey="name"
                         mainSearchPlaceholder={`Buscar ${config.title.toLowerCase()}`}
                         filters={[]}
-                        renderFilters={config.renderFilters}
+                        renderFilters={isSchoolAdmin ? undefined : config.renderFilters}
                     />
                 </Section>
                 <Pagination
@@ -221,10 +225,15 @@ export const EntityConsole = <
                             : `Novo ${config.title}`}
                     </h1>
                 </div>
-                <Button variant="outline" onClick={onBackToList}>
-                    <ArrowLeft className="mr-2" size={16} />
-                    Voltar para lista
-                </Button>
+                <div className="flex items-center gap-2">
+                    {crud.editingItem && config.renderEditActions && (
+                        config.renderEditActions(crud.editingItem)
+                    )}
+                    <Button variant="outline" onClick={onBackToList}>
+                        <ArrowLeft className="mr-2" size={16} />
+                        Voltar para lista
+                    </Button>
+                </div>
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

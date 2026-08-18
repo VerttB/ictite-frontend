@@ -6,7 +6,7 @@ export async function proxy(req: NextRequest) {
     const tokenCookie = req.cookies.get("access_token");
     const token = tokenCookie?.value;
 
-    const protectedRoutes = ["/console", "/console/v2"];
+    const protectedRoutes = ["/console", "/console/v2", "/school/console"];
     const isProtected = protectedRoutes.some((path) =>
         req.nextUrl.pathname.startsWith(path)
     );
@@ -34,5 +34,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/console/:path*", "/console/v2/:path*"],
+    matcher: ["/console/:path*", "/console/v2/:path*", "/school/console/:path*"],
 };

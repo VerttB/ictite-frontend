@@ -51,6 +51,7 @@ import {
 } from "@/components/ui/combobox";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
+import { InviteGeneratorForm } from "./InviteGeneratorForm";
 import z from "zod";
 
 const SchoolFiltersModal = ({
@@ -356,6 +357,12 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
             identity_territory_id: item.identityTerritory?.id,
         }),
         renderForm: () => <SchoolForm />,
+        renderEditActions: (item) => (
+            <InviteGeneratorForm
+                schoolId={item.id}
+                schoolName={(item as any).name}
+            />
+        ),
         renderFilters: ({ currentParams, applyParams, closeFilters }) => (
             <SchoolFiltersModal
                 currentParams={currentParams}

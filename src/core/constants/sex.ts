@@ -1,6 +1,8 @@
 export const GenderTypes = {
-    MASCULINO: "Masculino",
-    FEMININO: "Feminino",
+    HOMEM_CIS: "Homem Cisgênero",
+    MULHER_CIS: "Mulher Cisgênero",
+    HOMEM_TRANS: "Homem Trans",
+    MULHER_TRANS: "Mulher Trans",
     OUTRO: "Outro",
     NAO_INFORMADO: "Não informado",
     PREF_NAO_INFORMAR: "Prefiro não informar",
