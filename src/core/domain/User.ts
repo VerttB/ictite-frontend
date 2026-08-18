@@ -11,7 +11,7 @@ export const UserSchema = z.object({
     id: z.string(),
     username: z.string().optional(),
     email: z.string().email("Email inválido"),
-    role: role: UserRoleSchema,
+    role: UserRoleSchema,
     school_id: z.string().nullable().optional(),
     created_at: z.string().optional(),
 });

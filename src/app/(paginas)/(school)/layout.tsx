@@ -1,5 +1,6 @@
 "use client";
 
+import { RoleGuard } from "@/components/RoleGuard";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function SchoolLayout({
@@ -7,5 +8,9 @@ export default function SchoolLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return <SidebarProvider>{children}</SidebarProvider>;
+    return (
+            <RoleGuard allowedRoles={["SCHOOL_ADMIN", "ADMIN"]}>
+                <SidebarProvider>{children}</SidebarProvider>
+            </RoleGuard>
+            );
 }

@@ -107,7 +107,11 @@ export default function UserProvider({
             await registerInvited(payload);
             const userData = await me();
             setUser(userData);
-            router.push("/console/v2");
+            if (userData?.role === "SCHOOL_ADMIN") {
+                router.push("/school/console");
+            } else {
+                router.push("/console/v2");
+            }
             return true;
         } catch (error) {
             console.error("Erro no autocadastro:", error);
