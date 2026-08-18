@@ -30,6 +30,20 @@ interface UseSchoolSubmissionReturn {
     reloadSubmission: () => Promise<void>;
 }
 
+// Função provisória para resolver bug entre undefined e nulls, remove todos os nulls do objeto, para que o zod consiga validar corretamente.
+function removeNulls<T>(obj: T): T {
+    if (Array.isArray(obj)) {
+        return obj.map(removeNulls) as unknown as T;
+    }
+    if (obj !== null && typeof obj === "object") {
+        return Object.entries(obj).reduce((acc, [key, value]) => {
+            acc[key] = value === null ? undefined : removeNulls(value);
+            return acc;
+        }, {} as any);
+    }
+    return obj;
+}
+
 export function useSchoolSubmission(): UseSchoolSubmissionReturn {
     const [submission, setSubmission] = useState<SchoolFormSubmission | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -97,7 +111,8 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         setIsSaving(true);
         try {
             const currentData = form.getValues();
-            const validatedData = SchoolFormDraftDataSchema.parse(currentData);
+            const cleanData = removeNulls(currentData);
+            const validatedData = SchoolFormDraftDataSchema.parse(cleanData);
             const updatedSub = await schoolSubmissionService.saveDraft(
                 submission.version,
                 validatedData
@@ -116,6 +131,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                 }
             } else {
                 toast.error("Erro de conexão ao salvar rascunho.");
+                console.log(error);
             }
         } finally {
             setIsSaving(false);
@@ -127,7 +143,8 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         setIsSubmitting(true);
         try {
             const currentData = form.getValues();
-            const validatedData = SchoolFormDraftDataSchema.parse(currentData);
+            const cleanData = removeNulls(currentData);
+            const validatedData = SchoolFormDraftDataSchema.parse(cleanData);
             await schoolSubmissionService.saveDraft(submission.version, validatedData);
 
             const submittedSub = await schoolSubmissionService.submitDraft();

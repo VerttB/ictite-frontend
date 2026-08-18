@@ -71,7 +71,7 @@ export interface SchoolFormSubmission {
     school_id: string;
     status: "RASCUNHO" | "PENDENTE" | "APROVADO" | "REJEITADO";
     version: number;
-    data: SchoolFormDraftData;
+    data: SchoolFormDataInput;
     base_timestamp: string;
     has_conflict: boolean;
     submitted_by?: string | null;
