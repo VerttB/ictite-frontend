@@ -39,12 +39,15 @@ export const EquipmentDraftDataSchema = z.object({
     type_equipment_id: z.string().uuid("ID do tipo de equipamento inválido"),
 });
 
+// Solução provisória para permitir que o formulário seja validado mesmo com campos opcionais, mas que não sejam nulos ou indefinidos.
+export type SchoolFormDataInput = z.input<typeof SchoolFormDraftDataSchema>;
+
 export const SchoolFormDraftDataSchema = z.object({
     school: SchoolDraftDataSchema,
-    clubs: z.array(ClubDraftDataSchema).default([]),
-    projects: z.array(ProjectDraftDataSchema).default([]),
-    researchers: z.array(ResearcherDraftDataSchema).default([]),
-    equipments: z.array(EquipmentDraftDataSchema).default([]),
+    clubs: z.array(ClubDraftDataSchema),
+    projects: z.array(ProjectDraftDataSchema),
+    researchers: z.array(ResearcherDraftDataSchema),
+    equipments: z.array(EquipmentDraftDataSchema),
 });
 
 export const RequestDeadlineExtensionSchema = z.object({

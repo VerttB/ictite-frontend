@@ -20,12 +20,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { SchoolFormDraftData, ClubDraftData } from "@/schemas/schoolSubmissionSchema";
+import {
+    SchoolFormDraftData,
+    ClubDraftData,
+    SchoolFormDataInput,
+} from "@/schemas/schoolSubmissionSchema";
 
 interface ProjectItemFormProps {
     index: number;
     fieldId: string;
-    form: UseFormReturn<SchoolFormDraftData>;
+    form: UseFormReturn<SchoolFormDataInput>;
     clubs: ClubDraftData[];
     readOnly?: boolean;
     isExpanded: boolean;
