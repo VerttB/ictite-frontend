@@ -15,6 +15,7 @@ import { generateSchoolInvite } from "@/core/service/AuthService";
 import { GenerateInviteResponse } from "@/core/domain/Invite";
 import { Check, Copy, Link2, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
+import { getAssetPrefix } from "@/core/utils/api";
 
 interface InviteGeneratorFormProps {
     schoolId: string;
@@ -30,7 +31,7 @@ export function InviteGeneratorForm({
     const [copied, setCopied] = useState(false);
 
     const inviteUrl = invite
-        ? `${window.location.origin}/convite/${invite.invite_token}`
+        ? `${window.location.origin}${getAssetPrefix()}/convite/${invite.invite_token}`
         : "";
 
     const handleGenerate = async () => {
