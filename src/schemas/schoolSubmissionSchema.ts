@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const SchoolDraftDataSchema = z.object({
-    name: z.string().min(2, "Nome da escola deve ter no mínimo 2 caracteres"),
+    name: z.string(),
     city: z.string().optional(),
     cep: z.string().optional(),
     description: z.string().optional(),
@@ -10,21 +10,21 @@ export const SchoolDraftDataSchema = z.object({
 
 export const ClubDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
-    name: z.string().min(2, "Nome do clube deve ter no mínimo 2 caracteres"),
+    name: z.string(),
     instagram_url: z.string().optional(),
 });
 
 export const ProjectDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
-    name: z.string().min(2, "Nome do projeto deve ter no mínimo 2 caracteres"),
+    name: z.string(),
     description: z.string().optional(),
-    clube_ciencia_id: z.string().uuid("Selecione um clube válido"),
+    clube_ciencia_id: z.string(),
     year: z.number().int().optional(),
 });
 
 export const ResearcherDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
-    name: z.string().min(2, "Nome completo é obrigatório"),
+    name: z.string(),
     type: z.enum(["Aluno", "Professor", "Facilitador"]),
     gender: z.string().optional(),
     race: z.string().optional(),
@@ -34,9 +34,9 @@ export const ResearcherDraftDataSchema = z.object({
 
 export const EquipmentDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
-    name: z.string().min(2, "Nome do equipamento é obrigatório"),
-    quantity: z.number().min(1, "Quantidade deve ser no mínimo 1"),
-    type_equipment_id: z.string().uuid("ID do tipo de equipamento inválido"),
+    name: z.string(),
+    quantity: z.number(),
+    type_equipment_id: z.string(),
 });
 
 // Solução provisória para permitir que o formulário seja validado mesmo com campos opcionais, mas que não sejam nulos ou indefinidos.
@@ -49,6 +49,82 @@ export const SchoolFormDraftDataSchema = z.object({
     researchers: z.array(ResearcherDraftDataSchema),
     equipments: z.array(EquipmentDraftDataSchema),
 });
+
+export const SchoolFormFinalDataSchema = SchoolFormDraftDataSchema.superRefine(
+    (data, context) => {
+        const addIssue = (path: (string | number)[], message: string) =>
+            context.addIssue({ code: "custom", path, message });
+
+        if (data.school.name.trim().length < 2) {
+            addIssue(["school", "name"], "Informe o nome da escola");
+        }
+        if (data.clubs.length === 0) {
+            addIssue(["clubs"], "Cadastre ao menos um clube de ciência");
+        }
+        if (data.projects.length === 0) {
+            addIssue(["projects"], "Cadastre ao menos um projeto");
+        }
+        if (data.researchers.length === 0) {
+            addIssue(["researchers"], "Cadastre ao menos um pesquisador");
+        }
+
+        const clubIds = new Set(data.clubs.map((club) => club.id));
+        const projectIds = new Set(data.projects.map((project) => project.id));
+
+        data.clubs.forEach((club, index) => {
+            if (club.name.trim().length < 2) {
+                addIssue(["clubs", index, "name"], "Informe o nome do clube");
+            }
+        });
+
+        data.projects.forEach((project, index) => {
+            if (project.name.trim().length < 2) {
+                addIssue(["projects", index, "name"], "Informe o nome do projeto");
+            }
+            if (
+                !z.string().uuid().safeParse(project.clube_ciencia_id).success ||
+                !clubIds.has(project.clube_ciencia_id)
+            ) {
+                addIssue(
+                    ["projects", index, "clube_ciencia_id"],
+                    "Selecione um clube deste formulário"
+                );
+            }
+        });
+
+        data.researchers.forEach((researcher, index) => {
+            if (researcher.name.trim().length < 2) {
+                addIssue(["researchers", index, "name"], "Informe o nome do pesquisador");
+            }
+            researcher.project_ids.forEach((projectId, projectIndex) => {
+                if (!projectIds.has(projectId)) {
+                    addIssue(
+                        ["researchers", index, "project_ids", projectIndex],
+                        "Selecione somente projetos deste formulário"
+                    );
+                }
+            });
+        });
+
+        data.equipments.forEach((equipment, index) => {
+            if (equipment.name.trim().length < 2) {
+                addIssue(["equipments", index, "name"], "Informe o nome do equipamento");
+            }
+            if (!Number.isInteger(equipment.quantity) || equipment.quantity < 1) {
+                addIssue(
+                    ["equipments", index, "quantity"],
+                    "Informe uma quantidade válida"
+                );
+            }
+            if (!z.string().uuid().safeParse(equipment.type_equipment_id).success) {
+                addIssue(
+                    ["equipments", index, "type_equipment_id"],
+                    "Selecione um tipo de equipamento válido"
+                );
+            }
+        });
+    }
+);
 
 export const RequestDeadlineExtensionSchema = z.object({
     requested_deadline: z.string().min(1, "Selecione uma data limite válida"),

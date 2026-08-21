@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { FieldPath, useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { ApiError } from "@/lib/api/error";
@@ -10,6 +10,7 @@ import {
     SchoolFormSubmission,
     SchoolFormDraftData,
     SchoolFormDraftDataSchema,
+    SchoolFormFinalDataSchema,
     RequestDeadlineExtension,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
@@ -140,12 +141,27 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
 
     const submitForm = async () => {
         if (!submission) return;
+        const currentData = form.getValues();
+        const cleanData = removeNulls(currentData);
+        const validation = SchoolFormFinalDataSchema.safeParse(cleanData);
+        if (!validation.success) {
+            form.clearErrors();
+            validation.error.issues.forEach((issue) => {
+                form.setError(issue.path.join(".") as FieldPath<SchoolFormDataInput>, {
+                    type: "manual",
+                    message: issue.message,
+                });
+            });
+            const messages = [
+                ...new Set(validation.error.issues.map((issue) => issue.message)),
+            ];
+            toast.error(`Revise o formulário: ${messages.join("; ")}`);
+            return;
+        }
+
         setIsSubmitting(true);
         try {
-            const currentData = form.getValues();
-            const cleanData = removeNulls(currentData);
-            const validatedData = SchoolFormDraftDataSchema.parse(cleanData);
-            await schoolSubmissionService.saveDraft(submission.version, validatedData);
+            await schoolSubmissionService.saveDraft(submission.version, validation.data);
 
             const submittedSub = await schoolSubmissionService.submitDraft();
             setSubmission(submittedSub);
