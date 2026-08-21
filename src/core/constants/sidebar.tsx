@@ -43,7 +43,7 @@ export const admItems = [
         title: "Escolas",
         url: "/console/v2/escolas",
         icon: School,
-        allowedRoles: ["ADMIN", "SCHOOL_ADMIN"],
+        allowedRoles: ["ADMIN"],
     },
     // {
     //     title: "Submissões",

@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RoleGuard } from "@/components/RoleGuard";
 
-const ADM_ROLES = ["ADMIN", "SCHOOL_ADMIN"];
+const ADM_ROLES = ["ADMIN"];
 
 export default function layout({
     children,

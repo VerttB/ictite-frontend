@@ -9,7 +9,7 @@ export default function SchoolLayout({
     children: React.ReactNode;
 }>) {
     return (
-            <RoleGuard allowedRoles={["SCHOOL_ADMIN", "ADMIN"]}>
+            <RoleGuard allowedRoles={["SCHOOL_ADMIN"]}>
                 <SidebarProvider>{children}</SidebarProvider>
             </RoleGuard>
             );
