@@ -23,6 +23,23 @@ interface InviteRegistrationFormProps {
     token: string;
 }
 
+function getInviteErrorMessage(message: string): string {
+    const normalizedMessage = message.toLowerCase();
+    if (normalizedMessage.includes("e-mail já está cadastrado")) {
+        return "Este e-mail já está cadastrado no sistema.";
+    }
+    if (normalizedMessage.includes("convite já foi utilizado")) {
+        return "Este convite já foi utilizado.";
+    }
+    if (normalizedMessage.includes("convite expirou")) {
+        return "Este convite expirou.";
+    }
+    if (normalizedMessage.includes("convite é inválido")) {
+        return "Este convite é inválido.";
+    }
+    return "Não foi possível ativar sua conta. Tente novamente.";
+}
+
 export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
     const router = useRouter();
     const { registerInvitedUser, isLoading } = useUserContext();
@@ -41,12 +58,11 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
     const onSubmit = async (data: InviteRegistrationData) => {
         clearErrors("root");
         const { confirmPassword: _confirmPassword, ...payload } = data;
-        const success = await registerInvitedUser(payload);
-        if (!success) {
+        const errorMessage = await registerInvitedUser(payload);
+        if (errorMessage) {
             setError("root", {
                 type: "manual",
-                message:
-                    "Não foi possível ativar sua conta. Verifique se o convite é válido e ainda não expirou.",
+                message: getInviteErrorMessage(errorMessage),
             });
         }
     };
