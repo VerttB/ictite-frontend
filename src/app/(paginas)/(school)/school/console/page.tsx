@@ -168,7 +168,7 @@ export default function SchoolConsolePage() {
                                 {/* 5. ABA ESCOLA: Exibe Apenas Imagem e Dados da Escola */}
                                 {activeSection === "escola" && (
                                     <div className="animate-fade-in flex w-full flex-col gap-6">
-                                        <SchoolImageDropzone />
+                                        <SchoolImageDropzone readOnly={isReadOnly} />
                                         <SchoolMainFields
                                             form={form}
                                             readOnly={isReadOnly}

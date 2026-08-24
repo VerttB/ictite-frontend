@@ -48,4 +48,18 @@ export const schoolSubmissionService = {
             params: { page, size },
         });
     },
+
+    async getFormImage(): Promise<{ url: string | null; path: string | null }> {
+        return apiClient.get<{ url: string | null; path: string | null }>("/submissions/current/image");
+    },
+
+    async uploadFormImage(file: File): Promise<{ url: string; path: string }> {
+        const formData = new FormData();
+        formData.append("file", file);
+        return apiClient.post<{ url: string; path: string }>("/submissions/current/image", formData);
+    },
+
+    async deleteFormImage(): Promise<void> {
+        return apiClient.delete<void>("/submissions/current/image");
+    },
 };
