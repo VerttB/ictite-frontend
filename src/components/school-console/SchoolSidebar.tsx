@@ -30,6 +30,8 @@ import {
     Home,
     BarChart3,
     LayoutDashboard,
+    History,
+    Globe2,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -43,6 +45,8 @@ import { cn } from "@/lib/utils";
 
 export type SchoolSection =
     | "geral"
+    | "previa_site"
+    | "historico"
     | "visao_geral_form"
     | "escola"
     | "clubs"
@@ -66,6 +70,11 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
             label: "Visão Geral",
             icon: BarChart3,
         },
+        {
+            id: "historico" as SchoolSection,
+            label: "Histórico",
+            icon: History,
+        },
         { id: "escola" as SchoolSection, label: "Escola", icon: School },
         { id: "clubs" as SchoolSection, label: "Clubes de Ciência", icon: Handshake },
         { id: "projects" as SchoolSection, label: "Projetos", icon: SquareChartGantt },
@@ -75,6 +84,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
 
     const isFormChildActive = formSubItems.some((item) => item.id === activeSection);
     const isGeralActive = activeSection === "geral";
+    const isPreviaActive = activeSection === "previa_site";
 
     return (
         <Sidebar collapsible="icon">
@@ -121,7 +131,29 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
-                            {/* 3. Item Pai Expandível: Formulário */}
+                            {/* 3. Item Independente no Topo: Prévia do Portal */}
+                            <SidebarMenuItem
+                                className={cn(
+                                    "flex rounded-sm transition-all duration-200",
+                                    isPreviaActive
+                                        ? "bg-primary text-white"
+                                        : "hover:bg-primary/70 bg-gray-200 text-gray-700 hover:text-white"
+                                )}>
+                                <SidebarMenuButton
+                                    onClick={() => onSelectSection("previa_site")}
+                                    tooltip="Prévia do Portal"
+                                    className={cn(
+                                        "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
+                                        isPreviaActive
+                                            ? "bg-primary hover:bg-primary font-bold text-white hover:text-white"
+                                            : "hover:bg-primary/70 bg-gray-200 text-gray-700 hover:text-white"
+                                    )}>
+                                    <Globe2 size={18} />
+                                    <span>Prévia do Portal</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+
+                            {/* 4. Item Pai Expandível: Formulário */}
                             <SidebarMenuItem className="flex flex-col rounded-sm transition-all duration-200">
                                 <SidebarMenuButton
                                     onClick={() => setIsFormExpanded(!isFormExpanded)}
@@ -143,7 +175,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                     )}
                                 </SidebarMenuButton>
 
-                                {/* Sub-itens do Formulário (Visão Geral, Escola, Clubes, Projetos, Pesquisadores, Equipamentos) */}
+                                {/* Sub-itens do Formulário (Visão Geral, Histórico, Escola, Clubes, Projetos, Pesquisadores, Equipamentos) */}
                                 {isFormExpanded && open && (
                                     <SidebarMenuSub className="border-primary/40 mt-1 flex flex-col gap-1 border-l-2 pl-2">
                                         {formSubItems.map((item) => {

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-    ArrowLeft,
     BookOpen,
     Eye,
     FlaskConical,
@@ -10,13 +9,14 @@ import {
     Printer,
     School,
     Users,
+    ArrowLeft,
 } from "lucide-react";
 
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 
 interface ClubSitePreviewProps {
     data: SchoolFormDataInput;
-    onBack: () => void;
+    onBack?: () => void;
 }
 
 export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
@@ -34,10 +34,10 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold">
-                            Ver como ficará no &quot;site&quot;
+                            Prévia do Portal
                         </h2>
                         <p className="text-font-primary/60 text-sm">
-                            Demonstração com as informações atuais do rascunho.
+                            Demonstração com as informações atuais do rascunho da escola.
                         </p>
                     </div>
                 </div>
@@ -226,14 +226,16 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                 </section>
             )}
 
-            <div className="sticky bottom-4 rounded-md border bg-white/95 p-4 shadow-lg backdrop-blur-sm">
-                <button
-                    type="button"
-                    onClick={onBack}
-                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50">
-                    <ArrowLeft size={16} /> Voltar para edição
-                </button>
-            </div>
+            {onBack && (
+                <div className="sticky bottom-4 rounded-md border bg-white/95 p-4 shadow-lg backdrop-blur-sm">
+                    <button
+                        type="button"
+                        onClick={onBack}
+                        className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50">
+                        <ArrowLeft size={16} /> Voltar para edição
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

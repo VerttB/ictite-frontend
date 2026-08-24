@@ -9,7 +9,6 @@ import {
     Loader2,
     Eye,
     ClipboardCheck,
-    Globe2,
 } from "lucide-react";
 import { useSchoolSubmission } from "@/hooks/useSchoolSubmission";
 
@@ -29,6 +28,7 @@ import {
 import { SchoolSidebar, SchoolSection } from "@/components/school-console/SchoolSidebar";
 import { SchoolGeneralInfoSection } from "@/components/school-console/SchoolGeneralInfoSection";
 import { SchoolFormOverviewSection } from "@/components/school-console/SchoolFormOverviewSection";
+import { SchoolHistorySection } from "@/components/school-console/SchoolHistorySection";
 import { SchoolFormPreview } from "@/components/school-console/SchoolFormPreview";
 import { ClubSitePreview } from "@/components/school-console/ClubSitePreview";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
@@ -141,7 +141,21 @@ export default function SchoolConsolePage() {
                                     </div>
                                 )}
 
-                                {/* 2. ABA VISÃO GERAL (DO FORMULÁRIO: Status do Rascunho e Validações) */}
+                                {/* 2. ABA PRÉVIA DO PORTAL (Visualização como ficará no site público) */}
+                                {activeSection === "previa_site" && (
+                                    <div className="animate-fade-in w-full">
+                                        <ClubSitePreview data={form.getValues()} />
+                                    </div>
+                                )}
+
+                                {/* 3. ABA HISTÓRICO (Linha do Tempo de Atividades da Escola) */}
+                                {activeSection === "historico" && (
+                                    <div className="animate-fade-in w-full">
+                                        <SchoolHistorySection />
+                                    </div>
+                                )}
+
+                                {/* 4. ABA VISÃO GERAL (DO FORMULÁRIO: Status do Rascunho e Validações) */}
                                 {activeSection === "visao_geral_form" && (
                                     <div className="animate-fade-in w-full">
                                         <SchoolFormOverviewSection
@@ -151,7 +165,7 @@ export default function SchoolConsolePage() {
                                     </div>
                                 )}
 
-                                {/* 3. ABA ESCOLA: Exibe Apenas Imagem e Dados da Escola */}
+                                {/* 5. ABA ESCOLA: Exibe Apenas Imagem e Dados da Escola */}
                                 {activeSection === "escola" && (
                                     <div className="animate-fade-in flex w-full flex-col gap-6">
                                         <SchoolImageDropzone />
@@ -162,10 +176,12 @@ export default function SchoolConsolePage() {
                                     </div>
                                 )}
 
-                                {/* 4. ABAS FILHAS DO FORMULÁRIO (CLUBES, PROJETOS, PESQUISADORES, EQUIPAMENTOS) */}
+                                {/* 6. ABAS FILHAS DO FORMULÁRIO (CLUBES, PROJETOS, PESQUISADORES, EQUIPAMENTOS) */}
                                 {activeSection !== "escola" &&
                                     activeSection !== "visao_geral_form" &&
-                                    activeSection !== "geral" && (
+                                    activeSection !== "geral" &&
+                                    activeSection !== "historico" &&
+                                    activeSection !== "previa_site" && (
                                         <div className="animate-fade-in w-full">
                                             <SchoolSubEntitiesTabs
                                                 form={form}
@@ -176,95 +192,87 @@ export default function SchoolConsolePage() {
                                     )}
 
                                 {/* Barra Inferior de Ações (Preserva o Estado Global do Form) */}
-                                {activeSection !== "geral" && !isReadOnly && (
-                                    <div className="mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <button
-                                                type="button"
-                                                onClick={saveDraft}
-                                                disabled={isSaving || isSubmitting}
-                                                className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-gray-800 disabled:opacity-50">
-                                                {isSaving ? (
-                                                    <Loader2
-                                                        size={16}
-                                                        className="animate-spin"
-                                                    />
-                                                ) : (
-                                                    <Save size={16} />
+                                {activeSection !== "geral" &&
+                                    activeSection !== "historico" &&
+                                    activeSection !== "previa_site" &&
+                                    !isReadOnly && (
+                                        <div className="mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={saveDraft}
+                                                    disabled={isSaving || isSubmitting}
+                                                    className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-gray-800 disabled:opacity-50">
+                                                    {isSaving ? (
+                                                        <Loader2
+                                                            size={16}
+                                                            className="animate-spin"
+                                                        />
+                                                    ) : (
+                                                        <Save size={16} />
+                                                    )}
+                                                    Salvar Rascunho
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={refreshFromDatabase}
+                                                    disabled={isSaving || isSubmitting}
+                                                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
+                                                    <RefreshCw size={16} />
+                                                    Redefinir Mudanças
+                                                </button>
+
+                                                {submission?.status === "RASCUNHO" && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => openPreview("preview")}
+                                                        disabled={isSaving || isSubmitting}
+                                                        className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
+                                                        <Eye size={16} />
+                                                        Pré-visualizar formulário
+                                                    </button>
                                                 )}
-                                                Salvar Rascunho
-                                            </button>
 
-                                            <button
-                                                type="button"
-                                                onClick={refreshFromDatabase}
-                                                disabled={isSaving || isSubmitting}
-                                                className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
-                                                <RefreshCw size={16} />
-                                                Redefinir Mudanças
-                                            </button>
+                                                {submission?.status === "REJEITADO" && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={reopenDraft}
+                                                        className="inline-flex items-center gap-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-semibold text-amber-800 transition-all hover:bg-amber-100">
+                                                        <RotateCcw size={16} />
+                                                        Reabrir Formulário
+                                                    </button>
+                                                )}
+                                            </div>
 
-                                            {submission?.status === "RASCUNHO" && (
+                                            {submission?.status === "RASCUNHO" ? (
                                                 <button
                                                     type="button"
-                                                    onClick={() => openPreview("preview")}
+                                                    onClick={() => openPreview("review")}
                                                     disabled={isSaving || isSubmitting}
-                                                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
-                                                    <Eye size={16} />
-                                                    Pré-visualizar formulário
+                                                    className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
+                                                    <ClipboardCheck size={16} />
+                                                    Revisar e enviar
                                                 </button>
-                                            )}
-
-                                            {submission?.status === "RASCUNHO" && (
+                                            ) : (
                                                 <button
                                                     type="button"
-                                                    onClick={() => openPreview("site")}
+                                                    onClick={submitForm}
                                                     disabled={isSaving || isSubmitting}
-                                                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
-                                                    <Globe2 size={16} />
-                                                    Ver como ficará no &quot;site&quot;
-                                                </button>
-                                            )}
-
-                                            {submission?.status === "REJEITADO" && (
-                                                <button
-                                                    type="button"
-                                                    onClick={reopenDraft}
-                                                    className="inline-flex items-center gap-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-semibold text-amber-800 transition-all hover:bg-amber-100">
-                                                    <RotateCcw size={16} />
-                                                    Reabrir Formulário
+                                                    className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
+                                                    {isSubmitting ? (
+                                                        <Loader2
+                                                            size={16}
+                                                            className="animate-spin"
+                                                        />
+                                                    ) : (
+                                                        <Send size={16} />
+                                                    )}
+                                                    Enviar para Aprovação
                                                 </button>
                                             )}
                                         </div>
-
-                                        {submission?.status === "RASCUNHO" ? (
-                                            <button
-                                                type="button"
-                                                onClick={() => openPreview("review")}
-                                                disabled={isSaving || isSubmitting}
-                                                className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
-                                                <ClipboardCheck size={16} />
-                                                Revisar e enviar
-                                            </button>
-                                        ) : (
-                                            <button
-                                                type="button"
-                                                onClick={submitForm}
-                                                disabled={isSaving || isSubmitting}
-                                                className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
-                                                {isSubmitting ? (
-                                                    <Loader2
-                                                        size={16}
-                                                        className="animate-spin"
-                                                    />
-                                                ) : (
-                                                    <Send size={16} />
-                                                )}
-                                                Enviar para Aprovação
-                                            </button>
-                                        )}
-                                    </div>
-                                )}
+                                    )}
                             </>
                         )}
                     </div>

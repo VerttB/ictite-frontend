@@ -39,7 +39,6 @@ export const EquipmentDraftDataSchema = z.object({
     type_equipment_id: z.string().uuid("ID do tipo de equipamento inválido"),
 });
 
-// Solução provisória para permitir que o formulário seja validado mesmo com campos opcionais, mas que não sejam nulos ou indefinidos.
 export type SchoolFormDataInput = z.input<typeof SchoolFormDraftDataSchema>;
 
 export const SchoolFormDraftDataSchema = z.object({
@@ -83,4 +82,15 @@ export interface SchoolFormSubmission {
     extension_status?: "Pendente" | "Aprovado" | "Rejeitado" | null;
     created_at: string;
     updated_at: string;
+}
+
+export interface SchoolFormActivityLog {
+    id: string;
+    school_id: string;
+    submission_id?: string | null;
+    user_id: string;
+    user_name?: string | null;
+    action: string;
+    details?: string | null;
+    created_at: string;
 }

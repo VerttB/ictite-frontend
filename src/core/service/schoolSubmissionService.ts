@@ -1,5 +1,11 @@
 import { apiClient } from "@/lib/api/client";
-import { SchoolFormSubmission, SchoolFormDraftData, RequestDeadlineExtension } from "@/schemas/schoolSubmissionSchema";
+import { Pagination } from "@/schemas/Pagination";
+import {
+    SchoolFormSubmission,
+    SchoolFormDraftData,
+    RequestDeadlineExtension,
+    SchoolFormActivityLog,
+} from "@/schemas/schoolSubmissionSchema";
 
 export const schoolSubmissionService = {
     async getCurrentSubmission(): Promise<SchoolFormSubmission> {
@@ -35,5 +41,11 @@ export const schoolSubmissionService = {
 
     async requestDeadlineExtension(payload: RequestDeadlineExtension): Promise<SchoolFormSubmission> {
         return apiClient.post<SchoolFormSubmission>("/submissions/current/request-deadline-extension", payload);
+    },
+
+    async getLogs(page = 1, size = 20): Promise<Pagination<SchoolFormActivityLog>> {
+        return apiClient.get<Pagination<SchoolFormActivityLog>>("/submissions/logs", {
+            params: { page, size },
+        });
     },
 };
