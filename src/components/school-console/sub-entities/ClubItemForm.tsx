@@ -12,12 +12,15 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SchoolFormDraftData } from "@/schemas/schoolSubmissionSchema";
+import {
+    SchoolFormDataInput,
+    SchoolFormDraftData,
+} from "@/schemas/schoolSubmissionSchema";
 
 interface ClubItemFormProps {
     index: number;
     fieldId: string;
-    form: UseFormReturn<SchoolFormDraftData>;
+    form: UseFormReturn<SchoolFormDataInput>;
     readOnly?: boolean;
     isExpanded: boolean;
     onToggleExpand: () => void;

@@ -11,15 +11,17 @@ import {
     SchoolFormDraftData,
     SchoolFormDraftDataSchema,
     RequestDeadlineExtension,
+    SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
 import { schoolSubmissionService } from "@/core/service/schoolSubmissionService";
+import z from "zod";
 
 interface UseSchoolSubmissionReturn {
     submission: SchoolFormSubmission | null;
     isLoading: boolean;
     isSaving: boolean;
     isSubmitting: boolean;
-    form: UseFormReturn<SchoolFormDraftData>;
+    form: UseFormReturn<SchoolFormDataInput>;
     saveDraft: () => Promise<void>;
     submitForm: () => Promise<void>;
     refreshFromDatabase: () => Promise<void>;
@@ -28,13 +30,27 @@ interface UseSchoolSubmissionReturn {
     reloadSubmission: () => Promise<void>;
 }
 
+// Função provisória para resolver bug entre undefined e nulls, remove todos os nulls do objeto, para que o zod consiga validar corretamente.
+function removeNulls<T>(obj: T): T {
+    if (Array.isArray(obj)) {
+        return obj.map(removeNulls) as unknown as T;
+    }
+    if (obj !== null && typeof obj === "object") {
+        return Object.entries(obj).reduce((acc, [key, value]) => {
+            acc[key] = value === null ? undefined : removeNulls(value);
+            return acc;
+        }, {} as any);
+    }
+    return obj;
+}
+
 export function useSchoolSubmission(): UseSchoolSubmissionReturn {
     const [submission, setSubmission] = useState<SchoolFormSubmission | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    const form = useForm<SchoolFormDraftData>({
+    const form = useForm<SchoolFormDataInput>({
         resolver: zodResolver(SchoolFormDraftDataSchema),
         defaultValues: {
             school: { name: "", city: "", cep: "", description: "", instagram_url: "" },
@@ -70,7 +86,9 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                                 form.reset(newSub.data);
                             }
                         } catch (_createErr) {
-                            toast.error("Erro ao criar o rascunho inicial do formulário.");
+                            toast.error(
+                                "Erro ao criar o rascunho inicial do formulário."
+                            );
                         }
                     } else {
                         toast.error("Erro ao consultar a última submissão da escola.");
@@ -93,9 +111,11 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         setIsSaving(true);
         try {
             const currentData = form.getValues();
+            const cleanData = removeNulls(currentData);
+            const validatedData = SchoolFormDraftDataSchema.parse(cleanData);
             const updatedSub = await schoolSubmissionService.saveDraft(
                 submission.version,
-                currentData
+                validatedData
             );
             setSubmission(updatedSub);
             form.reset(updatedSub.data);
@@ -103,12 +123,15 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         } catch (error) {
             if (error instanceof ApiError) {
                 if (error.status === 409) {
-                    toast.error(error.message || "Conflito de concorrência ou prazo encerrado.");
+                    toast.error(
+                        error.message || "Conflito de concorrência ou prazo encerrado."
+                    );
                 } else {
                     toast.error(error.message || "Erro ao salvar rascunho.");
                 }
             } else {
                 toast.error("Erro de conexão ao salvar rascunho.");
+                console.log(error);
             }
         } finally {
             setIsSaving(false);
@@ -120,7 +143,9 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         setIsSubmitting(true);
         try {
             const currentData = form.getValues();
-            await schoolSubmissionService.saveDraft(submission.version, currentData);
+            const cleanData = removeNulls(currentData);
+            const validatedData = SchoolFormDraftDataSchema.parse(cleanData);
+            await schoolSubmissionService.saveDraft(submission.version, validatedData);
 
             const submittedSub = await schoolSubmissionService.submitDraft();
             setSubmission(submittedSub);
@@ -166,10 +191,13 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         }
     };
 
-    const requestDeadlineExtension = async (payload: RequestDeadlineExtension): Promise<boolean> => {
+    const requestDeadlineExtension = async (
+        payload: RequestDeadlineExtension
+    ): Promise<boolean> => {
         if (!submission) return false;
         try {
-            const updatedSub = await schoolSubmissionService.requestDeadlineExtension(payload);
+            const updatedSub =
+                await schoolSubmissionService.requestDeadlineExtension(payload);
             setSubmission(updatedSub);
             toast.success("Solicitação de prorrogação enviada com sucesso!");
             return true;

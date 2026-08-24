@@ -1,7 +1,15 @@
 "use client";
 
 import { UseFormReturn, Controller } from "react-hook-form";
-import { Book, Trash2, ChevronDown, ChevronUp, AlertCircle, AlertTriangle, CheckCircle2 } from "lucide-react";
+import {
+    Book,
+    Trash2,
+    ChevronDown,
+    ChevronUp,
+    AlertCircle,
+    AlertTriangle,
+    CheckCircle2,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +19,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { SchoolFormDraftData, ProjectDraftData } from "@/schemas/schoolSubmissionSchema";
+import {
+    SchoolFormDraftData,
+    ProjectDraftData,
+    SchoolFormDataInput,
+} from "@/schemas/schoolSubmissionSchema";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { GenderTypes } from "@/core/constants/sex";
 import { RaceTypes } from "@/core/constants/race";
@@ -19,7 +31,7 @@ import { RaceTypes } from "@/core/constants/race";
 interface ResearcherItemFormProps {
     index: number;
     fieldId: string;
-    form: UseFormReturn<SchoolFormDraftData>;
+    form: UseFormReturn<SchoolFormDataInput>;
     projects: ProjectDraftData[];
     readOnly?: boolean;
     isExpanded: boolean;
@@ -37,12 +49,18 @@ export function ResearcherItemForm({
     onToggleExpand,
     onRemove,
 }: ResearcherItemFormProps) {
-    const { register, control, watch, formState: { errors } } = form;
+    const {
+        register,
+        control,
+        watch,
+        formState: { errors },
+    } = form;
     const researcher = watch(`researchers.${index}`);
     const researcherError = errors.researchers?.[index];
 
     const hasError = Boolean(researcherError);
-    const isIncomplete = !researcher?.name || researcher.name.trim().length < 2 || !researcher?.type;
+    const isIncomplete =
+        !researcher?.name || researcher.name.trim().length < 2 || !researcher?.type;
 
     let borderClass = "border-l-4 border-l-[#088077]";
     let iconBgClass = "bg-[#088077]/10 text-[#088077]";
@@ -71,11 +89,11 @@ export function ResearcherItemForm({
     }
 
     return (
-        <div className={`relative flex flex-col rounded-2xl border border-gray-200 bg-gray-50/50 hover:bg-white transition-all shadow-xs overflow-hidden animate-in fade-in-50 slide-in-from-top-4 duration-300 ${borderClass}`}>
+        <div
+            className={`animate-in fade-in-50 slide-in-from-top-4 relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-gray-50/50 shadow-xs transition-all duration-300 hover:bg-white ${borderClass}`}>
             <div
                 onClick={onToggleExpand}
-                className="flex items-center justify-between p-4 cursor-pointer select-none border-b border-gray-100 hover:bg-gray-100/50 transition-colors"
-            >
+                className="flex cursor-pointer items-center justify-between border-b border-gray-100 p-4 transition-colors select-none hover:bg-gray-100/50">
                 <div className="flex items-center gap-3">
                     <span className={`rounded-xl p-2 ${iconBgClass}`}>
                         <Book size={18} />
@@ -101,24 +119,27 @@ export function ResearcherItemForm({
                                 e.stopPropagation();
                                 onRemove();
                             }}
-                            className="text-red-500 hover:bg-red-50 hover:text-red-700 h-8 w-8"
-                        >
+                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-700">
                             <Trash2 size={16} />
                         </Button>
                     )}
-                    <Button type="button" variant="ghost" size="icon" className="h-8 w-8 text-gray-400">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-gray-400">
                         {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                     </Button>
                 </div>
             </div>
 
             {isExpanded && (
-                <div className="p-5 space-y-4 animate-fade-in bg-white">
+                <div className="animate-fade-in space-y-4 bg-white p-5">
                     <input type="hidden" {...register(`researchers.${index}.id`)} />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                            <label className="mb-1 block text-xs font-semibold text-gray-700">
                                 Nome Completo (Obrigatório)
                             </label>
                             <Input
@@ -127,7 +148,7 @@ export function ResearcherItemForm({
                                 {...register(`researchers.${index}.name`)}
                             />
                             {errors.researchers?.[index]?.name && (
-                                <p className="mt-1 flex items-center gap-1 text-xs text-red-500 font-medium">
+                                <p className="mt-1 flex items-center gap-1 text-xs font-medium text-red-500">
                                     <AlertCircle size={12} />
                                     {errors.researchers[index]?.name?.message}
                                 </p>
@@ -135,7 +156,7 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                            <label className="mb-1 block text-xs font-semibold text-gray-700">
                                 Função / Tipo (Obrigatório)
                             </label>
                             <Controller
@@ -145,17 +166,20 @@ export function ResearcherItemForm({
                                     <Select
                                         disabled={readOnly}
                                         value={field.value}
-                                        onValueChange={field.onChange}
-                                    >
+                                        onValueChange={field.onChange}>
                                         <SelectTrigger className="w-full bg-white">
                                             <SelectValue placeholder="Selecione o tipo..." />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {Object.values(ResearcherTypes).map((typeVal) => (
-                                                <SelectItem key={typeVal} value={typeVal}>
-                                                    {typeVal}
-                                                </SelectItem>
-                                            ))}
+                                            {Object.values(ResearcherTypes).map(
+                                                (typeVal) => (
+                                                    <SelectItem
+                                                        key={typeVal}
+                                                        value={typeVal}>
+                                                        {typeVal}
+                                                    </SelectItem>
+                                                )
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -165,7 +189,7 @@ export function ResearcherItemForm({
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                            <label className="mb-1 block text-xs font-semibold text-gray-700">
                                 Gênero
                             </label>
                             <Controller
@@ -175,17 +199,20 @@ export function ResearcherItemForm({
                                     <Select
                                         disabled={readOnly}
                                         value={field.value || ""}
-                                        onValueChange={field.onChange}
-                                    >
+                                        onValueChange={field.onChange}>
                                         <SelectTrigger className="w-full bg-white">
                                             <SelectValue placeholder="Gênero..." />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {Object.values(GenderTypes).map((genderVal) => (
-                                                <SelectItem key={genderVal} value={genderVal}>
-                                                    {genderVal}
-                                                </SelectItem>
-                                            ))}
+                                            {Object.values(GenderTypes).map(
+                                                (genderVal) => (
+                                                    <SelectItem
+                                                        key={genderVal}
+                                                        value={genderVal}>
+                                                        {genderVal}
+                                                    </SelectItem>
+                                                )
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -193,7 +220,7 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                            <label className="mb-1 block text-xs font-semibold text-gray-700">
                                 Raça / Etnia
                             </label>
                             <Controller
@@ -203,8 +230,7 @@ export function ResearcherItemForm({
                                     <Select
                                         disabled={readOnly}
                                         value={field.value || ""}
-                                        onValueChange={field.onChange}
-                                    >
+                                        onValueChange={field.onChange}>
                                         <SelectTrigger className="w-full bg-white">
                                             <SelectValue placeholder="Raça/Etnia..." />
                                         </SelectTrigger>
@@ -221,7 +247,7 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="block text-xs font-semibold text-gray-700 mb-1">
+                            <label className="mb-1 block text-xs font-semibold text-gray-700">
                                 ID Lattes (16 dígitos)
                             </label>
                             <Input
@@ -235,7 +261,7 @@ export function ResearcherItemForm({
                     </div>
 
                     <div>
-                        <label className="block text-xs font-semibold text-gray-700 mb-1">
+                        <label className="mb-1 block text-xs font-semibold text-gray-700">
                             Projetos Vinculados
                         </label>
                         <Controller
@@ -258,20 +284,29 @@ export function ResearcherItemForm({
                                             projects.map((p) => (
                                                 <label
                                                     key={p.id}
-                                                    className="flex items-center gap-2 cursor-pointer text-xs font-medium"
-                                                >
+                                                    className="flex cursor-pointer items-center gap-2 text-xs font-medium">
                                                     <input
                                                         type="checkbox"
                                                         disabled={readOnly}
                                                         value={p.id}
-                                                        checked={selectedProjectIds.includes(p.id)}
+                                                        checked={selectedProjectIds.includes(
+                                                            p.id
+                                                        )}
                                                         onChange={(event) => {
-                                                            const nextProjectIds = event.target.checked
-                                                                ? [...selectedProjectIds, p.id]
+                                                            const nextProjectIds = event
+                                                                .target.checked
+                                                                ? [
+                                                                      ...selectedProjectIds,
+                                                                      p.id,
+                                                                  ]
                                                                 : selectedProjectIds.filter(
-                                                                      (projectId) => projectId !== p.id
+                                                                      (projectId) =>
+                                                                          projectId !==
+                                                                          p.id
                                                                   );
-                                                            field.onChange(nextProjectIds);
+                                                            field.onChange(
+                                                                nextProjectIds
+                                                            );
                                                         }}
                                                         className="rounded text-[#088077] focus:ring-[#088077]"
                                                     />

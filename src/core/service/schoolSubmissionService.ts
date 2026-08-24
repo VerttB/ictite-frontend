@@ -1,5 +1,11 @@
 import { apiClient } from "@/lib/api/client";
-import { SchoolFormSubmission, SchoolFormDraftData, RequestDeadlineExtension } from "@/schemas/schoolSubmissionSchema";
+import { Pagination } from "@/schemas/Pagination";
+import {
+    SchoolFormSubmission,
+    SchoolFormDraftData,
+    RequestDeadlineExtension,
+    SchoolFormActivityLog,
+} from "@/schemas/schoolSubmissionSchema";
 
 export const schoolSubmissionService = {
     async getCurrentSubmission(): Promise<SchoolFormSubmission> {
@@ -35,5 +41,25 @@ export const schoolSubmissionService = {
 
     async requestDeadlineExtension(payload: RequestDeadlineExtension): Promise<SchoolFormSubmission> {
         return apiClient.post<SchoolFormSubmission>("/submissions/current/request-deadline-extension", payload);
+    },
+
+    async getLogs(page = 1, size = 20): Promise<Pagination<SchoolFormActivityLog>> {
+        return apiClient.get<Pagination<SchoolFormActivityLog>>("/submissions/logs", {
+            params: { page, size },
+        });
+    },
+
+    async getFormImage(): Promise<{ url: string | null; path: string | null }> {
+        return apiClient.get<{ url: string | null; path: string | null }>("/submissions/current/image");
+    },
+
+    async uploadFormImage(file: File): Promise<{ url: string; path: string }> {
+        const formData = new FormData();
+        formData.append("file", file);
+        return apiClient.post<{ url: string; path: string }>("/submissions/current/image", formData);
+    },
+
+    async deleteFormImage(): Promise<void> {
+        return apiClient.delete<void>("/submissions/current/image");
     },
 };

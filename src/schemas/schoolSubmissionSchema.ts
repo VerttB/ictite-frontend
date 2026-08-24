@@ -39,12 +39,14 @@ export const EquipmentDraftDataSchema = z.object({
     type_equipment_id: z.string().uuid("ID do tipo de equipamento inválido"),
 });
 
+export type SchoolFormDataInput = z.input<typeof SchoolFormDraftDataSchema>;
+
 export const SchoolFormDraftDataSchema = z.object({
     school: SchoolDraftDataSchema,
-    clubs: z.array(ClubDraftDataSchema).default([]),
-    projects: z.array(ProjectDraftDataSchema).default([]),
-    researchers: z.array(ResearcherDraftDataSchema).default([]),
-    equipments: z.array(EquipmentDraftDataSchema).default([]),
+    clubs: z.array(ClubDraftDataSchema),
+    projects: z.array(ProjectDraftDataSchema),
+    researchers: z.array(ResearcherDraftDataSchema),
+    equipments: z.array(EquipmentDraftDataSchema),
 });
 
 export const RequestDeadlineExtensionSchema = z.object({
@@ -68,7 +70,7 @@ export interface SchoolFormSubmission {
     school_id: string;
     status: "RASCUNHO" | "PENDENTE" | "APROVADO" | "REJEITADO";
     version: number;
-    data: SchoolFormDraftData;
+    data: SchoolFormDataInput;
     base_timestamp: string;
     has_conflict: boolean;
     submitted_by?: string | null;
@@ -80,4 +82,15 @@ export interface SchoolFormSubmission {
     extension_status?: "Pendente" | "Aprovado" | "Rejeitado" | null;
     created_at: string;
     updated_at: string;
+}
+
+export interface SchoolFormActivityLog {
+    id: string;
+    school_id: string;
+    submission_id?: string | null;
+    user_id: string;
+    user_name?: string | null;
+    action: string;
+    details?: string | null;
+    created_at: string;
 }

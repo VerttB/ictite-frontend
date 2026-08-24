@@ -291,7 +291,7 @@ export function AdminSubmissionDetailsDialog({
                                     data.data.researchers.map((researcher) => {
                                         const projectNames = data.data.projects
                                             .filter((project) =>
-                                                researcher.project_ids.includes(project.id)
+                                                researcher.project_ids?.includes(project.id)
                                             )
                                             .map((project) => project.name)
                                             .join(", ");

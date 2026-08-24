@@ -20,14 +20,17 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { SchoolFormDraftData } from "@/schemas/schoolSubmissionSchema";
+import {
+    SchoolFormDataInput,
+    SchoolFormDraftData,
+} from "@/schemas/schoolSubmissionSchema";
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
 import { EquipmentType } from "@/core/domain/EquipmentType";
 
 interface EquipmentItemFormProps {
     index: number;
     fieldId: string;
-    form: UseFormReturn<SchoolFormDraftData>;
+    form: UseFormReturn<SchoolFormDataInput>;
     readOnly?: boolean;
     isExpanded: boolean;
     onToggleExpand: () => void;
