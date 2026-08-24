@@ -25,6 +25,7 @@ import {
     SchoolSubEntitiesTabs,
     TabType,
 } from "@/components/school-console/SchoolSubEntitiesTabs";
+
 import { SchoolSidebar, SchoolSection } from "@/components/school-console/SchoolSidebar";
 import { SchoolGeneralInfoSection } from "@/components/school-console/SchoolGeneralInfoSection";
 import { SchoolFormOverviewSection } from "@/components/school-console/SchoolFormOverviewSection";
@@ -90,7 +91,7 @@ export default function SchoolConsolePage() {
             />
 
             {/* Container Padrão ictite com Borda Profunda e Header */}
-            <div className="bg-foreground flex min-h-screen w-full flex-col pr-4 pb-4">
+            <div className="bg-foreground flex flex-1 min-w-0 min-h-screen w-full flex-col pr-4 pb-4">
                 <Header />
 
                 {/* Conteúdo Principal do Console com Inset Box-Shadow de Profundidade */}
