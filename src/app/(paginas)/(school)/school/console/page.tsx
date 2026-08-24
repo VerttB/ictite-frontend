@@ -9,6 +9,7 @@ import {
     Loader2,
     Eye,
     ClipboardCheck,
+    Globe2,
 } from "lucide-react";
 import { useSchoolSubmission } from "@/hooks/useSchoolSubmission";
 
@@ -28,10 +29,11 @@ import { SchoolSidebar, SchoolSection } from "@/components/school-console/School
 import { SchoolGeneralInfoSection } from "@/components/school-console/SchoolGeneralInfoSection";
 import { SchoolFormOverviewSection } from "@/components/school-console/SchoolFormOverviewSection";
 import { SchoolFormPreview } from "@/components/school-console/SchoolFormPreview";
+import { ClubSitePreview } from "@/components/school-console/ClubSitePreview";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 
 type PreviewState = {
-    mode: "preview" | "review";
+    mode: "preview" | "review" | "site";
     data: SchoolFormDataInput;
 };
 
@@ -113,7 +115,12 @@ export default function SchoolConsolePage() {
 
                     {/* Conteúdo do Módulo Selecionado */}
                     <div className="flex min-h-[480px] flex-col gap-6 rounded-2xl border border-gray-200/80 bg-[#F9FAFB] p-6 shadow-xs">
-                        {preview ? (
+                        {preview?.mode === "site" ? (
+                            <ClubSitePreview
+                                data={preview.data}
+                                onBack={() => setPreview(null)}
+                            />
+                        ) : preview ? (
                             <SchoolFormPreview
                                 data={preview.data}
                                 mode={preview.mode}
@@ -203,7 +210,18 @@ export default function SchoolConsolePage() {
                                                     disabled={isSaving || isSubmitting}
                                                     className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
                                                     <Eye size={16} />
-                                                    Pré-visualizar
+                                                    Pré-visualizar formulário
+                                                </button>
+                                            )}
+
+                                            {submission?.status === "RASCUNHO" && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => openPreview("site")}
+                                                    disabled={isSaving || isSubmitting}
+                                                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
+                                                    <Globe2 size={16} />
+                                                    Ver como ficará no &quot;site&quot;
                                                 </button>
                                             )}
 
