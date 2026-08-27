@@ -119,6 +119,17 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                         </p>
                                     </div>
                                 )}
+
+                                {club.description && (
+                                    <div className="rounded-md border p-4">
+                                        <p className="text-sm font-semibold">
+                                            Sobre o clube
+                                        </p>
+                                        <p className="text-font-primary/60 mt-1 text-sm">
+                                            {club.description}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex flex-col gap-4">
@@ -146,6 +157,11 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                 {project.description && (
                                                     <p className="text-font-primary/60 mt-3 text-sm">
                                                         {project.description}
+                                                    </p>
+                                                )}
+                                                {project.long_description && (
+                                                    <p className="text-font-primary/60 mt-2 border-t pt-2 text-sm">
+                                                        {project.long_description}
                                                     </p>
                                                 )}
                                             </article>

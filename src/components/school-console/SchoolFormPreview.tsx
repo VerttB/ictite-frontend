@@ -19,6 +19,8 @@ import {
 
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
 import { EquipmentType } from "@/core/domain/EquipmentType";
+import { getTerritories } from "@/core/service/IdentityTerritoryService";
+import { IdentityTerritory } from "@/core/domain/IdentityTerritory";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 
 interface SchoolFormPreviewProps {
@@ -159,6 +161,18 @@ export function SchoolFormPreview({
         getEquipamentTypes
     );
 
+    const { data: territories = [] } = useSWR<IdentityTerritory[]>(
+        "identity-territories",
+        getTerritories
+    );
+
+    const territoryMap = new Map(
+        territories.map((t) => [t.id, `${t.code} — ${t.name}`])
+    );
+    const territoryName = data.school?.identity_territory_id
+        ? territoryMap.get(data.school.identity_territory_id) || null
+        : null;
+
     const clubNames = new Map(clubs.map((club) => [club.id, club.name]));
     const projectNames = new Map(projects.map((project) => [project.id, project.name]));
     const equipmentTypeNames = new Map(
@@ -215,6 +229,11 @@ export function SchoolFormPreview({
                     <PreviewField label="Cidade" value={data.school?.city} />
                     <PreviewField label="CEP" value={data.school?.cep} />
                     <PreviewField
+                        label="Território de Identidade"
+                        value={territoryName}
+                        wide
+                    />
+                    <PreviewField
                         label="Instagram"
                         value={data.school?.instagram_url}
                         wide
@@ -251,6 +270,13 @@ export function SchoolFormPreview({
                                     <PreviewField
                                         label="Instagram"
                                         value={club.instagram_url}
+                                    />
+                                </div>
+                                <div className="mt-3">
+                                    <PreviewField
+                                        label="Descrição"
+                                        value={club.description}
+                                        wide
                                     />
                                 </div>
                             </div>
@@ -290,8 +316,13 @@ export function SchoolFormPreview({
                                         wide
                                     />
                                     <PreviewField
-                                        label="Descrição"
+                                        label="Descrição Curta"
                                         value={project.description}
+                                        wide
+                                    />
+                                    <PreviewField
+                                        label="Descrição Longa"
+                                        value={project.long_description}
                                         wide
                                     />
                                 </div>

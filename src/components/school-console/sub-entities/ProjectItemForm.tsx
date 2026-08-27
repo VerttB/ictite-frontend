@@ -202,13 +202,25 @@ export function ProjectItemForm({
 
                     <div>
                         <label className="mb-1 block text-xs font-semibold text-gray-700">
-                            Descrição / Resumo
+                            Descrição Curta / Resumo
                         </label>
                         <Textarea
                             rows={2}
                             disabled={readOnly}
                             placeholder="Breve resumo sobre os objetivos do projeto..."
                             {...register(`projects.${index}.description`)}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            Descrição Longa / Detalhada (Opcional)
+                        </label>
+                        <Textarea
+                            rows={4}
+                            disabled={readOnly}
+                            placeholder="Descrição detalhada do projeto, metodologia, resultados esperados..."
+                            {...register(`projects.${index}.long_description`)}
                         />
                     </div>
                 </div>
