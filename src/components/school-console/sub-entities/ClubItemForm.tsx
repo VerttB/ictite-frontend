@@ -17,6 +17,7 @@ import {
     SchoolFormDataInput,
     SchoolFormDraftData,
 } from "@/schemas/schoolSubmissionSchema";
+import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface ClubItemFormProps {
     index: number;
@@ -166,6 +167,14 @@ export function ClubItemForm({
                             {...register(`clubs.${index}.description`)}
                         />
                     </div>
+
+                    {club?.id && (
+                        <FormEntityImageDropzone
+                            entityType="clube_ciencias"
+                            entityId={club.id}
+                            readOnly={readOnly}
+                        />
+                    )}
                 </div>
             )}
         </div>

@@ -25,6 +25,7 @@ import {
     ClubDraftData,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
+import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface ProjectItemFormProps {
     index: number;
@@ -223,6 +224,14 @@ export function ProjectItemForm({
                             {...register(`projects.${index}.long_description`)}
                         />
                     </div>
+
+                    {project?.id && (
+                        <FormEntityImageDropzone
+                            entityType="project"
+                            entityId={project.id}
+                            readOnly={readOnly}
+                        />
+                    )}
                 </div>
             )}
         </div>

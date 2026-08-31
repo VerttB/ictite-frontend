@@ -26,6 +26,7 @@ import {
 } from "@/schemas/schoolSubmissionSchema";
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
 import { EquipmentType } from "@/core/domain/EquipmentType";
+import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface EquipmentItemFormProps {
     index: number;
@@ -209,6 +210,14 @@ export function EquipmentItemForm({
                             />
                         </div>
                     </div>
+
+                    {equipment?.id && (
+                        <FormEntityImageDropzone
+                            entityType="equipment"
+                            entityId={equipment.id}
+                            readOnly={readOnly}
+                        />
+                    )}
                 </div>
             )}
         </div>

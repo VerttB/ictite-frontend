@@ -62,4 +62,32 @@ export const schoolSubmissionService = {
     async deleteFormImage(): Promise<void> {
         return apiClient.delete<void>("/submissions/current/image");
     },
+
+    async getFormEntityImages(
+        entityType: string,
+        entityId: string
+    ): Promise<{ images: { path: string; url: string; filename: string }[] }> {
+        return apiClient.get<{ images: { path: string; url: string; filename: string }[] }>(
+            `/submissions/current/images/${entityType}/${entityId}`
+        );
+    },
+
+    async uploadFormEntityImages(entityType: string, entityId: string, files: File[]): Promise<{ images: { path: string; url: string; filename: string }[] }> {
+        const formData = new FormData();
+        files.forEach((file) => formData.append("files", file));
+        return apiClient.post<{ images: { path: string; url: string; filename: string }[] }>(
+            `/submissions/current/images/${entityType}/${entityId}`,
+            formData
+        );
+    },
+
+    async deleteFormEntityImages(entityType: string, entityId: string): Promise<void> {
+        return apiClient.delete<void>(`/submissions/current/images/${entityType}/${entityId}`);
+    },
+
+    async deleteSingleFormEntityImage(entityType: string, entityId: string, filename: string): Promise<{ images: { path: string; url: string; filename: string }[] }> {
+        return apiClient.delete<{ images: { path: string; url: string; filename: string }[] }>(
+            `/submissions/current/images/${entityType}/${entityId}/${filename}`
+        );
+    },
 };
