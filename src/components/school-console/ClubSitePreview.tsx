@@ -65,15 +65,16 @@ function DraftClubGallery({ entityId, alt }: DraftClubImageProps) {
         () => schoolSubmissionService.getFormEntityImages("clube_ciencias", entityId)
     );
     const images = data?.images || [];
+    const galleryImages = images.slice(1);
 
-    if (images.length === 0) {
+    if (galleryImages.length === 0) {
         return null;
     }
 
     return (
         <div className="flex border-t pt-4">
             <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
-                {images.map((image, index) => (
+                {galleryImages.map((image, index) => (
                     <Popover key={index}>
                         <PopoverTrigger>
                             <ImageDisplay
@@ -89,6 +90,35 @@ function DraftClubGallery({ entityId, alt }: DraftClubImageProps) {
                 ))}
             </div>
         </div>
+    );
+}
+
+function DraftProjectImage({ entityId, alt }: DraftClubImageProps) {
+    const { data, isLoading } = useSWR(
+        entityId ? `/submissions/current/images/project/${entityId}` : null,
+        () => schoolSubmissionService.getFormEntityImages("project", entityId)
+    );
+
+    if (isLoading) {
+        return <div className="h-40 w-full animate-pulse rounded-md bg-gray-100" />;
+    }
+
+    const primaryImage = data?.images?.[0];
+
+    if (!primaryImage) {
+        return (
+            <div className="text-font-primary/60 flex h-40 w-full items-center justify-center rounded-md border-2 border-dashed border-gray-200 bg-gray-50 text-center text-xs">
+                Sem imagem disponível
+            </div>
+        );
+    }
+
+    return (
+        <ImageDisplay
+            src={primaryImage.url}
+            alt={alt}
+            className="h-40 w-full overflow-hidden rounded-md border bg-gray-50"
+        />
     );
 }
 
@@ -255,6 +285,10 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                             <article
                                                 key={project.id || projectIndex}
                                                 className="flex h-full flex-col justify-center gap-4 rounded-md border border-l-8 border-l-amber-500 bg-white p-5 shadow">
+                                                <DraftProjectImage
+                                                    entityId={project.id}
+                                                    alt={`Imagem do projeto ${project.name || "de pesquisa"}`}
+                                                />
                                                 <div className="flex items-start justify-between gap-3">
                                                     <h3 className="text-2xl">
                                                         {project.name ||
