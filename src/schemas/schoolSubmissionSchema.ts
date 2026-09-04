@@ -6,18 +6,21 @@ export const SchoolDraftDataSchema = z.object({
     cep: z.string().optional(),
     description: z.string().optional(),
     instagram_url: z.string().optional(),
+    identity_territory_id: z.string().uuid("Selecione um território válido").optional().or(z.literal("")),
 });
 
 export const ClubDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
     name: z.string().min(2, "Nome do clube deve ter no mínimo 2 caracteres"),
     instagram_url: z.string().optional(),
+    description: z.string().optional(),
 });
 
 export const ProjectDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
     name: z.string().min(2, "Nome do projeto deve ter no mínimo 2 caracteres"),
     description: z.string().optional(),
+    long_description: z.string().optional(),
     clube_ciencia_id: z.string().uuid("Selecione um clube válido"),
     year: z.number().int().optional(),
 });

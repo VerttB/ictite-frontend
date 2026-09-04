@@ -25,6 +25,7 @@ import {
     ClubDraftData,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
+import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface ProjectItemFormProps {
     index: number;
@@ -202,7 +203,7 @@ export function ProjectItemForm({
 
                     <div>
                         <label className="mb-1 block text-xs font-semibold text-gray-700">
-                            Descrição / Resumo
+                            Descrição Curta / Resumo
                         </label>
                         <Textarea
                             rows={2}
@@ -211,6 +212,26 @@ export function ProjectItemForm({
                             {...register(`projects.${index}.description`)}
                         />
                     </div>
+
+                    <div>
+                        <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            Descrição Longa / Detalhada (Opcional)
+                        </label>
+                        <Textarea
+                            rows={4}
+                            disabled={readOnly}
+                            placeholder="Descrição detalhada do projeto, metodologia, resultados esperados..."
+                            {...register(`projects.${index}.long_description`)}
+                        />
+                    </div>
+
+                    {project?.id && (
+                        <FormEntityImageDropzone
+                            entityType="project"
+                            entityId={project.id}
+                            readOnly={readOnly}
+                        />
+                    )}
                 </div>
             )}
         </div>

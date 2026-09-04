@@ -45,8 +45,8 @@ import { cn } from "@/lib/utils";
 
 export type SchoolSection =
     | "geral"
-    | "previa_site"
     | "historico"
+    | "previa_site"
     | "visao_geral_form"
     | "escola"
     | "clubs"
@@ -70,11 +70,6 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
             label: "Visão Geral",
             icon: BarChart3,
         },
-        {
-            id: "historico" as SchoolSection,
-            label: "Histórico",
-            icon: History,
-        },
         { id: "escola" as SchoolSection, label: "Escola", icon: School },
         { id: "clubs" as SchoolSection, label: "Clubes de Ciência", icon: Handshake },
         { id: "projects" as SchoolSection, label: "Projetos", icon: SquareChartGantt },
@@ -84,6 +79,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
 
     const isFormChildActive = formSubItems.some((item) => item.id === activeSection);
     const isGeralActive = activeSection === "geral";
+    const isHistoricoActive = activeSection === "historico";
     const isPreviaActive = activeSection === "previa_site";
 
     return (
@@ -131,7 +127,29 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
-                            {/* 3. Item Independente no Topo: Prévia do Portal */}
+                            {/* 3. Item Independente no Topo: Histórico de Mudanças */}
+                            <SidebarMenuItem
+                                className={cn(
+                                    "flex rounded-sm transition-all duration-200",
+                                    isHistoricoActive
+                                        ? "bg-primary text-white"
+                                        : "hover:bg-primary/70 bg-gray-200 text-gray-700 hover:text-white"
+                                )}>
+                                <SidebarMenuButton
+                                    onClick={() => onSelectSection("historico")}
+                                    tooltip="Histórico de Mudanças"
+                                    className={cn(
+                                        "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
+                                        isHistoricoActive
+                                            ? "bg-primary hover:bg-primary font-bold text-white hover:text-white"
+                                            : "hover:bg-primary/70 bg-gray-200 text-gray-700 hover:text-white"
+                                    )}>
+                                    <History size={18} />
+                                    <span>Histórico de Mudanças</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+
+                            {/* 4. Item Independente no Topo: Prévia do Portal */}
                             <SidebarMenuItem
                                 className={cn(
                                     "flex rounded-sm transition-all duration-200",
@@ -153,7 +171,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
-                            {/* 4. Item Pai Expandível: Formulário */}
+                            {/* 5. Item Pai Expandível: Formulário da Escola */}
                             <SidebarMenuItem className="flex flex-col rounded-sm transition-all duration-200">
                                 <SidebarMenuButton
                                     onClick={() => setIsFormExpanded(!isFormExpanded)}
@@ -161,7 +179,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                     className={cn(
                                         "flex w-full cursor-pointer items-center justify-between rounded-sm p-2 text-sm font-semibold transition-all duration-200",
                                         isFormChildActive
-                                            ? "bg-primary hover:bg-primary font-bold text-white hover:text-white"
+                                            ? "bg-[#088077] hover:bg-[#088077] font-bold text-white hover:text-white"
                                             : "hover:bg-primary/70 bg-gray-200 text-gray-800 hover:text-white"
                                     )}>
                                     <div className="flex items-center gap-2">
@@ -175,7 +193,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                     )}
                                 </SidebarMenuButton>
 
-                                {/* Sub-itens do Formulário (Visão Geral, Histórico, Escola, Clubes, Projetos, Pesquisadores, Equipamentos) */}
+                                {/* Sub-itens Exclusivos do Formulário (Visão Geral, Escola, Clubes, Projetos, Pesquisadores, Equipamentos) */}
                                 {isFormExpanded && open && (
                                     <SidebarMenuSub className="border-primary/40 mt-1 flex flex-col gap-1 border-l-2 pl-2">
                                         {formSubItems.map((item) => {

@@ -11,11 +11,13 @@ import {
     CheckCircle2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
     SchoolFormDataInput,
     SchoolFormDraftData,
 } from "@/schemas/schoolSubmissionSchema";
+import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface ClubItemFormProps {
     index: number;
@@ -153,6 +155,26 @@ export function ClubItemForm({
                             />
                         </div>
                     </div>
+
+                    <div>
+                        <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            Descrição do Clube (Opcional)
+                        </label>
+                        <Textarea
+                            rows={3}
+                            disabled={readOnly}
+                            placeholder="Breve descrição sobre objetivos e atividades do clube..."
+                            {...register(`clubs.${index}.description`)}
+                        />
+                    </div>
+
+                    {club?.id && (
+                        <FormEntityImageDropzone
+                            entityType="clube_ciencias"
+                            entityId={club.id}
+                            readOnly={readOnly}
+                        />
+                    )}
                 </div>
             )}
         </div>

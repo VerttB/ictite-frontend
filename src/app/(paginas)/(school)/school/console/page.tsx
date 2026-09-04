@@ -1,21 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-    Save,
-    RefreshCw,
-    Send,
-    RotateCcw,
-    Loader2,
-    Eye,
-    ClipboardCheck,
-} from "lucide-react";
+import { Save, Send, RotateCcw, Loader2, Eye, ClipboardCheck } from "lucide-react";
 import { useSchoolSubmission } from "@/hooks/useSchoolSubmission";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from "@/components/ui/dialog";
 
 import { SchoolConsoleHeader } from "@/components/school-console/SchoolConsoleHeader";
 import { SchoolImageDropzone } from "@/components/school-console/SchoolImageDropzone";
@@ -32,6 +32,7 @@ import { SchoolHistorySection } from "@/components/school-console/SchoolHistoryS
 import { SchoolFormPreview } from "@/components/school-console/SchoolFormPreview";
 import { ClubSitePreview } from "@/components/school-console/ClubSitePreview";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
+import { Button } from "@/components/ui/button";
 
 type PreviewState = {
     mode: "preview" | "review" | "site";
@@ -54,6 +55,7 @@ export default function SchoolConsolePage() {
 
     const [activeSection, setActiveSection] = useState<SchoolSection>("geral");
     const [preview, setPreview] = useState<PreviewState | null>(null);
+    const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState<boolean>(false);
 
     const isReadOnly =
         submission?.status === "PENDENTE" || submission?.status === "APROVADO";
@@ -91,7 +93,7 @@ export default function SchoolConsolePage() {
             />
 
             {/* Container Padrão ictite com Borda Profunda e Header */}
-            <div className="bg-foreground flex flex-1 min-w-0 min-h-screen w-full flex-col pr-4 pb-4">
+            <div className="bg-foreground flex min-h-screen w-full min-w-0 flex-1 flex-col pr-4 pb-4">
                 <Header />
 
                 {/* Conteúdo Principal do Console com Inset Box-Shadow de Profundidade */}
@@ -214,20 +216,27 @@ export default function SchoolConsolePage() {
                                                     Salvar Rascunho
                                                 </button>
 
-                                                <button
+                                                <Button
                                                     type="button"
-                                                    onClick={refreshFromDatabase}
-                                                    disabled={isSaving || isSubmitting}
-                                                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
-                                                    <RefreshCw size={16} />
-                                                    Redefinir Mudanças
-                                                </button>
+                                                    variant="outline"
+                                                    onClick={() =>
+                                                        setIsDiscardDialogOpen(true)
+                                                    }
+                                                    disabled={isSaving || isSubmitting}>
+                                                    {" "}
+                                                    <RotateCcw size={16} />
+                                                    Descartar Alterações
+                                                </Button>
 
                                                 {submission?.status === "RASCUNHO" && (
                                                     <button
                                                         type="button"
-                                                        onClick={() => openPreview("preview")}
-                                                        disabled={isSaving || isSubmitting}
+                                                        onClick={() =>
+                                                            openPreview("preview")
+                                                        }
+                                                        disabled={
+                                                            isSaving || isSubmitting
+                                                        }
                                                         className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
                                                         <Eye size={16} />
                                                         Pré-visualizar formulário
@@ -279,6 +288,38 @@ export default function SchoolConsolePage() {
                 </main>
                 <Footer />
             </div>
+
+            {/* Modal de Confirmação para Descartar Alterações */}
+            <Dialog open={isDiscardDialogOpen} onOpenChange={setIsDiscardDialogOpen}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="text-lg font-semibold text-gray-900">
+                            Descartar alterações?
+                        </DialogTitle>
+                        <DialogDescription className="mt-1 text-sm text-gray-600">
+                            Tem certeza de que deseja descartar as alterações não salvas?
+                            Todas as mudanças feitas nesta sessão serão perdidas.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => setIsDiscardDialogOpen(false)}>
+                            Cancelar
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={async () => {
+                                setIsDiscardDialogOpen(false);
+                                await refreshFromDatabase();
+                            }}>
+                            Sim, descartar
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }
