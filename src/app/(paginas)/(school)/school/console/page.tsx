@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Save, Send, RotateCcw, Loader2, Eye, ClipboardCheck } from "lucide-react";
+import { useState } from "react";
+import { Save, Send, RotateCcw, Loader2, ClipboardCheck } from "lucide-react";
 import { useSchoolSubmission } from "@/hooks/useSchoolSubmission";
 
 import { Header } from "@/components/Header";
@@ -35,7 +35,7 @@ import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 import { Button } from "@/components/ui/button";
 
 type PreviewState = {
-    mode: "preview" | "review" | "site";
+    mode: "review";
     data: SchoolFormDataInput;
 };
 
@@ -60,21 +60,17 @@ export default function SchoolConsolePage() {
     const isReadOnly =
         submission?.status === "PENDENTE" || submission?.status === "APROVADO";
 
-    const openPreview = (mode: PreviewState["mode"]) => {
-        setPreview({ mode, data: structuredClone(form.getValues()) });
+    const openReview = () => {
+        setPreview({ mode: "review", data: structuredClone(form.getValues()) });
     };
 
-    useEffect(() => {
-        if (submission?.status === "PENDENTE" || submission?.status === "APROVADO") {
-            setPreview(null);
-        }
-    }, [submission?.status]);
+    const visiblePreview = isReadOnly ? null : preview;
 
     if (isLoading) {
         return (
             <div className="flex min-h-[60vh] w-full flex-col items-center justify-center gap-3">
                 <Loader2 className="animate-spin text-[#088077]" size={36} />
-                <p className="text-sm font-medium text-gray-500">
+                <p className="text-font-secondary text-sm font-medium">
                     Carregando formulário da escola...
                 </p>
             </div>
@@ -93,7 +89,7 @@ export default function SchoolConsolePage() {
             />
 
             {/* Container Padrão ictite com Borda Profunda e Header */}
-            <div className="bg-foreground flex min-h-screen w-full min-w-0 flex-1 flex-col pr-4 pb-4">
+            <div className="bg-background flex min-h-screen w-full min-w-0 flex-1 flex-col pr-4 pb-4">
                 <Header />
 
                 {/* Conteúdo Principal do Console com Inset Box-Shadow de Profundidade */}
@@ -106,7 +102,7 @@ export default function SchoolConsolePage() {
                     {/* Botão de Retrair/Expandir Sidebar & Toaster */}
                     <div className="flex items-center gap-2">
                         <SidebarTrigger />
-                        <span className="text-xs font-semibold text-gray-500">Menu</span>
+                        <span className="text-font-secondary text-xs font-semibold">Menu</span>
                     </div>
                     <Toaster />
 
@@ -117,16 +113,11 @@ export default function SchoolConsolePage() {
                     />
 
                     {/* Conteúdo do Módulo Selecionado */}
-                    <div className="flex min-h-[480px] flex-col gap-6 rounded-2xl border border-gray-200/80 bg-[#F9FAFB] p-6 shadow-xs">
-                        {preview?.mode === "site" ? (
-                            <ClubSitePreview
-                                data={preview.data}
-                                onBack={() => setPreview(null)}
-                            />
-                        ) : preview ? (
+                    <div className="bg-card flex min-h-[480px] flex-col gap-6 rounded-2xl border border-border p-6 shadow-xs">
+                        {visiblePreview ? (
                             <SchoolFormPreview
-                                data={preview.data}
-                                mode={preview.mode}
+                                data={visiblePreview.data}
+                                mode={visiblePreview.mode}
                                 isSubmitting={isSubmitting}
                                 onBack={() => setPreview(null)}
                                 onSubmit={submitForm}
@@ -198,7 +189,7 @@ export default function SchoolConsolePage() {
                                     activeSection !== "historico" &&
                                     activeSection !== "previa_site" &&
                                     !isReadOnly && (
-                                        <div className="mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                                        <div className="bg-background mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border p-4 shadow-sm">
                                             <div className="flex flex-wrap items-center gap-2">
                                                 <button
                                                     type="button"
@@ -228,21 +219,6 @@ export default function SchoolConsolePage() {
                                                     Descartar Alterações
                                                 </Button>
 
-                                                {submission?.status === "RASCUNHO" && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            openPreview("preview")
-                                                        }
-                                                        disabled={
-                                                            isSaving || isSubmitting
-                                                        }
-                                                        className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50">
-                                                        <Eye size={16} />
-                                                        Pré-visualizar formulário
-                                                    </button>
-                                                )}
-
                                                 {submission?.status === "REJEITADO" && (
                                                     <button
                                                         type="button"
@@ -257,7 +233,7 @@ export default function SchoolConsolePage() {
                                             {submission?.status === "RASCUNHO" ? (
                                                 <button
                                                     type="button"
-                                                    onClick={() => openPreview("review")}
+                                                    onClick={openReview}
                                                     disabled={isSaving || isSubmitting}
                                                     className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
                                                     <ClipboardCheck size={16} />
@@ -293,10 +269,10 @@ export default function SchoolConsolePage() {
             <Dialog open={isDiscardDialogOpen} onOpenChange={setIsDiscardDialogOpen}>
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle className="text-lg font-semibold text-gray-900">
+                        <DialogTitle className="text-font-primary text-lg font-semibold">
                             Descartar alterações?
                         </DialogTitle>
-                        <DialogDescription className="mt-1 text-sm text-gray-600">
+                        <DialogDescription className="text-font-secondary mt-1 text-sm">
                             Tem certeza de que deseja descartar as alterações não salvas?
                             Todas as mudanças feitas nesta sessão serão perdidas.
                         </DialogDescription>

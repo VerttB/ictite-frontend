@@ -14,8 +14,24 @@ import { Project } from "../domain/Project";
 import { Researcher } from "../domain/Researcher";
 import { CoordinatorWithClub } from "../domain/Coordinator";
 
+interface SchoolCepLocation {
+    city: string;
+    latitude: number;
+    longitude: number;
+    identity_territory_id?: string | null;
+    identity_territory_code?: number | null;
+    identity_territory_name?: string | null;
+}
+
 export const getSchoolGeoData = async (): Promise<SchoolGeoJson> => {
     return await apiClient.get<SchoolGeoJson>("/schools/geojson");
+};
+
+export const getSchoolLocationByCep = async (
+    cep: string
+): Promise<SchoolCepLocation> => {
+    const normalizedCep = cep.replace(/\D/g, "");
+    return await apiClient.get<SchoolCepLocation>(`/schools/cep/${normalizedCep}`);
 };
 
 export const getSchoolById = async (id: string): Promise<School> => {

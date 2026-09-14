@@ -8,7 +8,6 @@ import { ApiError } from "@/lib/api/error";
 
 import {
     SchoolFormSubmission,
-    SchoolFormDraftData,
     SchoolFormDraftDataSchema,
     RequestDeadlineExtension,
     SchoolFormDataInput,
@@ -36,12 +35,21 @@ function removeNulls<T>(obj: T): T {
         return obj.map(removeNulls) as unknown as T;
     }
     if (obj !== null && typeof obj === "object") {
-        return Object.entries(obj).reduce((acc, [key, value]) => {
+        const cleaned = Object.entries(obj).reduce<Record<string, unknown>>((acc, [key, value]) => {
             acc[key] = value === null ? undefined : removeNulls(value);
             return acc;
-        }, {} as any);
+        }, {});
+        return cleaned as T;
     }
     return obj;
+}
+
+function getDraftValidationMessage(error: z.ZodError): string {
+    const firstIssue = error.issues[0]?.message;
+    if (!firstIssue) {
+        return "Revise os campos do formulário antes de salvar o rascunho.";
+    }
+    return `Revise o formulário antes de salvar: ${firstIssue}`;
 }
 
 export function useSchoolSubmission(): UseSchoolSubmissionReturn {
@@ -129,6 +137,9 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                 } else {
                     toast.error(error.message || "Erro ao salvar rascunho.");
                 }
+            } else if (error instanceof z.ZodError) {
+                await form.trigger();
+                toast.error(getDraftValidationMessage(error));
             } else {
                 toast.error("Erro de conexão ao salvar rascunho.");
                 console.log(error);

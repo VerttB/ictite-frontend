@@ -21,7 +21,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {
-    SchoolFormDraftData,
     ClubDraftData,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
@@ -40,7 +39,6 @@ interface ProjectItemFormProps {
 
 export function ProjectItemForm({
     index,
-    fieldId,
     form,
     clubs,
     readOnly = false,
@@ -92,16 +90,16 @@ export function ProjectItemForm({
 
     return (
         <div
-            className={`animate-in fade-in-50 slide-in-from-top-4 relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-gray-50/50 shadow-xs transition-all duration-300 hover:bg-white ${borderClass}`}>
+            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background relative flex flex-col overflow-hidden rounded-2xl border border-border shadow-xs transition-all duration-300 hover:bg-muted/40 ${borderClass}`}>
             <div
                 onClick={onToggleExpand}
-                className="flex cursor-pointer items-center justify-between border-b border-gray-100 p-4 transition-colors select-none hover:bg-gray-100/50">
+                className="flex cursor-pointer items-center justify-between border-b border-border p-4 transition-colors select-none hover:bg-muted/50">
                 <div className="flex items-center gap-3">
                     <span className={`rounded-xl p-2 ${iconBgClass}`}>
                         <SquareChartGantt size={18} />
                     </span>
                     <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-semibold text-gray-800">
+                        <h4 className="text-font-primary text-sm font-semibold">
                             {project?.name || `Projeto de Pesquisa #${index + 1}`}
                         </h4>
                         {badge}
@@ -118,7 +116,7 @@ export function ProjectItemForm({
                                 e.stopPropagation();
                                 onRemove();
                             }}
-                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-700">
+                            className="h-8 w-8 text-red-500 hover:bg-red-500/10 hover:text-red-700">
                             <Trash2 size={16} />
                         </Button>
                     )}
@@ -126,19 +124,19 @@ export function ProjectItemForm({
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-gray-400">
+                        className="text-font-secondary h-8 w-8">
                         {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                     </Button>
                 </div>
             </div>
 
             {isExpanded && (
-                <div className="animate-fade-in space-y-4 bg-white p-5">
+                <div className="animate-fade-in space-y-4 bg-background p-5">
                     <input type="hidden" {...register(`projects.${index}.id`)} />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div className="sm:col-span-2">
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Nome do Projeto (Obrigatório)
                             </label>
                             <Input
@@ -155,7 +153,7 @@ export function ProjectItemForm({
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Ano
                             </label>
                             <Input
@@ -169,7 +167,7 @@ export function ProjectItemForm({
                     </div>
 
                     <div>
-                        <label className="mb-1 block text-xs font-semibold text-gray-700">
+                        <label className="text-font-primary mb-1 block text-xs font-semibold">
                             Clube de Ciência Vinculado (Obrigatório)
                         </label>
                         <Controller
@@ -180,7 +178,7 @@ export function ProjectItemForm({
                                     disabled={readOnly}
                                     value={field.value}
                                     onValueChange={field.onChange}>
-                                    <SelectTrigger className="w-full bg-white">
+                                    <SelectTrigger className="w-full bg-background">
                                         <SelectValue placeholder="Selecione um clube de ciência..." />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -202,7 +200,7 @@ export function ProjectItemForm({
                     </div>
 
                     <div>
-                        <label className="mb-1 block text-xs font-semibold text-gray-700">
+                        <label className="text-font-primary mb-1 block text-xs font-semibold">
                             Descrição Curta / Resumo
                         </label>
                         <Textarea
@@ -214,7 +212,7 @@ export function ProjectItemForm({
                     </div>
 
                     <div>
-                        <label className="mb-1 block text-xs font-semibold text-gray-700">
+                        <label className="text-font-primary mb-1 block text-xs font-semibold">
                             Descrição Longa / Detalhada (Opcional)
                         </label>
                         <Textarea

@@ -55,7 +55,7 @@ export function SchoolImageDropzone({ readOnly = false }: SchoolImageDropzonePro
     return (
         <div className="w-full">
             <div className="mb-2 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-xs font-semibold text-gray-700">
+                <label className="text-font-primary flex items-center gap-2 text-xs font-semibold">
                     <ImageIcon size={16} className="text-[#088077]" />
                     Imagem do Formulário da Escola
                 </label>
@@ -92,7 +92,7 @@ export function SchoolImageDropzone({ readOnly = false }: SchoolImageDropzonePro
                         <img
                             src={currentImageUrl}
                             alt="Logomarca / Imagem do formulário da escola"
-                            className="max-h-36 rounded-xl object-cover shadow-sm border border-gray-200"
+                            className="max-h-36 rounded-xl border border-border object-cover shadow-sm"
                         />
                         {!readOnly && (
                             <button
@@ -113,7 +113,7 @@ export function SchoolImageDropzone({ readOnly = false }: SchoolImageDropzonePro
                         <p className="text-sm font-semibold text-[#088077]">
                             Adicionar Imagem da Escola para o Formulário
                         </p>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-font-secondary text-xs">
                             {readOnly
                                 ? "Nenhuma imagem foi anexada."
                                 : "Clique ou arraste uma imagem (PNG, JPG ou WEBP)"}

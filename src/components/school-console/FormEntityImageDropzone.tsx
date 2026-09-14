@@ -51,8 +51,14 @@ export function FormEntityImageDropzone({ entityType, entityId, readOnly = false
             await schoolSubmissionService.uploadFormEntityImages(entityType, entityId, validFiles);
             await mutate();
             toast.success("Imagens enviadas com sucesso!");
-        } catch (err: any) {
-            const detail = err?.detail || err?.message;
+        } catch (err: unknown) {
+            const errorRecord = err as { detail?: unknown; message?: unknown };
+            const detail =
+                typeof errorRecord.detail === "string"
+                    ? errorRecord.detail
+                    : typeof errorRecord.message === "string"
+                      ? errorRecord.message
+                      : undefined;
             toast.error(detail ? `Erro: ${detail}` : "Erro ao enviar imagens.");
         } finally {
             setIsUploading(false);
@@ -84,10 +90,10 @@ export function FormEntityImageDropzone({ entityType, entityId, readOnly = false
     return (
         <div className="w-full">
             <div className="mb-2 flex items-center justify-between">
-                <label className="flex items-center gap-2 text-xs font-semibold text-gray-700">
+                <label className="text-font-primary flex items-center gap-2 text-xs font-semibold">
                     <ImageIcon size={14} className="text-[#088077]" />
                     {displayLabel}
-                    <span className="font-normal text-gray-500">({images.length}/5)</span>
+                    <span className="text-font-secondary font-normal">({images.length}/5)</span>
                 </label>
                 {images.length > 0 && <span className="text-[11px] font-medium text-emerald-600">✓ {images.length} imagem(ns) no rascunho</span>}
             </div>
@@ -116,7 +122,7 @@ export function FormEntityImageDropzone({ entityType, entityId, readOnly = false
                     <div className="flex w-full flex-col gap-3">
                         <div className="flex flex-wrap gap-2">
                             {images.map((img) => (
-                                <div key={img.filename} className="relative size-20 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-xs">
+                                <div key={img.filename} className="bg-background relative size-20 overflow-hidden rounded-lg border border-border shadow-xs">
                                     <img src={img.url} alt={img.filename} className="h-full w-full object-cover" />
                                     {!readOnly && (
                                         <button
@@ -143,7 +149,7 @@ export function FormEntityImageDropzone({ entityType, entityId, readOnly = false
                             <UploadCloud size={20} />
                         </div>
                         <p className="text-xs font-semibold text-[#088077]">Adicionar imagens</p>
-                        <span className="text-[11px] text-gray-500">{readOnly ? "Nenhuma imagem anexada." : "Clique para selecionar (até 5 imagens, 5MB cada)"}</span>
+                        <span className="text-font-secondary text-[11px]">{readOnly ? "Nenhuma imagem anexada." : "Clique para selecionar (até 5 imagens, 5MB cada)"}</span>
                     </div>
                 )}
             </label>

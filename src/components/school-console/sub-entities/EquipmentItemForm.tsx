@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/select";
 import {
     SchoolFormDataInput,
-    SchoolFormDraftData,
 } from "@/schemas/schoolSubmissionSchema";
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
 import { EquipmentType } from "@/core/domain/EquipmentType";
@@ -40,7 +39,6 @@ interface EquipmentItemFormProps {
 
 export function EquipmentItemForm({
     index,
-    fieldId,
     form,
     readOnly = false,
     isExpanded,
@@ -96,19 +94,19 @@ export function EquipmentItemForm({
 
     return (
         <div
-            className={`animate-in fade-in-50 slide-in-from-top-4 relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-gray-50/50 shadow-xs transition-all duration-300 hover:bg-white ${borderClass}`}>
+            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background relative flex flex-col overflow-hidden rounded-2xl border border-border shadow-xs transition-all duration-300 hover:bg-muted/40 ${borderClass}`}>
             <div
                 onClick={onToggleExpand}
-                className="flex cursor-pointer items-center justify-between border-b border-gray-100 p-4 transition-colors select-none hover:bg-gray-100/50">
+                className="flex cursor-pointer items-center justify-between border-b border-border p-4 transition-colors select-none hover:bg-muted/50">
                 <div className="flex items-center gap-3">
                     <span className={`rounded-xl p-2 ${iconBgClass}`}>
                         <Printer size={18} />
                     </span>
                     <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-semibold text-gray-800">
+                        <h4 className="text-font-primary text-sm font-semibold">
                             {equipment?.name || `Equipamento #${index + 1}`}
                         </h4>
-                        <span className="rounded-md bg-gray-200 px-2 py-0.5 text-[10px] font-bold text-gray-700">
+                        <span className="bg-muted text-font-primary rounded-md px-2 py-0.5 text-[10px] font-bold">
                             {equipment?.quantity || 1} un
                         </span>
                         {badge}
@@ -125,7 +123,7 @@ export function EquipmentItemForm({
                                 e.stopPropagation();
                                 onRemove();
                             }}
-                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-700">
+                            className="h-8 w-8 text-red-500 hover:bg-red-500/10 hover:text-red-700">
                             <Trash2 size={16} />
                         </Button>
                     )}
@@ -133,19 +131,19 @@ export function EquipmentItemForm({
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-gray-400">
+                        className="text-font-secondary h-8 w-8">
                         {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                     </Button>
                 </div>
             </div>
 
             {isExpanded && (
-                <div className="animate-fade-in space-y-4 bg-white p-5">
+                <div className="animate-fade-in space-y-4 bg-background p-5">
                     <input type="hidden" {...register(`equipments.${index}.id`)} />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Nome do Equipamento (Obrigatório)
                             </label>
                             <Input
@@ -162,7 +160,7 @@ export function EquipmentItemForm({
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Tipo do Equipamento (Obrigatório)
                             </label>
                             <Controller
@@ -173,7 +171,7 @@ export function EquipmentItemForm({
                                         disabled={readOnly}
                                         value={field.value}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-white">
+                                        <SelectTrigger className="w-full bg-background">
                                             <SelectValue placeholder="Selecione o tipo..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -197,7 +195,7 @@ export function EquipmentItemForm({
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Quantidade (Obrigatório)
                             </label>
                             <Input
