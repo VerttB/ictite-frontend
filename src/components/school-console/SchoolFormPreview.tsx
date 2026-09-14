@@ -42,14 +42,14 @@ function PreviewField({ label, value, wide = false }: PreviewFieldProps) {
 
     return (
         <div className={wide ? "sm:col-span-2" : undefined}>
-            <p className="text-[11px] font-bold tracking-wide text-gray-400 uppercase">
+            <p className="text-font-secondary text-[11px] font-bold tracking-wide uppercase">
                 {label}
             </p>
             <p
                 className={
                     hasValue
-                        ? "mt-1 text-sm text-gray-800"
-                        : "mt-1 text-sm text-gray-400 italic"
+                        ? "text-font-primary mt-1 text-sm"
+                        : "text-font-secondary mt-1 text-sm italic"
                 }>
                 {hasValue ? value : "Não informado"}
             </p>
@@ -76,13 +76,13 @@ function SectionHeader({
     count?: number;
 }) {
     return (
-        <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-            <h3 className="flex items-center gap-2 text-sm font-bold text-gray-800">
+        <div className="flex items-center justify-between border-b border-border pb-4">
+            <h3 className="text-font-primary flex items-center gap-2 text-sm font-bold">
                 <span className="text-[#088077]">{icon}</span>
                 {title}
             </h3>
             {count !== undefined && (
-                <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[10px] font-bold text-gray-600">
+                <span className="bg-muted text-font-secondary rounded-full px-2.5 py-1 text-[10px] font-bold">
                     {count} {count === 1 ? "item" : "itens"}
                 </span>
             )}
@@ -122,7 +122,10 @@ export function getSchoolFormPendingSections(data: SchoolFormDataInput): string[
         researchers.length === 0 ||
         researchers.some(
             (researcher) =>
-                !researcher.name || researcher.name.trim().length < 2 || !researcher.type
+                !researcher.name ||
+                researcher.name.trim().length < 2 ||
+                !researcher.type ||
+                !researcher.project_ids?.length
         )
     ) {
         pending.push("pesquisadores");
@@ -181,23 +184,23 @@ export function SchoolFormPreview({
 
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="bg-card flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-border p-6 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-[#088077]/10 p-3 text-[#088077]">
                         {mode === "review" ? <BookOpen size={28} /> : <Eye size={28} />}
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold text-gray-900">
+                        <h2 className="text-font-primary text-lg font-bold">
                             {mode === "review"
                                 ? "Revisar e enviar"
                                 : "Pré-visualização do formulário"}
                         </h2>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-font-secondary text-xs">
                             Visualização somente leitura dos dados atuais do rascunho.
                         </p>
                     </div>
                 </div>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-[11px] font-bold text-gray-600">
+                <span className="bg-muted text-font-secondary inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-[11px] font-bold">
                     <Eye size={14} /> Somente leitura
                 </span>
             </div>
@@ -219,7 +222,7 @@ export function SchoolFormPreview({
                 </div>
             )}
 
-            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
                 <SectionHeader
                     icon={<School size={19} />}
                     title="Dados principais da escola"
@@ -246,7 +249,7 @@ export function SchoolFormPreview({
                 </div>
             </section>
 
-            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
                 <SectionHeader
                     icon={<Handshake size={19} />}
                     title="Clubes de Ciência"
@@ -261,7 +264,7 @@ export function SchoolFormPreview({
                         clubs.map((club, index) => (
                             <div
                                 key={club.id || index}
-                                className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                                className="rounded-2xl border border-border bg-background p-4">
                                 <PreviewField
                                     label={`Clube ${index + 1}`}
                                     value={club.name}
@@ -285,7 +288,7 @@ export function SchoolFormPreview({
                 </div>
             </section>
 
-            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
                 <SectionHeader
                     icon={<SquareChartGantt size={19} />}
                     title="Projetos de Pesquisa"
@@ -300,7 +303,7 @@ export function SchoolFormPreview({
                         projects.map((project, index) => (
                             <div
                                 key={project.id || index}
-                                className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                                className="rounded-2xl border border-border bg-background p-4">
                                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                     <PreviewField
                                         label={`Projeto ${index + 1}`}
@@ -332,7 +335,7 @@ export function SchoolFormPreview({
                 </div>
             </section>
 
-            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
                 <SectionHeader
                     icon={<Users size={19} />}
                     title="Pesquisadores"
@@ -353,7 +356,7 @@ export function SchoolFormPreview({
                             return (
                                 <div
                                     key={researcher.id || index}
-                                    className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                                    className="rounded-2xl border border-border bg-background p-4">
                                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                         <PreviewField
                                             label={`Pesquisador ${index + 1}`}
@@ -387,7 +390,7 @@ export function SchoolFormPreview({
                 </div>
             </section>
 
-            <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
                 <SectionHeader
                     icon={<Printer size={19} />}
                     title="Equipamentos"
@@ -396,7 +399,7 @@ export function SchoolFormPreview({
                 <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
                     {equipments.length === 0 ? (
                         <div className="lg:col-span-2">
-                            <div className="flex items-center gap-2 rounded-2xl border border-dashed border-gray-200 bg-gray-50/70 p-4 text-xs font-semibold text-gray-500">
+                            <div className="text-font-secondary flex items-center gap-2 rounded-2xl border border-dashed border-border bg-background p-4 text-xs font-semibold">
                                 <Building2 size={16} /> Nenhum equipamento informado
                                 (seção opcional).
                             </div>
@@ -405,7 +408,7 @@ export function SchoolFormPreview({
                         equipments.map((equipment, index) => (
                             <div
                                 key={equipment.id || index}
-                                className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                                className="rounded-2xl border border-border bg-background p-4">
                                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                                     <PreviewField
                                         label={`Equipamento ${index + 1}`}
@@ -430,11 +433,11 @@ export function SchoolFormPreview({
                 </div>
             </section>
 
-            <div className="sticky bottom-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white/95 p-4 shadow-lg backdrop-blur-sm">
+            <div className="bg-background/95 sticky bottom-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border p-4 shadow-lg backdrop-blur-sm">
                 <button
                     type="button"
                     onClick={onBack}
-                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all hover:bg-gray-50">
+                    className="text-font-primary inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-xs font-semibold transition-all hover:bg-muted">
                     <ArrowLeft size={16} /> Continuar editando
                 </button>
 

@@ -4,16 +4,10 @@ import { UseFormReturn } from "react-hook-form";
 import {
     FileText,
     CheckCircle2,
-    AlertCircle,
     AlertTriangle,
-    Handshake,
-    SquareChartGantt,
-    Book,
-    Printer,
     Clock,
 } from "lucide-react";
 import {
-    SchoolFormDraftData,
     SchoolFormSubmission,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
@@ -58,7 +52,7 @@ export function SchoolFormOverviewSection({
 
     // 4. Pesquisadores
     const incompleteResearchersCount = researchers.filter(
-        (r) => !r.name || r.name.trim().length < 2 || !r.type
+        (r) => !r.name || r.name.trim().length < 2 || !r.type || !r.project_ids?.length
     ).length;
     const isResearchersValid = researchers.length > 0 && incompleteResearchersCount === 0;
 
@@ -81,21 +75,21 @@ export function SchoolFormOverviewSection({
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
             {/* Header da Visão Geral do Formulário */}
-            <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="bg-card flex items-center justify-between rounded-3xl border border-border p-6 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-[#088077]/10 p-3 text-[#088077]">
                         <FileText size={28} />
                     </div>
                     <div>
                         <div className="flex items-center gap-2">
-                            <h2 className="text-lg font-bold text-gray-900">
+                            <h2 className="text-font-primary text-lg font-bold">
                                 Visão Geral do Formulário
                             </h2>
-                            <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-bold text-gray-600">
+                            <span className="bg-muted text-font-secondary rounded-full px-2.5 py-0.5 text-xs font-bold">
                                 Versão {submission?.version || 1}
                             </span>
                         </div>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-font-secondary text-xs">
                             Status do rascunho e validação das informações pré-submissão
                         </p>
                     </div>
@@ -106,7 +100,7 @@ export function SchoolFormOverviewSection({
                         <span className="text-sm font-black text-[#088077]">
                             {completionPercentage}% Concluído
                         </span>
-                        <div className="mt-1 h-2 w-32 overflow-hidden rounded-full bg-gray-100">
+                        <div className="mt-1 h-2 w-32 overflow-hidden rounded-full bg-muted">
                             <div
                                 className="h-full bg-[#088077] transition-all duration-300"
                                 style={{ width: `${completionPercentage}%` }}
@@ -118,16 +112,16 @@ export function SchoolFormOverviewSection({
 
             {/* Checklist de Validação do Formulário */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <h3 className="flex items-center gap-2 text-sm font-bold text-gray-800">
+                <div className="bg-card flex flex-col gap-4 rounded-3xl border border-border p-6 shadow-sm">
+                    <h3 className="text-font-primary flex items-center gap-2 text-sm font-bold">
                         <CheckCircle2 size={18} className="text-[#088077]" />
                         Validação das Seções do Formulário
                     </h3>
 
                     <div className="space-y-3 text-xs font-semibold">
                         {/* 1. Escola */}
-                        <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50 p-3.5">
-                            <span className="text-gray-700">1. Cadastro da Escola</span>
+                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
+                            <span className="text-font-primary">1. Cadastro da Escola</span>
                             {isSchoolValid ? (
                                 <span className="flex items-center gap-1 font-bold text-emerald-600">
                                     <CheckCircle2 size={15} /> OK ({schoolName})
@@ -140,8 +134,8 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 2. Clubes de Ciência */}
-                        <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50 p-3.5">
-                            <span className="text-gray-700">2. Clubes de Ciência</span>
+                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
+                            <span className="text-font-primary">2. Clubes de Ciência</span>
                             {clubs.length === 0 ? (
                                 <span className="flex items-center gap-1 font-bold text-amber-600">
                                     <AlertTriangle size={15} /> Nenhum clube cadastrado
@@ -160,8 +154,8 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 3. Projetos de Pesquisa */}
-                        <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50 p-3.5">
-                            <span className="text-gray-700">3. Projetos de Pesquisa</span>
+                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
+                            <span className="text-font-primary">3. Projetos de Pesquisa</span>
                             {projects.length === 0 ? (
                                 <span className="flex items-center gap-1 font-bold text-amber-600">
                                     <AlertTriangle size={15} /> Nenhum projeto cadastrado
@@ -180,8 +174,8 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 4. Pesquisadores */}
-                        <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50 p-3.5">
-                            <span className="text-gray-700">4. Pesquisadores</span>
+                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
+                            <span className="text-font-primary">4. Pesquisadores</span>
                             {researchers.length === 0 ? (
                                 <span className="flex items-center gap-1 font-bold text-amber-600">
                                     <AlertTriangle size={15} /> Nenhum pesquisador
@@ -202,8 +196,8 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 5. Equipamentos */}
-                        <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50 p-3.5">
-                            <span className="text-gray-700">
+                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
+                            <span className="text-font-primary">
                                 5. Equipamentos Laboratoriais
                             </span>
                             {incompleteEquipmentsCount > 0 ? (
@@ -223,8 +217,8 @@ export function SchoolFormOverviewSection({
                 </div>
 
                 {/* Resumo de Contagem de Itens no Rascunho */}
-                <div className="flex flex-col gap-4 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-                    <h3 className="flex items-center gap-2 text-sm font-bold text-gray-800">
+                <div className="bg-card flex flex-col gap-4 rounded-3xl border border-border p-6 shadow-sm">
+                    <h3 className="text-font-primary flex items-center gap-2 text-sm font-bold">
                         <Clock size={18} className="text-[#088077]" />
                         Resumo dos Dados no Rascunho
                     </h3>

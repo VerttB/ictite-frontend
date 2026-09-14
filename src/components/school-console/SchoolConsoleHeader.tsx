@@ -66,7 +66,7 @@ export function SchoolConsoleHeader({
         <div className="flex w-full flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                    <h1 className="text-2xl font-bold text-[#111827]">Console da Escola</h1>
+                    <h1 className="text-font-primary text-2xl font-bold">Console da Escola</h1>
                     {getStatusBadge(submission?.status)}
                 </div>
 
@@ -95,9 +95,9 @@ export function SchoolConsoleHeader({
 
             {/* Informações de Prazo Limite & Status da Solicitacao */}
             {(submission?.custom_deadline || submission?.extension_status) && (
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white p-4 text-xs shadow-sm">
+                <div className="bg-card flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border p-4 text-xs shadow-sm">
                     {submission.custom_deadline && (
-                        <div className="flex items-center gap-2 text-gray-700">
+                        <div className="text-font-primary flex items-center gap-2">
                             <Calendar size={16} className="text-[#088077]" />
                             <span>
                                 <strong>Prazo Estendido Concedido:</strong> {formatDate(submission.custom_deadline)}
@@ -107,7 +107,7 @@ export function SchoolConsoleHeader({
 
                     {submission.extension_status && (
                         <div className="flex items-center gap-2">
-                            <span className="font-medium text-gray-500">Status da Prorrogação:</span>
+                            <span className="text-font-secondary font-medium">Status da Prorrogação:</span>
                             <span className={`font-semibold px-2.5 py-0.5 rounded-full ${
                                 submission.extension_status === "Pendente"
                                     ? "bg-amber-100 text-amber-800"

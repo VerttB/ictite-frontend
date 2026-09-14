@@ -6,8 +6,6 @@ import {
     History,
     Clock,
     User,
-    ChevronLeft,
-    ChevronRight,
     Loader2,
     CheckCircle2,
     XCircle,
@@ -21,7 +19,6 @@ import {
 import { schoolSubmissionService } from "@/core/service/schoolSubmissionService";
 import { SchoolFormActivityLog } from "@/schemas/schoolSubmissionSchema";
 import { Pagination as PaginationSchema } from "@/schemas/Pagination";
-import { Button } from "../ui/button";
 import { Pagination } from "../Pagination";
 
 export function SchoolHistorySection() {
@@ -125,16 +122,16 @@ export function SchoolHistorySection() {
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
             {/* Header da Seção */}
-            <div className="flex flex-col items-start justify-between gap-4 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center">
+            <div className="bg-card flex flex-col items-start justify-between gap-4 rounded-3xl border border-border p-6 shadow-sm sm:flex-row sm:items-center">
                 <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-[#088077]/10 p-3 text-[#088077]">
                         <History size={28} />
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold text-gray-900">
+                        <h2 className="text-font-primary text-lg font-bold">
                             Histórico de Mudanças
                         </h2>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-font-secondary text-xs">
                             Acompanhe o registro de todas as edições, salvamentos e envios
                             efetuados no formulário da sua escola.
                         </p>
@@ -149,9 +146,9 @@ export function SchoolHistorySection() {
             </div>
 
             {/* Conteúdo Principal */}
-            <div className="min-h-[380px] rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="bg-card min-h-[380px] rounded-3xl border border-border p-6 shadow-sm">
                 {isLoading ? (
-                    <div className="flex min-h-[300px] items-center justify-center gap-2 text-gray-500">
+                    <div className="text-font-secondary flex min-h-[300px] items-center justify-center gap-2">
                         <Loader2 className="animate-spin text-[#088077]" size={24} />
                         <span className="text-sm font-medium">
                             Carregando histórico de mudanças...
@@ -162,11 +159,11 @@ export function SchoolHistorySection() {
                         Erro ao carregar o histórico de mudanças da escola.
                     </div>
                 ) : logs.length === 0 ? (
-                    <div className="py-12 text-center text-xs text-gray-400">
+                    <div className="text-font-secondary py-12 text-center text-xs">
                         Nenhum registro de alteração encontrado.
                     </div>
                 ) : (
-                    <div className="relative space-y-6 pl-6 before:absolute before:top-2 before:bottom-2 before:left-3 before:w-0.5 before:bg-gray-200">
+                    <div className="relative space-y-6 pl-6 before:absolute before:top-2 before:bottom-2 before:left-3 before:w-0.5 before:bg-border">
                         {logs.map((log) => {
                             const badge = formatActionBadge(log.action);
                             const IconComponent = badge.icon;
@@ -174,11 +171,11 @@ export function SchoolHistorySection() {
                             return (
                                 <div key={log.id} className="group relative">
                                     {/* Ponto da Linha do Tempo */}
-                                    <div className="absolute top-1 -left-[31px] flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#088077] bg-white text-[#088077] shadow-xs transition-transform group-hover:scale-110">
+                                    <div className="absolute top-1 -left-[31px] flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#088077] bg-background text-[#088077] shadow-xs transition-transform group-hover:scale-110">
                                         <IconComponent size={12} />
                                     </div>
 
-                                    <div className="flex flex-col gap-2 rounded-2xl border border-gray-100 bg-gray-50/50 p-4 transition-all hover:border-gray-200 hover:bg-white hover:shadow-xs">
+                                    <div className="flex flex-col gap-2 rounded-2xl border border-border bg-background p-4 transition-all hover:bg-muted/40 hover:shadow-xs">
                                         <div className="flex flex-wrap items-center justify-between gap-2">
                                             <div className="flex items-center gap-2">
                                                 <span
@@ -188,20 +185,20 @@ export function SchoolHistorySection() {
                                                 </span>
                                             </div>
 
-                                            <span className="flex items-center gap-1 text-xs font-medium text-gray-400">
+                                            <span className="text-font-secondary flex items-center gap-1 text-xs font-medium">
                                                 <Clock size={13} />
                                                 {formatDate(log.created_at)}
                                             </span>
                                         </div>
 
                                         {log.details && (
-                                            <p className="text-xs leading-relaxed font-medium text-gray-700">
+                                            <p className="text-font-primary text-xs leading-relaxed font-medium">
                                                 {log.details}
                                             </p>
                                         )}
 
                                         {log.user_name && (
-                                            <div className="flex items-center gap-1 pt-1 text-[11px] font-medium text-gray-500">
+                                            <div className="text-font-secondary flex items-center gap-1 pt-1 text-[11px] font-medium">
                                                 <User
                                                     size={12}
                                                     className="text-[#088077]"

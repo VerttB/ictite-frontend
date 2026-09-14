@@ -20,7 +20,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {
-    SchoolFormDraftData,
     ProjectDraftData,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
@@ -41,7 +40,6 @@ interface ResearcherItemFormProps {
 
 export function ResearcherItemForm({
     index,
-    fieldId,
     form,
     projects,
     readOnly = false,
@@ -60,7 +58,10 @@ export function ResearcherItemForm({
 
     const hasError = Boolean(researcherError);
     const isIncomplete =
-        !researcher?.name || researcher.name.trim().length < 2 || !researcher?.type;
+        !researcher?.name ||
+        researcher.name.trim().length < 2 ||
+        !researcher?.type ||
+        !researcher?.project_ids?.length;
 
     let borderClass = "border-l-4 border-l-[#088077]";
     let iconBgClass = "bg-[#088077]/10 text-[#088077]";
@@ -90,19 +91,19 @@ export function ResearcherItemForm({
 
     return (
         <div
-            className={`animate-in fade-in-50 slide-in-from-top-4 relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-gray-50/50 shadow-xs transition-all duration-300 hover:bg-white ${borderClass}`}>
+            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background relative flex flex-col overflow-hidden rounded-2xl border border-border shadow-xs transition-all duration-300 hover:bg-muted/40 ${borderClass}`}>
             <div
                 onClick={onToggleExpand}
-                className="flex cursor-pointer items-center justify-between border-b border-gray-100 p-4 transition-colors select-none hover:bg-gray-100/50">
+                className="flex cursor-pointer items-center justify-between border-b border-border p-4 transition-colors select-none hover:bg-muted/50">
                 <div className="flex items-center gap-3">
                     <span className={`rounded-xl p-2 ${iconBgClass}`}>
                         <Book size={18} />
                     </span>
                     <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-semibold text-gray-800">
+                        <h4 className="text-font-primary text-sm font-semibold">
                             {researcher?.name || `Pesquisador #${index + 1}`}
                         </h4>
-                        <span className="rounded-md bg-gray-200 px-2 py-0.5 text-[10px] font-bold text-gray-700">
+                        <span className="bg-muted text-font-primary rounded-md px-2 py-0.5 text-[10px] font-bold">
                             {researcher?.type || "Função não definida"}
                         </span>
                         {badge}
@@ -119,7 +120,7 @@ export function ResearcherItemForm({
                                 e.stopPropagation();
                                 onRemove();
                             }}
-                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-700">
+                            className="h-8 w-8 text-red-500 hover:bg-red-500/10 hover:text-red-700">
                             <Trash2 size={16} />
                         </Button>
                     )}
@@ -127,19 +128,19 @@ export function ResearcherItemForm({
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-gray-400">
+                        className="text-font-secondary h-8 w-8">
                         {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                     </Button>
                 </div>
             </div>
 
             {isExpanded && (
-                <div className="animate-fade-in space-y-4 bg-white p-5">
+                <div className="animate-fade-in space-y-4 bg-background p-5">
                     <input type="hidden" {...register(`researchers.${index}.id`)} />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Nome Completo (Obrigatório)
                             </label>
                             <Input
@@ -156,7 +157,7 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Função / Tipo (Obrigatório)
                             </label>
                             <Controller
@@ -167,7 +168,7 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-white">
+                                        <SelectTrigger className="w-full bg-background">
                                             <SelectValue placeholder="Selecione o tipo..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -189,7 +190,7 @@ export function ResearcherItemForm({
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Gênero
                             </label>
                             <Controller
@@ -200,7 +201,7 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value || ""}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-white">
+                                        <SelectTrigger className="w-full bg-background">
                                             <SelectValue placeholder="Gênero..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -220,7 +221,7 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 Raça / Etnia
                             </label>
                             <Controller
@@ -231,7 +232,7 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value || ""}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-white">
+                                        <SelectTrigger className="w-full bg-background">
                                             <SelectValue placeholder="Raça/Etnia..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -247,7 +248,7 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="mb-1 block text-xs font-semibold text-gray-700">
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
                                 ID Lattes (16 dígitos)
                             </label>
                             <Input
@@ -261,8 +262,8 @@ export function ResearcherItemForm({
                     </div>
 
                     <div>
-                        <label className="mb-1 block text-xs font-semibold text-gray-700">
-                            Projetos Vinculados
+                        <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            Projetos Vinculados (Obrigatório)
                         </label>
                         <Controller
                             control={control}
@@ -275,13 +276,13 @@ export function ResearcherItemForm({
                                       : [];
 
                                 return (
-                                    <div className="flex flex-wrap gap-3 rounded-xl border border-gray-200 bg-white p-3.5 text-sm">
+                                    <div className="flex flex-wrap gap-3 rounded-xl border border-border bg-background p-3.5 text-sm">
                                         {projects.length === 0 ? (
-                                            <span className="text-xs text-gray-400">
+                                            <span className="text-font-secondary text-xs">
                                                 Nenhum projeto cadastrado ainda.
                                             </span>
                                         ) : (
-                                            projects.map((p) => (
+                                            projects.map((p, projectIndex) => (
                                                 <label
                                                     key={p.id}
                                                     className="flex cursor-pointer items-center gap-2 text-xs font-medium">
@@ -310,7 +311,10 @@ export function ResearcherItemForm({
                                                         }}
                                                         className="rounded text-[#088077] focus:ring-[#088077]"
                                                     />
-                                                    <span>{p.name}</span>
+                                                    <span>
+                                                        {p.name?.trim() ||
+                                                            `Projeto #${projectIndex + 1} sem nome`}
+                                                    </span>
                                                 </label>
                                             ))
                                         )}
@@ -318,6 +322,13 @@ export function ResearcherItemForm({
                                 );
                             }}
                         />
+                        {!researcher?.project_ids?.length && (
+                            <p className="mt-1 flex items-center gap-1 text-xs font-medium text-amber-600">
+                                <AlertTriangle size={12} />
+                                Vincule o pesquisador a ao menos um projeto para enviar o
+                                rascunho.
+                            </p>
+                        )}
                     </div>
                 </div>
             )}

@@ -11,6 +11,10 @@ function formatErrorValue(value: unknown): string | undefined {
 
     if (typeof value === "object") {
         const obj = value as Record<string, unknown>;
+        if (typeof obj.message === "string") return obj.message;
+        if (typeof obj.detail === "string") return obj.detail;
+        if (typeof obj.error === "string") return obj.error;
+
         if ("msg" in obj || "loc" in obj) {
             const field = Array.isArray(obj.loc)
                 ? obj.loc
@@ -23,10 +27,6 @@ function formatErrorValue(value: unknown): string | undefined {
                 typeof obj.msg === "string" ? obj.msg : formatErrorValue(obj.msg);
             return [field, message].filter(Boolean).join(": ");
         }
-
-        if (typeof obj.message === "string") return obj.message;
-        if (typeof obj.detail === "string") return obj.detail;
-        if (typeof obj.error === "string") return obj.error;
 
         const entries = Object.entries(obj)
             .map(([key, val]) => {
