@@ -30,6 +30,8 @@ import {
     Home,
     BarChart3,
     LayoutDashboard,
+    History,
+    Globe2,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -43,6 +45,8 @@ import { cn } from "@/lib/utils";
 
 export type SchoolSection =
     | "geral"
+    | "historico"
+    | "previa_site"
     | "visao_geral_form"
     | "escola"
     | "clubs"
@@ -61,7 +65,11 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
     const [isFormExpanded, setIsFormExpanded] = useState<boolean>(true);
 
     const formSubItems = [
-        { id: "visao_geral_form" as SchoolSection, label: "Visão Geral", icon: BarChart3 },
+        {
+            id: "visao_geral_form" as SchoolSection,
+            label: "Visão Geral",
+            icon: BarChart3,
+        },
         { id: "escola" as SchoolSection, label: "Escola", icon: School },
         { id: "clubs" as SchoolSection, label: "Clubes de Ciência", icon: Handshake },
         { id: "projects" as SchoolSection, label: "Projetos", icon: SquareChartGantt },
@@ -71,6 +79,8 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
 
     const isFormChildActive = formSubItems.some((item) => item.id === activeSection);
     const isGeralActive = activeSection === "geral";
+    const isHistoricoActive = activeSection === "historico";
+    const isPreviaActive = activeSection === "previa_site";
 
     return (
         <Sidebar collapsible="icon">
@@ -86,9 +96,8 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                             <SidebarMenuItem className="flex rounded-sm transition-all duration-200">
                                 <SidebarMenuButton
                                     tooltip="Página Inicial"
-                                    className="flex w-full cursor-pointer rounded-sm bg-gray-200 text-gray-700 hover:bg-primary/70 hover:text-white transition-all duration-200 p-2 text-sm font-medium"
-                                    asChild
-                                >
+                                    className="bg-muted text-font-primary hover:bg-primary/70 flex w-full cursor-pointer rounded-sm p-2 text-sm font-medium transition-all duration-200 hover:text-white"
+                                    asChild>
                                     <Link href="/">
                                         <Home size={18} />
                                         <span>Página Inicial</span>
@@ -102,36 +111,77 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                     "flex rounded-sm transition-all duration-200",
                                     isGeralActive
                                         ? "bg-primary text-white"
-                                        : "bg-gray-200 text-gray-700 hover:bg-primary/70 hover:text-white"
-                                )}
-                            >
+                                        : "hover:bg-primary/70 bg-muted text-font-primary hover:text-white"
+                                )}>
                                 <SidebarMenuButton
                                     onClick={() => onSelectSection("geral")}
                                     tooltip="Geral"
                                     className={cn(
                                         "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
                                         isGeralActive
-                                            ? "bg-primary hover:bg-primary text-white hover:text-white font-bold"
-                                            : "bg-gray-200 text-gray-700 hover:bg-primary/70 hover:text-white"
-                                    )}
-                                >
+                                            ? "bg-primary hover:bg-primary font-bold text-white hover:text-white"
+                                            : "hover:bg-primary/70 bg-muted text-font-primary hover:text-white"
+                                    )}>
                                     <LayoutDashboard size={18} />
                                     <span>Geral</span>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
-                            {/* 3. Item Pai Expandível: Formulário */}
+                            {/* 3. Item Independente no Topo: Histórico de Mudanças */}
+                            <SidebarMenuItem
+                                className={cn(
+                                    "flex rounded-sm transition-all duration-200",
+                                    isHistoricoActive
+                                        ? "bg-primary text-white"
+                                        : "hover:bg-primary/70 bg-muted text-font-primary hover:text-white"
+                                )}>
+                                <SidebarMenuButton
+                                    onClick={() => onSelectSection("historico")}
+                                    tooltip="Histórico de Mudanças"
+                                    className={cn(
+                                        "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
+                                        isHistoricoActive
+                                            ? "bg-primary hover:bg-primary font-bold text-white hover:text-white"
+                                            : "hover:bg-primary/70 bg-muted text-font-primary hover:text-white"
+                                    )}>
+                                    <History size={18} />
+                                    <span>Histórico de Mudanças</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+
+                            {/* 4. Item Independente no Topo: Prévia do Portal */}
+                            <SidebarMenuItem
+                                className={cn(
+                                    "flex rounded-sm transition-all duration-200",
+                                    isPreviaActive
+                                        ? "bg-primary text-white"
+                                        : "hover:bg-primary/70 bg-muted text-font-primary hover:text-white"
+                                )}>
+                                <SidebarMenuButton
+                                    onClick={() => onSelectSection("previa_site")}
+                                    tooltip="Prévia do Portal"
+                                    className={cn(
+                                        "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
+                                        isPreviaActive
+                                            ? "bg-primary hover:bg-primary font-bold text-white hover:text-white"
+                                            : "hover:bg-primary/70 bg-muted text-font-primary hover:text-white"
+                                    )}>
+                                    <Globe2 size={18} />
+                                    <span>Prévia do Portal</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+
+                            {/* 5. Item Pai Expandível: Formulário da Escola */}
                             <SidebarMenuItem className="flex flex-col rounded-sm transition-all duration-200">
                                 <SidebarMenuButton
                                     onClick={() => setIsFormExpanded(!isFormExpanded)}
                                     tooltip="Formulário da Escola"
                                     className={cn(
-                                        "flex w-full items-center justify-between rounded-sm p-2 text-sm font-semibold transition-all duration-200 cursor-pointer",
+                                        "flex w-full cursor-pointer items-center justify-between rounded-sm p-2 text-sm font-semibold transition-all duration-200",
                                         isFormChildActive
-                                            ? "bg-primary text-white hover:bg-primary hover:text-white font-bold"
-                                            : "bg-gray-200 text-gray-800 hover:bg-primary/70 hover:text-white"
-                                    )}
-                                >
+                                            ? "bg-[#088077] hover:bg-[#088077] font-bold text-white hover:text-white"
+                                            : "hover:bg-primary/70 bg-muted text-font-primary hover:text-white"
+                                    )}>
                                     <div className="flex items-center gap-2">
                                         <FileText size={18} />
                                         <span>Formulário</span>
@@ -143,9 +193,9 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                     )}
                                 </SidebarMenuButton>
 
-                                {/* Sub-itens do Formulário (Visão Geral, Escola, Clubes, Projetos, Pesquisadores, Equipamentos) */}
+                                {/* Sub-itens Exclusivos do Formulário (Visão Geral, Escola, Clubes, Projetos, Pesquisadores, Equipamentos) */}
                                 {isFormExpanded && open && (
-                                    <SidebarMenuSub className="mt-1 flex flex-col gap-1 border-l-2 border-primary/40 pl-2">
+                                    <SidebarMenuSub className="border-primary/40 mt-1 flex flex-col gap-1 border-l-2 pl-2">
                                         {formSubItems.map((item) => {
                                             const Icon = item.icon;
                                             const isActive = activeSection === item.id;
@@ -153,14 +203,15 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                             return (
                                                 <SidebarMenuSubItem key={item.id}>
                                                     <SidebarMenuSubButton
-                                                        onClick={() => onSelectSection(item.id)}
+                                                        onClick={() =>
+                                                            onSelectSection(item.id)
+                                                        }
                                                         className={cn(
                                                             "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-xs transition-all duration-200",
                                                             isActive
-                                                                ? "bg-primary text-white font-bold shadow-xs hover:bg-primary hover:text-white"
-                                                                : "text-gray-700 hover:bg-primary/70 hover:text-white font-medium"
-                                                        )}
-                                                    >
+                                                                ? "bg-primary hover:bg-primary font-bold text-white shadow-xs hover:text-white"
+                                                                : "hover:bg-primary/70 text-font-primary font-medium hover:text-white"
+                                                        )}>
                                                         <Icon size={15} />
                                                         <span>{item.label}</span>
                                                     </SidebarMenuSubButton>
@@ -181,11 +232,11 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                         <DropdownMenu>
                             <DropdownMenuTrigger className="w-full">
                                 <div className="flex min-h-8 min-w-8 items-center gap-3">
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gray-300 font-bold text-gray-700">
+                                    <div className="bg-muted text-font-primary flex h-8 w-8 items-center justify-center rounded-md font-bold">
                                         {user.email.charAt(0).toUpperCase()}
                                     </div>
                                     {open && (
-                                        <p className="text-sm font-medium truncate text-left">
+                                        <p className="text-font-primary truncate text-left text-sm font-medium">
                                             {user.email}
                                         </p>
                                     )}
@@ -197,8 +248,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                 </DropdownMenuLabel>
                                 <DropdownMenuItem
                                     onClick={logoutUser}
-                                    className="cursor-pointer hover:bg-red-500 hover:text-white"
-                                >
+                                    className="cursor-pointer hover:bg-red-500 hover:text-white">
                                     Deslogar
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -207,7 +257,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                 </SidebarGroup>
                 <SidebarSeparator />
                 <SidebarGroup>
-                    <p className={cn("text-xs text-gray-500", open ? "block" : "hidden")}>
+                    <p className={cn("text-font-secondary text-xs", open ? "block" : "hidden")}>
                         © 2025 ICTITE
                     </p>
                 </SidebarGroup>

@@ -19,7 +19,7 @@ type UserContextType = {
     isSchoolAdmin: boolean;
     loginUser: (loginRequest: UserLogin) => Promise<boolean>;
     logoutUser: () => void;
-    registerInvitedUser: (payload: RegisterInvitedRequest) => Promise<boolean>;
+    registerInvitedUser: (payload: RegisterInvitedRequest) => Promise<string | null>;
     error: string | null;
 };
 
@@ -101,7 +101,7 @@ export default function UserProvider({
 
     const registerInvitedUser = async (
         payload: RegisterInvitedRequest
-    ): Promise<boolean> => {
+    ): Promise<string | null> => {
         setIsLoading(true);
         try {
             await registerInvited(payload);
@@ -112,12 +112,13 @@ export default function UserProvider({
             } else {
                 router.push("/console/v2");
             }
-            return true;
+            return null;
         } catch (error) {
             console.error("Erro no autocadastro:", error);
-            setError(error instanceof Error ? error.message : String(error));
+            const message = error instanceof Error ? error.message : String(error);
+            setError(message);
             setUser(null);
-            return false;
+            return message;
         } finally {
             setIsLoading(false);
         }

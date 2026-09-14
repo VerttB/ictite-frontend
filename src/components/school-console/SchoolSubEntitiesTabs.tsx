@@ -13,10 +13,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-    SchoolFormDataInput,
-    SchoolFormDraftData,
-} from "@/schemas/schoolSubmissionSchema";
+import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 import { ClubItemForm } from "./sub-entities/ClubItemForm";
 import { ProjectItemForm } from "./sub-entities/ProjectItemForm";
 import { ResearcherItemForm } from "./sub-entities/ResearcherItemForm";
@@ -55,6 +52,7 @@ export function SchoolSubEntitiesTabs({
     } = useFieldArray({
         control,
         name: "clubs",
+        keyName: "fieldId",
     });
 
     const {
@@ -64,6 +62,7 @@ export function SchoolSubEntitiesTabs({
     } = useFieldArray({
         control,
         name: "projects",
+        keyName: "fieldId",
     });
 
     const {
@@ -73,6 +72,7 @@ export function SchoolSubEntitiesTabs({
     } = useFieldArray({
         control,
         name: "researchers",
+        keyName: "fieldId",
     });
 
     const {
@@ -82,6 +82,7 @@ export function SchoolSubEntitiesTabs({
     } = useFieldArray({
         control,
         name: "equipments",
+        keyName: "fieldId",
     });
 
     const currentClubs = watch("clubs") || [];
@@ -102,13 +103,13 @@ export function SchoolSubEntitiesTabs({
 
     const activeFields = getActiveFields();
     const allExpanded =
-        activeFields.length > 0 && activeFields.every((f) => isItemExpanded(f.id));
+        activeFields.length > 0 && activeFields.every((f) => isItemExpanded(f.fieldId));
 
     const toggleExpandAll = () => {
         const nextState = !allExpanded;
         const updated: Record<string, boolean> = { ...expandedItems };
         activeFields.forEach((f) => {
-            updated[f.id] = nextState;
+            updated[f.fieldId] = nextState;
         });
         setExpandedItems(updated);
     };
@@ -133,6 +134,7 @@ export function SchoolSubEntitiesTabs({
 
     const handleAddResearcher = () => {
         const id = crypto.randomUUID();
+        const firstProjectId = currentProjects[0]?.id;
         prependResearcher({
             id,
             name: "",
@@ -140,7 +142,7 @@ export function SchoolSubEntitiesTabs({
             gender: "Não informado",
             race: "Não informado",
             lattes_id: "",
-            project_ids: [],
+            project_ids: currentProjects.length === 1 && firstProjectId ? [firstProjectId] : [],
         });
         setExpandedItems((prev) => ({ ...prev, [id]: true }));
     };
@@ -189,12 +191,12 @@ export function SchoolSubEntitiesTabs({
     const HeaderIcon = headerInfo.icon;
 
     return (
-        <div className="w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="bg-card w-full rounded-2xl border border-border p-6 shadow-sm">
             {/* Header da Seção Ativa */}
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+            <div className="flex items-center justify-between border-b border-border pb-4">
                 <div className="flex items-center gap-2 text-[#088077]">
                     <HeaderIcon size={20} />
-                    <h3 className="text-base font-bold text-gray-800">
+                    <h3 className="text-font-primary text-base font-bold">
                         {headerInfo.title}
                     </h3>
                 </div>
@@ -206,7 +208,7 @@ export function SchoolSubEntitiesTabs({
                             type="button"
                             variant="outline"
                             onClick={toggleExpandAll}
-                            className="gap-1.5 rounded-full border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-all hover:bg-gray-50">
+                            className="text-font-secondary gap-1.5 rounded-full border-border px-3 py-1.5 text-xs font-semibold transition-all hover:bg-muted">
                             {allExpanded ? (
                                 <ChevronsUp size={15} />
                             ) : (
@@ -233,20 +235,20 @@ export function SchoolSubEntitiesTabs({
                 {/* 1. CLUBES DE CIÊNCIA */}
                 {activeTab === "clubs" &&
                     (clubFields.length === 0 ? (
-                        <div className="py-8 text-center text-xs text-gray-400">
+                        <div className="text-font-secondary py-8 text-center text-xs">
                             Nenhum clube de ciência cadastrado. Clique em{" "}
                             <strong>+ Adicionar</strong> para cadastrar.
                         </div>
                     ) : (
                         clubFields.map((field, index) => (
                             <ClubItemForm
-                                key={field.id}
+                                key={field.fieldId}
                                 index={index}
-                                fieldId={field.id}
+                                fieldId={field.fieldId}
                                 form={form}
                                 readOnly={readOnly}
-                                isExpanded={isItemExpanded(field.id)}
-                                onToggleExpand={() => toggleExpand(field.id)}
+                                isExpanded={isItemExpanded(field.fieldId)}
+                                onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeClub(index)}
                             />
                         ))
@@ -255,21 +257,21 @@ export function SchoolSubEntitiesTabs({
                 {/* 2. PROJETOS DE PESQUISA */}
                 {activeTab === "projects" &&
                     (projectFields.length === 0 ? (
-                        <div className="py-8 text-center text-xs text-gray-400">
+                        <div className="text-font-secondary py-8 text-center text-xs">
                             Nenhum projeto cadastrado. Clique em{" "}
                             <strong>+ Adicionar</strong> para criar um projeto.
                         </div>
                     ) : (
                         projectFields.map((field, index) => (
                             <ProjectItemForm
-                                key={field.id}
+                                key={field.fieldId}
                                 index={index}
-                                fieldId={field.id}
+                                fieldId={field.fieldId}
                                 form={form}
                                 clubs={currentClubs}
                                 readOnly={readOnly}
-                                isExpanded={isItemExpanded(field.id)}
-                                onToggleExpand={() => toggleExpand(field.id)}
+                                isExpanded={isItemExpanded(field.fieldId)}
+                                onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeProject(index)}
                             />
                         ))
@@ -278,7 +280,7 @@ export function SchoolSubEntitiesTabs({
                 {/* 3. PESQUISADORES */}
                 {activeTab === "researchers" &&
                     (researcherFields.length === 0 ? (
-                        <div className="py-8 text-center text-xs text-gray-400">
+                        <div className="text-font-secondary py-8 text-center text-xs">
                             Nenhum pesquisador cadastrado. Clique em{" "}
                             <strong>+ Adicionar</strong> para incluir alunos, professores
                             ou facilitadores.
@@ -286,14 +288,14 @@ export function SchoolSubEntitiesTabs({
                     ) : (
                         researcherFields.map((field, index) => (
                             <ResearcherItemForm
-                                key={field.id}
+                                key={field.fieldId}
                                 index={index}
-                                fieldId={field.id}
+                                fieldId={field.fieldId}
                                 form={form}
                                 projects={currentProjects}
                                 readOnly={readOnly}
-                                isExpanded={isItemExpanded(field.id)}
-                                onToggleExpand={() => toggleExpand(field.id)}
+                                isExpanded={isItemExpanded(field.fieldId)}
+                                onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeResearcher(index)}
                             />
                         ))
@@ -302,7 +304,7 @@ export function SchoolSubEntitiesTabs({
                 {/* 4. EQUIPAMENTOS */}
                 {activeTab === "equipments" &&
                     (equipmentFields.length === 0 ? (
-                        <div className="py-8 text-center text-xs text-gray-400">
+                        <div className="text-font-secondary py-8 text-center text-xs">
                             Nenhum equipamento cadastrado. Clique em{" "}
                             <strong>+ Adicionar</strong> para incluir equipamentos
                             laboratoriais.
@@ -310,13 +312,13 @@ export function SchoolSubEntitiesTabs({
                     ) : (
                         equipmentFields.map((field, index) => (
                             <EquipmentItemForm
-                                key={field.id}
+                                key={field.fieldId}
                                 index={index}
-                                fieldId={field.id}
+                                fieldId={field.fieldId}
                                 form={form}
                                 readOnly={readOnly}
-                                isExpanded={isItemExpanded(field.id)}
-                                onToggleExpand={() => toggleExpand(field.id)}
+                                isExpanded={isItemExpanded(field.fieldId)}
+                                onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeEquipment(index)}
                             />
                         ))
