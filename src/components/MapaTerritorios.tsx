@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Feature, FeatureCollection, MultiPolygon, Point, Polygon } from "geojson";
 import mapboxgl from "mapbox-gl";
+import type { ExpressionSpecification } from "mapbox-gl";
 import { useRouter } from "next/navigation";
 import { Route } from "next";
 import useSWR from "swr";
@@ -172,8 +173,8 @@ function buildTerritorySummaries(
     return Array.from(summaries.values()).sort((a, b) => Number(a.id) - Number(b.id));
 }
 
-function buildTerritoryColorExpression(summaries: TerritorySummary[]) {
-    const expression: unknown[] = ["match", ["to-string", ["get", "territorio_id"]]];
+function buildTerritoryColorExpression(summaries: TerritorySummary[]): ExpressionSpecification {
+    const expression: ExpressionSpecification = ["match", ["to-string", ["get", "territorio_id"]]];
 
     summaries.forEach((summary) => {
         expression.push(summary.id, summary.count > 0 ? getColor(summary.id) : "#d1d5db");
