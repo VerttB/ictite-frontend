@@ -59,7 +59,7 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
         message: string;
         cep: string;
     }>({ status: "idle", message: "", cep: "" });
-    const cepLookupTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+    const cepLookupTimeoutRef = useRef<number | null>(null);
     const cepLookupRequestRef = useRef(0);
     const cepField = register("school.cep");
 
