@@ -22,6 +22,7 @@ interface ClubItemFormProps {
     index: number;
     fieldId: string;
     form: UseFormReturn<SchoolFormDataInput>;
+    ensureDraftSaved: () => Promise<boolean>;
     readOnly?: boolean;
     isExpanded: boolean;
     onToggleExpand: () => void;
@@ -31,6 +32,7 @@ interface ClubItemFormProps {
 export function ClubItemForm({
     index,
     form,
+    ensureDraftSaved,
     readOnly = false,
     isExpanded,
     onToggleExpand,
@@ -170,6 +172,7 @@ export function ClubItemForm({
                         <FormEntityImageDropzone
                             entityType="clube_ciencias"
                             entityId={club.id}
+                            ensureDraftSaved={ensureDraftSaved}
                             readOnly={readOnly}
                         />
                     )}

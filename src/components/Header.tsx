@@ -16,7 +16,8 @@ export const Header = () => {
     const { isMobile } = useViewPort();
 
     const pathname = usePathname();
-    const isInConsole = pathname.startsWith("/console") || pathname.startsWith("/school/console");
+    const isSchoolConsole = pathname.startsWith("/school/console");
+    const isInConsole = pathname.startsWith("/console") || isSchoolConsole;
     const consolePath = user?.role === "SCHOOL_ADMIN" ? "/school/console" : "/console/v2";
 
     const logoSrc =
@@ -33,13 +34,15 @@ export const Header = () => {
                 <p className="flex items-end text-sm text-gray-500">Versão 2.3.1</p>
             </div>
             <div className="flex flex-row items-center gap-2 sm:gap-4">
-                <Link target="_blank" href={"https://simcc.uesc.br/observatorio"}>
-                    <Button
-                        size={isMobile ? "icon" : "default"}
-                        className="cursor-pointer text-xl">
-                        {isMobile ? <ChevronRight /> : "Observatório"}
-                    </Button>
-                </Link>
+                {!isSchoolConsole && (
+                    <Link target="_blank" href={"https://simcc.uesc.br/observatorio"}>
+                        <Button
+                            size={isMobile ? "icon" : "default"}
+                            className="cursor-pointer text-xl">
+                            {isMobile ? <ChevronRight /> : "Observatório"}
+                        </Button>
+                    </Link>
+                )}
                 <Button
                     size={"icon"}
                     variant="outline"

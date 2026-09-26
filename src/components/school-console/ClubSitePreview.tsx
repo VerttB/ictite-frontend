@@ -1,6 +1,7 @@
 "use client";
 
 import useSWR from "swr";
+import { useState } from "react";
 import Image from "next/image";
 
 import {
@@ -9,6 +10,7 @@ import {
     BookOpenText,
     BrainCircuit,
     Eye,
+    ExternalLink,
     FlaskConical,
     HeartHandshake,
     Instagram,
@@ -20,8 +22,16 @@ import {
 
 import { ImageDisplay } from "@/components/ui/ImageDisplay";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import { schoolSubmissionService } from "@/core/service/schoolSubmissionService";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
+
+type PreviewProject = SchoolFormDataInput["projects"][number];
 
 interface DraftClubImageProps {
     entityId: string;
@@ -93,21 +103,30 @@ function DraftClubGallery({ entityId, alt }: DraftClubImageProps) {
     );
 }
 
-function DraftProjectImage({ entityId, alt }: DraftClubImageProps) {
+function DraftProjectImage({
+    entityId,
+    alt,
+    expanded = false,
+}: DraftClubImageProps & { expanded?: boolean }) {
     const { data, isLoading } = useSWR(
         entityId ? `/submissions/current/images/project/${entityId}` : null,
         () => schoolSubmissionService.getFormEntityImages("project", entityId)
     );
 
     if (isLoading) {
-        return <div className="h-40 w-full animate-pulse rounded-md bg-gray-100" />;
+        return (
+            <div
+                className={`w-full animate-pulse rounded-md bg-gray-100 ${expanded ? "h-96" : "h-40"}`}
+            />
+        );
     }
 
     const primaryImage = data?.images?.[0];
 
     if (!primaryImage) {
         return (
-            <div className="text-font-primary/60 flex h-40 w-full items-center justify-center rounded-md border-2 border-dashed border-gray-200 bg-gray-50 text-center text-xs">
+            <div
+                className={`text-font-primary/60 flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-200 bg-gray-50 text-center text-xs ${expanded ? "h-96" : "h-40"}`}>
                 Sem imagem disponível
             </div>
         );
@@ -117,7 +136,7 @@ function DraftProjectImage({ entityId, alt }: DraftClubImageProps) {
         <ImageDisplay
             src={primaryImage.url}
             alt={alt}
-            className="h-40 w-full overflow-hidden rounded-md border bg-gray-50"
+            className={`w-full overflow-hidden rounded-md border bg-gray-50 ${expanded ? "h-96" : "h-40"}`}
         />
     );
 }
@@ -131,6 +150,7 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
     const clubs = data.clubs || [];
     const projects = data.projects || [];
     const researchers = data.researchers || [];
+    const [expandedProject, setExpandedProject] = useState<PreviewProject | null>(null);
 
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
@@ -151,6 +171,25 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                     está publicada.
                 </span>
             </div>
+
+            <section className="bg-foreground flex items-center gap-4 rounded-md border p-6">
+                <div className="bg-primary/10 text-primary rounded-md p-3">
+                    <School size={28} />
+                </div>
+                <div className="min-w-0">
+                    <p className="text-font-primary/60 text-xs font-semibold uppercase">
+                        Escola
+                    </p>
+                    <h1 className="text-font-primary text-2xl font-semibold">
+                        {data.school?.name || "Escola ainda não informada"}
+                    </h1>
+                    {data.school?.city && (
+                        <p className="text-font-primary/70 mt-1 text-sm">
+                            {data.school.city}
+                        </p>
+                    )}
+                </div>
+            </section>
 
             {clubs.length === 0 ? (
                 <section className="bg-foreground flex flex-col gap-4 rounded-md border p-6">
@@ -227,13 +266,8 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                         {club.name || "Nome do clube ainda não informado"}
                                     </h1>
                                     <div className="text-primary flex flex-col gap-2 text-sm md:flex-row md:items-center">
-                                        <span className="flex items-center gap-2 md:border-r md:pr-5">
-                                            <School size={20} />
-                                            {data.school?.name ||
-                                                "Escola ainda não informada"}
-                                        </span>
                                         {club.instagram_url && (
-                                            <span className="flex items-center gap-2 md:border-r md:px-5">
+                                            <span className="flex items-center gap-2">
                                                 <Instagram size={20} />
                                                 {club.instagram_url}
                                             </span>
@@ -280,11 +314,11 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                     <h2 className="text-2xl font-semibold">Projetos:</h2>
                                 </div>
                                 {clubProjects.length > 0 ? (
-                                    <div className="grid [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))] gap-4">
+                                    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
                                         {clubProjects.map((project, projectIndex) => (
                                             <article
                                                 key={project.id || projectIndex}
-                                                className="flex h-full flex-col justify-center gap-4 rounded-md border border-l-8 border-l-amber-500 bg-white p-5 shadow">
+                                                className="flex h-full min-w-0 flex-col gap-4 rounded-md border border-l-8 border-l-amber-500 bg-white p-5 shadow">
                                                 <DraftProjectImage
                                                     entityId={project.id}
                                                     alt={`Imagem do projeto ${project.name || "de pesquisa"}`}
@@ -294,9 +328,14 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                         {project.name ||
                                                             "Projeto ainda sem nome"}
                                                     </h3>
-                                                    <span className="flex size-10 shrink-0 items-center justify-center rounded-md border border-red-400">
+                                                    <button
+                                                        type="button"
+                                                        aria-label={`Ampliar projeto ${project.name || ""}`}
+                                                        title="Ampliar projeto"
+                                                        onClick={() => setExpandedProject(project)}
+                                                        className="text-font-primary flex size-10 shrink-0 items-center justify-center rounded-md border border-border transition-colors hover:bg-muted">
                                                         <Maximize2 size={18} />
-                                                    </span>
+                                                    </button>
                                                 </div>
                                                 {project.description && (
                                                     <p className="text-font-primary">
@@ -355,17 +394,37 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                                         researcher.id ||
                                                                         researcherIndex
                                                                     }
-                                                                    className="relative flex min-h-[300px] max-w-[210px] flex-col justify-end overflow-hidden rounded-md border-2 bg-black p-4 text-white">
-                                                                    <p className="text-xl">
-                                                                        {researcher.name ||
-                                                                            "Nome ainda não informado"}
-                                                                    </p>
-                                                                    <span className="bg-secondary mt-2 flex w-fit items-center gap-2 rounded-sm px-3 py-1 text-white">
+                                                                    className="bg-background text-font-primary relative flex min-h-[300px] min-w-0 flex-col justify-end overflow-hidden rounded-md border-2 p-4">
+                                                                    {researcher.image && (
+                                                                        <ImageDisplay
+                                                                            src={researcher.image}
+                                                                            alt={`Foto de ${researcher.name || "pesquisador"}`}
+                                                                            className="absolute inset-0 h-full w-full rounded-none"
+                                                                        />
+                                                                    )}
+                                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                                                                    <div className="relative z-10 text-white">
+                                                                        <p className="text-xl">
+                                                                            {researcher.name ||
+                                                                                "Nome ainda não informado"}
+                                                                        </p>
+                                                                        <span className="bg-secondary mt-2 flex w-fit items-center gap-2 rounded-sm px-3 py-1 text-white">
                                                                         <BookOpen
                                                                             size={20}
                                                                         />
                                                                         {researcher.type}
-                                                                    </span>
+                                                                        </span>
+                                                                        {researcher.lattes_id && (
+                                                                            <a
+                                                                                href={`https://lattes.cnpq.br/${researcher.lattes_id.replace(/\D/g, "")}`}
+                                                                                target="_blank"
+                                                                                rel="noreferrer"
+                                                                                className="mt-3 inline-flex items-center gap-2 rounded-sm bg-white/15 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/25">
+                                                                                <ExternalLink size={15} />
+                                                                                Currículo Lattes
+                                                                            </a>
+                                                                        )}
+                                                                    </div>
                                                                 </article>
                                                             )
                                                         )}
@@ -385,6 +444,37 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                     );
                 })
             )}
+
+            <Dialog
+                open={expandedProject !== null}
+                onOpenChange={(open) => {
+                    if (!open) setExpandedProject(null);
+                }}>
+                <DialogContent className="max-h-[90vh] max-w-5xl overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>{expandedProject?.name || "Projeto"}</DialogTitle>
+                    </DialogHeader>
+                    {expandedProject && (
+                        <div className="space-y-5">
+                            <DraftProjectImage
+                                entityId={expandedProject.id}
+                                alt={`Imagem do projeto ${expandedProject.name || "de pesquisa"}`}
+                                expanded
+                            />
+                            {expandedProject.description && (
+                                <p className="text-font-primary">
+                                    {expandedProject.description}
+                                </p>
+                            )}
+                            {expandedProject.long_description && (
+                                <p className="text-font-primary whitespace-pre-wrap">
+                                    {expandedProject.long_description}
+                                </p>
+                            )}
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
 
             {onBack && (
                 <div className="sticky bottom-4 rounded-md border bg-white/95 p-4 shadow-lg backdrop-blur-sm">

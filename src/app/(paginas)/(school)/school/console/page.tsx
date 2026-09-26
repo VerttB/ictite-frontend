@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Save, Send, RotateCcw, Loader2, ClipboardCheck } from "lucide-react";
+import {
+    Save,
+    Send,
+    RotateCcw,
+    Loader2,
+    ClipboardCheck,
+    CheckCircle2,
+} from "lucide-react";
 import { useSchoolSubmission } from "@/hooks/useSchoolSubmission";
 
 import { Header } from "@/components/Header";
@@ -16,6 +23,7 @@ import {
     DialogDescription,
     DialogFooter,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 import { SchoolConsoleHeader } from "@/components/school-console/SchoolConsoleHeader";
 import { SchoolImageDropzone } from "@/components/school-console/SchoolImageDropzone";
@@ -32,10 +40,9 @@ import { SchoolHistorySection } from "@/components/school-console/SchoolHistoryS
 import { SchoolFormPreview } from "@/components/school-console/SchoolFormPreview";
 import { ClubSitePreview } from "@/components/school-console/ClubSitePreview";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
-import { Button } from "@/components/ui/button";
 
 type PreviewState = {
-    mode: "review";
+    mode: "preview" | "review";
     data: SchoolFormDataInput;
 };
 
@@ -56,6 +63,7 @@ export default function SchoolConsolePage() {
     const [activeSection, setActiveSection] = useState<SchoolSection>("geral");
     const [preview, setPreview] = useState<PreviewState | null>(null);
     const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState<boolean>(false);
+    const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState<boolean>(false);
 
     const isReadOnly =
         submission?.status === "PENDENTE" || submission?.status === "APROVADO";
@@ -64,13 +72,21 @@ export default function SchoolConsolePage() {
         setPreview({ mode: "review", data: structuredClone(form.getValues()) });
     };
 
+    const handleFormSubmit = async () => {
+        const success = await submitForm();
+        if (success) {
+            setPreview(null);
+            setIsSuccessDialogOpen(true);
+        }
+    };
+
     const visiblePreview = isReadOnly ? null : preview;
 
     if (isLoading) {
         return (
             <div className="flex min-h-[60vh] w-full flex-col items-center justify-center gap-3">
                 <Loader2 className="animate-spin text-[#088077]" size={36} />
-                <p className="text-font-secondary text-sm font-medium">
+                <p className="text-sm font-medium text-gray-500">
                     Carregando formulário da escola...
                 </p>
             </div>
@@ -89,7 +105,7 @@ export default function SchoolConsolePage() {
             />
 
             {/* Container Padrão ictite com Borda Profunda e Header */}
-            <div className="bg-background flex min-h-screen w-full min-w-0 flex-1 flex-col pr-4 pb-4">
+            <div className="bg-foreground flex min-h-screen w-full min-w-0 flex-1 flex-col pb-4 pr-4">
                 <Header />
 
                 {/* Conteúdo Principal do Console com Inset Box-Shadow de Profundidade */}
@@ -102,7 +118,7 @@ export default function SchoolConsolePage() {
                     {/* Botão de Retrair/Expandir Sidebar & Toaster */}
                     <div className="flex items-center gap-2">
                         <SidebarTrigger />
-                        <span className="text-font-secondary text-xs font-semibold">Menu</span>
+                        <span className="text-xs font-semibold text-gray-500">Menu</span>
                     </div>
                     <Toaster />
 
@@ -113,14 +129,14 @@ export default function SchoolConsolePage() {
                     />
 
                     {/* Conteúdo do Módulo Selecionado */}
-                    <div className="bg-card flex min-h-[480px] flex-col gap-6 rounded-2xl border border-border p-6 shadow-xs">
+                    <div className="border-border bg-card shadow-xs flex min-h-[480px] flex-col gap-6 rounded-2xl border p-6">
                         {visiblePreview ? (
                             <SchoolFormPreview
                                 data={visiblePreview.data}
                                 mode={visiblePreview.mode}
                                 isSubmitting={isSubmitting}
                                 onBack={() => setPreview(null)}
-                                onSubmit={submitForm}
+                                onSubmit={handleFormSubmit}
                             />
                         ) : (
                             <>
@@ -134,17 +150,17 @@ export default function SchoolConsolePage() {
                                     </div>
                                 )}
 
-                                {/* 2. ABA PRÉVIA DO PORTAL (Visualização como ficará no site público) */}
-                                {activeSection === "previa_site" && (
-                                    <div className="animate-fade-in w-full">
-                                        <ClubSitePreview data={form.getValues()} />
-                                    </div>
-                                )}
-
-                                {/* 3. ABA HISTÓRICO (Linha do Tempo de Atividades da Escola) */}
+                                {/* 2. ABA HISTÓRICO (Linha do Tempo de Atividades da Escola) */}
                                 {activeSection === "historico" && (
                                     <div className="animate-fade-in w-full">
                                         <SchoolHistorySection />
+                                    </div>
+                                )}
+
+                                {/* 3. ABA PRÉVIA DO PORTAL (Visualização como ficará no site público) */}
+                                {activeSection === "previa_site" && (
+                                    <div className="animate-fade-in w-full">
+                                        <ClubSitePreview data={form.getValues()} />
                                     </div>
                                 )}
 
@@ -154,6 +170,9 @@ export default function SchoolConsolePage() {
                                         <SchoolFormOverviewSection
                                             form={form}
                                             submission={submission}
+                                            onOpenReview={
+                                                isReadOnly ? undefined : openReview
+                                            }
                                         />
                                     </div>
                                 )}
@@ -180,6 +199,9 @@ export default function SchoolConsolePage() {
                                                 form={form}
                                                 readOnly={isReadOnly}
                                                 activeTab={activeSection as TabType}
+                                                ensureDraftSaved={() =>
+                                                    saveDraft({ quietSuccess: true })
+                                                }
                                             />
                                         </div>
                                     )}
@@ -188,38 +210,43 @@ export default function SchoolConsolePage() {
                                 {activeSection !== "geral" &&
                                     activeSection !== "historico" &&
                                     activeSection !== "previa_site" &&
-                                    !isReadOnly && (
-                                        <div className="bg-background mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border p-4 shadow-sm">
+                                    (!isReadOnly ||
+                                        submission?.status === "APROVADO") && (
+                                        <div className="mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 shadow-sm">
                                             <div className="flex flex-wrap items-center gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={saveDraft}
-                                                    disabled={isSaving || isSubmitting}
-                                                    className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-gray-800 disabled:opacity-50">
-                                                    {isSaving ? (
-                                                        <Loader2
-                                                            size={16}
-                                                            className="animate-spin"
-                                                        />
-                                                    ) : (
-                                                        <Save size={16} />
-                                                    )}
-                                                    Salvar Rascunho
-                                                </button>
+                                                {!isReadOnly && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => void saveDraft()}
+                                                        disabled={isSaving || isSubmitting}
+                                                        className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-gray-800 disabled:opacity-50">
+                                                        {isSaving ? (
+                                                            <Loader2
+                                                                size={16}
+                                                                className="animate-spin"
+                                                            />
+                                                        ) : (
+                                                            <Save size={16} />
+                                                        )}
+                                                        Salvar Rascunho
+                                                    </button>
+                                                )}
 
-                                                <Button
-                                                    type="button"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        setIsDiscardDialogOpen(true)
-                                                    }
-                                                    disabled={isSaving || isSubmitting}>
-                                                    {" "}
-                                                    <RotateCcw size={16} />
-                                                    Descartar Alterações
-                                                </Button>
+                                                {!isReadOnly && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            setIsDiscardDialogOpen(true)
+                                                        }
+                                                        disabled={isSaving || isSubmitting}
+                                                        className="text-font-primary inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-xs font-semibold transition-all hover:bg-muted disabled:opacity-50">
+                                                        <RotateCcw size={16} />
+                                                        Descartar Alterações
+                                                    </button>
+                                                )}
 
-                                                {submission?.status === "REJEITADO" && (
+                                                {(submission?.status === "REJEITADO" ||
+                                                    submission?.status === "APROVADO") && (
                                                     <button
                                                         type="button"
                                                         onClick={reopenDraft}
@@ -230,7 +257,7 @@ export default function SchoolConsolePage() {
                                                 )}
                                             </div>
 
-                                            {submission?.status === "RASCUNHO" ? (
+                                            {!isReadOnly && (submission?.status === "RASCUNHO" ? (
                                                 <button
                                                     type="button"
                                                     onClick={openReview}
@@ -242,7 +269,7 @@ export default function SchoolConsolePage() {
                                             ) : (
                                                 <button
                                                     type="button"
-                                                    onClick={submitForm}
+                                                    onClick={handleFormSubmit}
                                                     disabled={isSaving || isSubmitting}
                                                     className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
                                                     {isSubmitting ? (
@@ -255,7 +282,7 @@ export default function SchoolConsolePage() {
                                                     )}
                                                     Enviar para Aprovação
                                                 </button>
-                                            )}
+                                            ))}
                                         </div>
                                     )}
                             </>
@@ -292,6 +319,34 @@ export default function SchoolConsolePage() {
                                 await refreshFromDatabase();
                             }}>
                             Sim, descartar
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Modal de Sucesso após Envio do Formulário */}
+            <Dialog open={isSuccessDialogOpen} onOpenChange={setIsSuccessDialogOpen}>
+                <DialogContent className="sm:max-w-lg">
+                    <div className="flex flex-col items-center gap-4 py-4 text-center">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-teal-100 text-[#088077]">
+                            <CheckCircle2 size={36} />
+                        </div>
+                        <DialogHeader className="text-center sm:text-center">
+                            <DialogTitle className="text-font-primary text-xl font-bold uppercase tracking-tight">
+                                Formulário Enviado com Sucesso!
+                            </DialogTitle>
+                            <DialogDescription className="text-font-primary mt-3 text-sm font-semibold leading-relaxed">
+                                VOCÊ ACABA DE ENVIAR/ATUALIZAR AS INFORMAÇÕES DO SEU(S)
+                                CLUBE(S) DE CIÊNCIAS PARA O PORTAL DA REDE ICTITE.
+                            </DialogDescription>
+                        </DialogHeader>
+                    </div>
+                    <DialogFooter className="sm:justify-center">
+                        <Button
+                            type="button"
+                            className="bg-[#088077] px-8 text-white hover:bg-[#088077]/90"
+                            onClick={() => setIsSuccessDialogOpen(false)}>
+                            Entendido
                         </Button>
                     </DialogFooter>
                 </DialogContent>

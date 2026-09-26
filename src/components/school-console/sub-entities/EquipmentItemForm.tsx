@@ -31,6 +31,7 @@ interface EquipmentItemFormProps {
     index: number;
     fieldId: string;
     form: UseFormReturn<SchoolFormDataInput>;
+    ensureDraftSaved: () => Promise<boolean>;
     readOnly?: boolean;
     isExpanded: boolean;
     onToggleExpand: () => void;
@@ -40,6 +41,7 @@ interface EquipmentItemFormProps {
 export function EquipmentItemForm({
     index,
     form,
+    ensureDraftSaved,
     readOnly = false,
     isExpanded,
     onToggleExpand,
@@ -213,6 +215,7 @@ export function EquipmentItemForm({
                         <FormEntityImageDropzone
                             entityType="equipment"
                             entityId={equipment.id}
+                            ensureDraftSaved={ensureDraftSaved}
                             readOnly={readOnly}
                         />
                     )}
