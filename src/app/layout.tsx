@@ -15,9 +15,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Ictite",
+    title: "ICTITE - Plataforma Ciência Mais Bahia",
     description: "Plataforma do projeto da Ciência Mais Bahia - Rede ICTITE",
-    icons: "/logo_icon.png",
+    icons: {
+        icon: [
+            { url: "/logo_icon.png" },
+            { url: "/favicon.ico" },
+        ],
+        shortcut: "/logo_icon.png",
+        apple: "/logo_icon.png",
+    },
 };
 
 export default function RootLayout({

@@ -25,12 +25,14 @@ interface SchoolSubEntitiesTabsProps {
     form: UseFormReturn<SchoolFormDataInput>;
     readOnly?: boolean;
     activeTab: TabType;
+    ensureDraftSaved: () => Promise<boolean>;
 }
 
 export function SchoolSubEntitiesTabs({
     form,
     readOnly = false,
     activeTab,
+    ensureDraftSaved,
 }: SchoolSubEntitiesTabsProps) {
     const { control, watch } = form;
     const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
@@ -246,6 +248,7 @@ export function SchoolSubEntitiesTabs({
                                 index={index}
                                 fieldId={field.fieldId}
                                 form={form}
+                                ensureDraftSaved={ensureDraftSaved}
                                 readOnly={readOnly}
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}
@@ -269,6 +272,7 @@ export function SchoolSubEntitiesTabs({
                                 fieldId={field.fieldId}
                                 form={form}
                                 clubs={currentClubs}
+                                ensureDraftSaved={ensureDraftSaved}
                                 readOnly={readOnly}
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}
@@ -316,6 +320,7 @@ export function SchoolSubEntitiesTabs({
                                 index={index}
                                 fieldId={field.fieldId}
                                 form={form}
+                                ensureDraftSaved={ensureDraftSaved}
                                 readOnly={readOnly}
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}

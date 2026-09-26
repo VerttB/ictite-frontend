@@ -30,6 +30,7 @@ interface ProjectItemFormProps {
     index: number;
     fieldId: string;
     form: UseFormReturn<SchoolFormDataInput>;
+    ensureDraftSaved: () => Promise<boolean>;
     clubs: ClubDraftData[];
     readOnly?: boolean;
     isExpanded: boolean;
@@ -40,6 +41,7 @@ interface ProjectItemFormProps {
 export function ProjectItemForm({
     index,
     form,
+    ensureDraftSaved,
     clubs,
     readOnly = false,
     isExpanded,
@@ -227,6 +229,7 @@ export function ProjectItemForm({
                         <FormEntityImageDropzone
                             entityType="project"
                             entityId={project.id}
+                            ensureDraftSaved={ensureDraftSaved}
                             readOnly={readOnly}
                         />
                     )}

@@ -6,7 +6,9 @@ import {
     CheckCircle2,
     AlertTriangle,
     Clock,
+    ClipboardCheck,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
     SchoolFormSubmission,
     SchoolFormDataInput,
@@ -15,11 +17,13 @@ import {
 interface SchoolFormOverviewSectionProps {
     form: UseFormReturn<SchoolFormDataInput>;
     submission: SchoolFormSubmission | null;
+    onOpenReview?: () => void;
 }
 
 export function SchoolFormOverviewSection({
     form,
     submission,
+    onOpenReview,
 }: SchoolFormOverviewSectionProps) {
     const values = form.watch();
     const schoolName = values.school?.name || "Escola não nomeada";
@@ -107,6 +111,12 @@ export function SchoolFormOverviewSection({
                             />
                         </div>
                     </div>
+                    {onOpenReview && (
+                        <Button type="button" onClick={onOpenReview}>
+                            <ClipboardCheck size={16} />
+                            Revisar e enviar
+                        </Button>
+                    )}
                 </div>
             </div>
 

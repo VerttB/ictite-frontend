@@ -32,8 +32,18 @@ export function SchoolGeneralInfoSection({
     const schoolName = values.school?.name || "Escola não nomeada";
     const city = values.school?.city || "Bahia";
     const cep = values.school?.cep || "Não informado";
-    const instagramUrl = values.school?.instagram_url;
+    const rawInstagram = values.school?.instagram_url;
     const description = values.school?.description;
+
+    const formattedInstagramUrl = (() => {
+        const value = rawInstagram?.trim();
+        if (!value) return null;
+        if (/^https?:\/\//i.test(value)) return value;
+        const handle = value
+            .replace(/^(www\.)?instagram\.com\//i, "")
+            .replace(/^@/, "");
+        return `https://www.instagram.com/${handle}`;
+    })();
 
     const clubsCount = values.clubs?.length || 0;
     const projectsCount = values.projects?.length || 0;
@@ -83,9 +93,9 @@ export function SchoolGeneralInfoSection({
                                 <Building2 size={14} className="text-[#088077]" /> CEP:{" "}
                                 {cep}
                             </span>
-                            {instagramUrl && (
+                            {formattedInstagramUrl && (
                                 <a
-                                    href={instagramUrl}
+                                    href={formattedInstagramUrl}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="flex items-center gap-1 font-semibold text-[#088077] hover:underline">
@@ -102,56 +112,56 @@ export function SchoolGeneralInfoSection({
 
                 {/* Descrição da Instituição */}
                 {description && (
-                    <div className="text-font-primary flex items-start gap-3 rounded-2xl border border-border bg-background p-4 text-xs">
-                        <FileText size={18} className="mt-0.5 shrink-0 text-[#088077]" />
+                    <div className="text-font-primary flex items-start gap-3 rounded-2xl border border-border bg-background p-4 text-sm">
+                        <FileText size={20} className="mt-0.5 shrink-0 text-[#088077]" />
                         <p className="leading-relaxed">{description}</p>
                     </div>
                 )}
 
-                {/* Estatísticas Gerais da Instituição */}
+                {/* Estatísticas Gerais da Instituição com Tipografia Aprimorada */}
                 <div className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-4">
-                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-4">
+                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-5 shadow-xs">
                         <div className="flex items-center justify-between text-teal-600">
-                            <Handshake size={20} />
-                            <span className="text-xs font-semibold">Clubes</span>
+                            <Handshake size={24} />
+                            <span className="text-sm font-bold">Clubes</span>
                         </div>
-                        <span className="text-font-primary mt-2 text-2xl font-black">
+                        <span className="text-font-primary mt-2 text-3xl font-black">
                             {clubsCount}
                         </span>
-                        <span className="text-font-secondary text-[11px]">Cadastrados</span>
+                        <span className="text-font-secondary text-xs font-medium">Cadastrados</span>
                     </div>
 
-                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-4">
+                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-5 shadow-xs">
                         <div className="flex items-center justify-between text-blue-600">
-                            <SquareChartGantt size={20} />
-                            <span className="text-xs font-semibold">Projetos</span>
+                            <SquareChartGantt size={24} />
+                            <span className="text-sm font-bold">Projetos</span>
                         </div>
-                        <span className="text-font-primary mt-2 text-2xl font-black">
+                        <span className="text-font-primary mt-2 text-3xl font-black">
                             {projectsCount}
                         </span>
-                        <span className="text-font-secondary text-[11px]">Ativos</span>
+                        <span className="text-font-secondary text-xs font-medium">Ativos</span>
                     </div>
 
-                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-4">
+                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-5 shadow-xs">
                         <div className="flex items-center justify-between text-purple-600">
-                            <Book size={20} />
-                            <span className="text-xs font-semibold">Pesquisadores</span>
+                            <Book size={24} />
+                            <span className="text-sm font-bold">Pesquisadores</span>
                         </div>
-                        <span className="text-font-primary mt-2 text-2xl font-black">
+                        <span className="text-font-primary mt-2 text-3xl font-black">
                             {researchersCount}
                         </span>
-                        <span className="text-font-secondary text-[11px]">Integrantes</span>
+                        <span className="text-font-secondary text-xs font-medium">Integrantes</span>
                     </div>
 
-                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-4">
+                    <div className="flex flex-col gap-1 rounded-2xl border border-border bg-background p-5 shadow-xs">
                         <div className="flex items-center justify-between text-amber-600">
-                            <Printer size={20} />
-                            <span className="text-xs font-semibold">Equipamentos</span>
+                            <Printer size={24} />
+                            <span className="text-sm font-bold">Equipamentos</span>
                         </div>
-                        <span className="text-font-primary mt-2 text-2xl font-black">
+                        <span className="text-font-primary mt-2 text-3xl font-black">
                             {equipmentsCount}
                         </span>
-                        <span className="text-font-secondary text-[11px]">Unidades</span>
+                        <span className="text-font-secondary text-xs font-medium">Unidades</span>
                     </div>
                 </div>
             </div>

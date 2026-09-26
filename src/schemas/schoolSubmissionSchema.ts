@@ -32,6 +32,7 @@ export const ResearcherDraftDataSchema = z.object({
     gender: z.string().optional(),
     race: z.string().optional(),
     lattes_id: z.string().optional(),
+    image: z.string().optional(),
     project_ids: z.array(z.string().uuid()).default([]),
 });
 
