@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import useSWR from "swr";
 import Image from "next/image";
 import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react";
@@ -14,6 +14,11 @@ interface FormEntityImageDropzoneProps {
     readOnly?: boolean;
     label?: string;
     ensureDraftSaved?: () => Promise<boolean>;
+    draftData?: {
+        clubs?: Array<{ id: string }>;
+        projects?: Array<{ id: string }>;
+        equipments?: Array<{ id: string }>;
+    };
 }
 
 export function FormEntityImageDropzone({
@@ -22,10 +27,27 @@ export function FormEntityImageDropzone({
     readOnly = false,
     label,
     ensureDraftSaved,
+    draftData,
 }: FormEntityImageDropzoneProps) {
     const [isUploading, setIsUploading] = useState(false);
 
-    const swrKey = entityId ? `/submissions/current/images/${entityType}/${entityId}` : null;
+    // Verificar se a entidade existe no draft salvo no backend
+    const entityExistsInDraft = useMemo(() => {
+        if (!draftData) return false;
+        switch (entityType) {
+            case "clube_ciencias":
+                return draftData.clubs?.some(c => c.id === entityId) ?? false;
+            case "project":
+                return draftData.projects?.some(p => p.id === entityId) ?? false;
+            case "equipment":
+                return draftData.equipments?.some(e => e.id === entityId) ?? false;
+            default:
+                return false;
+        }
+    }, [draftData, entityType, entityId]);
+
+    // Só buscar imagens se a entidade existe no draft
+    const swrKey = entityExistsInDraft ? `/submissions/current/images/${entityType}/${entityId}` : null;
 
     const { data, mutate, isLoading } = useSWR(swrKey, () => schoolSubmissionService.getFormEntityImages(entityType, entityId));
 

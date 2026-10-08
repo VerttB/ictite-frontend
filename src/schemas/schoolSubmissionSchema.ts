@@ -22,8 +22,15 @@ export const ProjectDraftDataSchema = z.object({
     description: z.string().optional(),
     long_description: z.string().optional(),
     clube_ciencia_id: z.string().uuid("Selecione um clube válido"),
-    year: z.number().int().optional(),
-});
+    start_year: z.number().int().optional(),
+    end_year: z.number().int().optional(),
+}).refine(
+    (data) => data.start_year === undefined || data.end_year === undefined || data.end_year >= data.start_year,
+    {
+        message: "O ano de previsão de conclusão deve ser maior ou igual ao ano de início.",
+        path: ["end_year"],
+    }
+);
 
 export const ResearcherDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
@@ -33,7 +40,7 @@ export const ResearcherDraftDataSchema = z.object({
     race: z.string().optional(),
     lattes_id: z.string().optional(),
     image: z.string().optional(),
-    project_ids: z.array(z.string().uuid()).default([]),
+    project_ids: z.array(z.string().uuid()).min(1, "O pesquisador deve estar vinculado a pelo menos um projeto"),
 });
 
 export const EquipmentDraftDataSchema = z.object({

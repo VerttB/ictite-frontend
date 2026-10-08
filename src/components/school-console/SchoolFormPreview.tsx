@@ -309,7 +309,8 @@ export function SchoolFormPreview({
                                         label={`Projeto ${index + 1}`}
                                         value={project.name}
                                     />
-                                    <PreviewField label="Ano" value={project.year} />
+                                    <PreviewField label="Ano de Início" value={project.start_year} />
+                                    <PreviewField label="Ano de Previsão de Conclusão" value={project.end_year} />
                                     <PreviewField
                                         label="Clube vinculado"
                                         value={

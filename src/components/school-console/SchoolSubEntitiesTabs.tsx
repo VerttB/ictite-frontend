@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import useSWR from "swr";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import {
     Handshake,
@@ -18,6 +19,8 @@ import { ClubItemForm } from "./sub-entities/ClubItemForm";
 import { ProjectItemForm } from "./sub-entities/ProjectItemForm";
 import { ResearcherItemForm } from "./sub-entities/ResearcherItemForm";
 import { EquipmentItemForm } from "./sub-entities/EquipmentItemForm";
+import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
+import { EquipmentType } from "@/core/domain/EquipmentType";
 
 export type TabType = "clubs" | "projects" | "researchers" | "equipments";
 
@@ -26,6 +29,7 @@ interface SchoolSubEntitiesTabsProps {
     readOnly?: boolean;
     activeTab: TabType;
     ensureDraftSaved: () => Promise<boolean>;
+    draftData?: SchoolFormDataInput;
 }
 
 export function SchoolSubEntitiesTabs({
@@ -33,9 +37,27 @@ export function SchoolSubEntitiesTabs({
     readOnly = false,
     activeTab,
     ensureDraftSaved,
+    draftData,
 }: SchoolSubEntitiesTabsProps) {
     const { control, watch } = form;
     const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+    // Fetch equipment types once at the parent level to avoid duplicate fetches/rendering
+    const { data: equipmentTypes = [] } = useSWR<EquipmentType[]>(
+        "/equipment-types/",
+        getEquipamentTypes
+    );
+
+    // Deduplicate by name (in case backend has duplicates)
+    const uniqueEquipmentTypes = useMemo(() => {
+        const seen = new Set<string>();
+        return equipmentTypes.filter((type) => {
+            const normalizedName = type.name.trim().toLowerCase();
+            if (seen.has(normalizedName)) return false;
+            seen.add(normalizedName);
+            return true;
+        });
+    }, [equipmentTypes]);
 
     const toggleExpand = (id: string) => {
         setExpandedItems((prev) => ({
@@ -128,8 +150,10 @@ export function SchoolSubEntitiesTabs({
             id,
             name: "",
             description: "",
+            long_description: "",
             clube_ciencia_id: currentClubs[0]?.id || "",
-            year: new Date().getFullYear(),
+            start_year: new Date().getFullYear(),
+            end_year: new Date().getFullYear(),
         });
         setExpandedItems((prev) => ({ ...prev, [id]: true }));
     };
@@ -253,6 +277,7 @@ export function SchoolSubEntitiesTabs({
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeClub(index)}
+                                draftData={draftData}
                             />
                         ))
                     ))}
@@ -277,6 +302,7 @@ export function SchoolSubEntitiesTabs({
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeProject(index)}
+                                draftData={draftData}
                             />
                         ))
                     ))}
@@ -325,6 +351,8 @@ export function SchoolSubEntitiesTabs({
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeEquipment(index)}
+                                draftData={draftData}
+                                equipmentTypes={uniqueEquipmentTypes}
                             />
                         ))
                     ))}
