@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
 import {
     FileText,
@@ -7,6 +8,9 @@ import {
     AlertTriangle,
     Clock,
     ClipboardCheck,
+    Calendar,
+    AlertCircle,
+    Hourglass,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +22,95 @@ interface SchoolFormOverviewSectionProps {
     form: UseFormReturn<SchoolFormDataInput>;
     submission: SchoolFormSubmission | null;
     onOpenReview?: () => void;
+}
+
+function formatDateTime(dateString: string | null | undefined): string {
+    if (!dateString) return "";
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    } catch {
+        return dateString;
+    }
+}
+
+function getDaysRemaining(deadlineString: string | null | undefined): number | null {
+    if (!deadlineString) return null;
+    try {
+        const deadline = new Date(deadlineString);
+        const now = new Date();
+        const diffTime = deadline.getTime() - now.getTime();
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    } catch {
+        return null;
+    }
+}
+
+function getExtensionStatusText(
+    extensionStatus: string | null | undefined,
+    daysRemaining: number | null,
+    customDeadline: string | null | undefined
+): { label: string; variant: "default" | "warning" | "destructive" | "success"; icon: React.ReactNode } {
+    if (extensionStatus === "Pendente") {
+        return {
+            label: "Prorrogação solicitada",
+            variant: "warning",
+            icon: <Hourglass size={14} />,
+        };
+    }
+    if (extensionStatus === "Aprovado") {
+        return {
+            label: "Prorrogação aprovada",
+            variant: "success",
+            icon: <CheckCircle2 size={14} />,
+        };
+    }
+    if (extensionStatus === "Rejeitado") {
+        return {
+            label: "Prorrogação rejeitada",
+            variant: "destructive",
+            icon: <AlertCircle size={14} />,
+        };
+    }
+    if (daysRemaining !== null) {
+        if (daysRemaining < 0) {
+            return {
+                label: `Prazo encerrado há ${Math.abs(daysRemaining)} dia(s)`,
+                variant: "destructive",
+                icon: <AlertTriangle size={14} />,
+            };
+        }
+        if (daysRemaining <= 3) {
+            return {
+                label: `Restam ${daysRemaining} dia(s)`,
+                variant: "warning",
+                icon: <AlertTriangle size={14} />,
+            };
+        }
+        return {
+            label: `Restam ${daysRemaining} dia(s)`,
+            variant: "default",
+            icon: <Calendar size={14} />,
+        };
+    }
+    if (customDeadline) {
+        return {
+            label: "Prazo personalizado definido",
+            variant: "default",
+            icon: <Calendar size={14} />,
+        };
+    }
+    return {
+        label: "Sem prazo definido",
+        variant: "default",
+        icon: <Calendar size={14} />,
+    };
 }
 
 export function SchoolFormOverviewSection({
@@ -32,6 +125,21 @@ export function SchoolFormOverviewSection({
     const projects = values.projects || [];
     const researchers = values.researchers || [];
     const equipments = values.equipments || [];
+
+    // Deadline information
+    const customDeadline = submission?.custom_deadline ?? null;
+    const extensionStatus = submission?.extension_status ?? null;
+    const requestedDeadline = submission?.requested_deadline ?? null;
+    const extensionRequestedAt = submission?.extension_requested_at ?? null;
+
+    const effectiveDeadline = useMemo(() => {
+        if (extensionStatus === "Aprovado" && requestedDeadline) return requestedDeadline;
+        if (customDeadline) return customDeadline;
+        return null;
+    }, [customDeadline, extensionStatus, requestedDeadline]);
+
+    const daysRemaining = useMemo(() => getDaysRemaining(effectiveDeadline), [effectiveDeadline]);
+    const extensionInfo = useMemo(() => getExtensionStatusText(extensionStatus, daysRemaining, customDeadline), [extensionStatus, daysRemaining, customDeadline]);
 
     // --- Strict Section Validation ---
 
@@ -78,6 +186,66 @@ export function SchoolFormOverviewSection({
 
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
+            {/* Prazo de Preenchimento - Destaque no Topo */}
+            <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
+                <div className="bg-[#088077]/5 border-b border-border p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="rounded-xl bg-[#088077]/10 p-3 text-[#088077]">
+                                <Calendar size={24} />
+                            </div>
+                            <div>
+                                <h3 className="text-font-primary text-lg font-bold">Prazo de Preenchimento</h3>
+                                <p className="text-font-secondary text-xs">Data limite para envio do formulário da escola</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col sm:items-end gap-2">
+                            {effectiveDeadline ? (
+                                <>
+                                    <div className="flex items-center gap-2 text-right">
+                                        <span className="text-font-primary text-sm font-semibold">
+                                            {formatDateTime(effectiveDeadline)}
+                                        </span>
+                                        {extensionStatus === "Aprovado" && requestedDeadline && (
+                                            <span className="bg-emerald-100 text-emerald-800 rounded-full px-2 py-0.5 text-[10px] font-bold">
+                                                Prorrogado
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className={`flex items-center gap-1.5 font-semibold text-sm ${
+                                        extensionInfo.variant === "destructive" ? "text-red-600" :
+                                        extensionInfo.variant === "warning" ? "text-amber-600" :
+                                        extensionInfo.variant === "success" ? "text-emerald-600" :
+                                        "text-[#088077]"
+                                    }`}>
+                                        {extensionInfo.icon}
+                                        {extensionInfo.label}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="flex flex-col sm:items-end gap-2">
+                                    <span className="text-font-secondary text-sm">Não definido</span>
+                                    <span className="flex items-center gap-1.5 font-semibold text-sm text-amber-600">
+                                        <AlertCircle size={14} />
+                                        {extensionInfo.label}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                {(extensionStatus === "Pendente" || extensionRequestedAt) && requestedDeadline && (
+                    <div className="bg-amber-50 border-t border-amber-200 p-4">
+                        <div className="flex items-center gap-2 text-amber-800">
+                            <Hourglass size={16} />
+                            <span className="text-sm font-medium">
+                                Prorrogação solicitada em {formatDateTime(extensionRequestedAt)} para {formatDateTime(requestedDeadline)} — aguardando análise.
+                            </span>
+                        </div>
+                    </div>
+                )}
+            </div>
+
             {/* Header da Visão Geral do Formulário */}
             <div className="bg-card flex items-center justify-between rounded-3xl border border-border p-6 shadow-sm">
                 <div className="flex items-center gap-3">

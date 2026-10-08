@@ -202,6 +202,7 @@ export default function SchoolConsolePage() {
                                                 ensureDraftSaved={() =>
                                                     saveDraft({ quietSuccess: true })
                                                 }
+                                                draftData={submission?.data}
                                             />
                                         </div>
                                     )}
