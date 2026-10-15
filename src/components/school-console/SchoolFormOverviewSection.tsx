@@ -11,6 +11,7 @@ import {
     Calendar,
     AlertCircle,
     Hourglass,
+    XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -234,12 +235,30 @@ export function SchoolFormOverviewSection({
                         </div>
                     </div>
                 </div>
-                {(extensionStatus === "Pendente" || extensionRequestedAt) && requestedDeadline && (
-                    <div className="bg-amber-50 border-t border-amber-200 p-4">
-                        <div className="flex items-center gap-2 text-amber-800">
-                            <Hourglass size={16} />
+                {extensionStatus && requestedDeadline && (
+                    <div
+                        className={`border-t p-4 ${
+                            extensionStatus === "Pendente"
+                                ? "border-amber-200 bg-amber-50 text-amber-800"
+                                : extensionStatus === "Aprovado"
+                                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                                  : "border-red-200 bg-red-50 text-red-800"
+                        }`}>
+                        <div className="flex items-center gap-2">
+                            {extensionStatus === "Pendente" ? (
+                                <Hourglass size={16} />
+                            ) : extensionStatus === "Aprovado" ? (
+                                <CheckCircle2 size={16} />
+                            ) : (
+                                <XCircle size={16} />
+                            )}
                             <span className="text-sm font-medium">
-                                Prorrogação solicitada em {formatDateTime(extensionRequestedAt)} para {formatDateTime(requestedDeadline)} — aguardando análise.
+                                {extensionStatus === "Pendente" &&
+                                    `Prorrogação solicitada em ${formatDateTime(extensionRequestedAt)} para ${formatDateTime(requestedDeadline)} — aguardando análise.`}
+                                {extensionStatus === "Aprovado" &&
+                                    `Prorrogação aprovada. Novo prazo: ${formatDateTime(customDeadline ?? requestedDeadline)}.`}
+                                {extensionStatus === "Rejeitado" &&
+                                    `Solicitação de prorrogação enviada em ${formatDateTime(extensionRequestedAt)} — rejeitada.`}
                             </span>
                         </div>
                     </div>
