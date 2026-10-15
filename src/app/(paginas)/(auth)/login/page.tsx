@@ -9,6 +9,7 @@ import { userLoginSchema } from "@/schemas/LoginSchema";
 import { useUserContext } from "@/providers/UserContext";
 import { ChevronLeft, CircleUserRound, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function Login() {
     const router = useRouter();
@@ -31,6 +32,7 @@ export default function Login() {
         clearErrors("root");
         const success = await loginUser(data);
         if (!success) {
+            toast.error("Falha no login. Verifique suas credenciais.");
             setError("root", {
                 type: "manual",
                 message: "Falha no login. Verifique suas credenciais.",
