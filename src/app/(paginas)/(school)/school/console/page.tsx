@@ -49,6 +49,7 @@ type PreviewState = {
 export default function SchoolConsolePage() {
     const {
         submission,
+        globalDeadline,
         isLoading,
         isSaving,
         isSubmitting,
@@ -125,6 +126,7 @@ export default function SchoolConsolePage() {
                     {/* Header do Formulário com Status e Solicitação de Prorrogação */}
                     <SchoolConsoleHeader
                         submission={submission}
+                        globalDeadline={globalDeadline}
                         onRequestExtension={requestDeadlineExtension}
                     />
 
@@ -170,6 +172,7 @@ export default function SchoolConsolePage() {
                                         <SchoolFormOverviewSection
                                             form={form}
                                             submission={submission}
+                                            globalDeadline={globalDeadline}
                                             onOpenReview={
                                                 isReadOnly ? undefined : openReview
                                             }

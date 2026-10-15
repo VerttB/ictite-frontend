@@ -34,9 +34,11 @@ export function RequestExtensionModal({
 
     const handleFormSubmit = async (data: RequestDeadlineExtension) => {
         const isoDate = new Date(data.requested_deadline).toISOString();
-        await onSubmit({ ...data, requested_deadline: isoDate });
-        reset();
-        onClose();
+        const submitted = await onSubmit({ ...data, requested_deadline: isoDate });
+        if (submitted) {
+            reset();
+            onClose();
+        }
     };
 
     return (
