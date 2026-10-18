@@ -23,6 +23,7 @@ import { Spinner } from "@/components/LoadingSpin";
 import { useSidebar } from "@/components/ui/sidebar";
 import styles from "./MapaEscolasLeaflet.module.css";
 import { getAssetPrefix } from "@/core/utils/api";
+import "leaflet/dist/leaflet.css";
 
 type SchoolProperties = SchoolGeoJson["features"][number]["properties"];
 type SchoolFeature = Feature<Point, SchoolProperties>;
