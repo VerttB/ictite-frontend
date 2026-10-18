@@ -3,11 +3,11 @@ import CardPesquisador from "./PesquisadorCard";
 import useSWR from "swr";
 import { getProjectResearchers } from "@/core/service/ProjetoService";
 import { Spinner } from "../LoadingSpin";
-import { BookA, BookOpen, BookOpenText, HeartHandshake } from "lucide-react";
+import { BookA, BookOpen, BookOpenText, HeartHandshake, RotateCcw } from "lucide-react";
 import { ResearcherByType } from "@/core/domain/Researcher";
 import CardNaoEncontrado from "../card/CardNaoEncontrado";
 export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
-    const { data: pesquisador, isLoading } = useSWR<ResearcherByType>(
+    const { data: pesquisador, error, isLoading, mutate } = useSWR<ResearcherByType>(
         `project-${projectId}`,
         () => getProjectResearchers(projectId)
     );
@@ -15,6 +15,17 @@ export const PesquisadoresLista = ({ projectId }: { projectId: string }) => {
         <>
             {isLoading ? (
                 <Spinner />
+            ) : error ? (
+                <div role="alert" className="flex flex-col items-start gap-3 text-font-secondary">
+                    <p>Não foi possível carregar os pesquisadores deste projeto.</p>
+                    <button
+                        type="button"
+                        className="flex items-center gap-2 rounded border px-3 py-2 text-font-primary"
+                        onClick={() => void mutate()}>
+                        <RotateCcw size={16} />
+                        Tentar novamente
+                    </button>
+                </div>
             ) : (
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2">

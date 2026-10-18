@@ -71,7 +71,7 @@ export default function ConsoleV2() {
                             </li>
                             <li>
                                 Precione o botão de <strong>Adicionar</strong>, sendo
-                                exemplificado com o sinal de '+'.
+                                exemplificado com o sinal de &apos;+&apos;.
                             </li>
                             <li>
                                 Preencha os campos obrigatórios e clique em{" "}

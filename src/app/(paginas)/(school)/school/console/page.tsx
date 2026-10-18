@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Save,
     Send,
@@ -65,9 +65,25 @@ export default function SchoolConsolePage() {
     const [preview, setPreview] = useState<PreviewState | null>(null);
     const [isDiscardDialogOpen, setIsDiscardDialogOpen] = useState<boolean>(false);
     const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState<boolean>(false);
+    const [currentTime, setCurrentTime] = useState(0);
+
+    useEffect(() => {
+        const updateTime = () => setCurrentTime(Date.now());
+        const initialTimer = window.setTimeout(updateTime, 0);
+        const interval = window.setInterval(updateTime, 60_000);
+        return () => {
+            window.clearTimeout(initialTimer);
+            window.clearInterval(interval);
+        };
+    }, []);
+
+    const effectiveDeadline = submission?.custom_deadline ?? globalDeadline;
+    const deadlineExpired = Boolean(
+        effectiveDeadline && currentTime >= new Date(effectiveDeadline).getTime()
+    );
 
     const isReadOnly =
-        submission?.status === "PENDENTE" || submission?.status === "APROVADO";
+        submission?.status === "PENDENTE" || submission?.status === "APROVADO" || deadlineExpired;
 
     const openReview = () => {
         setPreview({ mode: "review", data: structuredClone(form.getValues()) });
@@ -126,7 +142,7 @@ export default function SchoolConsolePage() {
                     {/* Header do Formulário com Status e Solicitação de Prorrogação */}
                     <SchoolConsoleHeader
                         submission={submission}
-                        globalDeadline={globalDeadline}
+                        deadlineExpired={deadlineExpired}
                         onRequestExtension={requestDeadlineExtension}
                     />
 
@@ -137,6 +153,7 @@ export default function SchoolConsolePage() {
                                 data={visiblePreview.data}
                                 mode={visiblePreview.mode}
                                 isSubmitting={isSubmitting}
+                                deadlineExpired={deadlineExpired}
                                 onBack={() => setPreview(null)}
                                 onSubmit={handleFormSubmit}
                             />
@@ -174,7 +191,7 @@ export default function SchoolConsolePage() {
                                             submission={submission}
                                             globalDeadline={globalDeadline}
                                             onOpenReview={
-                                                isReadOnly ? undefined : openReview
+                                                isReadOnly || deadlineExpired ? undefined : openReview
                                             }
                                         />
                                     </div>
@@ -222,7 +239,7 @@ export default function SchoolConsolePage() {
                                                     <button
                                                         type="button"
                                                         onClick={() => void saveDraft()}
-                                                        disabled={isSaving || isSubmitting}
+                                                        disabled={isSaving || isSubmitting || deadlineExpired}
                                                         className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-gray-800 disabled:opacity-50">
                                                         {isSaving ? (
                                                             <Loader2
@@ -254,6 +271,7 @@ export default function SchoolConsolePage() {
                                                     <button
                                                         type="button"
                                                         onClick={reopenDraft}
+                                                        disabled={deadlineExpired}
                                                         className="inline-flex items-center gap-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-semibold text-amber-800 transition-all hover:bg-amber-100">
                                                         <RotateCcw size={16} />
                                                         Reabrir Formulário
@@ -265,7 +283,7 @@ export default function SchoolConsolePage() {
                                                 <button
                                                     type="button"
                                                     onClick={openReview}
-                                                    disabled={isSaving || isSubmitting}
+                                                    disabled={isSaving || isSubmitting || deadlineExpired}
                                                     className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
                                                     <ClipboardCheck size={16} />
                                                     Revisar e enviar
@@ -274,7 +292,7 @@ export default function SchoolConsolePage() {
                                                 <button
                                                     type="button"
                                                     onClick={handleFormSubmit}
-                                                    disabled={isSaving || isSubmitting}
+                                                    disabled={isSaving || isSubmitting || deadlineExpired}
                                                     className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
                                                     {isSubmitting ? (
                                                         <Loader2

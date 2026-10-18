@@ -1,43 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Clock, Calendar, AlertTriangle, CheckCircle2, XCircle, FileText } from "lucide-react";
 import { SchoolFormSubmission, RequestDeadlineExtension } from "@/schemas/schoolSubmissionSchema";
 import { RequestExtensionModal } from "./modals/RequestExtensionModal";
 
 interface SchoolConsoleHeaderProps {
     submission: SchoolFormSubmission | null;
-    globalDeadline: string | null | undefined;
+    deadlineExpired: boolean;
     onRequestExtension: (payload: RequestDeadlineExtension) => Promise<boolean>;
 }
 
 export function SchoolConsoleHeader({
     submission,
-    globalDeadline,
+    deadlineExpired,
     onRequestExtension,
 }: SchoolConsoleHeaderProps) {
     const [isExtensionModalOpen, setIsExtensionModalOpen] = useState<boolean>(false);
-    const [currentTime, setCurrentTime] = useState(0);
-
-    useEffect(() => {
-        const updateTime = () => setCurrentTime(Date.now());
-        const initialTimer = window.setTimeout(updateTime, 0);
-        const interval = window.setInterval(updateTime, 60_000);
-        return () => {
-            window.clearTimeout(initialTimer);
-            window.clearInterval(interval);
-        };
-    }, []);
-
-    const effectiveDeadline = submission?.custom_deadline ?? globalDeadline;
     const hasExpiredWithoutRequest = Boolean(
         submission &&
         submission.status !== "PENDENTE" &&
         submission.status !== "APROVADO" &&
         !submission.extension_requested_at &&
         !submission.extension_status &&
-        effectiveDeadline &&
-        currentTime > new Date(effectiveDeadline).getTime()
+        deadlineExpired
     );
 
     const getStatusBadge = (status?: string) => {
@@ -45,7 +31,7 @@ export function SchoolConsoleHeader({
             case "RASCUNHO":
                 return (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-200">
-                        <FileText size={14} /> RASCUNHO (Edição aberta)
+                        <FileText size={14} /> RASCUNHO ({deadlineExpired ? "Prazo encerrado" : "Edição aberta"})
                     </span>
                 );
             case "PENDENTE":

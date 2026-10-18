@@ -37,6 +37,7 @@ function removeNulls<T>(obj: T): T {
     }
     if (obj !== null && typeof obj === "object") {
         const cleaned = Object.entries(obj).reduce<Record<string, unknown>>((acc, [key, value]) => {
+            if (key === "identity_territory_id" && value === "") return acc;
             acc[key] = value === null ? undefined : removeNulls(value);
             return acc;
         }, {});
@@ -159,6 +160,8 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                     toast.error(
                         error.message || "Conflito de concorrência ou prazo encerrado."
                     );
+                } else if (error.status === 422) {
+                    toast.error("Confira os dados do formulário antes de salvar o rascunho.");
                 } else {
                     toast.error(error.message || "Erro ao salvar rascunho.");
                 }
@@ -191,7 +194,14 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
             return true;
         } catch (error) {
             if (error instanceof ApiError) {
-                toast.error(error.message || "Erro ao enviar formulário para aprovação.");
+                toast.error(
+                    error.status === 422
+                        ? "Confira os dados do formulário antes de enviar para aprovação."
+                        : error.message || "Erro ao enviar formulário para aprovação."
+                );
+            } else if (error instanceof z.ZodError) {
+                await form.trigger();
+                toast.error(getDraftValidationMessage(error));
             } else {
                 toast.error("Erro de conexão ao enviar formulário.");
             }

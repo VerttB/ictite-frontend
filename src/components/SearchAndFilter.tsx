@@ -41,8 +41,7 @@ export const SearchAndFilter = <T,>({
     const handleMainSearch = useCallback(
         (value: string) => {
             const newParams = { ...currentParams };
-            if (value) newParams[mainSearchKey] = value;
-            else delete newParams[mainSearchKey];
+            newParams[mainSearchKey] = value || undefined;
             applyParams(newParams);
         },
         [currentParams, mainSearchKey, applyParams]
@@ -61,6 +60,7 @@ export const SearchAndFilter = <T,>({
     return (
         <div className="flex items-center gap-2 w-full justify-end">
             <SearchBar
+                key={currentParams[mainSearchKey]?.toString() || ""}
                 placeholder={mainSearchPlaceholder}
                 initialValue={currentParams[mainSearchKey]?.toString() || ""}
                 onSearch={handleMainSearch}

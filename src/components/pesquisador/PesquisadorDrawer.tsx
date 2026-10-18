@@ -70,9 +70,9 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
 
                         <div className="flex h-full w-full flex-col items-start justify-start gap-1 px-2">
                             <DrawerTitle className="text-font-primary text-2xl">
-                                {researcher?.simcc ? (
+                                {researcher?.simcc?.lattes_id?.trim() ? (
                                     <Link
-                                        href={` https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id}`}
+                                        href={`https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id.trim()}`}
                                         target="_blank"
                                         className="flex cursor-pointer"
                                         title="Ver no SIMCC">

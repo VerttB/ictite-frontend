@@ -32,18 +32,18 @@ export const PesquisadorGenericoCard = ({ searchResult, icon }: GenericListProps
                         {icon}
                         <span className="line-clamp-1 text-lg">{result.name}</span>
                     </div>
-                    <div>
-                        {/* 💡 Corrigido para lattes_id (com dois 't's) */}
+                    {result.lattes_id?.trim() && (
                         <Link
                             href={
-                                `https://simcc.uesc.br/researcher?lattes_id=${result.lattes_id}` as Route
+                                `https://simcc.uesc.br/researcher?lattes_id=${result.lattes_id.trim()}` as Route
                             }
-                            target="_blank">
+                            target="_blank"
+                            title="Ver no SIMCC">
                             <Button size={"icon"} className="cursor-pointer">
                                 <ChevronRight />
                             </Button>
                         </Link>
-                    </div>
+                    )}
                 </div>
             ))}
         </div>

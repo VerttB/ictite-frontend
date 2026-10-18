@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <div className="text-font-primary/60 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
                         <div className="flex items-center gap-2">
                             <Printer className="text-font-primary/60 size-4" />
-                            <span>CEP: {school.cep || "Não informado"}</span>
+                            <span>CEP: {school.cep?.replace(/^(\d{5})-?(\d{3})$/, "$1-$2") || "Não informado"}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Map className="text-font-primary/60 size-4" />

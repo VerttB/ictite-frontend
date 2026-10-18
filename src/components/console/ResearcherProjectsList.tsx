@@ -27,6 +27,7 @@ import { Input } from "../ui/input";
 import { toast } from "sonner";
 import { Project, ProjectUpdate } from "@/core/domain/Project";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 import { ControlledComboBox } from "../forms-input/ControlledComboBox";
 import {
     Tooltip,
@@ -67,8 +68,8 @@ export const ResearcherProjectsList = ({ researcherId }: { researcherId: string 
         name: "clube_id",
     });
 
-    const crud = useAdmCrud<Project, any, ProjectUpdate>({
-        mutate: mutate as any,
+    const crud = useAdmCrud<Project, FieldValues, ProjectUpdate>({
+        mutate,
         deleteFn: async (projectId) => {
             await removeResearcherFromProject(projectId, researcherId);
         },

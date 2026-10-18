@@ -16,9 +16,8 @@ interface VideoAdmProps {
 }
 
 export const VideoAdm = ({ params }: VideoAdmProps) => {
-    const handleCreate = async (data: any): Promise<Video> => {
-        const { images, ...payload } = data;
-        const video = (await createVideo(payload)) as unknown as Video; // Type compat
+    const handleCreate = async (data: VideoCreate & { images: Video["images"] }): Promise<Video> => {
+        const video = (await createVideo(data)) as unknown as Video; // Type compat
         // Note: Image upload for videos is not implemented via separate route yet.
         return video;
     };

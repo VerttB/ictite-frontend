@@ -121,7 +121,7 @@ export default async function OneClubeCiencia({
             {/* |=======| IMAGENS DO CLUBE DE CIÊNCIA |=======| */}
             <div className="flex border-t pt-4">
                 <div className="flex flex-wrap items-center justify-center gap-3 overflow-x-hidden">
-                    {clubeCiencia.images?.map((image, index) => (
+                    {clubeCiencia.images?.slice(1).map((image, index) => (
                         <Popover key={index}>
                             <PopoverTrigger>
                                 <ImageDisplay

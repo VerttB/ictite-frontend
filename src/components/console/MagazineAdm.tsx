@@ -31,7 +31,7 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         const magazine = await createRevista(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -52,7 +52,7 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         const magazine = await updateRevista(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -82,7 +82,7 @@ export const MagazineAdm = ({ params }: MagazineAdmProps) => {
         fetchFn: getRevistas,
         createFn: async (data) => {
             const magazine = await handleCreate(data);
-            return { ...magazine, _redirectToList: true } as any;
+            return { ...magazine, _redirectToList: true };
         },
         updateFn: handleUpdate,
         deleteFn: deleteRevista,

@@ -8,7 +8,7 @@ import CardArtigo from "../card/CardArtigos";
 import { ResearcherArticles, ResearcherFinal } from "@/core/domain/Researcher";
 import CardProjeto from "../projeto/ProjetoCard";
 import { useViewPort } from "@/hooks/useViewPort";
-import { TabsConfig } from "@/core/interface/TabsConfig";
+import { TabsConfig, createTabsConfig } from "@/core/interface/TabsConfig";
 import { TabsGrid } from "../ui/TabsGridGeneric";
 import CardNaoEncontrado from "../card/CardNaoEncontrado";
 
@@ -21,7 +21,7 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
         return [...researcher.articles].sort((a, b) => b.year - a.year);
     }, [researcher]);
     const tabsConfig: TabsConfig[] = [
-        {
+        createTabsConfig({
             value: "artigos",
             label: "Artigos",
             icon: House,
@@ -34,8 +34,8 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
             renderItem: (item: ResearcherArticles) => (
                 <CardArtigo key={item.id} article={item} />
             ),
-        },
-        {
+        }),
+        createTabsConfig({
             value: "participacaoEventos",
             label: "Participação Eventos",
             icon: Printer,
@@ -43,9 +43,9 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
             isError: false,
             data: [],
             layoutType: "list",
-            renderItem: (item: any) => <div key={item.id}>Evento {item.id}</div>, //eslint-disable-line
-        },
-        {
+            renderItem: (item: { id: string }) => <div key={item.id}>Evento {item.id}</div>,
+        }),
+        createTabsConfig({
             value: "projetos",
             label: "Projetos",
             icon: PanelsTopLeft,
@@ -65,8 +65,8 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
                         <CardNaoEncontrado text="Nenhum projeto encontrado." />
                     </div>
                 ),
-        },
-        {
+        }),
+        createTabsConfig({
             value: "livros_capitulos",
             label: "Livros e Capítulos",
             icon: PanelsTopLeft,
@@ -74,8 +74,8 @@ export const PesquisadorTabs = ({ researcher }: { researcher: ResearcherFinal })
             isError: false,
             data: [],
             layoutType: "list",
-            renderItem: (item: any) => <div key={item.id}>Livro/Capítulo {item.id}</div>, //eslint-disable-line
-        },
+            renderItem: (item: { id: string }) => <div key={item.id}>Livro/Capítulo {item.id}</div>,
+        }),
     ];
     if (!researcher) return null;
     return (
