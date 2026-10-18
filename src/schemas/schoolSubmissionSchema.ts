@@ -60,8 +60,24 @@ export const SchoolFormDraftDataSchema = z.object({
     equipments: z.array(EquipmentDraftDataSchema),
 });
 
+export const getEarliestExtensionDate = () => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Bahia",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    }).formatToParts(new Date());
+    const dateParts = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+    const tomorrow = new Date(`${dateParts.year}-${dateParts.month}-${dateParts.day}T00:00:00Z`);
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+    return tomorrow.toISOString().slice(0, 10);
+};
+
 export const RequestDeadlineExtensionSchema = z.object({
-    requested_deadline: z.string().min(1, "Selecione uma data limite válida"),
+    requested_deadline: z.string()
+        .min(1, "Selecione uma data limite válida")
+        .refine((value) => !Number.isNaN(new Date(value).getTime()), "Selecione uma data limite válida")
+        .refine((value) => value.slice(0, 10) >= getEarliestExtensionDate(), "Escolha uma data a partir de amanhã (horário da Bahia)."),
     reason: z
         .string()
         .min(5, "Informe a justificativa com no mínimo 5 caracteres")

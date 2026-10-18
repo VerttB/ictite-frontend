@@ -8,6 +8,10 @@ import {
 } from "@/schemas/schoolSubmissionSchema";
 
 export const schoolSubmissionService = {
+    async getGlobalDeadline(): Promise<{ school_forms_global_deadline: string | null }> {
+        return apiClient.get<{ school_forms_global_deadline: string | null }>("/submissions/config/deadline");
+    },
+
     async getCurrentSubmission(): Promise<SchoolFormSubmission> {
         return apiClient.get<SchoolFormSubmission>("/submissions/current");
     },

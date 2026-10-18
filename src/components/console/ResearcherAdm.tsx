@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { EntityConsole } from "./generic/EntityConsole";
 import { ResearcherForm } from "./forms/ResearcherForm";
 import { ResearcherProjectsList } from "./ResearcherProjectsList";
@@ -19,6 +19,7 @@ import {
     ResearcherUpdateSchema,
 } from "@/core/domain/Researcher";
 import { AdminEntityConfig } from "@/core/interface/AdminEntity";
+import type { SearchParams } from "@/core/interface/SearchParams";
 import {
     Select,
     SelectContent,
@@ -34,33 +35,14 @@ const ResearcherFiltersModal = ({
     applyParams,
     closeFilters,
 }: {
-    currentParams: any;
-    applyParams: (params: any) => void;
+    currentParams: SearchParams;
+    applyParams: (params: SearchParams) => void;
     closeFilters: () => void;
 }) => {
-    const [selectedType, setSelectedType] = useState<string>("");
-    const [selectedGender, setSelectedGender] = useState<string>("");
-    const [selectedRace, setSelectedRace] = useState<string>("");
-
-    useEffect(() => {
-        const rawType = currentParams.type;
-        const initialType = Array.isArray(rawType)
-            ? rawType[0]
-            : (rawType as string) || "";
-        setSelectedType(initialType);
-
-        const rawGender = currentParams.gender;
-        const initialGender = Array.isArray(rawGender)
-            ? rawGender[0]
-            : (rawGender as string) || "";
-        setSelectedGender(initialGender);
-
-        const rawRace = currentParams.race;
-        const initialRace = Array.isArray(rawRace)
-            ? rawRace[0]
-            : (rawRace as string) || "";
-        setSelectedRace(initialRace);
-    }, [currentParams]);
+    const initialFilter = (value: SearchParams[string]) => String(Array.isArray(value) ? value[0] || "" : value || "");
+    const [selectedType, setSelectedType] = useState(() => initialFilter(currentParams.type));
+    const [selectedGender, setSelectedGender] = useState(() => initialFilter(currentParams.gender));
+    const [selectedRace, setSelectedRace] = useState(() => initialFilter(currentParams.race));
 
     const handleApply = () => {
         const newParams = { ...currentParams };

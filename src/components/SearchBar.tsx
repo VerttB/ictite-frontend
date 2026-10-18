@@ -16,11 +16,6 @@ export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBa
     const lastSearchedRef = useRef(initialValue);
 
     useEffect(() => {
-        setValue(initialValue);
-        lastSearchedRef.current = initialValue;
-    }, [initialValue]);
-
-    useEffect(() => {
         if (deboucedValue === lastSearchedRef.current) return;
         if (deboucedValue.length >= 2) {
             onSearch(deboucedValue);

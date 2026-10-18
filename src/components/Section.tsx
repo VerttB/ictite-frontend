@@ -21,6 +21,7 @@ interface BaseItem {
 interface SectionProps<T extends BaseItem> {
     title: string;
     items: T[];
+    total?: number;
     icon?: React.ReactNode;
     children?: React.ReactNode;
     onAdd?: () => void;
@@ -45,6 +46,7 @@ const resolveImage = (item: BaseItem) => {
 export const Section = <T extends BaseItem>({
     title,
     items,
+    total,
     icon,
     onAdd,
     onUpdate,
@@ -61,7 +63,7 @@ export const Section = <T extends BaseItem>({
                     {icon}
                     <h2 className="text-lg font-semibold">{title}</h2>
                     <p className="bg-primary w-18 rounded-md py-2 text-center text-sm text-white">
-                        Total: {items.length}
+                        Total: {total ?? items.length}
                     </p>
                 </div>
                 <div className="ml-4 h-12 w-full">{children}</div>

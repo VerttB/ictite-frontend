@@ -58,7 +58,7 @@ interface SchoolSidebarProps {
 }
 
 export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarProps) {
-    const { open } = useSidebar();
+    const { open, isMobile, setOpenMobile } = useSidebar();
     const { isAuthenticated, user, logoutUser } = useUserContext();
     const [isFormExpanded, setIsFormExpanded] = useState<boolean>(true);
 
@@ -80,6 +80,11 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
     const isHistoricoActive = activeSection === "historico";
     const isPreviaActive = activeSection === "previa_site";
 
+    const selectSection = (section: SchoolSection) => {
+        onSelectSection(section);
+        if (isMobile) setOpenMobile(false);
+    };
+
     return (
         <Sidebar collapsible="icon">
             <SidebarContent>
@@ -99,7 +104,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                         : "hover:bg-primary/70 bg-gray-200 text-gray-700 hover:text-white"
                                 )}>
                                 <SidebarMenuButton
-                                    onClick={() => onSelectSection("geral")}
+                                    onClick={() => selectSection("geral")}
                                     tooltip="Geral"
                                     className={cn(
                                         "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
@@ -121,7 +126,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                         : "hover:bg-primary/70 bg-gray-200 text-gray-700 hover:text-white"
                                 )}>
                                 <SidebarMenuButton
-                                    onClick={() => onSelectSection("historico")}
+                                    onClick={() => selectSection("historico")}
                                     tooltip="Histórico de Mudanças"
                                     className={cn(
                                         "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
@@ -143,7 +148,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                         : "hover:bg-primary/70 bg-gray-200 text-gray-700 hover:text-white"
                                 )}>
                                 <SidebarMenuButton
-                                    onClick={() => onSelectSection("previa_site")}
+                                    onClick={() => selectSection("previa_site")}
                                     tooltip="Prévia do Portal"
                                     className={cn(
                                         "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-sm font-medium transition-all duration-200",
@@ -189,7 +194,7 @@ export function SchoolSidebar({ activeSection, onSelectSection }: SchoolSidebarP
                                                 <SidebarMenuSubItem key={item.id}>
                                                     <SidebarMenuSubButton
                                                         onClick={() =>
-                                                            onSelectSection(item.id)
+                                                            selectSection(item.id)
                                                         }
                                                         className={cn(
                                                             "flex w-full cursor-pointer items-center gap-2 rounded-sm p-2 text-xs transition-all duration-200",

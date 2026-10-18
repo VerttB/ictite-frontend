@@ -7,21 +7,31 @@ import { RequestExtensionModal } from "./modals/RequestExtensionModal";
 
 interface SchoolConsoleHeaderProps {
     submission: SchoolFormSubmission | null;
+    deadlineExpired: boolean;
     onRequestExtension: (payload: RequestDeadlineExtension) => Promise<boolean>;
 }
 
 export function SchoolConsoleHeader({
     submission,
+    deadlineExpired,
     onRequestExtension,
 }: SchoolConsoleHeaderProps) {
     const [isExtensionModalOpen, setIsExtensionModalOpen] = useState<boolean>(false);
+    const hasExpiredWithoutRequest = Boolean(
+        submission &&
+        submission.status !== "PENDENTE" &&
+        submission.status !== "APROVADO" &&
+        !submission.extension_requested_at &&
+        !submission.extension_status &&
+        deadlineExpired
+    );
 
     const getStatusBadge = (status?: string) => {
         switch (status) {
             case "RASCUNHO":
                 return (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 border border-amber-200">
-                        <FileText size={14} /> RASCUNHO (Edição aberta)
+                        <FileText size={14} /> RASCUNHO ({deadlineExpired ? "Prazo encerrado" : "Edição aberta"})
                     </span>
                 );
             case "PENDENTE":
@@ -70,7 +80,7 @@ export function SchoolConsoleHeader({
                     {getStatusBadge(submission?.status)}
                 </div>
 
-                <div className="flex items-center gap-3">
+                {!hasExpiredWithoutRequest && <div className="flex items-center gap-3">
                     <button
                         type="button"
                         onClick={() => setIsExtensionModalOpen(true)}
@@ -79,8 +89,28 @@ export function SchoolConsoleHeader({
                         <Clock size={15} />
                         Solicitar Prorrogação
                     </button>
-                </div>
+                </div>}
             </div>
+
+            {hasExpiredWithoutRequest && (
+                <div role="alert" className="flex flex-wrap items-center justify-between gap-4 rounded-md border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950/20">
+                    <div className="flex items-start gap-3">
+                        <AlertTriangle className="mt-0.5 shrink-0 text-red-600 dark:text-red-400" size={20} />
+                        <div className="text-font-primary text-sm">
+                            <strong className="block font-semibold">O prazo de envio do formulário terminou.</strong>
+                            <p>Você pode solicitar um novo prazo para enviar o formulário.</p>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setIsExtensionModalOpen(true)}
+                        className="inline-flex items-center gap-2 rounded-md bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800"
+                    >
+                        <Clock size={16} />
+                        Solicitar novo prazo
+                    </button>
+                </div>
+            )}
 
             {/* Banner de Rejeição ou Alerta de Prazo */}
             {submission?.status === "REJEITADO" && submission.rejection_reason && (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { getClubProfessors } from "@/core/service/CoordinatorService";
+import { CoordinatorSimplified } from "@/core/domain/Coordinator";
 
 interface CoordinatorFormProps {
     parentId?: string;
@@ -10,7 +11,7 @@ interface CoordinatorFormProps {
 
 export const CoordinatorForm = ({ parentId }: CoordinatorFormProps) => {
     const { register, formState: { errors } } = useFormContext();
-    const [professors, setProfessors] = useState<any[]>([]);
+    const [professors, setProfessors] = useState<CoordinatorSimplified[]>([]);
     const [loading, setLoading] = useState(true);
 
     // Busca apenas os professores elegíveis para este clube específico

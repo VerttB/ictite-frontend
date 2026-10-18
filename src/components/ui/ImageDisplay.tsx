@@ -1,10 +1,10 @@
 "use client";
 import { getAssetPrefix } from "@/core/utils/api";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-export const ImageDisplay = ({
+const ImageDisplayContent = ({
     src,
     alt,
     className,
@@ -16,10 +16,6 @@ export const ImageDisplay = ({
     fallbackImage?: string;
 }) => {
     const [imgSrc, setImgSrc] = useState<string | undefined>(src || fallbackImage);
-
-    useEffect(() => {
-        setImgSrc(src || fallbackImage);
-    }, [src, fallbackImage]);
 
     if (!src && !fallbackImage) {
         return (
@@ -51,3 +47,10 @@ export const ImageDisplay = ({
         </div>
     );
 };
+
+export const ImageDisplay = (props: {
+    src?: string;
+    alt: string;
+    className?: string;
+    fallbackImage?: string;
+}) => <ImageDisplayContent key={`${props.src || ""}:${props.fallbackImage || ""}`} {...props} />;

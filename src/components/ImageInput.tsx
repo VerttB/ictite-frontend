@@ -18,8 +18,8 @@ interface ImageUploadInputProps extends OmitValue {
     errors?: string;
     className?: string;
     multiple?: boolean;
-    value?: any[];
-    onChange?: (files: any[]) => void;
+    value?: Array<File | string | { url: string }>;
+    onChange?: (files: Array<File | string | { url: string }>) => void;
 }
 
 export const ImageUploadInput = forwardRef<HTMLInputElement, ImageUploadInputProps>(

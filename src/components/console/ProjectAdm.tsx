@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+import type { SearchParams } from "@/core/interface/SearchParams";
 import useSWR from "swr";
 import { EntityConsole } from "./generic/EntityConsole";
 import { ProjectForm } from "./forms/ProjectForm";
@@ -40,13 +41,13 @@ const ProjectFiltersModal = ({
     applyParams,
     closeFilters,
 }: {
-    currentParams: any;
-    applyParams: (params: any) => void;
+    currentParams: SearchParams;
+    applyParams: (params: SearchParams) => void;
     closeFilters: () => void;
 }) => {
-    const [selectedSchool, setSelectedSchool] = useState<string>("");
-    const [selectedClub, setSelectedClub] = useState<string>("");
-    const [selectedYear, setSelectedYear] = useState<string>("");
+    const [selectedSchool, setSelectedSchool] = useState<string>(String(currentParams.school_id || ""));
+    const [selectedClub, setSelectedClub] = useState<string>(String(currentParams.clube_ciencia_id || ""));
+    const [selectedYear, setSelectedYear] = useState<string>(String(currentParams.year || ""));
 
     const [schoolSearchValue, setSchoolSearchValue] = useState<string>("");
     const [clubSearchValue, setClubSearchValue] = useState<string>("");
@@ -74,21 +75,8 @@ const ProjectFiltersModal = ({
         return [{ value: "all", label: "Todos os Clubes" }, ...opts];
     }, [clubsData, selectedSchool]);
 
-    useEffect(() => {
-        setSelectedSchool((currentParams.school_id as string) || "");
-        setSelectedClub((currentParams.clube_ciencia_id as string) || "");
-        setSelectedYear(currentParams.year ? String(currentParams.year) : "");
-    }, [currentParams]);
-
-    useEffect(() => {
-        const matched = schoolsData?.items?.find((s) => s.id === selectedSchool);
-        setSchoolSearchValue(matched ? matched.name : "");
-    }, [selectedSchool, schoolsData]);
-
-    useEffect(() => {
-        const matched = clubsData?.items?.find((c) => c.id === selectedClub);
-        setClubSearchValue(matched ? matched.name : "");
-    }, [selectedClub, clubsData]);
+    const visibleSchoolSearch = schoolSearchValue || schoolsData?.items?.find((s) => s.id === selectedSchool)?.name || "";
+    const visibleClubSearch = clubSearchValue || clubsData?.items?.find((c) => c.id === selectedClub)?.name || "";
 
     const filteredSchoolOptions = useMemo(() => {
         if (!schoolSearchValue) return schoolOptions;
@@ -140,16 +128,17 @@ const ProjectFiltersModal = ({
                         value={
                             schoolOptions.find((o) => o.value === selectedSchool) || null
                         }
-                        inputValue={schoolSearchValue}
+                        inputValue={visibleSchoolSearch}
                         onInputValueChange={(arg1) => {
                             const text = typeof arg1 === "string" ? arg1 : "";
                             setSchoolSearchValue(text);
                             if (text === "") {
                                 setSelectedSchool("");
                                 setSelectedClub("");
+                                setClubSearchValue("");
                             }
                         }}
-                        onValueChange={(val: any) => {
+                        onValueChange={(val) => {
                             if (!val) {
                                 setSelectedSchool("");
                                 setSelectedClub("");
@@ -184,13 +173,13 @@ const ProjectFiltersModal = ({
                     <Combobox
                         items={filteredClubOptions}
                         value={clubOptions.find((o) => o.value === selectedClub) || null}
-                        inputValue={clubSearchValue}
+                        inputValue={visibleClubSearch}
                         onInputValueChange={(arg1) => {
                             const text = typeof arg1 === "string" ? arg1 : "";
                             setClubSearchValue(text);
                             if (text === "") setSelectedClub("");
                         }}
-                        onValueChange={(val: any) => {
+                        onValueChange={(val) => {
                             if (!val) {
                                 setSelectedClub("");
                                 setClubSearchValue("");
@@ -249,7 +238,7 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         const project = await createProject(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -270,7 +259,7 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         const project = await updateProject(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -295,8 +284,9 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         createSchema: ProjectFormSchema,
         updateSchema: ProjectUpdateFormSchema,
         defaultValues: { images: [] },
-        mapToFormValues: (item: any) => ({
+        mapToFormValues: (item) => ({
             ...item,
+            year: item.year == null ? undefined : String(item.year),
             clube_ciencia_id: item.clube?.id,
         }),
         renderForm: (props) => <ProjectForm {...props} />,

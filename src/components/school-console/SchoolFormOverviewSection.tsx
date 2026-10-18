@@ -11,6 +11,7 @@ import {
     Calendar,
     AlertCircle,
     Hourglass,
+    XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +22,7 @@ import {
 interface SchoolFormOverviewSectionProps {
     form: UseFormReturn<SchoolFormDataInput>;
     submission: SchoolFormSubmission | null;
+    globalDeadline: string | null | undefined;
     onOpenReview?: () => void;
 }
 
@@ -46,7 +48,9 @@ function getDaysRemaining(deadlineString: string | null | undefined): number | n
         const deadline = new Date(deadlineString);
         const now = new Date();
         const diffTime = deadline.getTime() - now.getTime();
-        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffTime < 0
+            ? -Math.ceil(Math.abs(diffTime) / (1000 * 60 * 60 * 24))
+            : Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     } catch {
         return null;
     }
@@ -116,6 +120,7 @@ function getExtensionStatusText(
 export function SchoolFormOverviewSection({
     form,
     submission,
+    globalDeadline,
     onOpenReview,
 }: SchoolFormOverviewSectionProps) {
     const values = form.watch();
@@ -135,8 +140,8 @@ export function SchoolFormOverviewSection({
     const effectiveDeadline = useMemo(() => {
         if (extensionStatus === "Aprovado" && requestedDeadline) return requestedDeadline;
         if (customDeadline) return customDeadline;
-        return null;
-    }, [customDeadline, extensionStatus, requestedDeadline]);
+        return globalDeadline;
+    }, [customDeadline, extensionStatus, requestedDeadline, globalDeadline]);
 
     const daysRemaining = useMemo(() => getDaysRemaining(effectiveDeadline), [effectiveDeadline]);
     const extensionInfo = useMemo(() => getExtensionStatusText(extensionStatus, daysRemaining, customDeadline), [extensionStatus, daysRemaining, customDeadline]);
@@ -224,22 +229,44 @@ export function SchoolFormOverviewSection({
                                 </>
                             ) : (
                                 <div className="flex flex-col sm:items-end gap-2">
-                                    <span className="text-font-secondary text-sm">Não definido</span>
+                                    <span className="text-font-secondary text-sm">
+                                        {globalDeadline === undefined ? "Prazo indisponível" : "Não definido"}
+                                    </span>
                                     <span className="flex items-center gap-1.5 font-semibold text-sm text-amber-600">
                                         <AlertCircle size={14} />
-                                        {extensionInfo.label}
+                                        {globalDeadline === undefined && !customDeadline
+                                            ? "Não foi possível consultar o prazo."
+                                            : extensionInfo.label}
                                     </span>
                                 </div>
                             )}
                         </div>
                     </div>
                 </div>
-                {(extensionStatus === "Pendente" || extensionRequestedAt) && requestedDeadline && (
-                    <div className="bg-amber-50 border-t border-amber-200 p-4">
-                        <div className="flex items-center gap-2 text-amber-800">
-                            <Hourglass size={16} />
+                {extensionStatus && requestedDeadline && (
+                    <div
+                        className={`border-t p-4 ${
+                            extensionStatus === "Pendente"
+                                ? "border-amber-200 bg-amber-50 text-amber-800"
+                                : extensionStatus === "Aprovado"
+                                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                                  : "border-red-200 bg-red-50 text-red-800"
+                        }`}>
+                        <div className="flex items-center gap-2">
+                            {extensionStatus === "Pendente" ? (
+                                <Hourglass size={16} />
+                            ) : extensionStatus === "Aprovado" ? (
+                                <CheckCircle2 size={16} />
+                            ) : (
+                                <XCircle size={16} />
+                            )}
                             <span className="text-sm font-medium">
-                                Prorrogação solicitada em {formatDateTime(extensionRequestedAt)} para {formatDateTime(requestedDeadline)} — aguardando análise.
+                                {extensionStatus === "Pendente" &&
+                                    `Prorrogação solicitada em ${formatDateTime(extensionRequestedAt)} para ${formatDateTime(requestedDeadline)} — aguardando análise.`}
+                                {extensionStatus === "Aprovado" &&
+                                    `Prorrogação aprovada. Novo prazo: ${formatDateTime(customDeadline ?? requestedDeadline)}.`}
+                                {extensionStatus === "Rejeitado" &&
+                                    `Solicitação de prorrogação enviada em ${formatDateTime(extensionRequestedAt)} — rejeitada.`}
                             </span>
                         </div>
                     </div>

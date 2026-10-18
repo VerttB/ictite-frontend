@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Clock, AlertCircle, X } from "lucide-react";
 import {
+    getEarliestExtensionDate,
     RequestDeadlineExtension,
     RequestDeadlineExtensionSchema,
 } from "@/schemas/schoolSubmissionSchema";
@@ -33,10 +34,12 @@ export function RequestExtensionModal({
     if (!isOpen) return null;
 
     const handleFormSubmit = async (data: RequestDeadlineExtension) => {
-        const isoDate = new Date(data.requested_deadline).toISOString();
-        await onSubmit({ ...data, requested_deadline: isoDate });
-        reset();
-        onClose();
+        const isoDate = new Date(`${data.requested_deadline}-03:00`).toISOString();
+        const submitted = await onSubmit({ ...data, requested_deadline: isoDate });
+        if (submitted) {
+            reset();
+            onClose();
+        }
     };
 
     return (
@@ -59,11 +62,12 @@ export function RequestExtensionModal({
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="mt-4 space-y-4">
                     <div>
                         <label className="text-font-primary mb-1 block text-sm font-medium">
-                            Nova Data Limite Desejada *
+                            Nova Data Limite Desejada (horário da Bahia) *
                         </label>
                         <div className="relative">
                             <input
                                 type="datetime-local"
+                                min={`${getEarliestExtensionDate()}T00:00`}
                                 {...register("requested_deadline")}
                                 className="bg-background text-font-primary w-full rounded-xl border border-border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20"
                             />

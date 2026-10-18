@@ -23,7 +23,7 @@ import { School } from "@/core/domain/School";
 import useSWR from "swr";
 import ClubeCienciaCard from "../clubeCiencia/ClubeCienciaCard";
 import { getSchoolClubs, getSchoolCoordinators } from "@/core/service/SchoolService";
-import { TabsConfig } from "@/core/interface/TabsConfig";
+import { TabsConfig, createTabsConfig } from "@/core/interface/TabsConfig";
 import { TabsGrid } from "../ui/TabsGridGeneric";
 import { Project } from "@/core/domain/Project";
 import { Equipment } from "@/core/domain/Equipment";
@@ -65,7 +65,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
     );
 
     const tabsConfig: TabsConfig[] = [
-        {
+        createTabsConfig({
             value: "clubes",
             label: "Clubes de Ciência",
             icon: Brain,
@@ -76,8 +76,8 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             renderItem: (clube: ScienceClub) => (
                 <ClubeCienciaCard key={clube.id} clubeCiencia={clube} />
             ),
-        },
-        {
+        }),
+        createTabsConfig({
             value: "pesquisadores",
             label: "Pesquisadores",
             icon: BookOpen,
@@ -88,8 +88,8 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             renderItem: (r: Researcher) => (
                 <CardPesquisador key={r.id ?? r.name} researcher={r} />
             ),
-        },
-        {
+        }),
+        createTabsConfig({
             value: "equipamentos",
             label: "Equipamentos",
             icon: Printer,
@@ -98,8 +98,8 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             emptyMessage: "Nenhum equipamento encontrado para esta escola.",
             data: equipments || [],
             renderItem: (e: Equipment) => <CardEquipamento key={e.id} equipment={e} />,
-        },
-        {
+        }),
+        createTabsConfig({
             value: "projetos",
             label: "Projetos",
             icon: PanelsTopLeft,
@@ -108,8 +108,8 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             emptyMessage: "Nenhum projeto encontrado para esta escola.",
             data: projects || [],
             renderItem: (p: Project) => <CardProjeto key={p.id} project={p} />,
-        },
-        {
+        }),
+        createTabsConfig({
             value: "coordenadores",
             label: "Coordenadores de Clube",
             icon: ScrollText,
@@ -120,7 +120,7 @@ export const EscolaTabs = ({ school }: EscolaTabsProps) => {
             renderItem: (coordenador: CoordinatorWithClub) => (
                 <CardCoordenador key={coordenador.id} name={coordenador.name} clube={coordenador.clube.name} />
             ),
-        },
+        }),
     ];
     return (
         <>

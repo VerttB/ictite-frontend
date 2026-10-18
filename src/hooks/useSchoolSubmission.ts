@@ -17,6 +17,7 @@ import z from "zod";
 
 interface UseSchoolSubmissionReturn {
     submission: SchoolFormSubmission | null;
+    globalDeadline: string | null | undefined;
     isLoading: boolean;
     isSaving: boolean;
     isSubmitting: boolean;
@@ -36,6 +37,7 @@ function removeNulls<T>(obj: T): T {
     }
     if (obj !== null && typeof obj === "object") {
         const cleaned = Object.entries(obj).reduce<Record<string, unknown>>((acc, [key, value]) => {
+            if (key === "identity_territory_id" && value === "") return acc;
             acc[key] = value === null ? undefined : removeNulls(value);
             return acc;
         }, {});
@@ -69,6 +71,7 @@ function getDraftValidationMessage(error: z.ZodError): string {
 
 export function useSchoolSubmission(): UseSchoolSubmissionReturn {
     const [submission, setSubmission] = useState<SchoolFormSubmission | null>(null);
+    const [globalDeadline, setGlobalDeadline] = useState<string | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -86,6 +89,12 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
 
     const loadSubmission = useCallback(async () => {
         setIsLoading(true);
+        const deadlineRequest = schoolSubmissionService.getGlobalDeadline()
+            .then(({ school_forms_global_deadline }) => setGlobalDeadline(school_forms_global_deadline))
+            .catch(() => {
+                setGlobalDeadline(undefined);
+                toast.error("Não foi possível consultar o prazo de envio do formulário.");
+            });
         try {
             const sub = await schoolSubmissionService.getCurrentSubmission();
             setSubmission(sub);
@@ -121,6 +130,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                 toast.error("Erro ao carregar o formulário da escola.");
             }
         } finally {
+            await deadlineRequest;
             setIsLoading(false);
         }
     }, [form]);
@@ -150,6 +160,8 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                     toast.error(
                         error.message || "Conflito de concorrência ou prazo encerrado."
                     );
+                } else if (error.status === 422) {
+                    toast.error("Confira os dados do formulário antes de salvar o rascunho.");
                 } else {
                     toast.error(error.message || "Erro ao salvar rascunho.");
                 }
@@ -182,7 +194,14 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
             return true;
         } catch (error) {
             if (error instanceof ApiError) {
-                toast.error(error.message || "Erro ao enviar formulário para aprovação.");
+                toast.error(
+                    error.status === 422
+                        ? "Confira os dados do formulário antes de enviar para aprovação."
+                        : error.message || "Erro ao enviar formulário para aprovação."
+                );
+            } else if (error instanceof z.ZodError) {
+                await form.trigger();
+                toast.error(getDraftValidationMessage(error));
             } else {
                 toast.error("Erro de conexão ao enviar formulário.");
             }
@@ -248,6 +267,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
 
     return {
         submission,
+        globalDeadline,
         isLoading,
         isSaving,
         isSubmitting,

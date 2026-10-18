@@ -14,30 +14,31 @@ import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { useUserContext } from "@/providers/UserContext";
 import { Pagination } from "../../Pagination";
 import { SearchAndFilter } from "../../SearchAndFilter";
-import { FormProvider, useForm, FieldValues } from "react-hook-form";
+import { FormProvider, useForm, FieldValues, DefaultValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { DeleteConfirmationModal } from "../../DeleteConfirmationModal";
 import { ConsolePageSize } from "@/core/constants/pagination";
+import { SearchParams } from "@/core/interface/SearchParams";
 
 interface EntityConsoleProps<
-    T extends { id: string; name?: string },
+    T extends { id: string; name: string },
     CreateDTO extends FieldValues,
     UpdateDTO extends FieldValues,
-    TCreateSchema extends ZodType<any, any, any>,
-    TUpdateSchema extends ZodType<any, any, any>,
+    TCreateSchema extends ZodType,
+    TUpdateSchema extends ZodType,
 > {
     config: AdminEntityConfig<T, CreateDTO, UpdateDTO, TCreateSchema, TUpdateSchema>;
-    params: any;
+    params: SearchParams;
 }
 
 export const EntityConsole = <
-    T extends { id: string; name?: string },
+    T extends { id: string; name: string },
     CreateDTO extends FieldValues,
     UpdateDTO extends FieldValues,
-    TCreateSchema extends ZodType<any, any, any>,
-    TUpdateSchema extends ZodType<any, any, any>,
+    TCreateSchema extends ZodType,
+    TUpdateSchema extends ZodType,
 >({
     config,
     params,
@@ -85,9 +86,9 @@ export const EntityConsole = <
         return crud.editingItem ? config.updateSchema : config.createSchema;
     }, [crud.editingItem, config.createSchema, config.updateSchema]);
 
-    const methods = useForm({
-        resolver: zodResolver(activeSchema),
-        defaultValues: config.defaultValues as any,
+    const methods = useForm<FieldValues>({
+        resolver: zodResolver(activeSchema as ZodType<FieldValues, FieldValues>),
+        defaultValues: config.defaultValues as DefaultValues<FieldValues>,
     });
 
     const {
@@ -97,7 +98,7 @@ export const EntityConsole = <
     } = methods;
 
     const onOpenCreate = () => {
-        reset(config.defaultValues as any);
+        reset(config.defaultValues);
         crud.ui.openCreate();
         setView("edit");
         setActiveTab("dados-gerais");
@@ -105,7 +106,7 @@ export const EntityConsole = <
 
     const onOpenEdit = (item: T) => {
         const formValues = config.mapToFormValues ? config.mapToFormValues(item) : item;
-        reset(formValues as any);
+        reset(formValues);
         crud.ui.openEdit(item);
         setView("edit");
         setActiveTab("dados-gerais");
@@ -117,11 +118,11 @@ export const EntityConsole = <
         crud.ui.closeCreate();
     };
 
-    const handleFormSubmit = async (data: any) => {
+    const handleFormSubmit = async (data: FieldValues) => {
         let success = false;
         if (crud.editingItem) {
             try {
-                const result = await config.updateFn(crud.editingItem.id, data);
+                const result = await config.updateFn(crud.editingItem.id, data as UpdateDTO);
                 if (result) {
                     await mutate();
                     // Stay in edit mode with updated data
@@ -129,44 +130,45 @@ export const EntityConsole = <
                     const formValues = config.mapToFormValues
                         ? config.mapToFormValues(result)
                         : result;
-                    reset(formValues as any);
+                    reset(formValues);
 
                     success = true;
                     toast.success("Item atualizado com sucesso!");
                 }
-            } catch (error: any) {
-                toast.error(error.message || "Erro ao atualizar o item.");
+            } catch (error: unknown) {
+                toast.error(error instanceof Error ? error.message : "Erro ao atualizar o item.");
             }
         } else {
             // Manual call to config.createFn because we need the result object (with ID)
             // to potentially switch to edit mode or redirect.
             try {
-                const result = await config.createFn(data as any);
+                const result = await config.createFn(data as CreateDTO);
                 if (result && result.id) {
                     await mutate();
-                    if ((result as any)._redirectToList) {
+                    if (result._redirectToList) {
                         onBackToList();
                     } else {
                         crud.ui.openEdit(result); // Switch to edit mode after creation to unlock tabs
                         const formValues = config.mapToFormValues
                             ? config.mapToFormValues(result)
                             : result;
-                        reset(formValues as any);
+                        reset(formValues);
                     }
                     success = true;
                     toast.success("Item criado com sucesso!");
                 }
-            } catch (error: any) {
-                toast.error(error.message || "Erro ao criar o item.");
+            } catch (error: unknown) {
+                toast.error(error instanceof Error ? error.message : "Erro ao criar o item.");
             }
         }
         return success;
     };
 
-    const getTooltipText = (item: any) => {
+    const getTooltipText = (item: T) => {
         if (config.entityName === "projects") {
-            const schoolName = item.school?.name || "Sem Escola";
-            const year = item.year || "Sem Ano";
+            const project = item as T & { school?: { name?: string }; year?: number };
+            const schoolName = project.school?.name || "Sem Escola";
+            const year = project.year || "Sem Ano";
             const fullName = item.name || "";
             return `Nome: ${fullName} | Escola: ${schoolName} | Ano: ${year}`;
         }
@@ -177,9 +179,10 @@ export const EntityConsole = <
         return (
             <div className="flex h-full w-full flex-col">
                 <Breadcrumbs items={breadcrumbs} />
-                <Section<any>
+                <Section<T>
                     title={config.title}
                     items={paginatedData?.items || []}
+                    total={paginatedData?.total}
                     onAdd={isSchoolAdmin ? undefined : onOpenCreate}
                     onUpdate={onOpenEdit}
                     onDelete={crud.ui.openDelete}
@@ -207,7 +210,7 @@ export const EntityConsole = <
                     open={!!crud.deletingItem}
                     onClose={crud.ui.closeDelete}
                     onConfirm={crud.actions.delete}
-                    title={`Deseja excluir ${(crud.deletingItem as any)?.name ?? "este item"}?`}
+                    title={`Deseja excluir ${crud.deletingItem?.name ?? "este item"}?`}
                     description="Essa ação não pode ser desfeita."
                 />
             </div>
@@ -221,7 +224,7 @@ export const EntityConsole = <
                     <Breadcrumbs items={breadcrumbs} />
                     <h1 className="text-2xl font-bold">
                         {crud.editingItem
-                            ? (crud.editingItem as any).name || `Editar ${config.title}`
+                            ? crud.editingItem.name || `Editar ${config.title}`
                             : `Novo ${config.title}`}
                     </h1>
                 </div>
@@ -270,7 +273,7 @@ export const EntityConsole = <
                                 <form
                                     onSubmit={handleSubmit(handleFormSubmit)}
                                     className="space-y-4">
-                                    {config.renderForm({ methods })}
+                                    {config.renderForm({})}
                                     <div className="flex justify-end gap-2 pt-4">
                                         <Button
                                             type="button"
