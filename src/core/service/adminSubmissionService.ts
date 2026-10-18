@@ -76,6 +76,15 @@ export const getGlobalDeadline = async (): Promise<GlobalDeadline> => {
     return await apiClient.get<GlobalDeadline>("/admin/submissions/config/deadline");
 };
 
+export const updateGlobalDeadline = async (
+    school_forms_global_deadline: string | null
+): Promise<GlobalDeadline> => {
+    return await apiClient.put<GlobalDeadline, { school_forms_global_deadline: string | null }>(
+        "/admin/submissions/config/deadline",
+        { school_forms_global_deadline }
+    );
+};
+
 export const grantDeadlineExtension = async (
     submissionId: string
 ): Promise<SchoolFormSubmission> => {

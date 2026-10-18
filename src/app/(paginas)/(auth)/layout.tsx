@@ -1,5 +1,6 @@
 import { getAssetPrefix } from "@/core/utils/api";
 import Image from "next/image";
+import { Toaster } from "@/components/ui/sonner";
 export default function AuthLayout({
     children,
 }: Readonly<{
@@ -45,7 +46,10 @@ export default function AuthLayout({
                     </div>
                 </div>
             </div>
-            <div className="h-full w-full">{children}</div>
+            <div className="h-full w-full">
+                <Toaster />
+                {children}
+            </div>
         </div>
     );
 }

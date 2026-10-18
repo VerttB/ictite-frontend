@@ -54,7 +54,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         const club = await createClubeCiencias(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -75,7 +75,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         const club = await updateClubeCiencias(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -106,7 +106,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         const project = await createProject(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -126,7 +126,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                         const project = await updateProject(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -143,8 +143,9 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     createSchema={ProjectFormSchema}
                     updateSchema={ProjectUpdateFormSchema}
                     defaultValues={{ images: [] }}
-                    mapToFormValues={(item: any) => ({
+                    mapToFormValues={(item) => ({
                         ...item,
+                        year: item.year == null ? undefined : String(item.year),
                         clube_ciencia_id: item.clube?.id,
                     })}
                     renderFields={(props) => <ProjectForm {...props} />}
@@ -174,7 +175,7 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     createSchema={CoordinatorCreateSchema}
                     updateSchema={CoordinatorUpdateSchema}
                     defaultValues={{ researcher_id: "", clube_id: parentId }}
-                    mapToFormValues={(item: any) => ({
+                    mapToFormValues={(item) => ({
                         clube_id: item.clube_id,
                         researcher_id: item.researcher_id,
                     })}
@@ -198,10 +199,10 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
         createSchema: ScienceClubFormSchema,
         updateSchema: ScienceClubUpdateFormSchema,
         defaultValues: { images: [] },
-        mapToFormValues: (item: any) => ({
+        mapToFormValues: (item) => ({
             ...item,
             school_id: item.school?.id,
-            coordinators_ids: item.coordinators?.map((c: any) => c.id) || [],
+            coordinators_ids: item.coordinators?.map((c) => c.id) || [],
         }),
         renderForm: (props) => <ClubForm {...props} />,
         childTabs,

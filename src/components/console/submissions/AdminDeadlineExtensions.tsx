@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import { CalendarClock, Eye, LoaderCircle } from "lucide-react";
+import { CalendarClock, Eye, LoaderCircle, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Select,
@@ -20,6 +21,7 @@ import {
     ExtensionStatus,
     getDeadlineExtensionRequests,
     getGlobalDeadline,
+    updateGlobalDeadline,
 } from "@/core/service/adminSubmissionService";
 import { SchoolFormSubmission } from "@/schemas/schoolSubmissionSchema";
 import { DeadlineExtensionDetailsDialog } from "./DeadlineExtensionDetailsDialog";
@@ -36,20 +38,41 @@ const formatDate = (value?: string | null) => {
     }).format(new Date(value));
 };
 
+const toLocalDateTimeInput = (value?: string | null) => {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
+    return localDate.toISOString().slice(0, 16);
+};
+
 export function AdminDeadlineExtensions() {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState<ExtensionStatus | undefined>();
     const [selectedSubmission, setSelectedSubmission] = useState<SchoolFormSubmission | null>(null);
+    const [deadlineInput, setDeadlineInput] = useState("");
+    const [isSavingDeadline, setIsSavingDeadline] = useState(false);
     const requestParams = useMemo(() => ({ page, size: 20, status }), [page, status]);
     const { data, error, isLoading, mutate } = useSWR(
         ["admin-deadline-extensions", requestParams],
         ([, params]) => getDeadlineExtensionRequests(params),
         { keepPreviousData: true }
     );
-    const { data: globalDeadline, error: globalDeadlineError } = useSWR(
+    const {
+        data: globalDeadline,
+        error: globalDeadlineError,
+        isLoading: isGlobalDeadlineLoading,
+        mutate: mutateGlobalDeadline,
+    } = useSWR(
         "admin-global-deadline",
         getGlobalDeadline
     );
+
+    useEffect(() => {
+        setDeadlineInput(
+            toLocalDateTimeInput(globalDeadline?.school_forms_global_deadline)
+        );
+    }, [globalDeadline?.school_forms_global_deadline]);
 
     useEffect(() => {
         if (error) toast.error("Não foi possível carregar as solicitações de prorrogação.");
@@ -84,15 +107,82 @@ export function AdminDeadlineExtensions() {
         setSelectedSubmission(updatedSubmission);
     };
 
+    const saveGlobalDeadline = async (value: string | null) => {
+        if (value !== null && Number.isNaN(new Date(value).getTime())) {
+            toast.error("Informe uma data e hora válidas.");
+            return;
+        }
+
+        setIsSavingDeadline(true);
+        try {
+            const updated = await updateGlobalDeadline(
+                value === null ? null : new Date(value).toISOString()
+            );
+            await mutateGlobalDeadline(updated, { revalidate: false });
+            toast.success(value === null ? "Prazo global removido." : "Prazo global atualizado.");
+        } catch {
+            toast.error("Não foi possível atualizar o prazo global.");
+        } finally {
+            setIsSavingDeadline(false);
+        }
+    };
+
     return (
         <div className="space-y-6">
             <Card>
-                <CardHeader>
-                    <CardTitle className="text-base">Prazo global</CardTitle>
+                <CardHeader className="border-b">
+                    <CardTitle className="flex items-center gap-2 text-base">
+                        <CalendarClock size={18} />
+                        Prazo global
+                    </CardTitle>
                     <CardDescription>
-                        Prazo vigente para os formulários escolares: {formatDate(globalDeadline?.school_forms_global_deadline)}
+                        Data limite aplicada às escolas sem prorrogação individual.
+                        Prazo vigente: {formatDate(globalDeadline?.school_forms_global_deadline)}
                     </CardDescription>
                 </CardHeader>
+                <CardContent className="flex flex-col gap-3 pt-5 sm:flex-row sm:items-end">
+                    <div className="flex-1 space-y-2">
+                        <label htmlFor="school-form-global-deadline" className="text-sm font-medium">
+                            Nova data e hora limite
+                        </label>
+                        <Input
+                            id="school-form-global-deadline"
+                            type="datetime-local"
+                            value={deadlineInput}
+                            onChange={(event) => setDeadlineInput(event.target.value)}
+                            disabled={isGlobalDeadlineLoading || isSavingDeadline}
+                        />
+                    </div>
+                    <Button
+                        type="button"
+                        onClick={() =>
+                            void saveGlobalDeadline(deadlineInput || null)
+                        }
+                        disabled={
+                            isGlobalDeadlineLoading ||
+                            isSavingDeadline ||
+                            !deadlineInput
+                        }>
+                        {isSavingDeadline ? (
+                            <LoaderCircle className="animate-spin" size={16} />
+                        ) : (
+                            <Save size={16} />
+                        )}
+                        Salvar prazo
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => void saveGlobalDeadline(null)}
+                        disabled={
+                            isGlobalDeadlineLoading ||
+                            isSavingDeadline ||
+                            !globalDeadline?.school_forms_global_deadline
+                        }>
+                        <Trash2 size={16} />
+                        Remover prazo
+                    </Button>
+                </CardContent>
             </Card>
 
             <Card>

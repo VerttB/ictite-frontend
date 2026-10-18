@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { GETictite } from "@/core/service/ICTITEService";
-import Mapa from "@/components/Mapa";
+import MapaEscolasPorTerritorio from "@/components/MapaEscolasPorTerritorio";
 import Noticias from "@/components/noticias/Noticias";
 import SearchClient from "@/components/SearchList";
 
@@ -21,7 +21,7 @@ export default async function ProjetoPage() {
             </div>
 
             <SearchClient />
-            <Mapa />
+            <MapaEscolasPorTerritorio />
         </div>
     );
 }

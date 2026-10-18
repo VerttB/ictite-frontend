@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import useSWR from "swr";
+import Image from "next/image";
 import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { schoolSubmissionService } from "@/core/service/schoolSubmissionService";
@@ -12,12 +13,41 @@ interface FormEntityImageDropzoneProps {
     entityId: string;
     readOnly?: boolean;
     label?: string;
+    ensureDraftSaved?: () => Promise<boolean>;
+    draftData?: {
+        clubs?: Array<{ id: string }>;
+        projects?: Array<{ id: string }>;
+        equipments?: Array<{ id: string }>;
+    };
 }
 
-export function FormEntityImageDropzone({ entityType, entityId, readOnly = false, label }: FormEntityImageDropzoneProps) {
+export function FormEntityImageDropzone({
+    entityType,
+    entityId,
+    readOnly = false,
+    label,
+    ensureDraftSaved,
+    draftData,
+}: FormEntityImageDropzoneProps) {
     const [isUploading, setIsUploading] = useState(false);
 
-    const swrKey = entityId ? `/submissions/current/images/${entityType}/${entityId}` : null;
+    // Verificar se a entidade existe no draft salvo no backend
+    const entityExistsInDraft = useMemo(() => {
+        if (!draftData) return false;
+        switch (entityType) {
+            case "clube_ciencias":
+                return draftData.clubs?.some(c => c.id === entityId) ?? false;
+            case "project":
+                return draftData.projects?.some(p => p.id === entityId) ?? false;
+            case "equipment":
+                return draftData.equipments?.some(e => e.id === entityId) ?? false;
+            default:
+                return false;
+        }
+    }, [draftData, entityType, entityId]);
+
+    // Só buscar imagens se a entidade existe no draft
+    const swrKey = entityExistsInDraft ? `/submissions/current/images/${entityType}/${entityId}` : null;
 
     const { data, mutate, isLoading } = useSWR(swrKey, () => schoolSubmissionService.getFormEntityImages(entityType, entityId));
 
@@ -48,6 +78,7 @@ export function FormEntityImageDropzone({ entityType, entityId, readOnly = false
 
         try {
             setIsUploading(true);
+            if (ensureDraftSaved && !(await ensureDraftSaved())) return;
             await schoolSubmissionService.uploadFormEntityImages(entityType, entityId, validFiles);
             await mutate();
             toast.success("Imagens enviadas com sucesso!");
@@ -123,7 +154,12 @@ export function FormEntityImageDropzone({ entityType, entityId, readOnly = false
                         <div className="flex flex-wrap gap-2">
                             {images.map((img) => (
                                 <div key={img.filename} className="bg-background relative size-20 overflow-hidden rounded-lg border border-border shadow-xs">
-                                    <img src={img.url} alt={img.filename} className="h-full w-full object-cover" />
+                                    <Image
+                                        src={img.url}
+                                        alt={img.filename}
+                                        fill
+                                        className="object-cover"
+                                    />
                                     {!readOnly && (
                                         <button
                                             type="button"

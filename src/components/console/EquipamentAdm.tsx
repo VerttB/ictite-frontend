@@ -31,7 +31,7 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         const eq = await createEquipament(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -52,7 +52,7 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         const eq = await updateEquipament(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -77,7 +77,7 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         createSchema: EquipmentFormSchema,
         updateSchema: EquipmentUpdateFormSchema,
         defaultValues: { images: [] },
-        mapToFormValues: (item: any) => ({
+        mapToFormValues: (item) => ({
             ...item,
             school_id: item.school?.id,
             type_equipment_id: item.type_equipment?.id,
@@ -87,7 +87,7 @@ export const EquipamentAdm = ({ params }: EquipamentAdmProps) => {
         fetchFn: getEquipaments,
         createFn: async (data) => {
             const eq = await handleCreate(data);
-            return { ...eq, _redirectToList: true } as any;
+            return { ...eq, _redirectToList: true };
         },
         updateFn: handleUpdate,
         deleteFn: deleteEquipament,

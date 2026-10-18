@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
+import type { SearchParams } from "@/core/interface/SearchParams";
 import useSWR from "swr";
 import { EntityConsole } from "./generic/EntityConsole";
 import { SchoolForm } from "./forms/SchoolForm";
@@ -59,11 +60,11 @@ const SchoolFiltersModal = ({
     applyParams,
     closeFilters,
 }: {
-    currentParams: any;
-    applyParams: (params: any) => void;
+    currentParams: SearchParams;
+    applyParams: (params: SearchParams) => void;
     closeFilters: () => void;
 }) => {
-    const [selectedTerritory, setSelectedTerritory] = useState<string>("");
+    const [selectedTerritory, setSelectedTerritory] = useState<string>(String(currentParams.identity_territory_id || ""));
     const [territorySearchValue, setTerritorySearchValue] = useState<string>("");
 
     const { data: territoriesData } = useSWR("all-territories-filter", () =>
@@ -76,14 +77,7 @@ const SchoolFiltersModal = ({
         return [{ value: "all", label: "Todos os Territórios" }, ...opts];
     }, [territoriesData]);
 
-    useEffect(() => {
-        setSelectedTerritory((currentParams.identity_territory_id as string) || "");
-    }, [currentParams]);
-
-    useEffect(() => {
-        const matched = territoriesData?.find((t) => t.id === selectedTerritory);
-        setTerritorySearchValue(matched ? matched.name : "");
-    }, [selectedTerritory, territoriesData]);
+    const visibleTerritorySearch = territorySearchValue || territoriesData?.find((t) => t.id === selectedTerritory)?.name || "";
 
     const filteredTerritoryOptions = useMemo(() => {
         if (!territorySearchValue) return territoryOptions;
@@ -120,13 +114,13 @@ const SchoolFiltersModal = ({
                         value={
                             territoryOptions.find((o) => o.value === selectedTerritory) || null
                         }
-                        inputValue={territorySearchValue}
+                        inputValue={visibleTerritorySearch}
                         onInputValueChange={(arg1) => {
                             const text = typeof arg1 === "string" ? arg1 : "";
                             setTerritorySearchValue(text);
                             if (text === "") setSelectedTerritory("");
                         }}
-                        onValueChange={(val: any) => {
+                        onValueChange={(val) => {
                             if (!val) {
                                 setSelectedTerritory("");
                                 setTerritorySearchValue("");
@@ -177,7 +171,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         const school = await createSchool(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -198,7 +192,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         const school = await updateSchool(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: any) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -229,7 +223,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const club = await createClubeCiencias(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -249,7 +243,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const club = await updateClubeCiencias(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -266,10 +260,10 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     createSchema={ScienceClubFormSchema}
                     updateSchema={ScienceClubUpdateFormSchema}
                     defaultValues={{ images: [] }}
-                    mapToFormValues={(item: any) => ({
+                    mapToFormValues={(item) => ({
                         ...item,
                         school_id: item.school?.id,
-                        coordinators_ids: item.coordinators?.map((c: any) => c.id) || [],
+                        coordinators_ids: item.coordinators?.map((c) => c.id) || [],
                     })}
                     renderFields={(props) => <ClubForm {...props} />}
                 />
@@ -292,7 +286,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const eq = await createEquipament(payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -312,7 +306,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                         const eq = await updateEquipament(id, payload);
                         if (images?.length) {
                             const form = new FormData();
-                            images.forEach((img: any) => {
+                            images.forEach((img) => {
                                 if (img instanceof File) {
                                     form.append("images", img);
                                 }
@@ -329,7 +323,7 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
                     createSchema={EquipmentFormSchema}
                     updateSchema={EquipmentUpdateFormSchema}
                     defaultValues={{ images: [] }}
-                    mapToFormValues={(item: any) => ({
+                    mapToFormValues={(item) => ({
                         ...item,
                         school_id: item.school?.id,
                         type_equipment_id: item.type_equipment?.id,
@@ -352,15 +346,16 @@ export const SchoolAdm = ({ params }: SchoolAdmProps) => {
         createSchema: SchoolFormSchema,
         updateSchema: SchoolUpdateFormSchema,
         defaultValues: { images: [] },
-        mapToFormValues: (item: any) => ({
+        mapToFormValues: (item) => ({
             ...item,
+            cep: item.cep ?? undefined,
             identity_territory_id: item.identityTerritory?.id,
         }),
         renderForm: () => <SchoolForm />,
         renderEditActions: (item) => (
             <InviteGeneratorForm
                 schoolId={item.id}
-                schoolName={(item as any).name}
+                schoolName={item.name}
             />
         ),
         renderFilters: ({ currentParams, applyParams, closeFilters }) => (

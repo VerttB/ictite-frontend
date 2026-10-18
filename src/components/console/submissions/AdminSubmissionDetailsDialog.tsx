@@ -266,7 +266,8 @@ export function AdminSubmissionDetailsDialog({
                                             <Card key={project.id}>
                                                 <CardContent className="grid gap-4 pt-1 sm:grid-cols-2">
                                                     <InfoItem label="Nome" value={project.name} />
-                                                    <InfoItem label="Ano" value={project.year} />
+                                                    <InfoItem label="Ano de início" value={project.start_year} />
+                                                    <InfoItem label="Ano de término" value={project.end_year} />
                                                     <InfoItem
                                                         label="Clube vinculado"
                                                         value={club?.name}

@@ -19,10 +19,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    ProjectDraftData,
-    SchoolFormDataInput,
-} from "@/schemas/schoolSubmissionSchema";
+import { ProjectDraftData, SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { GenderTypes } from "@/core/constants/sex";
 import { RaceTypes } from "@/core/constants/race";
@@ -91,10 +88,10 @@ export function ResearcherItemForm({
 
     return (
         <div
-            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background relative flex flex-col overflow-hidden rounded-2xl border border-border shadow-xs transition-all duration-300 hover:bg-muted/40 ${borderClass}`}>
+            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background border-border hover:bg-muted/40 relative flex flex-col overflow-hidden rounded-2xl border shadow-xs transition-all duration-300 ${borderClass}`}>
             <div
                 onClick={onToggleExpand}
-                className="flex cursor-pointer items-center justify-between border-b border-border p-4 transition-colors select-none hover:bg-muted/50">
+                className="border-border hover:bg-muted/50 flex cursor-pointer items-center justify-between border-b p-4 transition-colors select-none">
                 <div className="flex items-center gap-3">
                     <span className={`rounded-xl p-2 ${iconBgClass}`}>
                         <Book size={18} />
@@ -135,7 +132,7 @@ export function ResearcherItemForm({
             </div>
 
             {isExpanded && (
-                <div className="animate-fade-in space-y-4 bg-background p-5">
+                <div className="animate-fade-in bg-background space-y-4 p-5">
                     <input type="hidden" {...register(`researchers.${index}.id`)} />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -168,7 +165,7 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-background">
+                                        <SelectTrigger className="bg-background w-full">
                                             <SelectValue placeholder="Selecione o tipo..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -201,7 +198,7 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value || ""}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-background">
+                                        <SelectTrigger className="bg-background w-full">
                                             <SelectValue placeholder="Gênero..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -232,7 +229,7 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value || ""}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="w-full bg-background">
+                                        <SelectTrigger className="bg-background w-full">
                                             <SelectValue placeholder="Raça/Etnia..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -255,7 +252,7 @@ export function ResearcherItemForm({
                                 maxLength={16}
                                 disabled={readOnly}
                                 placeholder="1234567890123456"
-                                className="font-mono text-sm"
+                                className="focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex w-full cursor-default items-center gap-2 rounded-sm border py-1.5 pr-8 pl-2 font-mono text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2"
                                 {...register(`researchers.${index}.lattes_id`)}
                             />
                         </div>
@@ -276,7 +273,7 @@ export function ResearcherItemForm({
                                       : [];
 
                                 return (
-                                    <div className="flex flex-wrap gap-3 rounded-xl border border-border bg-background p-3.5 text-sm">
+                                    <div className="border-border bg-background flex flex-wrap gap-3 rounded-xl border p-3.5 text-sm">
                                         {projects.length === 0 ? (
                                             <span className="text-font-secondary text-xs">
                                                 Nenhum projeto cadastrado ainda.

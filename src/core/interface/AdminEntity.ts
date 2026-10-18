@@ -1,5 +1,7 @@
 import { ZodType } from "zod";
 import { FieldValues } from "react-hook-form";
+import { Pagination } from "@/schemas/Pagination";
+import { SearchParams } from "./SearchParams";
 
 export interface ChildTabConfig {
     id: string;
@@ -10,17 +12,16 @@ export interface ChildTabConfig {
 }
 
 export interface AdminFormProps {
-    methods: any;
     parentId?: string;
     parentIdField?: string;
 }
 
 export interface AdminEntityConfig<
-    T extends { id: string; name?: string },
+    T extends { id: string; name: string },
     CreateDTO extends FieldValues,
     UpdateDTO extends FieldValues,
-    TCreateSchema extends ZodType<any, any, any>,
-    TUpdateSchema extends ZodType<any, any, any> = TCreateSchema,
+    TCreateSchema extends ZodType,
+    TUpdateSchema extends ZodType = TCreateSchema,
 > {
     title: string;
     entityName: string;
@@ -31,16 +32,16 @@ export interface AdminEntityConfig<
     mapToFormValues?: (item: T) => Partial<CreateDTO | UpdateDTO>;
     renderForm: (props: AdminFormProps) => React.ReactNode;
     renderFilters?: (props: {
-        currentParams: any;
-        applyParams: (params: any) => void;
+        currentParams: SearchParams;
+        applyParams: (params: SearchParams) => void;
         closeFilters: () => void;
     }) => React.ReactNode;
     renderEditActions?: (item: T) => React.ReactNode;
     childTabs: ChildTabConfig[];
 
     // API Functions
-    fetchFn: (params: any) => Promise<any>;
-    createFn: (data: CreateDTO) => Promise<T>;
+    fetchFn: (params: FieldValues) => Promise<Pagination<T>>;
+    createFn: (data: CreateDTO) => Promise<T & { _redirectToList?: boolean }>;
     updateFn: (id: string, data: UpdateDTO) => Promise<T>;
     deleteFn: (id: string) => Promise<void>;
 }

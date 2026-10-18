@@ -27,6 +27,7 @@ interface SchoolFormPreviewProps {
     data: SchoolFormDataInput;
     mode: "preview" | "review";
     isSubmitting: boolean;
+    deadlineExpired: boolean;
     onBack: () => void;
     onSubmit: () => void;
 }
@@ -149,6 +150,7 @@ export function SchoolFormPreview({
     data,
     mode,
     isSubmitting,
+    deadlineExpired,
     onBack,
     onSubmit,
 }: SchoolFormPreviewProps) {
@@ -309,7 +311,8 @@ export function SchoolFormPreview({
                                         label={`Projeto ${index + 1}`}
                                         value={project.name}
                                     />
-                                    <PreviewField label="Ano" value={project.year} />
+                                    <PreviewField label="Ano de Início" value={project.start_year} />
+                                    <PreviewField label="Ano de Previsão de Conclusão" value={project.end_year} />
                                     <PreviewField
                                         label="Clube vinculado"
                                         value={
@@ -445,9 +448,11 @@ export function SchoolFormPreview({
                     <button
                         type="button"
                         onClick={onSubmit}
-                        disabled={!canSubmit || isSubmitting}
+                        disabled={!canSubmit || isSubmitting || deadlineExpired}
                         title={
-                            !canSubmit
+                            deadlineExpired
+                                ? "O prazo de envio terminou. Solicite um novo prazo."
+                                : !canSubmit
                                 ? "Conclua as partes pendentes antes de enviar"
                                 : undefined
                         }

@@ -30,21 +30,25 @@ interface ProjectItemFormProps {
     index: number;
     fieldId: string;
     form: UseFormReturn<SchoolFormDataInput>;
+    ensureDraftSaved: () => Promise<boolean>;
     clubs: ClubDraftData[];
     readOnly?: boolean;
     isExpanded: boolean;
     onToggleExpand: () => void;
     onRemove: () => void;
+    draftData?: SchoolFormDataInput;
 }
 
 export function ProjectItemForm({
     index,
     form,
+    ensureDraftSaved,
     clubs,
     readOnly = false,
     isExpanded,
     onToggleExpand,
     onRemove,
+    draftData,
 }: ProjectItemFormProps) {
     const {
         register,
@@ -154,15 +158,40 @@ export function ProjectItemForm({
 
                         <div>
                             <label className="text-font-primary mb-1 block text-xs font-semibold">
-                                Ano
+                                Ano de Início
                             </label>
                             <Input
                                 type="number"
                                 disabled={readOnly}
-                                {...register(`projects.${index}.year`, {
+                                {...register(`projects.${index}.start_year`, {
                                     valueAsNumber: true,
                                 })}
                             />
+                            {errors.projects?.[index]?.start_year && (
+                                <p className="mt-1 flex items-center gap-1 text-xs font-medium text-red-500">
+                                    <AlertCircle size={12} />
+                                    {errors.projects[index]?.start_year?.message}
+                                </p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                                Ano de Previsão de Conclusão
+                            </label>
+                            <Input
+                                type="number"
+                                disabled={readOnly}
+                                {...register(`projects.${index}.end_year`, {
+                                    valueAsNumber: true,
+                                })}
+                            />
+                            {errors.projects?.[index]?.end_year && (
+                                <p className="mt-1 flex items-center gap-1 text-xs font-medium text-red-500">
+                                    <AlertCircle size={12} />
+                                    {errors.projects[index]?.end_year?.message}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -227,7 +256,9 @@ export function ProjectItemForm({
                         <FormEntityImageDropzone
                             entityType="project"
                             entityId={project.id}
+                            ensureDraftSaved={ensureDraftSaved}
                             readOnly={readOnly}
+                            draftData={draftData}
                         />
                     )}
                 </div>

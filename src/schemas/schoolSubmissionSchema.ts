@@ -22,8 +22,15 @@ export const ProjectDraftDataSchema = z.object({
     description: z.string().optional(),
     long_description: z.string().optional(),
     clube_ciencia_id: z.string().uuid("Selecione um clube válido"),
-    year: z.number().int().optional(),
-});
+    start_year: z.number().int().optional(),
+    end_year: z.number().int().optional(),
+}).refine(
+    (data) => data.start_year === undefined || data.end_year === undefined || data.end_year >= data.start_year,
+    {
+        message: "O ano de previsão de conclusão deve ser maior ou igual ao ano de início.",
+        path: ["end_year"],
+    }
+);
 
 export const ResearcherDraftDataSchema = z.object({
     id: z.string().uuid("ID inválido"),
@@ -32,7 +39,8 @@ export const ResearcherDraftDataSchema = z.object({
     gender: z.string().optional(),
     race: z.string().optional(),
     lattes_id: z.string().optional(),
-    project_ids: z.array(z.string().uuid()).default([]),
+    image: z.string().optional(),
+    project_ids: z.array(z.string().uuid()).min(1, "O pesquisador deve estar vinculado a pelo menos um projeto"),
 });
 
 export const EquipmentDraftDataSchema = z.object({
@@ -52,8 +60,24 @@ export const SchoolFormDraftDataSchema = z.object({
     equipments: z.array(EquipmentDraftDataSchema),
 });
 
+export const getEarliestExtensionDate = () => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Bahia",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    }).formatToParts(new Date());
+    const dateParts = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+    const tomorrow = new Date(`${dateParts.year}-${dateParts.month}-${dateParts.day}T00:00:00Z`);
+    tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+    return tomorrow.toISOString().slice(0, 10);
+};
+
 export const RequestDeadlineExtensionSchema = z.object({
-    requested_deadline: z.string().min(1, "Selecione uma data limite válida"),
+    requested_deadline: z.string()
+        .min(1, "Selecione uma data limite válida")
+        .refine((value) => !Number.isNaN(new Date(value).getTime()), "Selecione uma data limite válida")
+        .refine((value) => value.slice(0, 10) >= getEarliestExtensionDate(), "Escolha uma data a partir de amanhã (horário da Bahia)."),
     reason: z
         .string()
         .min(5, "Informe a justificativa com no mínimo 5 caracteres")

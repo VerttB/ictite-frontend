@@ -1,6 +1,5 @@
 "use client";
 
-import useSWR from "swr";
 import { UseFormReturn, Controller } from "react-hook-form";
 import {
     Printer,
@@ -23,7 +22,6 @@ import {
 import {
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
-import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
 import { EquipmentType } from "@/core/domain/EquipmentType";
 import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
@@ -31,19 +29,25 @@ interface EquipmentItemFormProps {
     index: number;
     fieldId: string;
     form: UseFormReturn<SchoolFormDataInput>;
+    ensureDraftSaved: () => Promise<boolean>;
     readOnly?: boolean;
     isExpanded: boolean;
     onToggleExpand: () => void;
     onRemove: () => void;
+    draftData?: SchoolFormDataInput;
+    equipmentTypes: EquipmentType[];
 }
 
 export function EquipmentItemForm({
     index,
     form,
+    ensureDraftSaved,
     readOnly = false,
     isExpanded,
     onToggleExpand,
     onRemove,
+    draftData,
+    equipmentTypes = [],
 }: EquipmentItemFormProps) {
     const {
         register,
@@ -53,11 +57,6 @@ export function EquipmentItemForm({
     } = form;
     const equipment = watch(`equipments.${index}`);
     const equipmentError = errors.equipments?.[index];
-
-    const { data: equipmentTypes = [] } = useSWR<EquipmentType[]>(
-        "/equipment-types/",
-        getEquipamentTypes
-    );
 
     const hasError = Boolean(equipmentError);
     const isIncomplete =
@@ -213,7 +212,9 @@ export function EquipmentItemForm({
                         <FormEntityImageDropzone
                             entityType="equipment"
                             entityId={equipment.id}
+                            ensureDraftSaved={ensureDraftSaved}
                             readOnly={readOnly}
+                            draftData={draftData}
                         />
                     )}
                 </div>

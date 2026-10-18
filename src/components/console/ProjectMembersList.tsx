@@ -23,6 +23,8 @@ import { LoaderCircle, Check, Search } from "lucide-react";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
+import type { Researcher } from "@/core/domain/Researcher";
+import type { FieldValues } from "react-hook-form";
 
 export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
     const { data: members, mutate } = useSWR(["project-members", projectId], () =>
@@ -37,8 +39,8 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
     const [searchTerm, setSearchValue] = useState("");
     const [isSaving, setIsSaving] = useState(false);
 
-    const crud = useAdmCrud<any, any, any>({
-        mutate: mutate as any,
+    const crud = useAdmCrud<Researcher, FieldValues, FieldValues>({
+        mutate,
         deleteFn: async (researcherId) => {
             await removeResearcherFromProject(projectId, researcherId);
         },
@@ -93,7 +95,7 @@ export const ProjectMembersList = ({ projectId }: { projectId: string }) => {
 
     return (
         <div className="flex flex-col gap-4">
-            <Section<any>
+            <Section<Researcher>
                 title="Membros do Projeto"
                 items={flattenedMembers}
                 onAdd={crud.ui.openCreate}

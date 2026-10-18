@@ -30,7 +30,7 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         const material = await createMaterial(payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -50,7 +50,7 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         const material = await updateMaterial(id, payload);
         if (images?.length) {
             const form = new FormData();
-            images.forEach((img: File) => {
+            images.forEach((img) => {
                 if (img instanceof File) {
                     form.append("images", img);
                 }
@@ -80,7 +80,7 @@ export const MaterialAdm = ({ params }: MaterialAdmProps) => {
         fetchFn: getMaterials,
         createFn: async (data) => {
             const material = await handleCreate(data);
-            return { ...material, _redirectToList: true } as any;
+            return { ...material, _redirectToList: true };
         },
         updateFn: handleUpdate,
         deleteFn: deleteMaterial,

@@ -17,12 +17,13 @@ import z from "zod";
 
 interface UseSchoolSubmissionReturn {
     submission: SchoolFormSubmission | null;
+    globalDeadline: string | null | undefined;
     isLoading: boolean;
     isSaving: boolean;
     isSubmitting: boolean;
     form: UseFormReturn<SchoolFormDataInput>;
-    saveDraft: () => Promise<void>;
-    submitForm: () => Promise<void>;
+    saveDraft: (options?: { quietSuccess?: boolean }) => Promise<boolean>;
+    submitForm: () => Promise<boolean>;
     refreshFromDatabase: () => Promise<void>;
     reopenDraft: () => Promise<void>;
     requestDeadlineExtension: (payload: RequestDeadlineExtension) => Promise<boolean>;
@@ -36,6 +37,7 @@ function removeNulls<T>(obj: T): T {
     }
     if (obj !== null && typeof obj === "object") {
         const cleaned = Object.entries(obj).reduce<Record<string, unknown>>((acc, [key, value]) => {
+            if (key === "identity_territory_id" && value === "") return acc;
             acc[key] = value === null ? undefined : removeNulls(value);
             return acc;
         }, {});
@@ -45,15 +47,31 @@ function removeNulls<T>(obj: T): T {
 }
 
 function getDraftValidationMessage(error: z.ZodError): string {
-    const firstIssue = error.issues[0]?.message;
-    if (!firstIssue) {
-        return "Revise os campos do formulário antes de salvar o rascunho.";
+    const firstIssue = error.issues[0];
+    if (!firstIssue) return "Preencha os campos obrigatórios para salvar o rascunho.";
+
+    const path = firstIssue.path.join(" > ");
+    if (path.includes("school.name")) {
+        return "O nome da escola é obrigatório para salvar o rascunho.";
     }
-    return `Revise o formulário antes de salvar: ${firstIssue}`;
+    if (path.includes("clubs")) {
+        return "Verifique os clubes de ciência: o nome do clube é obrigatório.";
+    }
+    if (path.includes("projects")) {
+        return "Verifique os projetos: nome e vínculo com clube são obrigatórios.";
+    }
+    if (path.includes("researchers")) {
+        return "Verifique os pesquisadores: nome e função são obrigatórios.";
+    }
+    if (path.includes("equipments")) {
+        return "Verifique a quantidade dos equipamentos: deve ser maior ou igual a 1.";
+    }
+    return `Erro de validação: ${firstIssue.message}`;
 }
 
 export function useSchoolSubmission(): UseSchoolSubmissionReturn {
     const [submission, setSubmission] = useState<SchoolFormSubmission | null>(null);
+    const [globalDeadline, setGlobalDeadline] = useState<string | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -71,6 +89,12 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
 
     const loadSubmission = useCallback(async () => {
         setIsLoading(true);
+        const deadlineRequest = schoolSubmissionService.getGlobalDeadline()
+            .then(({ school_forms_global_deadline }) => setGlobalDeadline(school_forms_global_deadline))
+            .catch(() => {
+                setGlobalDeadline(undefined);
+                toast.error("Não foi possível consultar o prazo de envio do formulário.");
+            });
         try {
             const sub = await schoolSubmissionService.getCurrentSubmission();
             setSubmission(sub);
@@ -106,6 +130,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                 toast.error("Erro ao carregar o formulário da escola.");
             }
         } finally {
+            await deadlineRequest;
             setIsLoading(false);
         }
     }, [form]);
@@ -114,8 +139,8 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         loadSubmission();
     }, [loadSubmission]);
 
-    const saveDraft = async () => {
-        if (!submission) return;
+    const saveDraft = async (options?: { quietSuccess?: boolean }): Promise<boolean> => {
+        if (!submission) return false;
         setIsSaving(true);
         try {
             const currentData = form.getValues();
@@ -127,30 +152,36 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
             );
             setSubmission(updatedSub);
             form.reset(updatedSub.data);
-            toast.success("Rascunho salvo com sucesso!");
+            if (!options?.quietSuccess) toast.success("Rascunho salvo com sucesso!");
+            return true;
         } catch (error) {
             if (error instanceof ApiError) {
                 if (error.status === 409) {
                     toast.error(
                         error.message || "Conflito de concorrência ou prazo encerrado."
                     );
+                } else if (error.status === 422) {
+                    toast.error("Confira os dados do formulário antes de salvar o rascunho.");
                 } else {
                     toast.error(error.message || "Erro ao salvar rascunho.");
                 }
+                return false;
             } else if (error instanceof z.ZodError) {
                 await form.trigger();
                 toast.error(getDraftValidationMessage(error));
+                return false;
             } else {
                 toast.error("Erro de conexão ao salvar rascunho.");
                 console.log(error);
+                return false;
             }
         } finally {
             setIsSaving(false);
         }
     };
 
-    const submitForm = async () => {
-        if (!submission) return;
+    const submitForm = async (): Promise<boolean> => {
+        if (!submission) return false;
         setIsSubmitting(true);
         try {
             const currentData = form.getValues();
@@ -160,13 +191,21 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
 
             const submittedSub = await schoolSubmissionService.submitDraft();
             setSubmission(submittedSub);
-            toast.success("Formulário enviado com sucesso para aprovação!");
+            return true;
         } catch (error) {
             if (error instanceof ApiError) {
-                toast.error(error.message || "Erro ao enviar formulário para aprovação.");
+                toast.error(
+                    error.status === 422
+                        ? "Confira os dados do formulário antes de enviar para aprovação."
+                        : error.message || "Erro ao enviar formulário para aprovação."
+                );
+            } else if (error instanceof z.ZodError) {
+                await form.trigger();
+                toast.error(getDraftValidationMessage(error));
             } else {
                 toast.error("Erro de conexão ao enviar formulário.");
             }
+            return false;
         } finally {
             setIsSubmitting(false);
         }
@@ -195,8 +234,12 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
             setSubmission(reopenedSub);
             form.reset(reopenedSub.data);
             toast.success("Formulário reaberto para edição!");
-        } catch (_error) {
-            toast.error("Erro ao reabrir formulário.");
+        } catch (error) {
+            if (error instanceof ApiError) {
+                toast.error(error.message || "Erro ao reabrir formulário.");
+            } else {
+                toast.error("Erro de conexão ao reabrir formulário.");
+            }
         } finally {
             setIsLoading(false);
         }
@@ -224,6 +267,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
 
     return {
         submission,
+        globalDeadline,
         isLoading,
         isSaving,
         isSubmitting,

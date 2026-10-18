@@ -8,18 +8,6 @@ export const ImageSchema = z.object({
 
 export type Image = z.infer<typeof ImageSchema>;
 
-const isValidFile = (f: unknown) => {
-    // If it's an existing image object from backend, we consider it valid
-    if (f && typeof f === "object" && !("size" in f) && ("url" in f || "id" in f)) {
-        return true;
-    }
-    // Otherwise, check if it's a File and validate
-    if (f instanceof File) {
-        return f.size <= MAX_IMAGE_SIZE && isAcceptedImageFile(f);
-    }
-    return false;
-};
-
 const isSizeValid = (f: unknown) => {
     if (f && typeof f === "object" && !("size" in f) && ("url" in f || "id" in f)) {
         return true;
@@ -35,16 +23,24 @@ const isFormatValid = (f: unknown) => {
 };
 
 export const ImageCreateSchema = z
-    .any()
-    .transform<any[]>((files) => Array.from(files ?? []))
+    .unknown()
+    .transform((files): unknown[] =>
+        Array.isArray(files) || (typeof FileList !== "undefined" && files instanceof FileList)
+            ? Array.from(files)
+            : []
+    )
     .refine((arr) => arr.length >= 1, "Envie pelo menos 1 imagem")
     .refine((arr) => arr.length <= 5, "Máximo de 5 imagens")
     .refine((arr) => arr.every(isSizeValid), "Máx 5MB")
     .refine((arr) => arr.every(isFormatValid), "Formato inválido");
 
 export const OptionalImageCreateSchema = z
-    .any()
-    .transform<any[]>((files) => Array.from(files ?? []))
+    .unknown()
+    .transform((files): unknown[] =>
+        Array.isArray(files) || (typeof FileList !== "undefined" && files instanceof FileList)
+            ? Array.from(files)
+            : []
+    )
     .refine((arr) => arr.length <= 5, "Máximo de 5 imagens")
     .refine((arr) => arr.every(isSizeValid), "Máx 5MB")
     .refine((arr) => arr.every(isFormatValid), "Formato inválido");
