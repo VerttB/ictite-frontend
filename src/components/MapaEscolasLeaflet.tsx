@@ -22,6 +22,7 @@ import type { SchoolGeoJson } from "@/core/domain/School";
 import { Spinner } from "@/components/LoadingSpin";
 import { useSidebar } from "@/components/ui/sidebar";
 import styles from "./MapaEscolasLeaflet.module.css";
+import { getAssetPrefix } from "@/core/utils/api";
 
 type SchoolProperties = SchoolGeoJson["features"][number]["properties"];
 type SchoolFeature = Feature<Point, SchoolProperties>;
@@ -94,7 +95,7 @@ function territoryColor(id: string) {
 }
 
 async function fetchMunicipalities(): Promise<MunicipalityCollection> {
-    const response = await fetch("/territorio_relacionado.json");
+    const response = await fetch(`${getAssetPrefix()}/territorio_relacionado.json`);
     if (!response.ok) throw new Error("Não foi possível carregar os municípios do mapa.");
     const data: unknown = await response.json();
     if (
