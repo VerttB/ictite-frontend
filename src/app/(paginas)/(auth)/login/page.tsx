@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react"; 
+import { Eye, EyeOff } from "lucide-react"; 
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -16,6 +19,8 @@ export default function Login() {
     const { loginUser, isLoading } = useUserContext();
 
     type userLoginData = z.infer<typeof userLoginSchema>;
+
+    const [mostrarSenha, setMostrarSenha] = useState(false); 
 
     const {
         register,
@@ -68,11 +73,29 @@ export default function Login() {
                     </label>
                     <label htmlFor="password" className="flex flex-col gap-2">
                         Senha
-                        <Input
+
+                        <div className="relative">
+                            <Input
+                            id="password"
                             {...register("password")}
-                            type="password"
+                            type={mostrarSenha ? "text" : "password"}
                             className="bg-background rounded-md border-1 border-gray-300 px-2 py-2"
-                        />
+                            />
+
+                            <button
+                            type="button"
+                            onClick={() => setMostrarSenha(!mostrarSenha)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
+                            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                            >
+                            {mostrarSenha ? (
+                                <EyeOff size={20} />
+                            ) : (
+                                <Eye size={20} />
+                            )}
+                            </button>
+                        </div>
+
                         <span className="text-sm text-red-500">
                             {errors && errors.password?.message}
                         </span>
