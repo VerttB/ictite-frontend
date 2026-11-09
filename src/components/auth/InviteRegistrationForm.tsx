@@ -1,5 +1,8 @@
 "use client";
 
+import {useState} from 'react';
+import { Eye, EyeOff } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -24,6 +27,7 @@ interface InviteRegistrationFormProps {
 }
 
 function getInviteErrorMessage(message: string): string {
+
     const normalizedMessage = message.toLowerCase();
     if (normalizedMessage.includes("e-mail já está cadastrado")) {
         return "Este e-mail já está cadastrado no sistema.";
@@ -43,6 +47,9 @@ function getInviteErrorMessage(message: string): string {
 export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
     const router = useRouter();
     const { registerInvitedUser, isLoading } = useUserContext();
+
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
     const {
         register,
@@ -83,7 +90,7 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
             <div className="flex h-full items-center justify-center">
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className="flex flex-col gap-4 text-lg font-medium 2xl:text-xl">
+                    className="flex w-full max-w-xl flex-col gap-4 text-lg font-medium 2xl:text-xl">
                     <input type="hidden" {...register("invite_token")} />
 
                     <div className="flex flex-col gap-1 text-center">
@@ -111,12 +118,28 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
 
                     <label htmlFor="password" className="flex flex-col gap-2">
                         Senha
-                        <Input
-                            {...register("password")}
-                            type="password"
-                            placeholder="Mínimo 6 caracteres"
-                            className="bg-background border-1 rounded-md border-gray-300 px-2 py-2"
-                        />
+
+                        <div className="relative w-full">
+                            <Input
+                                id="password"
+                                {...register("password")}
+                                type={mostrarSenha ? "text" : "password"}
+                                placeholder="Mínimo 6 caracteres"
+                                className="w-full bg-background border rounded-md border-gray-300 px-2 py-2 pr-10"
+                            />
+
+                            <button
+                            type="button"
+                            onClick={() => setMostrarSenha(!mostrarSenha)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
+                            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                            >
+                                {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+
+
+                        </div>
+
                         <span className="text-sm text-red-500">
                             {errors.password?.message}
                         </span>
@@ -124,12 +147,27 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
 
                     <label htmlFor="confirmPassword" className="flex flex-col gap-2">
                         Confirmar senha
-                        <Input
-                            {...register("confirmPassword")}
-                            type="password"
-                            placeholder="Repita a senha"
-                            className="bg-background border-1 rounded-md border-gray-300 px-2 py-2"
-                        />
+
+                        <div className="relative w-full">
+                            <Input
+                                id="confirmPassword"
+                                {...register("confirmPassword")}
+                                type={mostrarConfirmarSenha ? "text" : "password"}
+                                placeholder="Repita a senha"
+                                className="w-full bg-background border rounded-md border-gray-300 px-2 py-2 pr-10"
+                            />
+
+                            <button
+                                type="button"
+                                onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
+                                aria-label={mostrarConfirmarSenha ? "Ocultar senha" : "Mostrar senha"}
+                            >
+                                {mostrarConfirmarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                            
+                        </div>
+
                         <span className="text-sm text-red-500">
                             {errors.confirmPassword?.message}
                         </span>
