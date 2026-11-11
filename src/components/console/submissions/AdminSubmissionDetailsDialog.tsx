@@ -14,7 +14,9 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getAdminSubmissionById } from "@/core/service/adminSubmissionService";
+import { getAdminSubmissionById, getAdminSubmissionImages } from "@/core/service/adminSubmissionService";
+import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
+import { ImageDisplay } from "@/components/ui/ImageDisplay";
 import { SchoolFormSubmission } from "@/schemas/schoolSubmissionSchema";
 import { AdminSubmissionActions } from "./AdminSubmissionActions";
 import { SubmissionStatusBadge } from "./SubmissionStatusBadge";
@@ -59,6 +61,17 @@ function EmptySection({ message }: { message: string }) {
     );
 }
 
+function ImageGallery({ images }: { images?: string[] }) {
+    if (!images?.length) return null;
+    return (
+        <div className="flex flex-wrap gap-2 sm:col-span-2">
+            {images.map((url) => (
+                <ImageDisplay key={url} src={url} alt="Imagem enviada para revisão" className="h-28 w-36 overflow-hidden rounded-md border" />
+            ))}
+        </div>
+    );
+}
+
 export function AdminSubmissionDetailsDialog({
     submissionId,
     open,
@@ -69,10 +82,20 @@ export function AdminSubmissionDetailsDialog({
         open && submissionId ? ["admin-submission-detail", submissionId] : null,
         ([, currentSubmissionId]) => getAdminSubmissionById(currentSubmissionId)
     );
+    const { data: images, error: imagesError } = useSWR(
+        open && submissionId ? ["admin-submission-images", submissionId] : null,
+        ([, currentSubmissionId]) => getAdminSubmissionImages(currentSubmissionId)
+    );
+    const { data: equipmentTypes = [] } = useSWR("equipment-types", getEquipamentTypes);
+    const equipmentTypeNames = new Map(equipmentTypes.map((type) => [type.id, type.name]));
 
     useEffect(() => {
         if (error) toast.error("Não foi possível carregar os detalhes da submissão.");
     }, [error]);
+
+    useEffect(() => {
+        if (imagesError) toast.error("Não foi possível carregar as imagens da submissão.");
+    }, [imagesError]);
 
     const handleSubmissionUpdated = async (submission: SchoolFormSubmission) => {
         await mutate(submission, { revalidate: false });
@@ -81,7 +104,7 @@ export function AdminSubmissionDetailsDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-h-[90vh] overflow-hidden p-0 sm:max-w-6xl">
+            <DialogContent className="flex max-h-[90vh] flex-col overflow-hidden p-0 sm:max-w-6xl">
                 <DialogHeader className="border-b px-6 py-5">
                     <DialogTitle>{data?.data.school.name || "Detalhes da submissão"}</DialogTitle>
                     <DialogDescription>
@@ -95,7 +118,7 @@ export function AdminSubmissionDetailsDialog({
                     ) : null}
                 </DialogHeader>
 
-                <div className="overflow-y-auto px-6 pb-6">
+                <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6">
                     {isLoading ? (
                         <div className="flex min-h-72 items-center justify-center gap-2 text-sm text-gray-500">
                             <LoaderCircle className="animate-spin" size={18} />
@@ -234,6 +257,7 @@ export function AdminSubmissionDetailsDialog({
                                                 value={data.data.school.description}
                                             />
                                         </div>
+                                        <ImageGallery images={images?.school ? [images.school] : []} />
                                     </CardContent>
                                 </Card>
                             </TabsContent>
@@ -248,6 +272,10 @@ export function AdminSubmissionDetailsDialog({
                                                     label="Instagram"
                                                     value={club.instagram_url}
                                                 />
+                                                <div className="sm:col-span-2">
+                                                    <InfoItem label="Descrição" value={club.description} />
+                                                </div>
+                                                <ImageGallery images={images?.clubs[club.id]} />
                                             </CardContent>
                                         </Card>
                                     ))
@@ -278,6 +306,10 @@ export function AdminSubmissionDetailsDialog({
                                                             value={project.description}
                                                         />
                                                     </div>
+                                                    <div className="sm:col-span-2">
+                                                        <InfoItem label="Descrição longa" value={project.long_description} />
+                                                    </div>
+                                                    <ImageGallery images={images?.projects[project.id]} />
                                                 </CardContent>
                                             </Card>
                                         );
@@ -311,6 +343,7 @@ export function AdminSubmissionDetailsDialog({
                                                         label="Projetos vinculados"
                                                         value={projectNames}
                                                     />
+                                                    <ImageGallery images={images?.researchers[researcher.id] ?? (researcher.image ? [researcher.image] : [])} />
                                                 </CardContent>
                                             </Card>
                                         );
@@ -326,10 +359,12 @@ export function AdminSubmissionDetailsDialog({
                                         <Card key={equipment.id}>
                                             <CardContent className="grid gap-4 pt-1 sm:grid-cols-2">
                                                 <InfoItem label="Nome" value={equipment.name} />
+                                                    <InfoItem label="Tipo" value={equipmentTypeNames.get(equipment.type_equipment_id)} />
                                                 <InfoItem
                                                     label="Quantidade"
                                                     value={equipment.quantity}
                                                 />
+                                                    <ImageGallery images={images?.equipments[equipment.id]} />
                                             </CardContent>
                                         </Card>
                                     ))

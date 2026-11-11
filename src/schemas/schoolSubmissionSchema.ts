@@ -22,8 +22,8 @@ export const ProjectDraftDataSchema = z.object({
     description: z.string().optional(),
     long_description: z.string().optional(),
     clube_ciencia_id: z.string().uuid("Selecione um clube válido"),
-    start_year: z.number().int().optional(),
-    end_year: z.number().int().optional(),
+    start_year: z.number().int().max(new Date().getFullYear(), "O ano de início não pode ser posterior ao ano atual.").optional(),
+    end_year: z.number().int().min(new Date().getFullYear(), "O ano de conclusão não pode ser anterior ao ano atual.").optional(),
 }).refine(
     (data) => data.start_year === undefined || data.end_year === undefined || data.end_year >= data.start_year,
     {

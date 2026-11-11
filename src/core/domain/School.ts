@@ -39,7 +39,7 @@ export const SchoolCreateSchema = SchoolSchema.pick({
 }).and(
     z.object({
         cep: OptionalCepSchema,
-        identity_territory_id: z.uuid().optional(),
+        identity_territory_id: z.uuid().nullish(),
     })
 );
 

@@ -9,7 +9,7 @@ import { schoolSubmissionService } from "@/core/service/schoolSubmissionService"
 import { MAX_IMAGE_SIZE, isAcceptedImageFile } from "@/core/constants/Image";
 
 interface FormEntityImageDropzoneProps {
-    entityType: "clube_ciencias" | "project" | "equipment";
+    entityType: "clube_ciencias" | "project" | "equipment" | "researcher";
     entityId: string;
     readOnly?: boolean;
     label?: string;
@@ -17,6 +17,7 @@ interface FormEntityImageDropzoneProps {
     draftData?: {
         clubs?: Array<{ id: string }>;
         projects?: Array<{ id: string }>;
+        researchers?: Array<{ id: string }>;
         equipments?: Array<{ id: string }>;
     };
 }
@@ -39,6 +40,8 @@ export function FormEntityImageDropzone({
                 return draftData.clubs?.some(c => c.id === entityId) ?? false;
             case "project":
                 return draftData.projects?.some(p => p.id === entityId) ?? false;
+            case "researcher":
+                return draftData.researchers?.some(r => r.id === entityId) ?? false;
             case "equipment":
                 return draftData.equipments?.some(e => e.id === entityId) ?? false;
             default:

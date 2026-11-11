@@ -71,7 +71,7 @@ export function AdminSubmissions({ params }: AdminSubmissionsProps) {
     const { data, error, isLoading, mutate } = useSWR(
         ["admin-submissions", requestParams],
         ([, currentParams]) => getAdminSubmissions(currentParams),
-        { keepPreviousData: true }
+        { keepPreviousData: false }
     );
 
     useEffect(() => {

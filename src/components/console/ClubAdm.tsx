@@ -145,7 +145,8 @@ export const ClubAdm = ({ params }: ClubAdmProps) => {
                     defaultValues={{ images: [] }}
                     mapToFormValues={(item) => ({
                         ...item,
-                        year: item.year == null ? undefined : String(item.year),
+                        start_year: item.start_year ?? undefined,
+                        end_year: item.end_year ?? undefined,
                         clube_ciencia_id: item.clube?.id,
                     })}
                     renderFields={(props) => <ProjectForm {...props} />}

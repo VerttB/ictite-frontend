@@ -68,32 +68,13 @@ export const ControlledComboBox = ({
 
     const rhfValue = useWatch({ name, control });
 
-    // Sync search value with selected label when editing or reset
+    const selectedLabel = !isMulti && rhfValue
+        ? normalizedOptions.find((option) => option.value === rhfValue.toString())?.label ?? ""
+        : "";
+
     React.useEffect(() => {
-        // If value is cleared (reset), clear the search text
-        if (!rhfValue || (Array.isArray(rhfValue) && rhfValue.length === 0)) {
-            if (!lockedValue) {
-                setSearchValue("");
-            }
-            return;
-        }
-
-        // If single select and we have a value, sync the label if not already typing
-        if (!isMulti && rhfValue) {
-            const selected = normalizedOptions.find(
-                (o) => o.value === rhfValue.toString()
-            );
-
-            // Only sync if the search text is empty (initial load) or
-            // if it's completely different from the current value's label
-            // (meaning the value changed externally)
-            if (selected && (!searchValue || searchValue !== selected.label)) {
-                // If the user just cleared the input manually but didn't select a new value yet,
-                // we might want to be careful here, but usually reset() is the main case.
-                setSearchValue(selected.label);
-            }
-        }
-    }, [rhfValue, normalizedOptions, isMulti, lockedValue]);
+        if (!isMulti && !lockedValue) setSearchValue(selectedLabel);
+    }, [selectedLabel, isMulti, lockedValue]);
 
     return (
         <div className={`${className}`}>

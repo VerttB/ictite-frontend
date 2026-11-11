@@ -162,9 +162,10 @@ export function ProjectItemForm({
                             </label>
                             <Input
                                 type="number"
+                                max={new Date().getFullYear()}
                                 disabled={readOnly}
                                 {...register(`projects.${index}.start_year`, {
-                                    valueAsNumber: true,
+                                    setValueAs: (value) => value === "" ? undefined : Number(value),
                                 })}
                             />
                             {errors.projects?.[index]?.start_year && (
@@ -181,9 +182,10 @@ export function ProjectItemForm({
                             </label>
                             <Input
                                 type="number"
+                                min={new Date().getFullYear()}
                                 disabled={readOnly}
                                 {...register(`projects.${index}.end_year`, {
-                                    valueAsNumber: true,
+                                    setValueAs: (value) => value === "" ? undefined : Number(value),
                                 })}
                             />
                             {errors.projects?.[index]?.end_year && (

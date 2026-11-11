@@ -23,6 +23,7 @@ import { ProjectDraftData, SchoolFormDataInput } from "@/schemas/schoolSubmissio
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { GenderTypes } from "@/core/constants/sex";
 import { RaceTypes } from "@/core/constants/race";
+import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface ResearcherItemFormProps {
     index: number;
@@ -33,6 +34,8 @@ interface ResearcherItemFormProps {
     isExpanded: boolean;
     onToggleExpand: () => void;
     onRemove: () => void;
+    ensureDraftSaved: () => Promise<boolean>;
+    draftData?: SchoolFormDataInput;
 }
 
 export function ResearcherItemForm({
@@ -43,6 +46,8 @@ export function ResearcherItemForm({
     isExpanded,
     onToggleExpand,
     onRemove,
+    ensureDraftSaved,
+    draftData,
 }: ResearcherItemFormProps) {
     const {
         register,
@@ -327,6 +332,16 @@ export function ResearcherItemForm({
                             </p>
                         )}
                     </div>
+
+                    {researcher?.id && (
+                        <FormEntityImageDropzone
+                            entityType="researcher"
+                            entityId={researcher.id}
+                            ensureDraftSaved={ensureDraftSaved}
+                            readOnly={readOnly}
+                            draftData={draftData}
+                        />
+                    )}
                 </div>
             )}
         </div>

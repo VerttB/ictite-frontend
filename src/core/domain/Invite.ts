@@ -11,7 +11,8 @@ export const GenerateInviteResponseSchema = z.object({
 export const RegisterInvitedRequestSchema = z.object({
     invite_token: z.string().min(1, "Token de convite obrigatório"),
     email: z.string().email("Email inválido"),
-    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+    password: z.string().min(10, "A senha deve ter pelo menos 10 caracteres")
+        .regex(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9])/, "Use maiúscula, minúscula, número e símbolo"),
 });
 
 export type GenerateInviteResponse = z.infer<

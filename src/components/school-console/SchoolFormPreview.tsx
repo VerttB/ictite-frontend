@@ -22,6 +22,8 @@ import { EquipmentType } from "@/core/domain/EquipmentType";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
 import { IdentityTerritory } from "@/core/domain/IdentityTerritory";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
+import { ImageDisplay } from "@/components/ui/ImageDisplay";
+import { schoolSubmissionService } from "@/core/service/schoolSubmissionService";
 
 interface SchoolFormPreviewProps {
     data: SchoolFormDataInput;
@@ -63,6 +65,21 @@ function EmptySection({ label }: { label: string }) {
         <div className="flex items-center gap-2 rounded-2xl border border-dashed border-amber-200 bg-amber-50/60 p-4 text-xs font-semibold text-amber-700">
             <AlertTriangle size={16} />
             {label} ainda não informado.
+        </div>
+    );
+}
+
+function DraftImageGallery({ entityType, entityId }: { entityType: string; entityId: string }) {
+    const { data } = useSWR(
+        entityId ? ["review-images", entityType, entityId] : null,
+        () => schoolSubmissionService.getFormEntityImages(entityType, entityId)
+    );
+    if (!data?.images?.length) return null;
+    return (
+        <div className="mt-4 flex flex-wrap gap-2">
+            {data.images.map((image) => (
+                <ImageDisplay key={image.path} src={image.url} alt="Imagem para revisão" className="h-28 w-36 overflow-hidden rounded-md border" />
+            ))}
         </div>
     );
 }
@@ -170,6 +187,7 @@ export function SchoolFormPreview({
         "identity-territories",
         getTerritories
     );
+    const { data: schoolImage } = useSWR("/submissions/current/image", () => schoolSubmissionService.getFormImage());
 
     const territoryMap = new Map(
         territories.map((t) => [t.id, `${t.code} — ${t.name}`])
@@ -249,6 +267,7 @@ export function SchoolFormPreview({
                         wide
                     />
                 </div>
+                {schoolImage?.url && <ImageDisplay src={schoolImage.url} alt="Imagem da escola para revisão" className="mt-4 h-40 w-56 overflow-hidden rounded-md border" />}
             </section>
 
             <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
@@ -284,6 +303,7 @@ export function SchoolFormPreview({
                                         wide
                                     />
                                 </div>
+                                <DraftImageGallery entityType="clube_ciencias" entityId={club.id} />
                             </div>
                         ))
                     )}
@@ -332,6 +352,7 @@ export function SchoolFormPreview({
                                         wide
                                     />
                                 </div>
+                                <DraftImageGallery entityType="project" entityId={project.id} />
                             </div>
                         ))
                     )}
@@ -386,6 +407,7 @@ export function SchoolFormPreview({
                                             value={linkedProjects}
                                         />
                                     </div>
+                                    <DraftImageGallery entityType="researcher" entityId={researcher.id} />
                                 </div>
                             );
                         })
@@ -430,6 +452,7 @@ export function SchoolFormPreview({
                                         value={equipment.quantity}
                                     />
                                 </div>
+                                <DraftImageGallery entityType="equipment" entityId={equipment.id} />
                             </div>
                         ))
                     )}

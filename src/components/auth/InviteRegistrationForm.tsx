@@ -114,7 +114,7 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
                         <Input
                             {...register("password")}
                             type="password"
-                            placeholder="Mínimo 6 caracteres"
+                            placeholder="10 caracteres, maiúscula, minúscula, número e símbolo"
                             className="bg-background border-1 rounded-md border-gray-300 px-2 py-2"
                         />
                         <span className="text-sm text-red-500">

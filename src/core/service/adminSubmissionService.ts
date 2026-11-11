@@ -6,6 +6,14 @@ import { SchoolFormSubmission } from "@/schemas/schoolSubmissionSchema";
 export type SubmissionStatus = SchoolFormSubmission["status"];
 export type ExtensionStatus = NonNullable<SchoolFormSubmission["extension_status"]>;
 
+export interface AdminSubmissionImages {
+    school: string | null;
+    clubs: Record<string, string[]>;
+    projects: Record<string, string[]>;
+    researchers: Record<string, string[]>;
+    equipments: Record<string, string[]>;
+}
+
 export interface AdminSubmissionSearchParams extends SearchParams {
     page?: number;
     size?: number;
@@ -40,6 +48,10 @@ export const getAdminSubmissionById = async (
     return await apiClient.get<SchoolFormSubmission>(
         `/admin/submissions/${submissionId}`
     );
+};
+
+export const getAdminSubmissionImages = async (submissionId: string): Promise<AdminSubmissionImages> => {
+    return await apiClient.get<AdminSubmissionImages>(`/admin/submissions/${submissionId}/images`);
 };
 
 export const approveAdminSubmission = async (

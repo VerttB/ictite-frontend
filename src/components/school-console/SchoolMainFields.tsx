@@ -165,7 +165,7 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
                 <div className="sm:col-span-2">
                     <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <School size={14} className="text-[#088077]" />
-                        Nome da Escola *
+                        Nome da Escola (Obrigatório)
                     </label>
                     <input
                         type="text"
@@ -186,7 +186,7 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
                 <div>
                     <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <Building2 size={14} className="text-[#088077]" />
-                        CEP
+                        CEP (Opcional)
                     </label>
                     <input
                         type="text"
@@ -213,7 +213,7 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
                 <div>
                     <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <MapPin size={14} className="text-[#088077]" />
-                        Cidade
+                        Cidade (Opcional)
                     </label>
                     <Controller
                         control={control}
