@@ -13,6 +13,8 @@ RUN \
 
 
 FROM base AS builder
+ARG NEXT_PUBLIC_GA4_MEASUREMENT_ID
+ENV NEXT_PUBLIC_GA4_MEASUREMENT_ID=$NEXT_PUBLIC_GA4_MEASUREMENT_ID
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

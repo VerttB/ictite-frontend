@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import "./global.css";
 import UserProvider from "@/providers/UserContext";
 import { ThemeProvider } from "@/core/providers/ThemeProvider";
@@ -18,10 +19,7 @@ export const metadata: Metadata = {
     title: "ICTITE - Plataforma Ciência Mais Bahia",
     description: "Plataforma do projeto da Ciência Mais Bahia - Rede ICTITE",
     icons: {
-        icon: [
-            { url: "/logo_icon.png" },
-            { url: "/favicon.ico" },
-        ],
+        icon: [{ url: "/logo_icon.png" }, { url: "/favicon.ico" }],
         shortcut: "/logo_icon.png",
         apple: "/logo_icon.png",
     },
@@ -34,8 +32,8 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="pt-BR">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+                <GoogleAnalytics />
                 <ThemeProvider>
                     <UserProvider>{children}</UserProvider>
                 </ThemeProvider>
