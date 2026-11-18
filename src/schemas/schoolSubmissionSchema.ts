@@ -101,6 +101,7 @@ export interface SchoolFormSubmission {
     base_timestamp: string;
     has_conflict: boolean;
     submitted_by?: string | null;
+    submitted_by_email?: string | null;
     rejection_reason?: string | null;
     custom_deadline?: string | null;
     extension_requested_at?: string | null;

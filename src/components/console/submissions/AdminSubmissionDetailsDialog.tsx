@@ -175,6 +175,7 @@ export function AdminSubmissionDetailsDialog({
                                             label="Status"
                                             value={<SubmissionStatusBadge status={data.status} />}
                                         />
+                                        <InfoItem label="Enviado por" value={data.submitted_by_email || "Não informado"} />
                                         <InfoItem label="Versão" value={data.version} />
                                         <InfoItem label="Criada em" value={formatDate(data.created_at)} />
                                         <InfoItem
