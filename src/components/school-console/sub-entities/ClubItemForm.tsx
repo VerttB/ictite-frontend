@@ -13,9 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-    SchoolFormDataInput,
-} from "@/schemas/schoolSubmissionSchema";
+import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface ClubItemFormProps {
@@ -80,11 +78,11 @@ export function ClubItemForm({
 
     return (
         <div
-            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background relative flex flex-col overflow-hidden rounded-2xl border border-border shadow-xs transition-all duration-300 hover:bg-muted/40 ${borderClass}`}>
+            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background border-border hover:bg-muted/40 relative flex flex-col overflow-hidden rounded-2xl border shadow-xs transition-all duration-300 ${borderClass}`}>
             {/* Header do Card */}
             <div
                 onClick={onToggleExpand}
-                className="flex cursor-pointer items-center justify-between border-b border-border p-4 transition-colors select-none hover:bg-muted/50">
+                className="border-border hover:bg-muted/50 flex cursor-pointer items-center justify-between border-b p-4 transition-colors select-none">
                 <div className="flex items-center gap-3">
                     <span className={`rounded-xl p-2 ${iconBgClass}`}>
                         <Handshake size={18} />
@@ -124,15 +122,18 @@ export function ClubItemForm({
 
             {/* Campos do Formulário do Clube */}
             {isExpanded && (
-                <div className="animate-fade-in space-y-4 bg-background p-5">
+                <div className="animate-fade-in bg-background space-y-4 p-5">
                     <input type="hidden" {...register(`clubs.${index}.id`)} />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`clubs.${index}.name`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Nome do Clube de Ciência (Obrigatório)
                             </label>
                             <Input
+                                id={`clubs.${index}.name`}
                                 disabled={readOnly}
                                 placeholder="Ex: Clube de Astronomia Galileu"
                                 {...register(`clubs.${index}.name`)}
@@ -146,10 +147,13 @@ export function ClubItemForm({
                         </div>
 
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`clubs.${index}.instagram_url`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 URL do Instagram (Opcional)
                             </label>
                             <Input
+                                id={`clubs.${index}.instagram_url`}
                                 type="url"
                                 disabled={readOnly}
                                 placeholder="https://instagram.com/clube"

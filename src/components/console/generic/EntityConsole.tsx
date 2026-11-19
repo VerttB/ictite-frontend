@@ -182,7 +182,7 @@ export const EntityConsole = <
 
     if (view === "list") {
         return (
-            <div className="flex h-full w-full flex-col">
+            <div className="flex h-full w-full min-w-0 flex-col">
                 <Breadcrumbs items={breadcrumbs} />
                 <Section<T>
                     title={config.title}
@@ -223,8 +223,8 @@ export const EntityConsole = <
     }
 
     return (
-        <div className="flex h-full w-full flex-col">
-            <div className="mb-4 flex items-center justify-between">
+        <div className="flex h-full w-full min-w-0 flex-col">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-col">
                     <Breadcrumbs items={breadcrumbs} />
                     <h1 className="text-2xl font-bold">

@@ -1,31 +1,37 @@
+import { fetchNewsImage, NewsImageError } from "@/core/utils/newsImageProxy";
+
+export const runtime = "nodejs";
+
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const url = searchParams.get("url");
 
     if (!url) {
-        return new Response("Missing url", { status: 400 });
+        return new Response("Informe o endereço da imagem.", {
+            status: 400,
+            headers: { "Cache-Control": "no-store" },
+        });
     }
 
     try {
-        const res = await fetch(url, {
+        const image = await fetchNewsImage(url);
+        return new Response(image.bytes, {
             headers: {
-                "User-Agent": "Mozilla/5.0",
-            },
-        });
-
-        if (!res.ok) {
-            return new Response("Failed to fetch image", { status: 500 });
-        }
-
-        const buffer = await res.arrayBuffer();
-
-        return new Response(buffer, {
-            headers: {
-                "Content-Type": res.headers.get("content-type") || "image/jpeg",
+                "Content-Type": image.contentType,
                 "Cache-Control": "public, max-age=86400",
+                "X-Content-Type-Options": "nosniff",
+                "Content-Security-Policy": "default-src 'none'; sandbox",
             },
         });
-    } catch (err) {
-        return new Response("Error fetching image", { status: 500 });
+    } catch (error) {
+        return new Response(
+            error instanceof NewsImageError
+                ? error.message
+                : "Não foi possível carregar a imagem.",
+            {
+                status: error instanceof NewsImageError ? error.status : 502,
+                headers: { "Cache-Control": "no-store" },
+            }
+        );
     }
 }

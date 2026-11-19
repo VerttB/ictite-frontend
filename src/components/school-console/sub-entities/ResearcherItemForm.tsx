@@ -142,10 +142,13 @@ export function ResearcherItemForm({
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`researchers.${index}.name`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Nome Completo (Obrigatório)
                             </label>
                             <Input
+                                id={`researchers.${index}.name`}
                                 disabled={readOnly}
                                 placeholder="Ex: Maria Clara Souza"
                                 {...register(`researchers.${index}.name`)}
@@ -159,7 +162,9 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`researchers.${index}.type`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Função / Tipo (Obrigatório)
                             </label>
                             <Controller
@@ -170,7 +175,9 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="bg-background w-full">
+                                        <SelectTrigger
+                                            id={`researchers.${index}.type`}
+                                            className="bg-background w-full">
                                             <SelectValue placeholder="Selecione o tipo..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -192,7 +199,9 @@ export function ResearcherItemForm({
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`researchers.${index}.gender`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Gênero
                             </label>
                             <Controller
@@ -203,7 +212,9 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value || ""}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="bg-background w-full">
+                                        <SelectTrigger
+                                            id={`researchers.${index}.gender`}
+                                            className="bg-background w-full">
                                             <SelectValue placeholder="Gênero..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -223,7 +234,9 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`researchers.${index}.race`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Raça / Etnia
                             </label>
                             <Controller
@@ -234,7 +247,9 @@ export function ResearcherItemForm({
                                         disabled={readOnly}
                                         value={field.value || ""}
                                         onValueChange={field.onChange}>
-                                        <SelectTrigger className="bg-background w-full">
+                                        <SelectTrigger
+                                            id={`researchers.${index}.race`}
+                                            className="bg-background w-full">
                                             <SelectValue placeholder="Raça/Etnia..." />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -250,10 +265,13 @@ export function ResearcherItemForm({
                         </div>
 
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`researchers.${index}.lattes_id`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 ID Lattes (16 dígitos)
                             </label>
                             <Input
+                                id={`researchers.${index}.lattes_id`}
                                 maxLength={16}
                                 disabled={readOnly}
                                 placeholder="1234567890123456"

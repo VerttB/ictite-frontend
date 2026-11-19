@@ -33,17 +33,25 @@ export function SearchBar({ onSearch, placeholder, initialValue = "" }: SearchBa
         lastSearchedRef.current = value;
     };
     return (
-        <div className="relative w-full flex-grow">
+        <div className="relative min-w-0 flex-1">
             <Input
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder={placeholder}
+                aria-label={placeholder || "Buscar"}
+                onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        submitSearch();
+                    }
+                }}
                 className="w-full rounded-lg border-2 px-4 py-2 pr-10"
             />
             <Button
                 variant="ghost"
                 size="icon"
                 onClick={submitSearch}
+                aria-label="Executar busca"
                 className="bg-primary absolute top-1/2 right-1 -translate-y-1/2">
                 <Search className="text-white" />
             </Button>

@@ -27,6 +27,7 @@ function ComboboxTrigger({
     return (
         <ComboboxPrimitive.Trigger
             data-slot="combobox-trigger"
+            aria-label="Mostrar opções"
             className={(state) =>
                 cn(
                     "[&_svg:not([class*='size-'])]:size-4",
@@ -47,6 +48,7 @@ function ComboboxClear({ className, ...props }: ComboboxPrimitive.Clear.Props) {
     return (
         <ComboboxPrimitive.Clear
             data-slot="combobox-clear"
+            aria-label="Limpar seleção"
             render={<InputGroupButton variant="ghost" size="icon-xs" />}
             className={(state) =>
                 cn(typeof className === "function" ? className(state) : className)
@@ -72,6 +74,7 @@ function ComboboxInput({
         <InputGroup className={cn("sw-auto px-2 text-sm")}>
             <ComboboxPrimitive.Input
                 render={<InputGroupInput disabled={disabled} />}
+                className={className}
                 {...props}
             />
             <InputGroupAddon align="inline-end">
@@ -283,7 +286,7 @@ function ComboboxChip({
 
 function ComboboxChipsInput({
     className,
-    children,
+    children: _children,
     ...props
 }: ComboboxPrimitive.Input.Props) {
     return (

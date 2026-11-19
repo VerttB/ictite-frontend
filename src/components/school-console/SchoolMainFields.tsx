@@ -12,9 +12,7 @@ import {
     FileText,
     Map as MapIcon,
 } from "lucide-react";
-import {
-    SchoolFormDataInput,
-} from "@/schemas/schoolSubmissionSchema";
+import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 import { getTerritories } from "@/core/service/IdentityTerritoryService";
 import { IdentityTerritory } from "@/core/domain/IdentityTerritory";
 import { getSchoolLocationByCep } from "@/core/service/SchoolService";
@@ -152,8 +150,8 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
               : "text-font-secondary";
 
     return (
-        <div className="bg-card w-full rounded-2xl border border-border p-6 shadow-sm">
-            <div className="flex items-center gap-2 border-b border-border pb-4 text-[#088077]">
+        <div className="bg-card border-border w-full rounded-2xl border p-6 shadow-sm">
+            <div className="border-border flex items-center gap-2 border-b pb-4 text-[#088077]">
                 <School size={20} />
                 <h3 className="text-font-primary text-base font-bold">
                     Dados Principais da Escola
@@ -163,16 +161,19 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
             <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 {/* Nome da Escola */}
                 <div className="sm:col-span-2">
-                    <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
+                    <label
+                        htmlFor={"school.name"}
+                        className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <School size={14} className="text-[#088077]" />
                         Nome da Escola (Obrigatório)
                     </label>
                     <input
+                        id={"school.name"}
                         type="text"
                         disabled={readOnly}
                         placeholder="Ex: Escola Estadual Professor João da Silva"
                         {...register("school.name")}
-                        className="bg-background text-font-primary placeholder:text-font-secondary w-full rounded-xl border border-border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20 disabled:bg-muted"
+                        className="bg-background text-font-primary placeholder:text-font-secondary border-border disabled:bg-muted w-full rounded-xl border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20"
                     />
                     {errors.school?.name && (
                         <p className="mt-1 flex items-center gap-1 text-xs font-medium text-red-500">
@@ -200,7 +201,7 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
                             handleCepLookup(formattedCep);
                             cepField.onChange(event);
                         }}
-                        className="bg-background text-font-primary placeholder:text-font-secondary w-full rounded-xl border border-border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20 disabled:bg-muted"
+                        className="bg-background text-font-primary placeholder:text-font-secondary border-border disabled:bg-muted w-full rounded-xl border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20"
                     />
                     {showCepLookupMessage && (
                         <p className={`mt-1 text-xs font-medium ${cepLookupTextClass}`}>
@@ -211,7 +212,9 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
 
                 {/* Cidade */}
                 <div>
-                    <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
+                    <label
+                        htmlFor="school.city"
+                        className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <MapPin size={14} className="text-[#088077]" />
                         Cidade (Opcional)
                     </label>
@@ -220,6 +223,8 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
                         name="school.city"
                         render={({ field }) => (
                             <input
+                                id="school.city"
+                                name={field.name}
                                 type="text"
                                 disabled={readOnly}
                                 placeholder="Ex: Salvador"
@@ -227,7 +232,7 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
                                 onBlur={field.onBlur}
                                 onChange={field.onChange}
                                 ref={field.ref}
-                                className="bg-background text-font-primary placeholder:text-font-secondary w-full rounded-xl border border-border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20 disabled:bg-muted"
+                                className="bg-background text-font-primary placeholder:text-font-secondary border-border disabled:bg-muted w-full rounded-xl border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20"
                             />
                         )}
                     />
@@ -235,7 +240,9 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
 
                 {/* Território de Identidade */}
                 <div className="sm:col-span-2">
-                    <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
+                    <label
+                        htmlFor={"school.identity_territory_id"}
+                        className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <MapIcon size={14} className="text-[#088077]" />
                         Território de Identidade (Opcional)
                     </label>
@@ -265,13 +272,17 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
                                         );
                                         field.onChange(territory?.id || "");
                                     }}>
-                                    <SelectTrigger className="bg-background w-full rounded-xl border border-border px-4 py-2.5 text-sm disabled:bg-muted">
+                                    <SelectTrigger
+                                        id={"school.identity_territory_id"}
+                                        className="bg-background border-border disabled:bg-muted w-full rounded-xl border px-4 py-2.5 text-sm">
                                         <SelectValue placeholder="Selecione o território..." />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="__none">Nenhum</SelectItem>
                                         {uniqueTerritories.map((t) => (
-                                            <SelectItem key={t.code} value={String(t.code)}>
+                                            <SelectItem
+                                                key={t.code}
+                                                value={String(t.code)}>
                                                 {t.code} — {t.name}
                                             </SelectItem>
                                         ))}
@@ -290,31 +301,37 @@ export function SchoolMainFields({ form, readOnly = false }: SchoolMainFieldsPro
 
                 {/* URL do Instagram */}
                 <div className="sm:col-span-2">
-                    <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
+                    <label
+                        htmlFor={"school.instagram_url"}
+                        className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <Instagram size={14} className="text-[#088077]" />
                         Instagram da Escola (Opcional)
                     </label>
                     <input
+                        id={"school.instagram_url"}
                         type="url"
                         disabled={readOnly}
                         placeholder="https://instagram.com/escola_exemplo"
                         {...register("school.instagram_url")}
-                        className="bg-background text-font-primary placeholder:text-font-secondary w-full rounded-xl border border-border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20 disabled:bg-muted"
+                        className="bg-background text-font-primary placeholder:text-font-secondary border-border disabled:bg-muted w-full rounded-xl border px-4 py-2.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20"
                     />
                 </div>
 
                 {/* Descrição da Escola */}
                 <div className="sm:col-span-2">
-                    <label className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
+                    <label
+                        htmlFor={"school.description"}
+                        className="text-font-primary mb-1.5 block flex items-center gap-1.5 text-xs font-semibold">
                         <FileText size={14} className="text-[#088077]" />
                         Descrição da Escola (Opcional)
                     </label>
                     <textarea
+                        id={"school.description"}
                         rows={3}
                         disabled={readOnly}
                         placeholder="Breve apresentação sobre o histórico, estrutura e valores da instituição de ensino..."
                         {...register("school.description")}
-                        className="bg-background text-font-primary placeholder:text-font-secondary w-full resize-none rounded-xl border border-border p-3.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20 disabled:bg-muted"
+                        className="bg-background text-font-primary placeholder:text-font-secondary border-border disabled:bg-muted w-full resize-none rounded-xl border p-3.5 text-sm transition-all outline-none focus:border-[#088077] focus:ring-2 focus:ring-[#088077]/20"
                     />
                 </div>
             </div>

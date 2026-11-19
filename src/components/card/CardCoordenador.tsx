@@ -1,4 +1,3 @@
-import { CoordinatorWithClub } from "@/core/domain/Coordinator"
 import { BrainCircuit, ScrollText } from "lucide-react";
 
 interface CoordinatorCardProps {

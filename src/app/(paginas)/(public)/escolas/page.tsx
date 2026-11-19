@@ -130,28 +130,29 @@ export default function Escolas() {
             </div>
 
             {/* |=======| BUSCA |=======| */}
-            <div className="flex flex-row items-center gap-2 px-4 sm:px-0">
+            <div className="flex min-w-0 flex-row items-center gap-2 px-4 sm:px-0">
                 <SearchBar
                     onSearch={handleSearch}
                     placeholder="Buscar escola por nome..."
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button className="h-12 gap-2 rounded-lg border-2 px-5 font-bold">
+                        <Button aria-label="Filtrar escolas por território" className="h-12 gap-2 rounded-lg border-2 px-5 font-bold">
                             <Filter size={20} />
                             <span className="hidden sm:inline">Filtrar</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel className="flex items-center justify-between">
+                        <DropdownMenuLabel className="flex flex-wrap items-center justify-between gap-2">
                             <span>Território Identidade</span>
                             {territory !== "" && (
-                                <div
+                                <button
+                                    type="button"
                                     onClick={() => handleTerritory("")}
                                     className="text-muted-foreground flex cursor-pointer items-center gap-1 text-xs">
                                     <Trash2 size={15} />
                                     Limpar
-                                </div>
+                                </button>
                             )}
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
@@ -175,10 +176,10 @@ export default function Escolas() {
 
             {/* |=======| LISTA DE ESCOLAS |=======| */}
             <div className="flex flex-col gap-6 px-4 sm:px-0">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                         <Building2 />
-                        <h2 className="text-2xl font-semibold">Escolas Listadas</h2>
+                        <h2 className="text-xl font-semibold sm:text-2xl">Escolas Listadas</h2>
                     </div>
                     <div className="bg-secondary rounded-xl px-4 py-2 shadow-md">
                         <span className="font-medium text-white">

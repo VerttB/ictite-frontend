@@ -1,27 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import "./global.css";
 import UserProvider from "@/providers/UserContext";
 import { ThemeProvider } from "@/core/providers/ThemeProvider";
+import { getAssetPrefix } from "@/core/utils/api";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
+const icon = `${getAssetPrefix()}/logo_icon.png`;
 
 export const metadata: Metadata = {
     title: "ICTITE - Plataforma Ciência Mais Bahia",
     description: "Plataforma do projeto da Ciência Mais Bahia - Rede ICTITE",
     icons: {
-        icon: [{ url: "/logo_icon.png" }, { url: "/favicon.ico" }],
-        shortcut: "/logo_icon.png",
-        apple: "/logo_icon.png",
+        icon: [{ url: icon }],
+        shortcut: icon,
+        apple: icon,
     },
 };
 
@@ -32,7 +26,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="pt-BR">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
                 <GoogleAnalytics />
                 <ThemeProvider>
                     <UserProvider>{children}</UserProvider>

@@ -219,7 +219,7 @@ export function SchoolSubEntitiesTabs({
     return (
         <div className="bg-card w-full rounded-2xl border border-border p-6 shadow-sm">
             {/* Header da Seção Ativa */}
-            <div className="flex items-center justify-between border-b border-border pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
                 <div className="flex items-center gap-2 text-[#088077]">
                     <HeaderIcon size={20} />
                     <h3 className="text-font-primary text-base font-bold">

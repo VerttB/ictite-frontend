@@ -5,16 +5,13 @@ import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 import {
     Bolt,
     Book,
-    BookOpen,
     ClipboardList,
     Handshake,
     LucideIcon,
     Milestone,
-    Newspaper,
     Printer,
     School,
     SquareChartGantt,
-    Video,
 } from "lucide-react";
 import { Route } from "next";
 import Link from "next/link";

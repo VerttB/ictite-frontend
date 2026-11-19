@@ -57,9 +57,9 @@ export function AppSidebar() {
 
                                     return (
                                         <SidebarMenuItem
-                                            className={`flex rounded-sm transition-all duration-200 ${open ? "w-full" : "justify-center"} ${path !== item.url.slice(0, item.url.length) ? "hover:bg-primary/70 bg-gray-200 hover:text-white" : "bg-primary hover:bg-primary text-white"} `}
+                                            className={cn("flex rounded-sm transition-all duration-200", open ? "w-full" : "justify-center")}
                                             key={item.title}
-                                            aria-label={item.url}>
+                                            aria-label={item.title}>
                                             <SidebarMenuButton
                                                 tooltip={item.title}
                                                 className={cn(
@@ -67,7 +67,7 @@ export function AppSidebar() {
                                                     open ? "w-full" : "justify-center",
                                                     isActive
                                                         ? "bg-primary hover:bg-primary text-white hover:text-white"
-                                                        : "hover:bg-primary/70 bg-gray-200 hover:text-white"
+                                                        : "bg-accent text-font-primary hover:bg-primary hover:text-white"
                                                 )}
                                                 asChild>
                                                 <Link
@@ -92,7 +92,7 @@ export function AppSidebar() {
                             <DropdownMenuTrigger>
                                 <div
                                     className={`flex min-h-8 min-w-8 items-center gap-3`}>
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gray-300">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-accent text-font-primary">
                                         {user.email.charAt(0).toUpperCase()}
                                     </div>
                                     {open && (
@@ -117,7 +117,7 @@ export function AppSidebar() {
                 </SidebarGroup>
                 <SidebarSeparator />
                 <SidebarGroup>
-                    <p className={cn("text-xs text-gray-500", open ? "block" : "hidden")}>
+                    <p className={cn("text-xs text-font-secondary", open ? "block" : "hidden")}>
                         © 2025 ICTITE
                     </p>
                 </SidebarGroup>

@@ -57,21 +57,23 @@ export const Section = <T extends BaseItem>({
 }: SectionProps<T>) => {
     const [layout, setLayout] = useState<"grid" | "list">("grid");
     return (
-        <section className="flex-1 px-4">
-            <div className="mb-4 flex items-center justify-between border-b-2 border-gray-300">
-                <div className="flex items-center gap-2">
+        <section className="min-w-0 flex-1 px-2 sm:px-4">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b-2 border-border pb-2">
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
                     {icon}
                     <h2 className="text-lg font-semibold">{title}</h2>
                     <p className="bg-primary w-18 rounded-md py-2 text-center text-sm text-white">
                         Total: {total ?? items.length}
                     </p>
                 </div>
-                <div className="ml-4 h-12 w-full">{children}</div>
-                <div className="mb-2 ml-auto flex items-center gap-2">
+                <div className="order-last w-full min-w-0 lg:order-none lg:ml-4 lg:w-auto lg:flex-1">{children}</div>
+                <div className="ml-auto flex items-center gap-2">
                     <Button
                         variant={"ghost"}
                         onClick={() => setLayout("list")}
-                        className="px-0.5 py-0 hover:bg-gray-200"
+                        className="px-0.5 py-0 text-font-primary hover:bg-accent"
+                        aria-label="Layout em lista"
+                        aria-pressed={layout === "list"}
                         title="Layout em lista">
                         <List
                             size={20}
@@ -81,9 +83,11 @@ export const Section = <T extends BaseItem>({
                     <Button
                         variant={"ghost"}
                         onClick={() => setLayout("grid")}
-                        className="px-0.5 py-0 hover:bg-gray-200"
+                        className="px-0.5 py-0 text-font-primary hover:bg-accent"
+                        aria-label="Layout em grade"
+                        aria-pressed={layout === "grid"}
                         title="Layout em grade">
-                        <Grid size={20} color="black" className="" />
+                        <Grid size={20} />
                     </Button>
                 </div>
             </div>

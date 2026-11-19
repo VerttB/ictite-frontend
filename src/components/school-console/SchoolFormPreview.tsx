@@ -24,6 +24,11 @@ import { IdentityTerritory } from "@/core/domain/IdentityTerritory";
 import { SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 import { ImageDisplay } from "@/components/ui/ImageDisplay";
 import { schoolSubmissionService } from "@/core/service/schoolSubmissionService";
+import {
+    getSchoolFormIssueMessage,
+    getSchoolFormValidation,
+    normalizeSchoolFormData,
+} from "@/core/utils/schoolFormValidation";
 
 interface SchoolFormPreviewProps {
     data: SchoolFormDataInput;
@@ -69,7 +74,13 @@ function EmptySection({ label }: { label: string }) {
     );
 }
 
-function DraftImageGallery({ entityType, entityId }: { entityType: string; entityId: string }) {
+function DraftImageGallery({
+    entityType,
+    entityId,
+}: {
+    entityType: string;
+    entityId: string;
+}) {
     const { data } = useSWR(
         entityId ? ["review-images", entityType, entityId] : null,
         () => schoolSubmissionService.getFormEntityImages(entityType, entityId)
@@ -78,7 +89,12 @@ function DraftImageGallery({ entityType, entityId }: { entityType: string; entit
     return (
         <div className="mt-4 flex flex-wrap gap-2">
             {data.images.map((image) => (
-                <ImageDisplay key={image.path} src={image.url} alt="Imagem para revisão" className="h-28 w-36 overflow-hidden rounded-md border" />
+                <ImageDisplay
+                    key={image.path}
+                    src={image.url}
+                    alt="Imagem para revisão"
+                    className="h-28 w-36 overflow-hidden rounded-md border"
+                />
             ))}
         </div>
     );
@@ -94,7 +110,7 @@ function SectionHeader({
     count?: number;
 }) {
     return (
-        <div className="flex items-center justify-between border-b border-border pb-4">
+        <div className="border-border flex items-center justify-between border-b pb-4">
             <h3 className="text-font-primary flex items-center gap-2 text-sm font-bold">
                 <span className="text-[#088077]">{icon}</span>
                 {title}
@@ -108,75 +124,20 @@ function SectionHeader({
     );
 }
 
-export function getSchoolFormPendingSections(data: SchoolFormDataInput): string[] {
-    const clubs = data.clubs || [];
-    const projects = data.projects || [];
-    const researchers = data.researchers || [];
-    const equipments = data.equipments || [];
-    const pending: string[] = [];
-
-    if (!data.school?.name || data.school.name.trim().length < 2) {
-        pending.push("dados principais da escola");
-    }
-    if (
-        clubs.length === 0 ||
-        clubs.some((club) => !club.name || club.name.trim().length < 2)
-    ) {
-        pending.push("clubes de ciência");
-    }
-    if (
-        projects.length === 0 ||
-        projects.some(
-            (project) =>
-                !project.name ||
-                project.name.trim().length < 2 ||
-                !project.clube_ciencia_id ||
-                project.clube_ciencia_id === "disabled"
-        )
-    ) {
-        pending.push("projetos de pesquisa");
-    }
-    if (
-        researchers.length === 0 ||
-        researchers.some(
-            (researcher) =>
-                !researcher.name ||
-                researcher.name.trim().length < 2 ||
-                !researcher.type ||
-                !researcher.project_ids?.length
-        )
-    ) {
-        pending.push("pesquisadores");
-    }
-    if (
-        equipments.some(
-            (equipment) =>
-                !equipment.name ||
-                equipment.name.trim().length < 2 ||
-                !equipment.type_equipment_id ||
-                !equipment.quantity
-        )
-    ) {
-        pending.push("equipamentos");
-    }
-
-    return pending;
-}
-
 export function SchoolFormPreview({
-    data,
+    data: rawData,
     mode,
     isSubmitting,
     deadlineExpired,
     onBack,
     onSubmit,
 }: SchoolFormPreviewProps) {
+    const data = normalizeSchoolFormData(rawData);
     const clubs = data.clubs || [];
     const projects = data.projects || [];
     const researchers = data.researchers || [];
     const equipments = data.equipments || [];
-    const pendingSections = getSchoolFormPendingSections(data);
-    const canSubmit = pendingSections.length === 0;
+    const { pendingSections, canSubmit, issues } = getSchoolFormValidation(data);
 
     const { data: equipmentTypes = [] } = useSWR<EquipmentType[]>(
         equipments.length > 0 ? "/equipment-types/" : null,
@@ -187,11 +148,11 @@ export function SchoolFormPreview({
         "identity-territories",
         getTerritories
     );
-    const { data: schoolImage } = useSWR("/submissions/current/image", () => schoolSubmissionService.getFormImage());
-
-    const territoryMap = new Map(
-        territories.map((t) => [t.id, `${t.code} — ${t.name}`])
+    const { data: schoolImage } = useSWR("/submissions/current/image", () =>
+        schoolSubmissionService.getFormImage()
     );
+
+    const territoryMap = new Map(territories.map((t) => [t.id, `${t.code} — ${t.name}`]));
     const territoryName = data.school?.identity_territory_id
         ? territoryMap.get(data.school.identity_territory_id) || null
         : null;
@@ -204,7 +165,7 @@ export function SchoolFormPreview({
 
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
-            <div className="bg-card flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-border p-6 shadow-sm">
+            <div className="bg-card border-border flex flex-wrap items-center justify-between gap-4 rounded-3xl border p-6 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-[#088077]/10 p-3 text-[#088077]">
                         {mode === "review" ? <BookOpen size={28} /> : <Eye size={28} />}
@@ -220,7 +181,7 @@ export function SchoolFormPreview({
                         </p>
                     </div>
                 </div>
-                <span className="bg-muted text-font-secondary inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-[11px] font-bold">
+                <span className="bg-muted text-font-secondary border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-bold">
                     <Eye size={14} /> Somente leitura
                 </span>
             </div>
@@ -234,6 +195,13 @@ export function SchoolFormPreview({
                         {pendingSections.join(", ")}. Volte à edição para concluir as
                         informações.
                     </p>
+                    <ul className="text-font-primary mt-2 list-disc space-y-1 pl-6">
+                        {issues.slice(0, 5).map((issue, index) => (
+                            <li key={`${issue.path.join(".")}-${index}`}>
+                                {getSchoolFormIssueMessage(issue)}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             ) : (
                 <div className="flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 text-xs font-bold text-emerald-700">
@@ -242,7 +210,7 @@ export function SchoolFormPreview({
                 </div>
             )}
 
-            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+            <section className="bg-card border-border rounded-3xl border p-6 shadow-sm">
                 <SectionHeader
                     icon={<School size={19} />}
                     title="Dados principais da escola"
@@ -267,10 +235,16 @@ export function SchoolFormPreview({
                         wide
                     />
                 </div>
-                {schoolImage?.url && <ImageDisplay src={schoolImage.url} alt="Imagem da escola para revisão" className="mt-4 h-40 w-56 overflow-hidden rounded-md border" />}
+                {schoolImage?.url && (
+                    <ImageDisplay
+                        src={schoolImage.url}
+                        alt="Imagem da escola para revisão"
+                        className="mt-4 h-40 w-56 overflow-hidden rounded-md border"
+                    />
+                )}
             </section>
 
-            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+            <section className="bg-card border-border rounded-3xl border p-6 shadow-sm">
                 <SectionHeader
                     icon={<Handshake size={19} />}
                     title="Clubes de Ciência"
@@ -285,7 +259,7 @@ export function SchoolFormPreview({
                         clubs.map((club, index) => (
                             <div
                                 key={club.id || index}
-                                className="rounded-2xl border border-border bg-background p-4">
+                                className="border-border bg-background rounded-2xl border p-4">
                                 <PreviewField
                                     label={`Clube ${index + 1}`}
                                     value={club.name}
@@ -303,14 +277,17 @@ export function SchoolFormPreview({
                                         wide
                                     />
                                 </div>
-                                <DraftImageGallery entityType="clube_ciencias" entityId={club.id} />
+                                <DraftImageGallery
+                                    entityType="clube_ciencias"
+                                    entityId={club.id}
+                                />
                             </div>
                         ))
                     )}
                 </div>
             </section>
 
-            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+            <section className="bg-card border-border rounded-3xl border p-6 shadow-sm">
                 <SectionHeader
                     icon={<SquareChartGantt size={19} />}
                     title="Projetos de Pesquisa"
@@ -325,14 +302,20 @@ export function SchoolFormPreview({
                         projects.map((project, index) => (
                             <div
                                 key={project.id || index}
-                                className="rounded-2xl border border-border bg-background p-4">
+                                className="border-border bg-background rounded-2xl border p-4">
                                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                     <PreviewField
                                         label={`Projeto ${index + 1}`}
                                         value={project.name}
                                     />
-                                    <PreviewField label="Ano de Início" value={project.start_year} />
-                                    <PreviewField label="Ano de Previsão de Conclusão" value={project.end_year} />
+                                    <PreviewField
+                                        label="Ano de Início"
+                                        value={project.start_year}
+                                    />
+                                    <PreviewField
+                                        label="Ano de Previsão de Conclusão"
+                                        value={project.end_year}
+                                    />
                                     <PreviewField
                                         label="Clube vinculado"
                                         value={
@@ -352,14 +335,17 @@ export function SchoolFormPreview({
                                         wide
                                     />
                                 </div>
-                                <DraftImageGallery entityType="project" entityId={project.id} />
+                                <DraftImageGallery
+                                    entityType="project"
+                                    entityId={project.id}
+                                />
                             </div>
                         ))
                     )}
                 </div>
             </section>
 
-            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+            <section className="bg-card border-border rounded-3xl border p-6 shadow-sm">
                 <SectionHeader
                     icon={<Users size={19} />}
                     title="Pesquisadores"
@@ -380,7 +366,7 @@ export function SchoolFormPreview({
                             return (
                                 <div
                                     key={researcher.id || index}
-                                    className="rounded-2xl border border-border bg-background p-4">
+                                    className="border-border bg-background rounded-2xl border p-4">
                                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                         <PreviewField
                                             label={`Pesquisador ${index + 1}`}
@@ -407,7 +393,10 @@ export function SchoolFormPreview({
                                             value={linkedProjects}
                                         />
                                     </div>
-                                    <DraftImageGallery entityType="researcher" entityId={researcher.id} />
+                                    <DraftImageGallery
+                                        entityType="researcher"
+                                        entityId={researcher.id}
+                                    />
                                 </div>
                             );
                         })
@@ -415,7 +404,7 @@ export function SchoolFormPreview({
                 </div>
             </section>
 
-            <section className="bg-card rounded-3xl border border-border p-6 shadow-sm">
+            <section className="bg-card border-border rounded-3xl border p-6 shadow-sm">
                 <SectionHeader
                     icon={<Printer size={19} />}
                     title="Equipamentos"
@@ -424,7 +413,7 @@ export function SchoolFormPreview({
                 <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-2">
                     {equipments.length === 0 ? (
                         <div className="lg:col-span-2">
-                            <div className="text-font-secondary flex items-center gap-2 rounded-2xl border border-dashed border-border bg-background p-4 text-xs font-semibold">
+                            <div className="text-font-secondary border-border bg-background flex items-center gap-2 rounded-2xl border border-dashed p-4 text-xs font-semibold">
                                 <Building2 size={16} /> Nenhum equipamento informado
                                 (seção opcional).
                             </div>
@@ -433,7 +422,7 @@ export function SchoolFormPreview({
                         equipments.map((equipment, index) => (
                             <div
                                 key={equipment.id || index}
-                                className="rounded-2xl border border-border bg-background p-4">
+                                className="border-border bg-background rounded-2xl border p-4">
                                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                                     <PreviewField
                                         label={`Equipamento ${index + 1}`}
@@ -452,18 +441,21 @@ export function SchoolFormPreview({
                                         value={equipment.quantity}
                                     />
                                 </div>
-                                <DraftImageGallery entityType="equipment" entityId={equipment.id} />
+                                <DraftImageGallery
+                                    entityType="equipment"
+                                    entityId={equipment.id}
+                                />
                             </div>
                         ))
                     )}
                 </div>
             </section>
 
-            <div className="bg-background/95 sticky bottom-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border p-4 shadow-lg backdrop-blur-sm">
+            <div className="bg-background/95 border-border sticky bottom-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 shadow-lg backdrop-blur-sm">
                 <button
                     type="button"
                     onClick={onBack}
-                    className="text-font-primary inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-xs font-semibold transition-all hover:bg-muted">
+                    className="text-font-primary border-border bg-background hover:bg-muted inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all">
                     <ArrowLeft size={16} /> Continuar editando
                 </button>
 
@@ -476,8 +468,8 @@ export function SchoolFormPreview({
                             deadlineExpired
                                 ? "O prazo de envio terminou. Solicite um novo prazo."
                                 : !canSubmit
-                                ? "Conclua as partes pendentes antes de enviar"
-                                : undefined
+                                  ? "Conclua as partes pendentes antes de enviar"
+                                  : undefined
                         }
                         className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:cursor-not-allowed disabled:opacity-50">
                         {isSubmitting ? (

@@ -11,11 +11,11 @@ export default function layout({
     return (
         <SidebarProvider>
             <AppSidebar />
-            <div className="bg-foreground flex w-full flex-col pr-4 pb-4">
+            <div className="bg-foreground flex min-w-0 w-full flex-col pr-4 pb-4">
                 <Header></Header>
 
                 <main
-                    className="bg-background flex h-full w-full flex-col p-2"
+                    className="bg-background flex min-w-0 h-full w-full flex-col p-2"
                     style={{
                         boxShadow: "inset 0px 0px 5px rgba(0, 0, 0, .5)",
                         borderRadius: "10px 10px 10px 10px",

@@ -99,6 +99,7 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
                     <label htmlFor="email" className="flex flex-col gap-2">
                         Email
                         <Input
+                            id="email"
                             {...register("email")}
                             type="email"
                             placeholder="seuemail@escola.com.br"
@@ -112,6 +113,7 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
                     <label htmlFor="password" className="flex flex-col gap-2">
                         Senha
                         <Input
+                            id="password"
                             {...register("password")}
                             type="password"
                             placeholder="10 caracteres, maiúscula, minúscula, número e símbolo"
@@ -125,6 +127,7 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
                     <label htmlFor="confirmPassword" className="flex flex-col gap-2">
                         Confirmar senha
                         <Input
+                            id="confirmPassword"
                             {...register("confirmPassword")}
                             type="password"
                             placeholder="Repita a senha"

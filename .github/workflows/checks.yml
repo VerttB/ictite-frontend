@@ -1,0 +1,92 @@
+name: Testes e build
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_BASE_URL: http://localhost:8100
+      NEXT_PUBLIC_BASE_PATH: ''
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+      - run: npm run lint -- --max-warnings 0
+      - run: npm test
+      - run: npm run build
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: false
+          load: true
+          tags: ictite-frontend:ci
+          build-args: |
+            NEXT_PUBLIC_BASE_URL=http://localhost:8100
+            NEXT_PUBLIC_BASE_PATH=
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Conferir arranque standalone
+        run: |
+          docker run --name frontend-ci -d -p 18010:8010 ictite-frontend:ci
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --output /dev/null http://localhost:18010/login/; then exit 0; fi
+            sleep 1
+          done
+          docker logs frontend-ci
+          exit 1
+      - name: Limpar container de teste
+        if: always()
+        run: docker rm -f frontend-ci || true
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: ictite-frontend
+      - name: Conferir acesso ao backend
+        env:
+          BACKEND_REPOSITORY: ${{ vars.BACKEND_REPOSITORY }}
+        run: test -n "$BACKEND_REPOSITORY" || { echo 'Configure a variável BACKEND_REPOSITORY (organização/repositório).'; exit 1; }
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ vars.BACKEND_REPOSITORY }}
+          ref: ${{ vars.BACKEND_REF || 'dev' }}
+          token: ${{ secrets.BACKEND_READ_TOKEN || github.token }}
+          path: ictite-backend
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install poetry
+      - run: poetry install --no-interaction
+        working-directory: ictite-backend
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: ictite-frontend/package-lock.json
+      - run: npm ci
+        working-directory: ictite-frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: ictite-frontend
+      - run: npm run test:e2e
+        working-directory: ictite-frontend
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: navegador-e2e
+          path: |
+            ictite-frontend/playwright-report/
+            ictite-frontend/test-results/

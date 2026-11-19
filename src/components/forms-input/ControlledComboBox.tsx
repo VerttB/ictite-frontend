@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/combobox";
 
 import { SimpleIdName } from "@/schemas/Common";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 type OptionType = { value: string; label: string };
 
@@ -47,7 +47,10 @@ export const ControlledComboBox = ({
     } = useFormContext();
     const anchor = useComboboxAnchor();
 
-    const [searchValue, setSearchValue] = useState(lockedValue ? lockedValue.label : "");
+    const [searchInput, setSearchInput] = useState<{
+        selection: string;
+        text: string;
+    } | null>(null);
 
     const normalizedOptions: OptionType[] = useMemo(() => {
         return options.map((opt) => {
@@ -58,6 +61,20 @@ export const ControlledComboBox = ({
         });
     }, [options]);
 
+    const rhfValue = useWatch({ name, control });
+    const selection = JSON.stringify(rhfValue ?? null);
+
+    const selectedLabel =
+        !isMulti && rhfValue
+            ? (normalizedOptions.find((option) => option.value === rhfValue.toString())
+                  ?.label ?? "")
+            : "";
+
+    const searchValue =
+        searchInput?.selection === selection
+            ? searchInput.text
+            : (lockedValue?.label ?? selectedLabel);
+    const setSearchValue = (text: string) => setSearchInput({ selection, text });
     const filteredOptions = useMemo(() => {
         if (!searchValue) return normalizedOptions;
         const lowerSearch = searchValue.toLowerCase();
@@ -66,19 +83,11 @@ export const ControlledComboBox = ({
         );
     }, [normalizedOptions, searchValue]);
 
-    const rhfValue = useWatch({ name, control });
-
-    const selectedLabel = !isMulti && rhfValue
-        ? normalizedOptions.find((option) => option.value === rhfValue.toString())?.label ?? ""
-        : "";
-
-    React.useEffect(() => {
-        if (!isMulti && !lockedValue) setSearchValue(selectedLabel);
-    }, [selectedLabel, isMulti, lockedValue]);
-
     return (
         <div className={`${className}`}>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label
+                htmlFor={name}
+                className="text-font-primary mb-1 block text-sm font-medium">
                 {label}
             </label>
 
@@ -183,6 +192,7 @@ export const ControlledComboBox = ({
                                                     </ComboboxChip>
                                                 ))}
                                                 <ComboboxChipsInput
+                                                    id={name}
                                                     placeholder={`Selecione ${label.toLowerCase()}`}
                                                     disabled={disabled}
                                                 />
@@ -192,6 +202,7 @@ export const ControlledComboBox = ({
                                 </ComboboxChips>
                             ) : (
                                 <ComboboxInput
+                                    id={name}
                                     placeholder={`Selecione ${label.toLowerCase()}`}
                                     disabled={disabled}
                                 />

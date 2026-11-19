@@ -6,6 +6,7 @@ import CardSecundariaNoticias from "./CardSecundariaNoticias";
 import { InstagramPost } from "@/core/domain/Instagram";
 import { getInstagramPosts } from "@/core/service/InstagramService";
 import useSWR from "swr";
+import { getAssetPrefix } from "@/core/utils/api";
 
 export default function Noticias() {
     const { data: posts, isLoading } = useSWR("instagramPosts", () =>
@@ -13,7 +14,9 @@ export default function Noticias() {
     );
     const postNormalized = posts?.map((post) => ({
         ...post,
-        image_url: "api/image?url=" + encodeURIComponent(post.image_url!),
+        image_url: post.image_url
+            ? `${getAssetPrefix()}/api/image?url=${encodeURIComponent(post.image_url)}`
+            : null,
     }));
 
     const [selectedPost, setSelectedPost] = useState<InstagramPost | null>(null);

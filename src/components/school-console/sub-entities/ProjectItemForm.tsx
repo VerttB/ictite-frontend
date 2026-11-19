@@ -20,11 +20,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    ClubDraftData,
-    SchoolFormDataInput,
-} from "@/schemas/schoolSubmissionSchema";
+import { ClubDraftData, SchoolFormDataInput } from "@/schemas/schoolSubmissionSchema";
 import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
+import { normalizeOptionalYear } from "@/core/utils/schoolFormValidation";
 
 interface ProjectItemFormProps {
     index: number;
@@ -94,10 +92,10 @@ export function ProjectItemForm({
 
     return (
         <div
-            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background relative flex flex-col overflow-hidden rounded-2xl border border-border shadow-xs transition-all duration-300 hover:bg-muted/40 ${borderClass}`}>
+            className={`animate-in fade-in-50 slide-in-from-top-4 bg-background border-border hover:bg-muted/40 relative flex flex-col overflow-hidden rounded-2xl border shadow-xs transition-all duration-300 ${borderClass}`}>
             <div
                 onClick={onToggleExpand}
-                className="flex cursor-pointer items-center justify-between border-b border-border p-4 transition-colors select-none hover:bg-muted/50">
+                className="border-border hover:bg-muted/50 flex cursor-pointer items-center justify-between border-b p-4 transition-colors select-none">
                 <div className="flex items-center gap-3">
                     <span className={`rounded-xl p-2 ${iconBgClass}`}>
                         <SquareChartGantt size={18} />
@@ -135,15 +133,18 @@ export function ProjectItemForm({
             </div>
 
             {isExpanded && (
-                <div className="animate-fade-in space-y-4 bg-background p-5">
+                <div className="animate-fade-in bg-background space-y-4 p-5">
                     <input type="hidden" {...register(`projects.${index}.id`)} />
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <div className="sm:col-span-2">
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`projects.${index}.name`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Nome do Projeto (Obrigatório)
                             </label>
                             <Input
+                                id={`projects.${index}.name`}
                                 disabled={readOnly}
                                 placeholder="Ex: Monitoramento da Qualidade da Água"
                                 {...register(`projects.${index}.name`)}
@@ -157,15 +158,18 @@ export function ProjectItemForm({
                         </div>
 
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`projects.${index}.start_year`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Ano de Início
                             </label>
                             <Input
+                                id={`projects.${index}.start_year`}
                                 type="number"
                                 max={new Date().getFullYear()}
                                 disabled={readOnly}
                                 {...register(`projects.${index}.start_year`, {
-                                    setValueAs: (value) => value === "" ? undefined : Number(value),
+                                    setValueAs: normalizeOptionalYear,
                                 })}
                             />
                             {errors.projects?.[index]?.start_year && (
@@ -177,15 +181,18 @@ export function ProjectItemForm({
                         </div>
 
                         <div>
-                            <label className="text-font-primary mb-1 block text-xs font-semibold">
+                            <label
+                                htmlFor={`projects.${index}.end_year`}
+                                className="text-font-primary mb-1 block text-xs font-semibold">
                                 Ano de Previsão de Conclusão
                             </label>
                             <Input
+                                id={`projects.${index}.end_year`}
                                 type="number"
                                 min={new Date().getFullYear()}
                                 disabled={readOnly}
                                 {...register(`projects.${index}.end_year`, {
-                                    setValueAs: (value) => value === "" ? undefined : Number(value),
+                                    setValueAs: normalizeOptionalYear,
                                 })}
                             />
                             {errors.projects?.[index]?.end_year && (
@@ -198,7 +205,9 @@ export function ProjectItemForm({
                     </div>
 
                     <div>
-                        <label className="text-font-primary mb-1 block text-xs font-semibold">
+                        <label
+                            htmlFor={`projects.${index}.clube_ciencia_id`}
+                            className="text-font-primary mb-1 block text-xs font-semibold">
                             Clube de Ciência Vinculado (Obrigatório)
                         </label>
                         <Controller
@@ -209,7 +218,9 @@ export function ProjectItemForm({
                                     disabled={readOnly}
                                     value={field.value}
                                     onValueChange={field.onChange}>
-                                    <SelectTrigger className="w-full bg-background">
+                                    <SelectTrigger
+                                        id={`projects.${index}.clube_ciencia_id`}
+                                        className="bg-background w-full">
                                         <SelectValue placeholder="Selecione um clube de ciência..." />
                                     </SelectTrigger>
                                     <SelectContent>

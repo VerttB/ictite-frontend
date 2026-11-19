@@ -5,10 +5,7 @@ import { BookText } from "lucide-react";
 import CardCategoriaMateriais from "@/components/card/CardCategoriaMateriais";
 import MenuSuperiorPagina from "@/components/MenuSuperiorPagina";
 
-export default function Materiais() {
-    const [selectedType, setSelectedType] = useState<string | null>(null);
-
-    const materiaisMock = [
+const materiaisMock = [
         {
             id: "1",
             name: "Robótica Educacional",
@@ -109,6 +106,11 @@ export default function Materiais() {
             images: ["https://picsum.photos/id/1062/400/300"],
         },
     ];
+
+export default function Materiais() {
+    const [selectedType, setSelectedType] = useState<string | null>(null);
+
+
 
     // lista de categorias únicas com contagem
     const categorias = useMemo(() => {

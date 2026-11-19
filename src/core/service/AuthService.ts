@@ -1,10 +1,7 @@
 import { UserLogin } from "@/core/domain/User";
-import { User } from "@/core/domain/User";
+import { User, UserSchema } from "@/core/domain/User";
 import { apiClient } from "@/lib/api/client";
-import {
-    GenerateInviteResponse,
-    RegisterInvitedRequest,
-} from "@/core/domain/Invite";
+import { GenerateInviteResponse, RegisterInvitedRequest } from "@/core/domain/Invite";
 
 export const login = async (loginRequest: UserLogin) => {
     return await apiClient.post("/auth/login", loginRequest);
@@ -15,7 +12,7 @@ export const me = async (): Promise<User> => {
     if (!userData) {
         throw new Error("Erro ao obter dados do usuário");
     }
-    return userData;
+    return UserSchema.parse(userData);
 };
 
 export const logout = async () => {
@@ -24,8 +21,11 @@ export const logout = async () => {
 
 export const registerInvited = async (
     payload: RegisterInvitedRequest
-): Promise<User> => {
-    const userData = await apiClient.post<User>("/auth/register/invited", payload);
+): Promise<{ user: User; message?: string }> => {
+    const userData = await apiClient.post<{ user: User; message?: string }>(
+        "/auth/register/invited",
+        payload
+    );
     if (!userData) {
         throw new Error("Erro ao ativar a conta do convidado");
     }

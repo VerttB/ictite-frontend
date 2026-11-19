@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
+import { NewsImage } from "./NewsImage";
 import { InstagramPost } from "@/core/domain/Instagram";
 
 interface CardSecundariaProps {
@@ -22,7 +22,8 @@ export default function CardSecundariaNoticias({
                 isSelected ? "border-primary bg-primary/5" : "hover:bg-gray-50"
             }`}>
             <div className="h-24 w-32 shrink-0">
-                <Image
+                <NewsImage
+                    key={post.image_url}
                     src={post.image_url!}
                     alt={post.title || "Noticia"}
                     width={128}

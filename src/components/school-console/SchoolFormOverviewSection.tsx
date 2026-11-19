@@ -15,6 +15,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+    getSchoolFormIssueMessage,
+    getSchoolFormValidation,
+} from "@/core/utils/schoolFormValidation";
+import {
     SchoolFormSubmission,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
@@ -60,7 +64,11 @@ function getExtensionStatusText(
     extensionStatus: string | null | undefined,
     daysRemaining: number | null,
     customDeadline: string | null | undefined
-): { label: string; variant: "default" | "warning" | "destructive" | "success"; icon: React.ReactNode } {
+): {
+    label: string;
+    variant: "default" | "warning" | "destructive" | "success";
+    icon: React.ReactNode;
+} {
     if (extensionStatus === "Pendente") {
         return {
             label: "Prorrogação solicitada",
@@ -143,41 +151,29 @@ export function SchoolFormOverviewSection({
         return globalDeadline;
     }, [customDeadline, extensionStatus, requestedDeadline, globalDeadline]);
 
-    const daysRemaining = useMemo(() => getDaysRemaining(effectiveDeadline), [effectiveDeadline]);
-    const extensionInfo = useMemo(() => getExtensionStatusText(extensionStatus, daysRemaining, customDeadline), [extensionStatus, daysRemaining, customDeadline]);
+    const daysRemaining = useMemo(
+        () => getDaysRemaining(effectiveDeadline),
+        [effectiveDeadline]
+    );
+    const extensionInfo = useMemo(
+        () => getExtensionStatusText(extensionStatus, daysRemaining, customDeadline),
+        [extensionStatus, daysRemaining, customDeadline]
+    );
 
-    // --- Strict Section Validation ---
-
-    // 1. Escola
-    const isSchoolValid = !!values.school?.name && values.school.name.trim().length >= 2;
-
-    // 2. Clubes de Ciência
-    const incompleteClubsCount = clubs.filter(
-        (c) => !c.name || c.name.trim().length < 2
-    ).length;
-    const isClubsValid = clubs.length > 0 && incompleteClubsCount === 0;
-
-    // 3. Projetos de Pesquisa
-    const incompleteProjectsCount = projects.filter(
-        (p) =>
-            !p.name ||
-            p.name.trim().length < 2 ||
-            !p.clube_ciencia_id ||
-            p.clube_ciencia_id === "disabled"
-    ).length;
-    const isProjectsValid = projects.length > 0 && incompleteProjectsCount === 0;
-
-    // 4. Pesquisadores
-    const incompleteResearchersCount = researchers.filter(
-        (r) => !r.name || r.name.trim().length < 2 || !r.type || !r.project_ids?.length
-    ).length;
-    const isResearchersValid = researchers.length > 0 && incompleteResearchersCount === 0;
-
-    // 5. Equipamentos
-    const incompleteEquipmentsCount = equipments.filter(
-        (e) => !e.name || e.name.trim().length < 2 || !e.type_equipment_id || !e.quantity
-    ).length;
-    const isEquipmentsValid = equipments.length === 0 || incompleteEquipmentsCount === 0;
+    const validation = getSchoolFormValidation(values);
+    const {
+        school: isSchoolValid,
+        clubs: isClubsValid,
+        projects: isProjectsValid,
+        researchers: isResearchersValid,
+        equipments: isEquipmentsValid,
+    } = validation.valid;
+    const {
+        clubs: incompleteClubsCount,
+        projects: incompleteProjectsCount,
+        researchers: incompleteResearchersCount,
+        equipments: incompleteEquipmentsCount,
+    } = validation.incompleteCounts;
 
     // Overall completion percentage calculation based on actual field completeness
     const validSections = [
@@ -191,48 +187,66 @@ export function SchoolFormOverviewSection({
 
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
+            {validation.issues.length > 0 && (
+                <p
+                    role="status"
+                    className="text-font-primary border-border bg-card rounded-xl border p-4 text-sm">
+                    {getSchoolFormIssueMessage(validation.issues[0])}
+                </p>
+            )}
             {/* Prazo de Preenchimento - Destaque no Topo */}
-            <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
-                <div className="bg-[#088077]/5 border-b border-border p-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="bg-card border-border overflow-hidden rounded-3xl border shadow-sm">
+                <div className="border-border border-b bg-[#088077]/5 p-4">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3">
                             <div className="rounded-xl bg-[#088077]/10 p-3 text-[#088077]">
                                 <Calendar size={24} />
                             </div>
                             <div>
-                                <h3 className="text-font-primary text-lg font-bold">Prazo de Preenchimento</h3>
-                                <p className="text-font-secondary text-xs">Data limite para envio do formulário da escola</p>
+                                <h3 className="text-font-primary text-lg font-bold">
+                                    Prazo de Preenchimento
+                                </h3>
+                                <p className="text-font-secondary text-xs">
+                                    Data limite para envio do formulário da escola
+                                </p>
                             </div>
                         </div>
-                        <div className="flex flex-col sm:items-end gap-2">
+                        <div className="flex flex-col gap-2 sm:items-end">
                             {effectiveDeadline ? (
                                 <>
                                     <div className="flex items-center gap-2 text-right">
                                         <span className="text-font-primary text-sm font-semibold">
                                             {formatDateTime(effectiveDeadline)}
                                         </span>
-                                        {extensionStatus === "Aprovado" && requestedDeadline && (
-                                            <span className="bg-emerald-100 text-emerald-800 rounded-full px-2 py-0.5 text-[10px] font-bold">
-                                                Prorrogado
-                                            </span>
-                                        )}
+                                        {extensionStatus === "Aprovado" &&
+                                            requestedDeadline && (
+                                                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                                                    Prorrogado
+                                                </span>
+                                            )}
                                     </div>
-                                    <div className={`flex items-center gap-1.5 font-semibold text-sm ${
-                                        extensionInfo.variant === "destructive" ? "text-red-600" :
-                                        extensionInfo.variant === "warning" ? "text-amber-600" :
-                                        extensionInfo.variant === "success" ? "text-emerald-600" :
-                                        "text-[#088077]"
-                                    }`}>
+                                    <div
+                                        className={`flex items-center gap-1.5 text-sm font-semibold ${
+                                            extensionInfo.variant === "destructive"
+                                                ? "text-red-600"
+                                                : extensionInfo.variant === "warning"
+                                                  ? "text-amber-600"
+                                                  : extensionInfo.variant === "success"
+                                                    ? "text-emerald-600"
+                                                    : "text-[#088077]"
+                                        }`}>
                                         {extensionInfo.icon}
                                         {extensionInfo.label}
                                     </div>
                                 </>
                             ) : (
-                                <div className="flex flex-col sm:items-end gap-2">
+                                <div className="flex flex-col gap-2 sm:items-end">
                                     <span className="text-font-secondary text-sm">
-                                        {globalDeadline === undefined ? "Prazo indisponível" : "Não definido"}
+                                        {globalDeadline === undefined
+                                            ? "Prazo indisponível"
+                                            : "Não definido"}
                                     </span>
-                                    <span className="flex items-center gap-1.5 font-semibold text-sm text-amber-600">
+                                    <span className="flex items-center gap-1.5 text-sm font-semibold text-amber-600">
                                         <AlertCircle size={14} />
                                         {globalDeadline === undefined && !customDeadline
                                             ? "Não foi possível consultar o prazo."
@@ -274,7 +288,7 @@ export function SchoolFormOverviewSection({
             </div>
 
             {/* Header da Visão Geral do Formulário */}
-            <div className="bg-card flex items-center justify-between rounded-3xl border border-border p-6 shadow-sm">
+            <div className="bg-card border-border flex items-center justify-between rounded-3xl border p-6 shadow-sm">
                 <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-[#088077]/10 p-3 text-[#088077]">
                         <FileText size={28} />
@@ -299,7 +313,7 @@ export function SchoolFormOverviewSection({
                         <span className="text-sm font-black text-[#088077]">
                             {completionPercentage}% Concluído
                         </span>
-                        <div className="mt-1 h-2 w-32 overflow-hidden rounded-full bg-muted">
+                        <div className="bg-muted mt-1 h-2 w-32 overflow-hidden rounded-full">
                             <div
                                 className="h-full bg-[#088077] transition-all duration-300"
                                 style={{ width: `${completionPercentage}%` }}
@@ -317,7 +331,7 @@ export function SchoolFormOverviewSection({
 
             {/* Checklist de Validação do Formulário */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                <div className="bg-card flex flex-col gap-4 rounded-3xl border border-border p-6 shadow-sm">
+                <div className="bg-card border-border flex flex-col gap-4 rounded-3xl border p-6 shadow-sm">
                     <h3 className="text-font-primary flex items-center gap-2 text-sm font-bold">
                         <CheckCircle2 size={18} className="text-[#088077]" />
                         Validação das Seções do Formulário
@@ -325,8 +339,10 @@ export function SchoolFormOverviewSection({
 
                     <div className="space-y-3 text-xs font-semibold">
                         {/* 1. Escola */}
-                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
-                            <span className="text-font-primary">1. Cadastro da Escola</span>
+                        <div className="border-border bg-background flex items-center justify-between rounded-2xl border p-3.5">
+                            <span className="text-font-primary">
+                                1. Cadastro da Escola
+                            </span>
                             {isSchoolValid ? (
                                 <span className="flex items-center gap-1 font-bold text-emerald-600">
                                     <CheckCircle2 size={15} /> OK ({schoolName})
@@ -339,8 +355,10 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 2. Clubes de Ciência */}
-                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
-                            <span className="text-font-primary">2. Clubes de Ciência</span>
+                        <div className="border-border bg-background flex items-center justify-between rounded-2xl border p-3.5">
+                            <span className="text-font-primary">
+                                2. Clubes de Ciência
+                            </span>
                             {clubs.length === 0 ? (
                                 <span className="flex items-center gap-1 font-bold text-amber-600">
                                     <AlertTriangle size={15} /> Nenhum clube cadastrado
@@ -359,8 +377,10 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 3. Projetos de Pesquisa */}
-                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
-                            <span className="text-font-primary">3. Projetos de Pesquisa</span>
+                        <div className="border-border bg-background flex items-center justify-between rounded-2xl border p-3.5">
+                            <span className="text-font-primary">
+                                3. Projetos de Pesquisa
+                            </span>
                             {projects.length === 0 ? (
                                 <span className="flex items-center gap-1 font-bold text-amber-600">
                                     <AlertTriangle size={15} /> Nenhum projeto cadastrado
@@ -379,7 +399,7 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 4. Pesquisadores */}
-                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
+                        <div className="border-border bg-background flex items-center justify-between rounded-2xl border p-3.5">
                             <span className="text-font-primary">4. Pesquisadores</span>
                             {researchers.length === 0 ? (
                                 <span className="flex items-center gap-1 font-bold text-amber-600">
@@ -401,7 +421,7 @@ export function SchoolFormOverviewSection({
                         </div>
 
                         {/* 5. Equipamentos */}
-                        <div className="flex items-center justify-between rounded-2xl border border-border bg-background p-3.5">
+                        <div className="border-border bg-background flex items-center justify-between rounded-2xl border p-3.5">
                             <span className="text-font-primary">
                                 5. Equipamentos Laboratoriais
                             </span>
@@ -422,7 +442,7 @@ export function SchoolFormOverviewSection({
                 </div>
 
                 {/* Resumo de Contagem de Itens no Rascunho */}
-                <div className="bg-card flex flex-col gap-4 rounded-3xl border border-border p-6 shadow-sm">
+                <div className="bg-card border-border flex flex-col gap-4 rounded-3xl border p-6 shadow-sm">
                     <h3 className="text-font-primary flex items-center gap-2 text-sm font-bold">
                         <Clock size={18} className="text-[#088077]" />
                         Resumo dos Dados no Rascunho

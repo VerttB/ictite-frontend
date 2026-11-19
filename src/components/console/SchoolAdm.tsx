@@ -108,7 +108,7 @@ const SchoolFiltersModal = ({
         <>
             <div className="grid gap-4 py-4">
                 <div className="grid gap-2">
-                    <label className="text-sm font-medium">Território de Identidade</label>
+                    <label htmlFor="territory-filter" className="text-font-primary text-sm font-medium">Território de Identidade</label>
                     <Combobox
                         items={filteredTerritoryOptions}
                         value={
@@ -131,7 +131,7 @@ const SchoolFiltersModal = ({
                                 );
                             }
                         }}>
-                        <ComboboxInput placeholder="Todos os Territórios" />
+                        <ComboboxInput id="territory-filter" placeholder="Todos os Territórios" />
                         <ComboboxContent className="pointer-events-auto z-[9999]">
                             {filteredTerritoryOptions.length === 0 ? (
                                 <ComboboxEmpty>Nenhuma opção encontrada</ComboboxEmpty>

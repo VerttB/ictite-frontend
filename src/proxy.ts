@@ -1,38 +1,51 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { jwtVerify, JWTPayload } from "jose";
+import { NextResponse, type NextRequest } from "next/server";
+import { getConsolePath } from "@/core/utils/authNavigation";
+import { getSessionUser } from "@/core/utils/session";
 
-export async function proxy(req: NextRequest) {
-    const tokenCookie = req.cookies.get("access_token");
-    const token = tokenCookie?.value;
-
-    const protectedRoutes = ["/console", "/console/v2", "/school/console"];
-    const isProtected = protectedRoutes.some((path) =>
-        req.nextUrl.pathname.startsWith(path)
-    );
-
-    if (isProtected) {
-        if (!token) {
-            const loginUrl = new URL("/login", req.url);
-            return NextResponse.redirect(loginUrl);
-        }
-
-        try {
-            const secret = new TextEncoder().encode(
-                process.env.JWT_SECRET || "default_secret_change_me"
-            );
-            await jwtVerify(token, secret);
-        } catch (error) {
-            console.error("Security Alert: Invalid or expired token in proxy:", error);
-            const response = NextResponse.redirect(new URL("/login", req.url));
-            response.cookies.delete("access_token");
-            return response;
-        }
-    }
-
-    return NextResponse.next();
+function loginRedirect(req: NextRequest, clearCookie = false) {
+    const target = new URL(`${req.nextUrl.basePath}/login/`, req.url);
+    target.searchParams.set("redirect", `${req.nextUrl.pathname}${req.nextUrl.search}`);
+    const response = NextResponse.redirect(target);
+    response.headers.set("Cache-Control", "no-store");
+    if (clearCookie)
+        response.cookies.set("access_token", "", {
+            path: "/",
+            maxAge: 0,
+            httpOnly: true,
+        });
+    return response;
 }
 
-export const config = {
-    matcher: ["/console/:path*", "/console/v2/:path*", "/school/console/:path*"],
-};
+export async function proxy(req: NextRequest) {
+    const token = req.cookies.get("access_token")?.value;
+    if (!token) return loginRedirect(req);
+    try {
+        const user = await getSessionUser(token);
+        if (!user) return loginRedirect(req, true);
+        const schoolConsole =
+            req.nextUrl.pathname === "/school/console" ||
+            req.nextUrl.pathname.startsWith("/school/console/");
+        const requiredRole = schoolConsole ? "SCHOOL_ADMIN" : "ADMIN";
+        if (user.role !== requiredRole) {
+            return NextResponse.redirect(
+                new URL(`${req.nextUrl.basePath}${getConsolePath(user.role)}/`, req.url)
+            );
+        }
+        const response = NextResponse.next();
+        response.headers.set("Cache-Control", "no-store");
+        return response;
+    } catch {
+        return new NextResponse(
+            "Não foi possível validar sua sessão. Tente novamente em instantes.",
+            {
+                status: 503,
+                headers: {
+                    "Cache-Control": "no-store",
+                    "Content-Type": "text/plain; charset=utf-8",
+                },
+            }
+        );
+    }
+}
+
+export const config = { matcher: ["/console/:path*", "/school/console/:path*"] };

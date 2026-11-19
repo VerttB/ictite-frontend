@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -9,11 +9,16 @@ import { ApiError } from "@/lib/api/error";
 import {
     SchoolFormSubmission,
     SchoolFormDraftDataSchema,
+    SchoolFormFinalDataSchema,
     RequestDeadlineExtension,
     SchoolFormDataInput,
 } from "@/schemas/schoolSubmissionSchema";
 import { schoolSubmissionService } from "@/core/service/schoolSubmissionService";
 import z from "zod";
+import {
+    getDraftValidationMessage,
+    normalizeSchoolFormData,
+} from "@/core/utils/schoolFormValidation";
 
 interface UseSchoolSubmissionReturn {
     submission: SchoolFormSubmission | null;
@@ -30,48 +35,12 @@ interface UseSchoolSubmissionReturn {
     reloadSubmission: () => Promise<void>;
 }
 
-// Função provisória para resolver bug entre undefined e nulls, remove todos os nulls do objeto, para que o zod consiga validar corretamente.
-function removeNulls<T>(obj: T): T {
-    if (Array.isArray(obj)) {
-        return obj.map(removeNulls) as unknown as T;
-    }
-    if (obj !== null && typeof obj === "object") {
-        const cleaned = Object.entries(obj).reduce<Record<string, unknown>>((acc, [key, value]) => {
-            if (key === "identity_territory_id" && value === "") return acc;
-            acc[key] = value === null ? undefined : removeNulls(value);
-            return acc;
-        }, {});
-        return cleaned as T;
-    }
-    return obj;
-}
-
-function getDraftValidationMessage(error: z.ZodError): string {
-    const firstIssue = error.issues[0];
-    if (!firstIssue) return "Preencha os campos obrigatórios para salvar o rascunho.";
-
-    const path = firstIssue.path.join(" > ");
-    if (path.includes("school.name")) {
-        return "O nome da escola é obrigatório para salvar o rascunho.";
-    }
-    if (path.includes("clubs")) {
-        return "Verifique os clubes de ciência: o nome do clube é obrigatório.";
-    }
-    if (path.includes("projects")) {
-        return "Verifique os projetos: nome e vínculo com clube são obrigatórios.";
-    }
-    if (path.includes("researchers")) {
-        return "Verifique os pesquisadores: nome e função são obrigatórios.";
-    }
-    if (path.includes("equipments")) {
-        return "Verifique a quantidade dos equipamentos: deve ser maior ou igual a 1.";
-    }
-    return `Erro de validação: ${firstIssue.message}`;
-}
-
 export function useSchoolSubmission(): UseSchoolSubmissionReturn {
+    const initialLoadStarted = useRef(false);
     const [submission, setSubmission] = useState<SchoolFormSubmission | null>(null);
-    const [globalDeadline, setGlobalDeadline] = useState<string | null | undefined>(undefined);
+    const [globalDeadline, setGlobalDeadline] = useState<string | null | undefined>(
+        undefined
+    );
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -89,8 +58,11 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
 
     const loadSubmission = useCallback(async () => {
         setIsLoading(true);
-        const deadlineRequest = schoolSubmissionService.getGlobalDeadline()
-            .then(({ school_forms_global_deadline }) => setGlobalDeadline(school_forms_global_deadline))
+        const deadlineRequest = schoolSubmissionService
+            .getGlobalDeadline()
+            .then(({ school_forms_global_deadline }) =>
+                setGlobalDeadline(school_forms_global_deadline)
+            )
             .catch(() => {
                 setGlobalDeadline(undefined);
                 toast.error("Não foi possível consultar o prazo de envio do formulário.");
@@ -99,7 +71,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
             const sub = await schoolSubmissionService.getCurrentSubmission();
             setSubmission(sub);
             if (sub && sub.data) {
-                form.reset(sub.data);
+                form.reset(normalizeSchoolFormData(sub.data));
             }
         } catch (error) {
             if (error instanceof ApiError && error.status === 404) {
@@ -107,7 +79,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                     const latestSub = await schoolSubmissionService.getLatestSubmission();
                     setSubmission(latestSub);
                     if (latestSub && latestSub.data) {
-                        form.reset(latestSub.data);
+                        form.reset(normalizeSchoolFormData(latestSub.data));
                     }
                 } catch (latestError) {
                     if (latestError instanceof ApiError && latestError.status === 404) {
@@ -115,7 +87,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                             const newSub = await schoolSubmissionService.createDraft();
                             setSubmission(newSub);
                             if (newSub && newSub.data) {
-                                form.reset(newSub.data);
+                                form.reset(normalizeSchoolFormData(newSub.data));
                             }
                         } catch (_createErr) {
                             toast.error(
@@ -136,7 +108,9 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
     }, [form]);
 
     useEffect(() => {
-        loadSubmission();
+        if (initialLoadStarted.current) return;
+        initialLoadStarted.current = true;
+        void loadSubmission();
     }, [loadSubmission]);
 
     const saveDraft = async (options?: { quietSuccess?: boolean }): Promise<boolean> => {
@@ -144,14 +118,14 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         setIsSaving(true);
         try {
             const currentData = form.getValues();
-            const cleanData = removeNulls(currentData);
+            const cleanData = normalizeSchoolFormData(currentData);
             const validatedData = SchoolFormDraftDataSchema.parse(cleanData);
             const updatedSub = await schoolSubmissionService.saveDraft(
                 submission.version,
                 validatedData
             );
             setSubmission(updatedSub);
-            form.reset(updatedSub.data);
+            form.reset(normalizeSchoolFormData(updatedSub.data));
             if (!options?.quietSuccess) toast.success("Rascunho salvo com sucesso!");
             return true;
         } catch (error) {
@@ -161,7 +135,9 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
                         error.message || "Conflito de concorrência ou prazo encerrado."
                     );
                 } else if (error.status === 422) {
-                    toast.error("Confira os dados do formulário antes de salvar o rascunho.");
+                    toast.error(
+                        "Confira os dados do formulário antes de salvar o rascunho."
+                    );
                 } else {
                     toast.error(error.message || "Erro ao salvar rascunho.");
                 }
@@ -185,9 +161,14 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         setIsSubmitting(true);
         try {
             const currentData = form.getValues();
-            const cleanData = removeNulls(currentData);
-            const validatedData = SchoolFormDraftDataSchema.parse(cleanData);
-            await schoolSubmissionService.saveDraft(submission.version, validatedData);
+            const cleanData = normalizeSchoolFormData(currentData);
+            const validatedData = SchoolFormFinalDataSchema.parse(cleanData);
+            const updatedDraft = await schoolSubmissionService.saveDraft(
+                submission.version,
+                validatedData
+            );
+            setSubmission(updatedDraft);
+            form.reset(normalizeSchoolFormData(updatedDraft.data));
 
             const submittedSub = await schoolSubmissionService.submitDraft();
             setSubmission(submittedSub);
@@ -217,7 +198,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         try {
             const refreshedSub = await schoolSubmissionService.refreshDraft();
             setSubmission(refreshedSub);
-            form.reset(refreshedSub.data);
+            form.reset(normalizeSchoolFormData(refreshedSub.data));
             toast.success("Dados recarregados do banco principal!");
         } catch (_error) {
             toast.error("Erro ao recarregar dados do banco de dados.");
@@ -232,7 +213,7 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         try {
             const reopenedSub = await schoolSubmissionService.reopenDraft();
             setSubmission(reopenedSub);
-            form.reset(reopenedSub.data);
+            form.reset(normalizeSchoolFormData(reopenedSub.data));
             toast.success("Formulário reaberto para edição!");
         } catch (error) {
             if (error instanceof ApiError) {

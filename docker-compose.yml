@@ -4,6 +4,8 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
+                NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:?Defina a URL publica da API}
+                NEXT_PUBLIC_BASE_PATH: ${NEXT_PUBLIC_BASE_PATH-/ictite/v1/web}
                 NEXT_PUBLIC_GA4_MEASUREMENT_ID: ${NEXT_PUBLIC_GA4_MEASUREMENT_ID:-}
         container_name: next-app
         ports:
@@ -16,6 +18,7 @@ services:
             - NODE_ENV=production
             - PORT=8010
             - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+            - API_INTERNAL_URL=${API_INTERNAL_URL:-}
         restart: unless-stopped
 networks:
     ictite-novo-network:
