@@ -16,7 +16,7 @@ export const SchoolForm = () => {
     }));
     return (
         <>
-            <InputField name="name" label="Nome da Escola" />
+            <InputField name="name" label="Nome da Escola (Obrigatório)" />
             <TextField name="description" label="Descrição (Opcional)" />
             <div className="grid grid-cols-2 gap-4">
                 <InputField name="cep" label="CEP (Opcional)" mask={mask.cep} />

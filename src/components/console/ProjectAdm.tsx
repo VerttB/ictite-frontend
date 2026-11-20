@@ -47,7 +47,7 @@ const ProjectFiltersModal = ({
 }) => {
     const [selectedSchool, setSelectedSchool] = useState<string>(String(currentParams.school_id || ""));
     const [selectedClub, setSelectedClub] = useState<string>(String(currentParams.clube_ciencia_id || ""));
-    const [selectedYear, setSelectedYear] = useState<string>(String(currentParams.year || ""));
+    const [selectedYear, setSelectedYear] = useState<string>(String(currentParams.start_year || ""));
 
     const [schoolSearchValue, setSchoolSearchValue] = useState<string>("");
     const [clubSearchValue, setClubSearchValue] = useState<string>("");
@@ -97,7 +97,7 @@ const ProjectFiltersModal = ({
 
         newParams.school_id = selectedSchool || undefined;
         newParams.clube_ciencia_id = selectedClub || undefined;
-        newParams.year = selectedYear ? Number(selectedYear) : undefined;
+        newParams.start_year = selectedYear ? Number(selectedYear) : undefined;
 
         applyParams(newParams);
         closeFilters();
@@ -111,7 +111,7 @@ const ProjectFiltersModal = ({
         const newParams = { ...currentParams };
         newParams.school_id = undefined;
         newParams.clube_ciencia_id = undefined;
-        newParams.year = undefined;
+        newParams.start_year = undefined;
 
         applyParams(newParams);
         closeFilters();
@@ -206,7 +206,7 @@ const ProjectFiltersModal = ({
                 </div>
 
                 <div className="grid gap-2">
-                    <label className="text-sm font-medium">Ano</label>
+                    <label className="text-sm font-medium">Ano de início</label>
                     <Input
                         type="number"
                         placeholder="Digite o ano (Ex: 2026)"
@@ -286,7 +286,8 @@ export const ProjectAdm = ({ params }: ProjectAdmProps) => {
         defaultValues: { images: [] },
         mapToFormValues: (item) => ({
             ...item,
-            year: item.year == null ? undefined : String(item.year),
+            start_year: item.start_year ?? undefined,
+            end_year: item.end_year ?? undefined,
             clube_ciencia_id: item.clube?.id,
         }),
         renderForm: (props) => <ProjectForm {...props} />,

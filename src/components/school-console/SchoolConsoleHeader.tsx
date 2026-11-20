@@ -75,7 +75,7 @@ export function SchoolConsoleHeader({
     return (
         <div className="flex w-full flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 flex-wrap items-center gap-3">
                     <h1 className="text-font-primary text-2xl font-bold">Console da Escola</h1>
                     {getStatusBadge(submission?.status)}
                 </div>

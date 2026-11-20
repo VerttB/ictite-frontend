@@ -68,10 +68,10 @@ export function SchoolSubEntitiesTabs({
 
     const isItemExpanded = (id: string) => expandedItems[id] !== false;
 
-    // Use prepend so newly added items appear at the TOP of the list
+    // Append new rows so mounted fields keep their existing form indices.
     const {
         fields: clubFields,
-        prepend: prependClub,
+        append: appendClub,
         remove: removeClub,
     } = useFieldArray({
         control,
@@ -81,7 +81,7 @@ export function SchoolSubEntitiesTabs({
 
     const {
         fields: projectFields,
-        prepend: prependProject,
+        append: appendProject,
         remove: removeProject,
     } = useFieldArray({
         control,
@@ -91,7 +91,7 @@ export function SchoolSubEntitiesTabs({
 
     const {
         fields: researcherFields,
-        prepend: prependResearcher,
+        append: appendResearcher,
         remove: removeResearcher,
     } = useFieldArray({
         control,
@@ -101,7 +101,7 @@ export function SchoolSubEntitiesTabs({
 
     const {
         fields: equipmentFields,
-        prepend: prependEquipment,
+        append: appendEquipment,
         remove: removeEquipment,
     } = useFieldArray({
         control,
@@ -140,13 +140,13 @@ export function SchoolSubEntitiesTabs({
 
     const handleAddClub = () => {
         const id = crypto.randomUUID();
-        prependClub({ id, name: "", instagram_url: "" });
+        appendClub({ id, name: "", description: "", instagram_url: "" });
         setExpandedItems((prev) => ({ ...prev, [id]: true }));
     };
 
     const handleAddProject = () => {
         const id = crypto.randomUUID();
-        prependProject({
+        appendProject({
             id,
             name: "",
             description: "",
@@ -161,7 +161,7 @@ export function SchoolSubEntitiesTabs({
     const handleAddResearcher = () => {
         const id = crypto.randomUUID();
         const firstProjectId = currentProjects[0]?.id;
-        prependResearcher({
+        appendResearcher({
             id,
             name: "",
             type: "Aluno",
@@ -175,7 +175,7 @@ export function SchoolSubEntitiesTabs({
 
     const handleAddEquipment = () => {
         const id = crypto.randomUUID();
-        prependEquipment({
+        appendEquipment({
             id,
             name: "",
             quantity: 1,
@@ -219,7 +219,7 @@ export function SchoolSubEntitiesTabs({
     return (
         <div className="bg-card w-full rounded-2xl border border-border p-6 shadow-sm">
             {/* Header da Seção Ativa */}
-            <div className="flex items-center justify-between border-b border-border pb-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
                 <div className="flex items-center gap-2 text-[#088077]">
                     <HeaderIcon size={20} />
                     <h3 className="text-font-primary text-base font-bold">
@@ -327,6 +327,8 @@ export function SchoolSubEntitiesTabs({
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeResearcher(index)}
+                                ensureDraftSaved={ensureDraftSaved}
+                                draftData={draftData}
                             />
                         ))
                     ))}

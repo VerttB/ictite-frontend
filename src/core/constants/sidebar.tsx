@@ -9,7 +9,7 @@ import {
     SquareChartGantt,
 } from "lucide-react";
 
-const ANY_ROLE = ["ADMIN", "SCHOOL_ADMIN", "MANAGER", "VIEWER"];
+const ANY_ROLE = ["ADMIN", "SCHOOL_ADMIN"];
 
 export const baseItems = [
     {
@@ -43,7 +43,7 @@ export const admItems = [
         title: "Escolas",
         url: "/console/v2/escolas",
         icon: School,
-        allowedRoles: ["ADMIN", "SCHOOL_ADMIN"],
+        allowedRoles: ["ADMIN"],
     },
     // {
     //     title: "Submissões",

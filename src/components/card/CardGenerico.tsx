@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
@@ -19,16 +19,16 @@ export const CardGenerico = ({
     isAddButton,
     fallbackImage,
 }: CardProps) => {
-    const [imgSrc, setImgSrc] = useState<string | undefined>(image);
-
-    useEffect(() => {
-        setImgSrc(image);
-    }, [image]);
+    const [failedSources, setFailedSources] = useState<string[]>([]);
+    const imgSrc = [image, fallbackImage].find(
+        (source) => source && !failedSources.includes(source)
+    );
 
     if (isAddButton) {
         return (
             <Button
                 onClick={onClick}
+                aria-label="Adicionar item"
                 className="flex h-40 w-full max-w-40 cursor-pointer items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200">
                 <Plus className="text-primary size-16 font-light" />
             </Button>
@@ -45,7 +45,9 @@ export const CardGenerico = ({
                     alt={title ?? "Card"}
                     fill
                     className="object-cover transition-transform duration-200 group-hover:scale-105"
-                    onError={() => setImgSrc(fallbackImage || "")}
+                    onError={() => {
+                        if (imgSrc) setFailedSources((sources) => [...sources, imgSrc]);
+                    }}
                 />
             ) : (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">

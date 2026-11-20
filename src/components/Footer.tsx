@@ -1,8 +1,5 @@
 import { getAssetPrefix } from "@/core/utils/api";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 export const Footer = () => {
     return (
         <footer className="bg-foreground relative mt-3 ml-4 flex h-fit min-h-16 xl:h-16 w-full flex-wrap items-center gap-4 rounded-sm p-2 px-4 py-2">
@@ -46,7 +43,7 @@ export const Footer = () => {
                 alt="Logo"
                 width={96}
                 height={96}
-                className="inline-block object-contain"
+                className="inline-block rounded-sm bg-white p-1 object-contain"
             />
             <Image
                 src={`${getAssetPrefix()}/apoios/cnpqLogo.png`}

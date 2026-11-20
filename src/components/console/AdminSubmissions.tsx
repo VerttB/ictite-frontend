@@ -71,7 +71,7 @@ export function AdminSubmissions({ params }: AdminSubmissionsProps) {
     const { data, error, isLoading, mutate } = useSWR(
         ["admin-submissions", requestParams],
         ([, currentParams]) => getAdminSubmissions(currentParams),
-        { keepPreviousData: true }
+        { keepPreviousData: false }
     );
 
     useEffect(() => {
@@ -155,10 +155,11 @@ export function AdminSubmissions({ params }: AdminSubmissionsProps) {
                             Não foi possível carregar as submissões.
                         </div>
                     ) : data?.items.length ? (
-                        <Table className="min-w-[900px]">
+                        <Table className="min-w-[1050px]">
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="font-semibold text-gray-800">Escola</TableHead>
+                                    <TableHead className="font-semibold text-gray-800">Enviado por</TableHead>
                                     <TableHead className="font-semibold text-gray-800">Status</TableHead>
                                     <TableHead className="font-semibold text-gray-800">Versão</TableHead>
                                     <TableHead className="font-semibold text-gray-800">Prazo</TableHead>
@@ -172,6 +173,7 @@ export function AdminSubmissions({ params }: AdminSubmissionsProps) {
                                         <TableCell className="font-medium">
                                             {submission.data.school.name}
                                         </TableCell>
+                                        <TableCell>{submission.submitted_by_email || "Não informado"}</TableCell>
                                         <TableCell>
                                             <SubmissionStatusBadge status={submission.status} />
                                         </TableCell>

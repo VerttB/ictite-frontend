@@ -1,11 +1,17 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
+const basePath = (
+    process.env.NEXT_PUBLIC_BASE_PATH ?? (isProd ? "/ictite/v1/web" : "")
+).replace(/\/$/, "");
 
 const nextConfig: NextConfig = {
+    // O projeto mantém suas próprias instruções em AGENTS.md.
+    agentRules: false,
     output: "standalone",
-    basePath: isProd ? "/ictite/v1/web" : "",
-    assetPrefix: isProd ? "/ictite/v1/web" : "",
+    distDir: process.env.NEXT_DIST_DIR || ".next",
+    basePath,
+    assetPrefix: basePath,
     trailingSlash: true,
     reactCompiler: true,
     typedRoutes: true,

@@ -10,7 +10,7 @@ export default function MenuSuperiorPagina ({ title } : { title: string }) {
 
     return(
         <div className="flex flex-row items-center gap-5">
-            <Button size={"icon"} variant={"outline"} className="cursor-pointer"
+            <Button size={"icon"} variant={"outline"} className="cursor-pointer" aria-label="Voltar"
             onClick={() => router.back()}>
                 <ChevronLeft />
             </Button>

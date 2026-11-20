@@ -33,6 +33,7 @@ import { getTerritories } from "@/core/service/IdentityTerritoryService";
 import { IdentityTerritory } from "@/core/domain/IdentityTerritory";
 import { EquipmentType } from "@/core/domain/EquipmentType";
 import { getEquipamentTypes } from "@/core/service/TipoEquipamentoService";
+import { formatInstagramUrl } from "@/core/utils/formatInstagramUrl";
 
 type PreviewProject = SchoolFormDataInput["projects"][number];
 
@@ -119,7 +120,7 @@ function DraftProjectImage({
     if (isLoading) {
         return (
             <div
-                className={`w-full animate-pulse rounded-md bg-gray-100 ${expanded ? "h-96" : "h-40"}`}
+                className={`w-full animate-pulse rounded-md bg-gray-100 ${expanded ? "h-96" : "h-56"}`}
             />
         );
     }
@@ -129,7 +130,7 @@ function DraftProjectImage({
     if (!primaryImage) {
         return (
             <div
-                className={`text-font-primary/60 flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-200 bg-gray-50 text-center text-xs ${expanded ? "h-96" : "h-40"}`}>
+                className={`text-font-primary/60 flex w-full items-center justify-center rounded-md border-2 border-dashed border-gray-200 bg-gray-50 text-center text-xs ${expanded ? "h-96" : "h-56"}`}>
                 Sem imagem disponível
             </div>
         );
@@ -139,8 +140,28 @@ function DraftProjectImage({
         <ImageDisplay
             src={primaryImage.url}
             alt={alt}
-            className={`w-full overflow-hidden rounded-md border bg-gray-50 ${expanded ? "h-96" : "h-40"}`}
+            className={`w-full overflow-hidden rounded-md border bg-gray-50 ${expanded ? "h-96" : "h-56"}`}
         />
+    );
+}
+
+function DraftResearcherImage({ entityId, name, fallbackUrl, className }: {
+    entityId: string;
+    name: string;
+    fallbackUrl?: string;
+    className: string;
+}) {
+    const { data } = useSWR(
+        entityId ? `/submissions/current/images/researcher/${entityId}` : null,
+        () => schoolSubmissionService.getFormEntityImages("researcher", entityId)
+    );
+    const imageUrl = data?.images?.[0]?.url || fallbackUrl;
+    return imageUrl ? (
+        <ImageDisplay src={imageUrl} alt={`Foto de ${name}`} className={className} />
+    ) : (
+        <div className={`${className} bg-muted text-font-secondary flex items-center justify-center`}>
+            <BookOpen size={32} />
+        </div>
     );
 }
 
@@ -222,7 +243,7 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-3">
                     <div>
-                        <h1 className="text-font-primary text-2xl font-semibold">
+                        <h1 className="text-font-primary text-3xl font-semibold md:text-4xl">
                             {data.school?.name || "Escola ainda não informada"}
                         </h1>
                         <div className="text-font-secondary mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm">
@@ -231,10 +252,10 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                 {data.school?.city || "Cidade não informada"}
                             </span>
                             {data.school?.instagram_url && (
-                                <span className="flex items-center gap-2">
+                                <a href={formatInstagramUrl(data.school.instagram_url)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:underline">
                                     <Instagram size={16} />
                                     {data.school.instagram_url}
-                                </span>
+                                </a>
                             )}
                             {data.school?.cep && (
                                 <span className="flex items-center gap-2">
@@ -336,16 +357,16 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                     alt={`Imagem do clube ${club.name || "de ciência"}`}
                                                 />
                                                 <div className="flex min-w-0 flex-col gap-2">
-                                                    <h1 className="text-center text-3xl font-semibold md:text-left md:text-4xl">
+                                                    <h2 className="text-center text-2xl font-semibold md:text-left md:text-3xl">
                                                         {club.name ||
                                                             "Nome do clube ainda não informado"}
-                                                    </h1>
+                                                    </h2>
                                                     <div className="text-primary flex flex-col gap-2 text-sm md:flex-row md:items-center">
                                                         {club.instagram_url && (
-                                                            <span className="flex items-center gap-2">
+                                                            <a href={formatInstagramUrl(club.instagram_url)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:underline">
                                                                 <Instagram size={20} />
                                                                 {club.instagram_url}
-                                                            </span>
+                                                            </a>
                                                         )}
                                                     </div>
                                                 </div>
@@ -393,7 +414,7 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                     </h2>
                                                 </div>
                                                 {clubProjects.length > 0 ? (
-                                                    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+                                                    <div className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
                                                         {clubProjects.map(
                                                             (project, projectIndex) => (
                                                                 <article
@@ -401,7 +422,7 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                                         project.id ||
                                                                         projectIndex
                                                                     }
-                                                                    className="flex h-full min-w-0 flex-col gap-4 rounded-md border border-l-8 border-l-amber-500 bg-white p-5 shadow">
+                                                                    className="bg-background flex h-full min-w-0 flex-col gap-4 rounded-md border border-l-8 border-l-amber-500 p-5 shadow">
                                                                     <DraftProjectImage
                                                                         entityId={
                                                                             project.id
@@ -497,15 +518,7 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                                                         researcherIndex
                                                                                     }
                                                                                     className="bg-background text-font-primary relative flex min-h-[300px] min-w-0 flex-col justify-end overflow-hidden rounded-md border-2 p-4">
-                                                                                    {researcher.image && (
-                                                                                        <ImageDisplay
-                                                                                            src={
-                                                                                                researcher.image
-                                                                                            }
-                                                                                            alt={`Foto de ${researcher.name || "pesquisador"}`}
-                                                                                            className="absolute inset-0 h-full w-full rounded-none"
-                                                                                        />
-                                                                                    )}
+                                                                                    <DraftResearcherImage entityId={researcher.id} name={researcher.name} fallbackUrl={researcher.image} className="absolute inset-0 h-full w-full rounded-none" />
                                                                                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                                                                                     <div className="relative z-10 text-white">
                                                                                         <p className="text-xl">
@@ -571,17 +584,7 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                     <article
                                         key={researcher.id || index}
                                         className="bg-foreground flex min-w-0 items-center gap-4 rounded-md border p-4">
-                                        {researcher.image ? (
-                                            <ImageDisplay
-                                                src={researcher.image}
-                                                alt={`Foto de ${researcher.name}`}
-                                                className="size-20 shrink-0 overflow-hidden rounded-full"
-                                            />
-                                        ) : (
-                                            <div className="text-font-secondary bg-background flex size-20 shrink-0 items-center justify-center rounded-full border">
-                                                <BookOpen />
-                                            </div>
-                                        )}
+                                        <DraftResearcherImage entityId={researcher.id} name={researcher.name} fallbackUrl={researcher.image} className="size-20 shrink-0 overflow-hidden rounded-full border" />
                                         <div className="min-w-0">
                                             <h3 className="text-font-primary truncate font-semibold">
                                                 {researcher.name || "Nome não informado"}

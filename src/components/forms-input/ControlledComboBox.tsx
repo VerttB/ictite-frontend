@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/combobox";
 
 import { SimpleIdName } from "@/schemas/Common";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 type OptionType = { value: string; label: string };
 
@@ -47,7 +47,10 @@ export const ControlledComboBox = ({
     } = useFormContext();
     const anchor = useComboboxAnchor();
 
-    const [searchValue, setSearchValue] = useState(lockedValue ? lockedValue.label : "");
+    const [searchInput, setSearchInput] = useState<{
+        selection: string;
+        text: string;
+    } | null>(null);
 
     const normalizedOptions: OptionType[] = useMemo(() => {
         return options.map((opt) => {
@@ -58,6 +61,20 @@ export const ControlledComboBox = ({
         });
     }, [options]);
 
+    const rhfValue = useWatch({ name, control });
+    const selection = JSON.stringify(rhfValue ?? null);
+
+    const selectedLabel =
+        !isMulti && rhfValue
+            ? (normalizedOptions.find((option) => option.value === rhfValue.toString())
+                  ?.label ?? "")
+            : "";
+
+    const searchValue =
+        searchInput?.selection === selection
+            ? searchInput.text
+            : (lockedValue?.label ?? selectedLabel);
+    const setSearchValue = (text: string) => setSearchInput({ selection, text });
     const filteredOptions = useMemo(() => {
         if (!searchValue) return normalizedOptions;
         const lowerSearch = searchValue.toLowerCase();
@@ -66,38 +83,11 @@ export const ControlledComboBox = ({
         );
     }, [normalizedOptions, searchValue]);
 
-    const rhfValue = useWatch({ name, control });
-
-    // Sync search value with selected label when editing or reset
-    React.useEffect(() => {
-        // If value is cleared (reset), clear the search text
-        if (!rhfValue || (Array.isArray(rhfValue) && rhfValue.length === 0)) {
-            if (!lockedValue) {
-                setSearchValue("");
-            }
-            return;
-        }
-
-        // If single select and we have a value, sync the label if not already typing
-        if (!isMulti && rhfValue) {
-            const selected = normalizedOptions.find(
-                (o) => o.value === rhfValue.toString()
-            );
-
-            // Only sync if the search text is empty (initial load) or
-            // if it's completely different from the current value's label
-            // (meaning the value changed externally)
-            if (selected && (!searchValue || searchValue !== selected.label)) {
-                // If the user just cleared the input manually but didn't select a new value yet,
-                // we might want to be careful here, but usually reset() is the main case.
-                setSearchValue(selected.label);
-            }
-        }
-    }, [rhfValue, normalizedOptions, isMulti, lockedValue]);
-
     return (
         <div className={`${className}`}>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label
+                htmlFor={name}
+                className="text-font-primary mb-1 block text-sm font-medium">
                 {label}
             </label>
 
@@ -202,6 +192,7 @@ export const ControlledComboBox = ({
                                                     </ComboboxChip>
                                                 ))}
                                                 <ComboboxChipsInput
+                                                    id={name}
                                                     placeholder={`Selecione ${label.toLowerCase()}`}
                                                     disabled={disabled}
                                                 />
@@ -211,6 +202,7 @@ export const ControlledComboBox = ({
                                 </ComboboxChips>
                             ) : (
                                 <ComboboxInput
+                                    id={name}
                                     placeholder={`Selecione ${label.toLowerCase()}`}
                                     disabled={disabled}
                                 />

@@ -6,13 +6,14 @@ import { ControlledComboBox } from "../../forms-input/ControlledComboBox";
 import { ControlledImageUpload } from "../../forms-input/ControlledImageInput";
 import useSWR from "swr";
 import { getSchools, getSchoolById } from "@/core/service/SchoolService";
-import { getCoordinators } from "@/core/service/CoordinatorService";
 import { AdminFormProps } from "@/core/interface/AdminEntity";
 
 export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isSchoolLocked = parentIdField === "school_id" && !!parentId;
 
-    const { data: schools } = useSWR("schools-all", () => getSchools({ size: 0 }));
+    const { data: schools, error: schoolsError, isLoading: schoolsLoading, mutate: reloadSchools } = useSWR(
+        "schools-all", () => getSchools({ size: 0 })
+    );
 
     const { data: parentSchool } = useSWR(
         isSchoolLocked ? ["school", parentId] : null,
@@ -30,7 +31,7 @@ export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
                 <ControlledComboBox
                     className="w-full"
                     name="school_id"
-                    label="Escola"
+                    label="Escola (Obrigatório)"
                     options={schoolOptions}
                     disabled={isSchoolLocked}
                     lockedValue={
@@ -42,6 +43,9 @@ export const ClubForm = ({ parentId, parentIdField }: AdminFormProps) => {
                             : null
                     }
                 />
+                {schoolsLoading && <p className="text-font-secondary text-xs">Carregando escolas...</p>}
+                {schoolsError && <button type="button" className="text-destructive text-xs underline" onClick={() => void reloadSchools()}>Não foi possível carregar as escolas. Tentar novamente</button>}
+                {!schoolsLoading && !schoolsError && schoolOptions.length === 0 && <p className="text-font-secondary text-xs">Nenhuma escola disponível.</p>}
                 <InputField name="instagram" label="Instagram (Opcional)" />
             </div>
 

@@ -14,7 +14,7 @@ import { useUrlPagination } from "@/hooks/useUrlPagination";
 import { useUserContext } from "@/providers/UserContext";
 import { Pagination } from "../../Pagination";
 import { SearchAndFilter } from "../../SearchAndFilter";
-import { FormProvider, useForm, FieldValues, DefaultValues } from "react-hook-form";
+import { FormProvider, useForm, FieldValues, DefaultValues, FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -164,11 +164,16 @@ export const EntityConsole = <
         return success;
     };
 
+    const handleInvalidForm = (errors: FieldErrors<FieldValues>) => {
+        const firstError = Object.values(errors).find((error) => error?.message);
+        toast.error(typeof firstError?.message === "string" ? firstError.message : "Confira os campos obrigatórios.");
+    };
+
     const getTooltipText = (item: T) => {
         if (config.entityName === "projects") {
-            const project = item as T & { school?: { name?: string }; year?: number };
+            const project = item as T & { school?: { name?: string }; start_year?: number };
             const schoolName = project.school?.name || "Sem Escola";
-            const year = project.year || "Sem Ano";
+            const year = project.start_year || "Sem Ano";
             const fullName = item.name || "";
             return `Nome: ${fullName} | Escola: ${schoolName} | Ano: ${year}`;
         }
@@ -177,7 +182,7 @@ export const EntityConsole = <
 
     if (view === "list") {
         return (
-            <div className="flex h-full w-full flex-col">
+            <div className="flex h-full w-full min-w-0 flex-col">
                 <Breadcrumbs items={breadcrumbs} />
                 <Section<T>
                     title={config.title}
@@ -218,8 +223,8 @@ export const EntityConsole = <
     }
 
     return (
-        <div className="flex h-full w-full flex-col">
-            <div className="mb-4 flex items-center justify-between">
+        <div className="flex h-full w-full min-w-0 flex-col">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-col">
                     <Breadcrumbs items={breadcrumbs} />
                     <h1 className="text-2xl font-bold">
@@ -271,7 +276,7 @@ export const EntityConsole = <
                         <CardContent>
                             <FormProvider {...methods}>
                                 <form
-                                    onSubmit={handleSubmit(handleFormSubmit)}
+                                    onSubmit={handleSubmit(handleFormSubmit, handleInvalidForm)}
                                     className="space-y-4">
                                     {config.renderForm({})}
                                     <div className="flex justify-end gap-2 pt-4">

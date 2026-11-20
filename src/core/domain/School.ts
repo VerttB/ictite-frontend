@@ -2,7 +2,6 @@ import { z } from "zod";
 import { ImageSchema, OptionalImageCreateSchema } from "./Image";
 import {
     SearchParamParser,
-    SimpleIdNameDescriptionSchema,
     SimpleIdNameSchema,
 } from "@/schemas/Common";
 import { mask } from "@/lib/maskBuilder";
@@ -10,7 +9,7 @@ import { PaginationSearchParamsSchema } from "@/schemas/Pagination";
 import { IdentityTerritorySchema } from "./IdentityTerritory";
 export const SchoolSchema = z.object({
     id: z.uuid(),
-    name: z.string().min(1, "Nome obrigatório"),
+    name: z.string().trim().min(2, "Informe ao menos 2 caracteres").max(100, "O nome da escola deve ter no máximo 100 caracteres"),
     city: z.string().nullish(),
     cep: z.string().nullish(),
     description: z.string().nullish(),
@@ -39,7 +38,7 @@ export const SchoolCreateSchema = SchoolSchema.pick({
 }).and(
     z.object({
         cep: OptionalCepSchema,
-        identity_territory_id: z.uuid().optional(),
+        identity_territory_id: z.uuid().nullish(),
     })
 );
 
@@ -50,7 +49,7 @@ export const SchoolFormSchema = SchoolCreateSchema.and(
 );
 
 export const SchoolUpdateSchema = z.object({
-    name: z.string().min(1, "Nome obrigatório").optional(),
+    name: z.string().trim().min(2, "Informe ao menos 2 caracteres").max(100, "O nome da escola deve ter no máximo 100 caracteres").optional(),
     description: z.string().nullish(),
     instagram: z.string().nullish(),
     cep: OptionalCepSchema,

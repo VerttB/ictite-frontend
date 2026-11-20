@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar } from "lucide-react";
-import Image from "next/image";
+import { NewsImage } from "./NewsImage";
 import { InstagramPost } from "@/core/domain/Instagram";
 
 interface CardNoticiasProps {
@@ -13,8 +13,9 @@ export default function CardNoticias({ post }: CardNoticiasProps) {
     return (
         <div className="group relative h-full min-h-[350px] cursor-pointer overflow-hidden rounded-md border border-gray-200 bg-gray-500">
             {/* IMAGEM */}
-            <Image
-                src={post.image_url || "https://picsum.photos/900/600"}
+            <NewsImage
+                key={post.image_url}
+                src={post.image_url}
                 alt={post.title || "Notícia"}
                 width={1000}
                 height={800}

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useCallback, useState, useMemo } from "react";
 import { SearchBar } from "./SearchBar";
 import { Button } from "./ui/button";
@@ -11,6 +10,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog";
 
 interface FilterListProps<T> {
@@ -28,12 +28,10 @@ interface FilterListProps<T> {
 }
 
 export const SearchAndFilter = <T,>({
-    onSearch,
     currentParams,
     applyParams,
     mainSearchKey,
     mainSearchPlaceholder,
-    filters,
     renderFilters,
 }: FilterListProps<T>) => {
     const [openModal, setOpenModal] = useState(false);
@@ -58,32 +56,33 @@ export const SearchAndFilter = <T,>({
     }, [currentParams, mainSearchKey]);
 
     return (
-        <div className="flex items-center gap-2 w-full justify-end">
-            <SearchBar
-                key={currentParams[mainSearchKey]?.toString() || ""}
-                placeholder={mainSearchPlaceholder}
-                initialValue={currentParams[mainSearchKey]?.toString() || ""}
-                onSearch={handleMainSearch}
-            />
-            {!!renderFilters && (
-                <Button
-                    variant="outline"
-                    title="Mais Filtros"
-                    onClick={() => setOpenModal(true)}
-                    className="relative h-9 px-3"
-                >
-                    <ListFilter size={20} className="mr-2" />
-                    Filtros
-                    {hasActiveFilters && (
-                        <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-                        </span>
-                    )}
-                </Button>
-            )}
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                <SearchBar
+                    key={currentParams[mainSearchKey]?.toString() || ""}
+                    placeholder={mainSearchPlaceholder}
+                    initialValue={currentParams[mainSearchKey]?.toString() || ""}
+                    onSearch={handleMainSearch}
+                />
+                {!!renderFilters && (
+                    <DialogTrigger asChild>
+                        <Button
+                            variant="outline"
+                            title="Mais Filtros"
+                            aria-label="Mais filtros"
+                            className="relative h-9 px-3">
+                            <ListFilter size={20} className="mr-2" />
+                            Filtros
+                            {hasActiveFilters && (
+                                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
+                                    <span className="relative inline-flex h-3 w-3 rounded-full bg-blue-500"></span>
+                                </span>
+                            )}
+                        </Button>
+                    </DialogTrigger>
+                )}
 
-            <Dialog open={openModal} onOpenChange={setOpenModal}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>Filtros Avançados</DialogTitle>
@@ -99,7 +98,7 @@ export const SearchAndFilter = <T,>({
                             closeFilters: () => setOpenModal(false),
                         })}
                 </DialogContent>
-            </Dialog>
-        </div>
+            </div>
+        </Dialog>
     );
 };

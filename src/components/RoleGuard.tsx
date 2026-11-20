@@ -4,6 +4,7 @@ import { useUserContext } from "@/providers/UserContext";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { LoaderCircle } from "lucide-react";
+import { getConsolePath } from "@/core/utils/authNavigation";
 
 interface RoleGuardProps {
     children: React.ReactNode;
@@ -22,14 +23,14 @@ export function RoleGuard({ children, allowedRoles }: RoleGuardProps) {
             return;
         }
         if (user && !allowedRoles.includes(user.role)) {
-            router.replace("/");
+            router.replace(getConsolePath(user.role));
         }
     }, [isLoading, isAuthenticated, user, allowedRoles, pathname, router]);
 
     if (isLoading) {
         return (
             <div className="flex h-screen w-full items-center justify-center">
-                <LoaderCircle className="animate-spin text-primary" size={32} />
+                <LoaderCircle className="text-primary animate-spin" size={32} />
             </div>
         );
     }

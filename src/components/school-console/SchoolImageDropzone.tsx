@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useState } from "react";
 import useSWR from "swr";
 import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react";
@@ -89,7 +91,10 @@ export function SchoolImageDropzone({ readOnly = false }: SchoolImageDropzonePro
                     </div>
                 ) : currentImageUrl ? (
                     <div className="relative flex flex-col items-center justify-center gap-2">
-                        <img
+                        <Image
+                            width={320}
+                            height={144}
+                            unoptimized
                             src={currentImageUrl}
                             alt="Logomarca / Imagem do formulário da escola"
                             className="max-h-36 rounded-xl border border-border object-cover shadow-sm"

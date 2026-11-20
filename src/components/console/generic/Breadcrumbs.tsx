@@ -17,26 +17,26 @@ interface BreadcrumbsProps {
 export const Breadcrumbs = ({ items, className }: BreadcrumbsProps) => {
     return (
         <nav className={cn("mb-4 flex", className)} aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-2">
+            <ol className="flex min-w-0 flex-wrap items-center gap-2">
                 <li>
                     <Link
                         href={"/console/v2" as Route}
-                        className="text-muted-foreground hover:text-foreground flex items-center transition-colors">
+                        className="text-font-secondary hover:text-font-primary flex items-center transition-colors">
                         <Home size={16} className="mr-1" />
                         <span className="sr-only">Console</span>
                     </Link>
                 </li>
                 {items.map((item, index) => (
                     <li key={index} className="flex items-center">
-                        <ChevronRight size={16} className="text-muted-foreground mx-1" />
+                        <ChevronRight size={16} className="text-font-secondary mx-1" />
                         {item.href ? (
                             <Link
                                 href={item.href as Route}
-                                className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors">
+                                className="text-font-secondary hover:text-font-primary text-sm font-medium transition-colors">
                                 {item.label}
                             </Link>
                         ) : (
-                            <span className="text-foreground text-sm font-medium">
+                            <span aria-current="page" className="text-font-primary break-words text-sm font-medium">
                                 {item.label}
                             </span>
                         )}

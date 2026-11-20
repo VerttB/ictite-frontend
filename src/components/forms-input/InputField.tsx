@@ -16,8 +16,9 @@ export const InputField = ({ name, label, mask, maxLength }: InputFieldProps) =>
     const { onChange, ...rest } = register(name, { maxLength });
     return (
         <div>
-            <label className="mb-1 block text-sm">{label}</label>
+            <label htmlFor={name} className="text-font-primary mb-1 block text-sm">{label}</label>
             <Input
+                id={name}
                 {...rest}
                 maxLength={maxLength}
                 onChange={(e) => {

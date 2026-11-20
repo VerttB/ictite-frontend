@@ -1,15 +1,12 @@
 "use client";
 
-import {
-    login,
-    me,
-    logout,
-    registerInvited,
-} from "@/core/service/AuthService";
+import { login, me, logout, registerInvited } from "@/core/service/AuthService";
 import { useRouter } from "next/navigation";
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect, useRef } from "react";
 import { User, UserLogin } from "@/core/domain/User";
 import { RegisterInvitedRequest } from "@/core/domain/Invite";
+import { getLoginReturnPath } from "@/core/utils/authNavigation";
+import { getAssetPrefix } from "@/core/utils/api";
 
 type UserContextType = {
     user: User | null;
@@ -18,7 +15,7 @@ type UserContextType = {
     isAdmin: boolean;
     isSchoolAdmin: boolean;
     loginUser: (loginRequest: UserLogin) => Promise<boolean>;
-    logoutUser: () => void;
+    logoutUser: () => Promise<void>;
     registerInvitedUser: (payload: RegisterInvitedRequest) => Promise<string | null>;
     error: string | null;
 };
@@ -33,11 +30,7 @@ export function useUserContext() {
     return context;
 }
 
-export default function UserProvider({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function UserProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -45,35 +38,50 @@ export default function UserProvider({
     const isAdmin = user?.role === "ADMIN";
     const isSchoolAdmin = user?.role === "SCHOOL_ADMIN";
     const router = useRouter();
+    const sessionVersion = useRef(0);
 
     useEffect(() => {
+        let active = true;
+        const version = sessionVersion.current;
         const loadUser = async () => {
             setIsLoading(true);
             try {
                 const userData = await me();
-                setUser(userData);
+                if (active && version === sessionVersion.current) setUser(userData);
             } catch (e) {
-                console.warn("Nenhum perfil ativo", e);
-                setError(e instanceof Error ? e.message : String(e));
-                setUser(null);
+                if (active && version === sessionVersion.current) {
+                    setError(e instanceof Error ? e.message : String(e));
+                    setUser(null);
+                }
             } finally {
-                setIsLoading(false);
+                if (active && version === sessionVersion.current) setIsLoading(false);
             }
         };
         loadUser();
+        const expireSession = () => {
+            sessionVersion.current++;
+            setUser(null);
+            setIsLoading(false);
+            setError("Sua sessão expirou. Faça login novamente.");
+        };
+        window.addEventListener("ictite:session-expired", expireSession);
+        return () => {
+            active = false;
+            window.removeEventListener("ictite:session-expired", expireSession);
+        };
     }, []);
 
     const loginUser = async (loginRequest: UserLogin): Promise<boolean> => {
+        sessionVersion.current++;
+        setError(null);
         setIsLoading(true);
         try {
             await login(loginRequest);
             const userData = await me();
             setUser(userData);
-            if (userData?.role === "SCHOOL_ADMIN") {
-                router.push("/school/console");
-            } else {
-                router.push("/console/v2");
-            }
+            const redirect = new URLSearchParams(window.location.search).get("redirect");
+            router.replace(getLoginReturnPath(redirect, userData.role, getAssetPrefix()));
+            router.refresh();
             return true;
         } catch (error) {
             console.error("Erro no login:", error);
@@ -86,11 +94,14 @@ export default function UserProvider({
     };
 
     const logoutUser = async () => {
+        sessionVersion.current++;
+        setError(null);
         setIsLoading(true);
         try {
             await logout();
             setUser(null);
-            router.push("/");
+            router.replace("/login");
+            router.refresh();
         } catch (error) {
             console.error("Erro no logout:", error);
             setError(error instanceof Error ? error.message : String(error));
@@ -102,16 +113,15 @@ export default function UserProvider({
     const registerInvitedUser = async (
         payload: RegisterInvitedRequest
     ): Promise<string | null> => {
+        sessionVersion.current++;
+        setError(null);
         setIsLoading(true);
         try {
             await registerInvited(payload);
             const userData = await me();
             setUser(userData);
-            if (userData?.role === "SCHOOL_ADMIN") {
-                router.push("/school/console");
-            } else {
-                router.push("/console/v2");
-            }
+            router.replace(getLoginReturnPath(null, userData.role));
+            router.refresh();
             return null;
         } catch (error) {
             console.error("Erro no autocadastro:", error);
@@ -136,9 +146,5 @@ export default function UserProvider({
         error,
     };
 
-    return (
-        <UserContext.Provider value={contextValue}>
-            {children}
-        </UserContext.Provider>
-    );
+    return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;
 }

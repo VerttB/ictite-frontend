@@ -1,8 +1,6 @@
 "use client";
 
 import { LucideIcon } from "lucide-react";
-import CamposEntidades from "../console/CamposEntidades";
-import { useState } from "react";
 
 interface EntidadeProps {
     nome: string;

@@ -28,8 +28,9 @@ export const ProjectForm = ({ parentId, parentIdField }: AdminFormProps) => {
             <TextField name="description" label="Descrição (Opcional)" />
             <TextField name="description_long" label="Descrição Longa (Opcional)" />
 
-            <div className="grid grid-cols-2 gap-4">
-                <InputField name="year" label="Ano (Opcional)" mask={mask.onlyDigits} />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <InputField name="start_year" label="Ano de início" mask={mask.onlyDigits} maxLength={4} />
+                <InputField name="end_year" label="Ano previsto de conclusão" mask={mask.onlyDigits} maxLength={4} />
                 <ControlledComboBox
                     className="w-full"
                     name="clube_ciencia_id"

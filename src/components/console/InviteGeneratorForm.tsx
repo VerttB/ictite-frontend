@@ -99,6 +99,7 @@ export function InviteGeneratorForm({
                             <div className="flex items-center gap-2">
                                 <input
                                     readOnly
+                                    aria-label="Link de convite"
                                     value={inviteUrl}
                                     className="bg-background border-1 flex-1 truncate rounded-md border border-gray-300 px-3 py-2 text-sm"
                                 />

@@ -39,6 +39,13 @@ export class ApiClient {
             }
         } catch (_e) {}
         if (response.ok) return data as T;
+        if (
+            response.status === 401 &&
+            typeof window !== "undefined" &&
+            !response.url.includes("/auth/")
+        ) {
+            window.dispatchEvent(new Event("ictite:session-expired"));
+        }
         const errorObject: unknown = data;
         throw new ApiError(
             getErrorMessages(errorObject, response.status),
@@ -156,7 +163,11 @@ export class ApiClient {
         return this.request<T>(endpoint, "PATCH", body, options);
     }
 
-    public delete<T = void, K = unknown>(endpoint: string, body?: K, options?: ApiRequestOptions) {
+    public delete<T = void, K = unknown>(
+        endpoint: string,
+        body?: K,
+        options?: ApiRequestOptions
+    ) {
         return this.request<T>(endpoint, "DELETE", body, options);
     }
 }

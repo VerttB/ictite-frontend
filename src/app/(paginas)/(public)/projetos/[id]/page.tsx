@@ -44,10 +44,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                                 <span className="text-sm">{project.clube.name}</span>
                             </div>
                         </Link>
-                        {project.year && (
+                        {(project.start_year || project.end_year) && (
                             <div className="mt-2 flex flex-row items-center gap-2 text-gray-500">
                                 <Calendar size={16} />
-                                <span className="text-sm">{project.year}</span>
+                                <span className="text-sm">
+                                    {project.start_year ?? "?"} - {project.end_year ?? "em andamento"}
+                                </span>
                             </div>
                         )}
                     </div>

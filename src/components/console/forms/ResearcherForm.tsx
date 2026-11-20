@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 import { InputField } from "../../forms-input/InputField";
 import { ControlledComboBox } from "../../forms-input/ControlledComboBox";
 import { ControlledSelect } from "../../forms-input/ControlledSelect";
@@ -9,18 +11,31 @@ import { RaceTypes } from "@/core/constants/race";
 import useSWR from "swr";
 import { getProjects, getProjectById } from "@/core/service/ProjetoService";
 import { AdminFormProps } from "@/core/interface/AdminEntity";
+import { getResearcherProjects } from "@/core/service/PesquisadorService";
 
 export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
     const isProjectLocked = parentIdField === "projects_ids" && !!parentId;
+    const { watch, setValue, formState: { dirtyFields } } = useFormContext();
+    const researcherId = watch("id") as string | undefined;
 
-    // const { data: projects } = useSWR("projects-all", () => getProjects({ size: 0 }));
-    // const { data: parentProject } = useSWR(
-    //     isProjectLocked ? ["project", parentId] : null,
-    //     () => getProjectById(parentId!)
-    // );
+    const { data: projects } = useSWR("projects-all", () => getProjects({ size: 0 }));
+    const { data: parentProject } = useSWR(
+        isProjectLocked ? ["project", parentId] : null,
+        () => getProjectById(parentId!)
+    );
+    const { data: linkedProjects } = useSWR(
+        researcherId ? ["researcher-projects-form", researcherId] : null,
+        () => getResearcherProjects(researcherId!)
+    );
 
-    // const projectOptions =
-    //     isProjectLocked && parentProject ? [parentProject] : projects?.items || [];
+    useEffect(() => {
+        if (linkedProjects && !dirtyFields.projects_ids) {
+            setValue("projects_ids", linkedProjects.map((project) => project.id));
+        }
+    }, [linkedProjects, dirtyFields.projects_ids, setValue]);
+
+    const projectOptions =
+        isProjectLocked && parentProject ? [parentProject] : projects?.items || [];
 
     return (
         <>
@@ -46,10 +61,10 @@ export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
                     options={Object.values(RaceTypes).map((t) => ({ id: t, name: t }))}
                 />
             </div>
-            {/* <ControlledComboBox
+            <ControlledComboBox
                 className="w-full"
                 name="projects_ids"
-                label="Projetos"
+                label="Projetos (Obrigatório)"
                 isMulti={true}
                 truncateLabels={true}
                 options={projectOptions}
@@ -62,7 +77,7 @@ export const ResearcherForm = ({ parentId, parentIdField }: AdminFormProps) => {
                           }
                         : null
                 }
-            /> */}
+            />
         </>
     );
 };

@@ -7,7 +7,6 @@ import {
     PanelsTopLeft,
     Brain,
     BookOpen,
-    NotebookText,
     ScrollText,
 } from "lucide-react";
 import { useState } from "react";

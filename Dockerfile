@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -13,9 +13,17 @@ RUN \
 
 
 FROM base AS builder
+ARG NEXT_PUBLIC_BASE_URL
+ARG NEXT_PUBLIC_BASE_PATH=/ictite/v1/web
+ARG NEXT_PUBLIC_GA4_MEASUREMENT_ID
+ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
+ENV NEXT_PUBLIC_BASE_PATH=$NEXT_PUBLIC_BASE_PATH
+ENV NEXT_PUBLIC_GA4_MEASUREMENT_ID=$NEXT_PUBLIC_GA4_MEASUREMENT_ID
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+RUN test -n "$NEXT_PUBLIC_BASE_URL" || (echo "Defina NEXT_PUBLIC_BASE_URL como argumento de build" >&2; exit 1)
 
 
 RUN \

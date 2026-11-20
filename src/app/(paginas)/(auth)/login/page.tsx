@@ -46,25 +46,26 @@ export default function Login() {
     };
 
     return (
-        <div className="flex flex-col h-full bg-gray-100 p-6">
+        <div className="flex h-full flex-col bg-gray-100 p-6">
             <div className="flex flex-row items-center gap-5">
                 <Button
                     type="button"
                     size={"default"}
                     variant={"ghost"}
-                    className="cursor-pointer hover:bg-primary/40"
+                    className="hover:bg-primary/40 cursor-pointer"
                     onClick={() => router.back()}>
                     <ChevronLeft />
                     <p className="text-2xl font-semibold">Voltar</p>
                 </Button>
             </div>
-            <div className="flex h-full items-center justify-center ">
+            <div className="flex h-full items-center justify-center">
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col gap-4 text-lg font-medium 2xl:text-xl">
                     <label htmlFor="email" className="flex flex-col gap-2">
                         Email
                         <Input
+                            id="email"
                             {...register("email")}
                             type="text"
                             className="bg-background rounded-md border-1 border-gray-300 px-2 py-2"
@@ -75,9 +76,7 @@ export default function Login() {
                     </label>
                     <label htmlFor="password" className="flex flex-col gap-2">
                         Senha
-
-                        <div className="relative">
-                            <Input
+                        <Input
                             id="password"
                             {...register("password")}
                             type={mostrarSenha ? "text" : "password"}
@@ -103,9 +102,7 @@ export default function Login() {
                         </span>
                     </label>
                     {errors && (
-                        <p className="text-sm text-red-500">
-                            {errors.root?.message}
-                        </p>
+                        <p className="text-sm text-red-500">{errors.root?.message}</p>
                     )}
                     <Button type="submit" disabled={isSubmitting || isLoading}>
                         {isSubmitting || isLoading ? (
@@ -115,7 +112,9 @@ export default function Login() {
                         )}
                         Fazer Login
                     </Button>
-                    <div className="flex items-center justify-center"><span className="text-xs" >© 2026 ICTITE</span></div>
+                    <div className="flex items-center justify-center">
+                        <span className="text-xs">© 2026 ICTITE</span>
+                    </div>
                 </form>
             </div>
         </div>

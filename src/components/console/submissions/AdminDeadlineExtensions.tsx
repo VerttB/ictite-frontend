@@ -8,7 +8,13 @@ import { toast } from "sonner";
 import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import {
     Select,
     SelectContent,
@@ -16,7 +22,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import {
     ExtensionStatus,
     getDeadlineExtensionRequests,
@@ -49,8 +62,9 @@ const toLocalDateTimeInput = (value?: string | null) => {
 export function AdminDeadlineExtensions() {
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState<ExtensionStatus | undefined>();
-    const [selectedSubmission, setSelectedSubmission] = useState<SchoolFormSubmission | null>(null);
-    const [deadlineInput, setDeadlineInput] = useState("");
+    const [selectedSubmission, setSelectedSubmission] =
+        useState<SchoolFormSubmission | null>(null);
+    const [editedDeadline, setDeadlineInput] = useState<string | null>(null);
     const [isSavingDeadline, setIsSavingDeadline] = useState(false);
     const requestParams = useMemo(() => ({ page, size: 20, status }), [page, status]);
     const { data, error, isLoading, mutate } = useSWR(
@@ -63,19 +77,15 @@ export function AdminDeadlineExtensions() {
         error: globalDeadlineError,
         isLoading: isGlobalDeadlineLoading,
         mutate: mutateGlobalDeadline,
-    } = useSWR(
-        "admin-global-deadline",
-        getGlobalDeadline
-    );
+    } = useSWR("admin-global-deadline", getGlobalDeadline);
+
+    const deadlineInput =
+        editedDeadline ??
+        toLocalDateTimeInput(globalDeadline?.school_forms_global_deadline);
 
     useEffect(() => {
-        setDeadlineInput(
-            toLocalDateTimeInput(globalDeadline?.school_forms_global_deadline)
-        );
-    }, [globalDeadline?.school_forms_global_deadline]);
-
-    useEffect(() => {
-        if (error) toast.error("Não foi possível carregar as solicitações de prorrogação.");
+        if (error)
+            toast.error("Não foi possível carregar as solicitações de prorrogação.");
     }, [error]);
 
     useEffect(() => {
@@ -87,13 +97,16 @@ export function AdminDeadlineExtensions() {
             (current) => {
                 if (!current) return current;
 
-                const leavesCurrentFilter = status && status !== updatedSubmission.extension_status;
+                const leavesCurrentFilter =
+                    status && status !== updatedSubmission.extension_status;
                 const items = leavesCurrentFilter
                     ? current.items.filter((item) => item.id !== updatedSubmission.id)
                     : current.items.map((item) =>
                           item.id === updatedSubmission.id ? updatedSubmission : item
                       );
-                const total = leavesCurrentFilter ? Math.max(0, current.total - 1) : current.total;
+                const total = leavesCurrentFilter
+                    ? Math.max(0, current.total - 1)
+                    : current.total;
 
                 return {
                     ...current,
@@ -119,7 +132,10 @@ export function AdminDeadlineExtensions() {
                 value === null ? null : new Date(value).toISOString()
             );
             await mutateGlobalDeadline(updated, { revalidate: false });
-            toast.success(value === null ? "Prazo global removido." : "Prazo global atualizado.");
+            setDeadlineInput(null);
+            toast.success(
+                value === null ? "Prazo global removido." : "Prazo global atualizado."
+            );
         } catch {
             toast.error("Não foi possível atualizar o prazo global.");
         } finally {
@@ -136,13 +152,16 @@ export function AdminDeadlineExtensions() {
                         Prazo global
                     </CardTitle>
                     <CardDescription>
-                        Data limite aplicada às escolas sem prorrogação individual.
-                        Prazo vigente: {formatDate(globalDeadline?.school_forms_global_deadline)}
+                        Data limite aplicada às escolas sem prorrogação individual. Prazo
+                        vigente:{" "}
+                        {formatDate(globalDeadline?.school_forms_global_deadline)}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3 pt-5 sm:flex-row sm:items-end">
                     <div className="flex-1 space-y-2">
-                        <label htmlFor="school-form-global-deadline" className="text-sm font-medium">
+                        <label
+                            htmlFor="school-form-global-deadline"
+                            className="text-sm font-medium">
                             Nova data e hora limite
                         </label>
                         <Input
@@ -155,13 +174,9 @@ export function AdminDeadlineExtensions() {
                     </div>
                     <Button
                         type="button"
-                        onClick={() =>
-                            void saveGlobalDeadline(deadlineInput || null)
-                        }
+                        onClick={() => void saveGlobalDeadline(deadlineInput || null)}
                         disabled={
-                            isGlobalDeadlineLoading ||
-                            isSavingDeadline ||
-                            !deadlineInput
+                            isGlobalDeadlineLoading || isSavingDeadline || !deadlineInput
                         }>
                         {isSavingDeadline ? (
                             <LoaderCircle className="animate-spin" size={16} />
@@ -193,21 +208,31 @@ export function AdminDeadlineExtensions() {
                                 <CalendarClock size={20} />
                                 Solicitações de prorrogação
                             </CardTitle>
-                            <CardDescription>Consulte e conceda prazos solicitados pelas escolas.</CardDescription>
+                            <CardDescription>
+                                Consulte e conceda prazos solicitados pelas escolas.
+                            </CardDescription>
                         </div>
                         <Select
                             value={status ?? "TODOS"}
                             onValueChange={(value) => {
-                                setStatus(value === "TODOS" ? undefined : (value as ExtensionStatus));
+                                setStatus(
+                                    value === "TODOS"
+                                        ? undefined
+                                        : (value as ExtensionStatus)
+                                );
                                 setPage(1);
                             }}>
-                            <SelectTrigger className="w-44" aria-label="Filtrar solicitações por situação">
+                            <SelectTrigger
+                                className="w-44"
+                                aria-label="Filtrar solicitações por situação">
                                 <SelectValue placeholder="Todas as situações" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="TODOS">Todas as situações</SelectItem>
                                 {extensionStatuses.map((item) => (
-                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                    <SelectItem key={item} value={item}>
+                                        {item}
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -227,33 +252,61 @@ export function AdminDeadlineExtensions() {
                         <Table className="min-w-[900px]">
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="font-semibold text-gray-800">Escola</TableHead>
-                                    <TableHead className="font-semibold text-gray-800">Situação</TableHead>
-                                    <TableHead className="font-semibold text-gray-800">Solicitada em</TableHead>
-                                    <TableHead className="font-semibold text-gray-800">Prazo atual</TableHead>
-                                    <TableHead className="font-semibold text-gray-800">Prazo solicitado</TableHead>
-                                    <TableHead className="text-right font-semibold text-gray-800">Ações</TableHead>
+                                    <TableHead className="font-semibold text-gray-800">
+                                        Escola
+                                    </TableHead>
+                                    <TableHead className="font-semibold text-gray-800">
+                                        Situação
+                                    </TableHead>
+                                    <TableHead className="font-semibold text-gray-800">
+                                        Solicitada em
+                                    </TableHead>
+                                    <TableHead className="font-semibold text-gray-800">
+                                        Prazo atual
+                                    </TableHead>
+                                    <TableHead className="font-semibold text-gray-800">
+                                        Prazo solicitado
+                                    </TableHead>
+                                    <TableHead className="text-right font-semibold text-gray-800">
+                                        Ações
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {data.items.map((submission) => (
                                     <TableRow key={submission.id}>
-                                        <TableCell className="font-medium">{submission.data.school.name}</TableCell>
+                                        <TableCell className="font-medium">
+                                            {submission.data.school.name}
+                                        </TableCell>
                                         <TableCell>
                                             {submission.extension_status ? (
-                                                <ExtensionStatusBadge status={submission.extension_status} />
-                                            ) : "—"}
+                                                <ExtensionStatusBadge
+                                                    status={submission.extension_status}
+                                                />
+                                            ) : (
+                                                "—"
+                                            )}
                                         </TableCell>
-                                        <TableCell>{formatDate(submission.extension_requested_at)}</TableCell>
-                                        <TableCell>{formatDate(submission.custom_deadline)}</TableCell>
-                                        <TableCell>{formatDate(submission.requested_deadline)}</TableCell>
+                                        <TableCell>
+                                            {formatDate(
+                                                submission.extension_requested_at
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            {formatDate(submission.custom_deadline)}
+                                        </TableCell>
+                                        <TableCell>
+                                            {formatDate(submission.requested_deadline)}
+                                        </TableCell>
                                         <TableCell className="text-right">
                                             <Button
                                                 type="button"
                                                 variant="outline"
                                                 size="sm"
-                                                className="in-data-[theme=dark]:border-transparent in-data-[theme=dark]:bg-gray-200 in-data-[theme=dark]:text-gray-900 in-data-[theme=dark]:hover:bg-primary/70 in-data-[theme=dark]:hover:text-white!"
-                                                onClick={() => setSelectedSubmission(submission)}>
+                                                className="in-data-[theme=dark]:hover:bg-primary/70 in-data-[theme=dark]:border-transparent in-data-[theme=dark]:bg-gray-200 in-data-[theme=dark]:text-gray-900 in-data-[theme=dark]:hover:text-white!"
+                                                onClick={() =>
+                                                    setSelectedSubmission(submission)
+                                                }>
                                                 <Eye size={16} />
                                                 Ver detalhes
                                             </Button>

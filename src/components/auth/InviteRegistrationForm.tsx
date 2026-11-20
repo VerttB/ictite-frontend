@@ -106,6 +106,7 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
                     <label htmlFor="email" className="flex flex-col gap-2">
                         Email
                         <Input
+                            id="email"
                             {...register("email")}
                             type="email"
                             placeholder="seuemail@escola.com.br"
@@ -118,28 +119,13 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
 
                     <label htmlFor="password" className="flex flex-col gap-2">
                         Senha
-
-                        <div className="relative w-full">
-                            <Input
-                                id="password"
-                                {...register("password")}
-                                type={mostrarSenha ? "text" : "password"}
-                                placeholder="Mínimo 6 caracteres"
-                                className="w-full bg-background border rounded-md border-gray-300 px-2 py-2 pr-10"
-                            />
-
-                            <button
-                            type="button"
-                            onClick={() => setMostrarSenha(!mostrarSenha)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
-                            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
-                            >
-                                {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
-                            </button>
-
-
-                        </div>
-
+                        <Input
+                            id="password"
+                            {...register("password")}
+                            type="password"
+                            placeholder="10 caracteres, maiúscula, minúscula, número e símbolo"
+                            className="bg-background border-1 rounded-md border-gray-300 px-2 py-2"
+                        />
                         <span className="text-sm text-red-500">
                             {errors.password?.message}
                         </span>
@@ -147,27 +133,13 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
 
                     <label htmlFor="confirmPassword" className="flex flex-col gap-2">
                         Confirmar senha
-
-                        <div className="relative w-full">
-                            <Input
-                                id="confirmPassword"
-                                {...register("confirmPassword")}
-                                type={mostrarConfirmarSenha ? "text" : "password"}
-                                placeholder="Repita a senha"
-                                className="w-full bg-background border rounded-md border-gray-300 px-2 py-2 pr-10"
-                            />
-
-                            <button
-                                type="button"
-                                onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
-                                aria-label={mostrarConfirmarSenha ? "Ocultar senha" : "Mostrar senha"}
-                            >
-                                {mostrarConfirmarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
-                            </button>
-                            
-                        </div>
-
+                        <Input
+                            id="confirmPassword"
+                            {...register("confirmPassword")}
+                            type="password"
+                            placeholder="Repita a senha"
+                            className="bg-background border-1 rounded-md border-gray-300 px-2 py-2"
+                        />
                         <span className="text-sm text-red-500">
                             {errors.confirmPassword?.message}
                         </span>

@@ -1,0 +1,20 @@
+services:
+  frontend:
+    image: ${ICTITE_FRONTEND_IMAGE:-ictite-frontend:latest}
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:?Configure a URL pública da API}
+        NEXT_PUBLIC_BASE_PATH: ${NEXT_PUBLIC_BASE_PATH-/ictite/v1/web}
+        NEXT_PUBLIC_GA4_MEASUREMENT_ID: ${NEXT_PUBLIC_GA4_MEASUREMENT_ID:-}
+    environment:
+      API_INTERNAL_URL: http://api:8000
+    ports:
+      - "${FRONTEND_PORT:-8010}:8010"
+    restart: unless-stopped
+    networks: [app]
+
+networks:
+  app:
+    external: true
+    name: ${ICTITE_NETWORK:-ictite-production}
