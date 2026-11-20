@@ -1,5 +1,8 @@
 "use client";
 
+import {useState} from 'react';
+import { Eye, EyeOff } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -24,6 +27,7 @@ interface InviteRegistrationFormProps {
 }
 
 function getInviteErrorMessage(message: string): string {
+
     const normalizedMessage = message.toLowerCase();
     if (normalizedMessage.includes("e-mail já está cadastrado")) {
         return "Este e-mail já está cadastrado no sistema.";
@@ -43,6 +47,9 @@ function getInviteErrorMessage(message: string): string {
 export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
     const router = useRouter();
     const { registerInvitedUser, isLoading } = useUserContext();
+
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
     const {
         register,
@@ -83,7 +90,7 @@ export function InviteRegistrationForm({ token }: InviteRegistrationFormProps) {
             <div className="flex h-full items-center justify-center">
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className="flex flex-col gap-4 text-lg font-medium 2xl:text-xl">
+                    className="flex w-full max-w-xl flex-col gap-4 text-lg font-medium 2xl:text-xl">
                     <input type="hidden" {...register("invite_token")} />
 
                     <div className="flex flex-col gap-1 text-center">
