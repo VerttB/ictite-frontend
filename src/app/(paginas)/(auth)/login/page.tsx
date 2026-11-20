@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react"; 
-import { Eye, EyeOff } from "lucide-react"; 
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userLoginSchema } from "@/schemas/LoginSchema";
 import { useUserContext } from "@/providers/UserContext";
-import { ChevronLeft, CircleUserRound, LoaderCircle } from "lucide-react";
+import { ChevronLeft, CircleUserRound, Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -21,7 +20,7 @@ export default function Login() {
 
     type userLoginData = z.infer<typeof userLoginSchema>;
 
-    const [mostrarSenha, setMostrarSenha] = useState(false); 
+    const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const {
         register,
@@ -76,24 +75,20 @@ export default function Login() {
                     </label>
                     <label htmlFor="password" className="flex flex-col gap-2">
                         Senha
-                        <Input
-                            id="password"
-                            {...register("password")}
-                            type={mostrarSenha ? "text" : "password"}
-                            className="bg-background rounded-md border-1 border-gray-300 px-2 py-2"
+                        <div className="relative">
+                            <Input
+                                id="password"
+                                {...register("password")}
+                                type={mostrarSenha ? "text" : "password"}
+                                className="bg-background rounded-md border-1 border-gray-300 px-2 py-2 pr-10"
                             />
-
                             <button
-                            type="button"
-                            onClick={() => setMostrarSenha(!mostrarSenha)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800"
-                            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
-                            >
-                            {mostrarSenha ? (
-                                <EyeOff size={20} />
-                            ) : (
-                                <Eye size={20} />
-                            )}
+                                type="button"
+                                onClick={() => setMostrarSenha((visible) => !visible)}
+                                className="text-font-secondary hover:text-font-primary absolute top-1/2 right-3 -translate-y-1/2"
+                                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                                aria-pressed={mostrarSenha}>
+                                {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
 
