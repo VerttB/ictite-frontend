@@ -83,13 +83,22 @@ export default function SchoolConsolePage() {
     );
 
     const isReadOnly =
-        submission?.status === "PENDENTE" || submission?.status === "APROVADO" || deadlineExpired;
+        submission?.status === "PENDENTE" ||
+        submission?.status === "APROVADO" ||
+        deadlineExpired;
 
     const openReview = () => {
         setPreview({ mode: "review", data: structuredClone(form.getValues()) });
     };
 
     const handleFormSubmit = async () => {
+        if (
+            submission?.extension_status === "Pendente" &&
+            !window.confirm(
+                "Enviar o formulário cancelará automaticamente sua solicitação de prorrogação pendente. Deseja continuar?"
+            )
+        )
+            return;
         const success = await submitForm();
         if (success) {
             setPreview(null);
@@ -122,7 +131,7 @@ export default function SchoolConsolePage() {
             />
 
             {/* Container Padrão ictite com Borda Profunda e Header */}
-            <div className="bg-foreground flex min-h-screen w-full min-w-0 flex-1 flex-col pb-4 pr-4">
+            <div className="bg-foreground flex min-h-screen w-full min-w-0 flex-1 flex-col pr-4 pb-4">
                 <Header />
 
                 {/* Conteúdo Principal do Console com Inset Box-Shadow de Profundidade */}
@@ -147,7 +156,7 @@ export default function SchoolConsolePage() {
                     />
 
                     {/* Conteúdo do Módulo Selecionado */}
-                    <div className="border-border bg-card shadow-xs flex min-h-[480px] flex-col gap-6 rounded-2xl border p-6">
+                    <div className="border-border bg-card flex min-h-[480px] flex-col gap-6 rounded-2xl border p-6 shadow-xs">
                         {visiblePreview ? (
                             <SchoolFormPreview
                                 data={visiblePreview.data}
@@ -191,7 +200,9 @@ export default function SchoolConsolePage() {
                                             submission={submission}
                                             globalDeadline={globalDeadline}
                                             onOpenReview={
-                                                isReadOnly || deadlineExpired ? undefined : openReview
+                                                isReadOnly || deadlineExpired
+                                                    ? undefined
+                                                    : openReview
                                             }
                                         />
                                     </div>
@@ -233,13 +244,17 @@ export default function SchoolConsolePage() {
                                     activeSection !== "previa_site" &&
                                     (!isReadOnly ||
                                         submission?.status === "APROVADO") && (
-                                        <div className="mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 shadow-sm">
+                                        <div className="border-border bg-card mt-auto flex flex-wrap items-center justify-between gap-4 rounded-2xl border p-4 shadow-sm">
                                             <div className="flex flex-wrap items-center gap-2">
                                                 {!isReadOnly && (
                                                     <button
                                                         type="button"
                                                         onClick={() => void saveDraft()}
-                                                        disabled={isSaving || isSubmitting || deadlineExpired}
+                                                        disabled={
+                                                            isSaving ||
+                                                            isSubmitting ||
+                                                            deadlineExpired
+                                                        }
                                                         className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-gray-800 disabled:opacity-50">
                                                         {isSaving ? (
                                                             <Loader2
@@ -259,15 +274,18 @@ export default function SchoolConsolePage() {
                                                         onClick={() =>
                                                             setIsDiscardDialogOpen(true)
                                                         }
-                                                        disabled={isSaving || isSubmitting}
-                                                        className="text-font-primary inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-xs font-semibold transition-all hover:bg-muted disabled:opacity-50">
+                                                        disabled={
+                                                            isSaving || isSubmitting
+                                                        }
+                                                        className="text-font-primary border-border bg-background hover:bg-muted inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all disabled:opacity-50">
                                                         <RotateCcw size={16} />
                                                         Descartar Alterações
                                                     </button>
                                                 )}
 
                                                 {(submission?.status === "REJEITADO" ||
-                                                    submission?.status === "APROVADO") && (
+                                                    submission?.status ===
+                                                        "APROVADO") && (
                                                     <button
                                                         type="button"
                                                         onClick={reopenDraft}
@@ -279,32 +297,41 @@ export default function SchoolConsolePage() {
                                                 )}
                                             </div>
 
-                                            {!isReadOnly && (submission?.status === "RASCUNHO" ? (
-                                                <button
-                                                    type="button"
-                                                    onClick={openReview}
-                                                    disabled={isSaving || isSubmitting || deadlineExpired}
-                                                    className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
-                                                    <ClipboardCheck size={16} />
-                                                    Revisar e enviar
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    type="button"
-                                                    onClick={handleFormSubmit}
-                                                    disabled={isSaving || isSubmitting || deadlineExpired}
-                                                    className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
-                                                    {isSubmitting ? (
-                                                        <Loader2
-                                                            size={16}
-                                                            className="animate-spin"
-                                                        />
-                                                    ) : (
-                                                        <Send size={16} />
-                                                    )}
-                                                    Enviar para Aprovação
-                                                </button>
-                                            ))}
+                                            {!isReadOnly &&
+                                                (submission?.status === "RASCUNHO" ? (
+                                                    <button
+                                                        type="button"
+                                                        onClick={openReview}
+                                                        disabled={
+                                                            isSaving ||
+                                                            isSubmitting ||
+                                                            deadlineExpired
+                                                        }
+                                                        className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
+                                                        <ClipboardCheck size={16} />
+                                                        Revisar e enviar
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleFormSubmit}
+                                                        disabled={
+                                                            isSaving ||
+                                                            isSubmitting ||
+                                                            deadlineExpired
+                                                        }
+                                                        className="inline-flex items-center gap-2 rounded-xl bg-[#088077] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#088077]/90 disabled:opacity-50">
+                                                        {isSubmitting ? (
+                                                            <Loader2
+                                                                size={16}
+                                                                className="animate-spin"
+                                                            />
+                                                        ) : (
+                                                            <Send size={16} />
+                                                        )}
+                                                        Enviar para Aprovação
+                                                    </button>
+                                                ))}
                                         </div>
                                     )}
                             </>
@@ -354,10 +381,10 @@ export default function SchoolConsolePage() {
                             <CheckCircle2 size={36} />
                         </div>
                         <DialogHeader className="text-center sm:text-center">
-                            <DialogTitle className="text-font-primary text-xl font-bold uppercase tracking-tight">
+                            <DialogTitle className="text-font-primary text-xl font-bold tracking-tight uppercase">
                                 Formulário Enviado com Sucesso!
                             </DialogTitle>
-                            <DialogDescription className="text-font-primary mt-3 text-sm font-semibold leading-relaxed">
+                            <DialogDescription className="text-font-primary mt-3 text-sm leading-relaxed font-semibold">
                                 VOCÊ ACABA DE ENVIAR/ATUALIZAR AS INFORMAÇÕES DO SEU(S)
                                 CLUBE(S) DE CIÊNCIAS PARA O PORTAL DA REDE ICTITE.
                             </DialogDescription>

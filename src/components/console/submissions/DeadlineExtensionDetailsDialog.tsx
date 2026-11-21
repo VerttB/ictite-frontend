@@ -46,7 +46,8 @@ export function DeadlineExtensionDetailsDialog({
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleGrant = async () => {
-        if (!submission || isSubmitting || submission.extension_status !== "Pendente") return;
+        if (!submission || isSubmitting || submission.extension_status !== "Pendente")
+            return;
 
         setIsSubmitting(true);
         try {
@@ -72,45 +73,73 @@ export function DeadlineExtensionDetailsDialog({
                     <DialogHeader>
                         <DialogTitle>Solicitação de prorrogação</DialogTitle>
                         <DialogDescription>
-                            Consulte os dados enviados pela escola antes de conceder o novo prazo.
+                            Consulte os dados enviados pela escola antes de conceder o
+                            novo prazo.
                         </DialogDescription>
                     </DialogHeader>
 
                     {submission ? (
                         <div className="grid gap-5 sm:grid-cols-2">
                             <div>
-                                <p className="text-xs font-semibold uppercase text-gray-500">Escola</p>
+                                <p className="text-xs font-semibold text-gray-500 uppercase">
+                                    Escola
+                                </p>
                                 <p className="text-sm">{submission.data.school.name}</p>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold uppercase text-gray-500">Situação</p>
-                                <ExtensionStatusBadge status={submission.extension_status!} />
+                                <p className="text-xs font-semibold text-gray-500 uppercase">
+                                    Situação
+                                </p>
+                                <ExtensionStatusBadge
+                                    status={submission.extension_status!}
+                                />
                             </div>
                             <div>
-                                <p className="text-xs font-semibold uppercase text-gray-500">Solicitada em</p>
-                                <p className="text-sm">{formatDate(submission.extension_requested_at)}</p>
+                                <p className="text-xs font-semibold text-gray-500 uppercase">
+                                    Solicitada em
+                                </p>
+                                <p className="text-sm">
+                                    {formatDate(submission.extension_requested_at)}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold uppercase text-gray-500">Prazo atual</p>
-                                <p className="text-sm">{formatDate(submission.custom_deadline)}</p>
+                                <p className="text-xs font-semibold text-gray-500 uppercase">
+                                    Prazo atual
+                                </p>
+                                <p className="text-sm">
+                                    {formatDate(submission.custom_deadline)}
+                                </p>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold uppercase text-gray-500">Prazo solicitado</p>
-                                <p className="text-sm">{formatDate(submission.requested_deadline)}</p>
+                                <p className="text-xs font-semibold text-gray-500 uppercase">
+                                    Prazo solicitado
+                                </p>
+                                <p className="text-sm">
+                                    {formatDate(submission.requested_deadline)}
+                                </p>
                             </div>
                             <div className="sm:col-span-2">
-                                <p className="text-xs font-semibold uppercase text-gray-500">Justificativa</p>
-                                <p className="whitespace-pre-wrap text-sm">{submission.extension_reason || "—"}</p>
+                                <p className="text-xs font-semibold text-gray-500 uppercase">
+                                    Justificativa
+                                </p>
+                                <p className="text-sm whitespace-pre-wrap">
+                                    {submission.extension_reason || "—"}
+                                </p>
                             </div>
                         </div>
                     ) : null}
 
                     <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => onOpenChange(false)}>
                             Fechar
                         </Button>
                         {submission?.extension_status === "Pendente" ? (
-                            <Button type="button" onClick={() => setConfirmationOpen(true)}>
+                            <Button
+                                type="button"
+                                onClick={() => setConfirmationOpen(true)}>
                                 <CalendarCheck2 size={16} />
                                 Conceder prorrogação
                             </Button>
@@ -128,7 +157,11 @@ export function DeadlineExtensionDetailsDialog({
                     <DialogHeader>
                         <DialogTitle>Confirmar prorrogação</DialogTitle>
                         <DialogDescription>
-                            O novo prazo será {formatDate(submission?.requested_deadline)}. Deseja continuar?
+                            O novo prazo será {formatDate(submission?.requested_deadline)}
+                            . O envio anterior será cancelado e o formulário voltará para
+                            edição, preservando os dados preenchidos e os dados já
+                            publicados. A escola precisará enviar o formulário novamente
+                            para análise. Deseja continuar?
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
@@ -139,7 +172,10 @@ export function DeadlineExtensionDetailsDialog({
                             disabled={isSubmitting}>
                             Cancelar
                         </Button>
-                        <Button type="button" onClick={handleGrant} disabled={isSubmitting}>
+                        <Button
+                            type="button"
+                            onClick={handleGrant}
+                            disabled={isSubmitting}>
                             {isSubmitting ? (
                                 <LoaderCircle className="animate-spin" size={16} />
                             ) : (

@@ -36,6 +36,18 @@ export function SchoolHistorySection() {
 
     const formatActionBadge = (action: string) => {
         switch (action) {
+            case "CANCELOU_ENVIO_POR_PRORROGACAO":
+                return {
+                    label: "Envio cancelado pela prorrogação",
+                    bg: "bg-muted text-font-secondary border-border",
+                    icon: Undo2,
+                };
+            case "CANCELOU_PRORROGACAO_POR_ENVIO":
+                return {
+                    label: "Prorrogação cancelada pelo envio",
+                    bg: "bg-muted text-font-secondary border-border",
+                    icon: Undo2,
+                };
             case "CRIOU_RASCUNHO":
                 return {
                     label: "Formulário Criado",
@@ -122,7 +134,7 @@ export function SchoolHistorySection() {
     return (
         <div className="animate-fade-in flex w-full flex-col gap-6">
             {/* Header da Seção */}
-            <div className="bg-card flex flex-col items-start justify-between gap-4 rounded-3xl border border-border p-6 shadow-sm sm:flex-row sm:items-center">
+            <div className="bg-card border-border flex flex-col items-start justify-between gap-4 rounded-3xl border p-6 shadow-sm sm:flex-row sm:items-center">
                 <div className="flex items-center gap-3">
                     <div className="rounded-2xl bg-[#088077]/10 p-3 text-[#088077]">
                         <History size={28} />
@@ -146,7 +158,7 @@ export function SchoolHistorySection() {
             </div>
 
             {/* Conteúdo Principal */}
-            <div className="bg-card min-h-[380px] rounded-3xl border border-border p-6 shadow-sm">
+            <div className="bg-card border-border min-h-[380px] rounded-3xl border p-6 shadow-sm">
                 {isLoading ? (
                     <div className="text-font-secondary flex min-h-[300px] items-center justify-center gap-2">
                         <Loader2 className="animate-spin text-[#088077]" size={24} />
@@ -163,7 +175,7 @@ export function SchoolHistorySection() {
                         Nenhum registro de alteração encontrado.
                     </div>
                 ) : (
-                    <div className="relative space-y-6 pl-6 before:absolute before:top-2 before:bottom-2 before:left-3 before:w-0.5 before:bg-border">
+                    <div className="before:bg-border relative space-y-6 pl-6 before:absolute before:top-2 before:bottom-2 before:left-3 before:w-0.5">
                         {logs.map((log) => {
                             const badge = formatActionBadge(log.action);
                             const IconComponent = badge.icon;
@@ -171,11 +183,11 @@ export function SchoolHistorySection() {
                             return (
                                 <div key={log.id} className="group relative">
                                     {/* Ponto da Linha do Tempo */}
-                                    <div className="absolute top-1 -left-[31px] flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#088077] bg-background text-[#088077] shadow-xs transition-transform group-hover:scale-110">
+                                    <div className="bg-background absolute top-1 -left-[31px] flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#088077] text-[#088077] shadow-xs transition-transform group-hover:scale-110">
                                         <IconComponent size={12} />
                                     </div>
 
-                                    <div className="flex flex-col gap-2 rounded-2xl border border-border bg-background p-4 transition-all hover:bg-muted/40 hover:shadow-xs">
+                                    <div className="border-border bg-background hover:bg-muted/40 flex flex-col gap-2 rounded-2xl border p-4 transition-all hover:shadow-xs">
                                         <div className="flex flex-wrap items-center justify-between gap-2">
                                             <div className="flex items-center gap-2">
                                                 <span

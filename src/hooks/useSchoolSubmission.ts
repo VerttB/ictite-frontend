@@ -113,6 +113,45 @@ export function useSchoolSubmission(): UseSchoolSubmissionReturn {
         void loadSubmission();
     }, [loadSubmission]);
 
+    const hasUnsavedChanges = form.formState.isDirty;
+    const shouldRefreshStatus = Boolean(
+        submission &&
+            (submission.status !== "RASCUNHO" ||
+                submission.extension_status === "Pendente")
+    );
+    useEffect(() => {
+        if (
+            !shouldRefreshStatus ||
+            isLoading ||
+            isSaving ||
+            isSubmitting ||
+            hasUnsavedChanges
+        )
+            return;
+        let active = true;
+        const refreshStatus = async () => {
+            if (document.visibilityState === "hidden") return;
+            try {
+                const updated = await schoolSubmissionService.getCurrentSubmission();
+                if (!active) return;
+                setSubmission(updated);
+                form.reset(normalizeSchoolFormData(updated.data));
+            } catch {
+                // A falha de uma consulta em segundo plano não descarta o formulário.
+            }
+        };
+        const interval = window.setInterval(() => void refreshStatus(), 15_000);
+        const onFocus = () => void refreshStatus();
+        window.addEventListener("focus", onFocus);
+        document.addEventListener("visibilitychange", onFocus);
+        return () => {
+            active = false;
+            window.clearInterval(interval);
+            window.removeEventListener("focus", onFocus);
+            document.removeEventListener("visibilitychange", onFocus);
+        };
+    }, [shouldRefreshStatus, form, hasUnsavedChanges, isLoading, isSaving, isSubmitting]);
+
     const saveDraft = async (options?: { quietSuccess?: boolean }): Promise<boolean> => {
         if (!submission) return false;
         setIsSaving(true);

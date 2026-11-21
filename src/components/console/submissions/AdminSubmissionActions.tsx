@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CheckCircle2, LoaderCircle, XCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useSWRConfig } from "swr";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +35,7 @@ export function AdminSubmissionActions({
     submission,
     onSubmissionUpdated,
 }: AdminSubmissionActionsProps) {
+    const { mutate: revalidateRelated } = useSWRConfig();
     const [approvalOpen, setApprovalOpen] = useState(false);
     const [rejectionOpen, setRejectionOpen] = useState(false);
     const [rejectionReason, setRejectionReason] = useState("");
@@ -49,6 +51,9 @@ export function AdminSubmissionActions({
             const updatedSubmission = await approveAdminSubmission(submission.id);
             setApprovalOpen(false);
             await onSubmissionUpdated(updatedSubmission);
+            await revalidateRelated(
+                (key) => Array.isArray(key) && key[0] === "admin-deadline-extensions"
+            );
             toast.success("Submissão aprovada com sucesso.");
         } catch (error) {
             toast.error(getErrorMessage(error));
@@ -116,8 +121,15 @@ export function AdminSubmissionActions({
                     <DialogHeader>
                         <DialogTitle>Confirmar aprovação</DialogTitle>
                         <DialogDescription>
-                            A submissão será aprovada e seus dados serão sincronizados. Deseja
-                            continuar?
+                            A submissão será aprovada e seus dados serão sincronizados.
+                            Deseja continuar?
+                            {submission.extension_status === "Pendente" && (
+                                <>
+                                    {" "}
+                                    A solicitação de prorrogação pendente será cancelada
+                                    automaticamente.
+                                </>
+                            )}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>

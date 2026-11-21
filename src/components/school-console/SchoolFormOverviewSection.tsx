@@ -90,6 +90,13 @@ function getExtensionStatusText(
             icon: <AlertCircle size={14} />,
         };
     }
+    if (extensionStatus === "Cancelado") {
+        return {
+            label: "Prorrogação cancelada pelo envio",
+            variant: "default",
+            icon: <AlertCircle size={14} />,
+        };
+    }
     if (daysRemaining !== null) {
         if (daysRemaining < 0) {
             return {

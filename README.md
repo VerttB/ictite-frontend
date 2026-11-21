@@ -102,3 +102,7 @@ Referência da configuração do servidor de testes: [documentação do Playwrig
 Atualização de segurança de 19/11: Next.js e `eslint-config-next` 16.4.6, Zod 4.6.7 e Vitest 4.1.12, com correções compatíveis das dependências transitivas no lockfile. Docker e CI usam Node 24 LTS; o Node 20 anterior já encerrou seu suporte, conforme a [tabela oficial de versões](https://nodejs.org/en/about/previous-releases). Os testes locais também são compatíveis com Node 22.18.
 
 Execute `npm ci` para reproduzir o lockfile. O CI executa `npm audit --audit-level=moderate`, além dos testes, lint e builds. Após atualizar as dependências, reinicie o servidor de desenvolvimento para carregar a nova versão do Next.js. A atualização não altera o código nem a política do proxy de imagens.
+
+## Envio e prorrogação do formulário
+
+O envio cancela um pedido de prorrogação pendente. A concessão de prazo cancela o envio anterior e reabre o formulário, preservando os dados; as confirmações informam essas consequências antes da ação. Pedidos cancelados aparecem como `Cancelado` e permanecem no histórico. O console consulta o estado ao voltar à janela e a cada 15 segundos enquanto houver uma decisão pendente ou o formulário estiver fechado; alterações locais não salvas são preservadas. Esta versão utiliza a API com a migração `d9a6e7b80321` aplicada.
