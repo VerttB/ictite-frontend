@@ -4,6 +4,7 @@ const statusStyles: Record<ExtensionStatus, string> = {
     Pendente: "border-amber-200 bg-amber-50 text-amber-700",
     Aprovado: "border-green-200 bg-green-50 text-green-700",
     Rejeitado: "border-red-200 bg-red-50 text-red-700",
+    Cancelado: "border-border bg-muted text-font-secondary",
 };
 
 export function ExtensionStatusBadge({ status }: { status: ExtensionStatus }) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { CalendarClock, Eye, LoaderCircle, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,7 +40,12 @@ import { SchoolFormSubmission } from "@/schemas/schoolSubmissionSchema";
 import { DeadlineExtensionDetailsDialog } from "./DeadlineExtensionDetailsDialog";
 import { ExtensionStatusBadge } from "./ExtensionStatusBadge";
 
-const extensionStatuses: ExtensionStatus[] = ["Pendente", "Aprovado", "Rejeitado"];
+const extensionStatuses: ExtensionStatus[] = [
+    "Pendente",
+    "Aprovado",
+    "Rejeitado",
+    "Cancelado",
+];
 
 const formatDate = (value?: string | null) => {
     if (!value) return "—";
@@ -60,6 +65,7 @@ const toLocalDateTimeInput = (value?: string | null) => {
 };
 
 export function AdminDeadlineExtensions() {
+    const { mutate: revalidateRelated } = useSWRConfig();
     const [page, setPage] = useState(1);
     const [status, setStatus] = useState<ExtensionStatus | undefined>();
     const [selectedSubmission, setSelectedSubmission] =
@@ -118,6 +124,9 @@ export function AdminDeadlineExtensions() {
             { revalidate: false }
         );
         setSelectedSubmission(updatedSubmission);
+        await revalidateRelated(
+            (key) => Array.isArray(key) && key[0] === "admin-submissions"
+        );
     };
 
     const saveGlobalDeadline = async (value: string | null) => {
