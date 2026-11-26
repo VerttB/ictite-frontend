@@ -26,6 +26,11 @@ const nextConfig: NextConfig = {
             { protocol: "https", hostname: "minimakerlab.com.br" },
             { protocol: "https", hostname: "simcc.uesc.br", pathname: "/**" },
             { protocol: "http", hostname: "simcc.uesc.br", pathname: "/**" },
+            {
+                protocol: "https",
+                hostname: "observatoriocti.secti.ba.gov.br",
+                pathname: "/**",
+            },
             { protocol: "https", hostname: "**.cdninstagram.com" },
             { protocol: "https", hostname: "**.fbcdn.net" },
         ],

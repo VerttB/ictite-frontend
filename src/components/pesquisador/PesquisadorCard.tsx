@@ -59,7 +59,7 @@ export default function CardPesquisador({ researcher }: CardPesquisadorProps) {
 
     return researcher.lattes_id ? (
         <Link
-            href={`https://simcc.uesc.br/researcher?lattes_id=${researcher.lattes_id}`}
+            href={`https://observatoriocti.secti.ba.gov.br/simcc/pesquisadores/${researcher.lattes_id}`}
             target="_blank">
             {card}
         </Link>

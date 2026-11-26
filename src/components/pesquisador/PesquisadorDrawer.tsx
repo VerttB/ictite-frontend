@@ -72,7 +72,7 @@ export default function Pesquisador({ isOpen, onClose, researcherId }: Pesquisad
                             <DrawerTitle className="text-font-primary text-2xl">
                                 {researcher?.simcc?.lattes_id?.trim() ? (
                                     <Link
-                                        href={`https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id.trim()}`}
+                                        href={`https://observatoriocti.secti.ba.gov.br/simcc/pesquisadores/${researcher.simcc.lattes_id.trim()}`}
                                         target="_blank"
                                         className="flex cursor-pointer"
                                         title="Ver no SIMCC">

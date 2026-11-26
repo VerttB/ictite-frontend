@@ -35,7 +35,7 @@ export const PesquisadorGenericoCard = ({ searchResult, icon }: GenericListProps
                     {result.lattes_id?.trim() && (
                         <Link
                             href={
-                                `https://simcc.uesc.br/researcher?lattes_id=${result.lattes_id.trim()}` as Route
+                                `https://observatoriocti.secti.ba.gov.br/simcc/pesquisadores/${result.lattes_id.trim()}` as Route
                             }
                             target="_blank"
                             title="Ver no SIMCC">
