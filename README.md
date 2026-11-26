@@ -105,4 +105,6 @@ Execute `npm ci` para reproduzir o lockfile. O CI executa `npm audit --audit-lev
 
 ## Envio e prorrogação do formulário
 
+O cadastro de pesquisadores não oferece envio de fotos. As prévias do portal e da revisão usam a imagem fornecida pela API a partir da integração SIMCC/Lattes, sem consultar galerias de rascunho de pesquisadores. Na ausência de foto integrada, a prévia apresenta o estado sem imagem.
+
 O envio cancela um pedido de prorrogação pendente. A concessão de prazo cancela o envio anterior e reabre o formulário, preservando os dados; as confirmações informam essas consequências antes da ação. Pedidos cancelados aparecem como `Cancelado` e permanecem no histórico. O console consulta o estado ao voltar à janela e a cada 15 segundos enquanto houver uma decisão pendente ou o formulário estiver fechado; alterações locais não salvas são preservadas. Esta versão utiliza a API com a migração `d9a6e7b80321` aplicada.

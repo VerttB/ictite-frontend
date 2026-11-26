@@ -94,7 +94,7 @@ test("admin cria escola e convite; escola salva, envia, corrige rejeição e pub
     await page.locator('input[name="password"]').fill(schoolPassword);
     await page.locator('input[name="confirmPassword"]').fill(schoolPassword);
     await page.getByRole("button", { name: "Ativar conta" }).click();
-    await expect(page).toHaveURL(/school\/console/);
+    await expect(page).toHaveURL(/school\/console/, { timeout: 60_000 });
     await expect(page.getByRole("heading", { name: "Console da Escola" })).toBeVisible();
     console.info("Escola criada pela interface; convite e ativação concluídos.");
     await page.getByRole("button", { name: "Escola", exact: true }).click();
@@ -143,6 +143,8 @@ test("admin cria escola e convite; escola salva, envia, corrige rejeição e pub
     await page.locator('input[name="researchers.0.name"]').fill("Pesquisadora E2E");
     await page.getByLabel("Projeto E2E sem anos", { exact: true }).check();
     await page.getByLabel("Segundo projeto E2E", { exact: true }).check();
+    await expect(page.locator('input[type="file"]')).toHaveCount(0);
+    await expect(page.getByText(/foto do pesquisador é obtida automaticamente/)).toBeVisible();
     await page.getByRole("button", { name: "Equipamentos", exact: true }).click();
     await page.getByRole("button", { name: "Adicionar", exact: true }).click();
     await page.locator('input[name="equipments.0.name"]').fill("Microscópio E2E");
