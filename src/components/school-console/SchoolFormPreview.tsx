@@ -393,10 +393,13 @@ export function SchoolFormPreview({
                                             value={linkedProjects}
                                         />
                                     </div>
-                                    <DraftImageGallery
-                                        entityType="researcher"
-                                        entityId={researcher.id}
-                                    />
+                                    {researcher.image && (
+                                        <ImageDisplay
+                                            src={researcher.image}
+                                            alt={`Foto de ${researcher.name}`}
+                                            className="mt-4 size-20 overflow-hidden rounded-full"
+                                        />
+                                    )}
                                 </div>
                             );
                         })

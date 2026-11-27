@@ -9,7 +9,7 @@ import { schoolSubmissionService } from "@/core/service/schoolSubmissionService"
 import { MAX_IMAGE_SIZE, isAcceptedImageFile } from "@/core/constants/Image";
 
 interface FormEntityImageDropzoneProps {
-    entityType: "clube_ciencias" | "project" | "equipment" | "researcher";
+    entityType: "clube_ciencias" | "project" | "equipment";
     entityId: string;
     readOnly?: boolean;
     label?: string;
@@ -17,7 +17,6 @@ interface FormEntityImageDropzoneProps {
     draftData?: {
         clubs?: Array<{ id: string }>;
         projects?: Array<{ id: string }>;
-        researchers?: Array<{ id: string }>;
         equipments?: Array<{ id: string }>;
     };
 }
@@ -37,22 +36,24 @@ export function FormEntityImageDropzone({
         if (!draftData) return false;
         switch (entityType) {
             case "clube_ciencias":
-                return draftData.clubs?.some(c => c.id === entityId) ?? false;
+                return draftData.clubs?.some((c) => c.id === entityId) ?? false;
             case "project":
-                return draftData.projects?.some(p => p.id === entityId) ?? false;
-            case "researcher":
-                return draftData.researchers?.some(r => r.id === entityId) ?? false;
+                return draftData.projects?.some((p) => p.id === entityId) ?? false;
             case "equipment":
-                return draftData.equipments?.some(e => e.id === entityId) ?? false;
+                return draftData.equipments?.some((e) => e.id === entityId) ?? false;
             default:
                 return false;
         }
     }, [draftData, entityType, entityId]);
 
     // Só buscar imagens se a entidade existe no draft
-    const swrKey = entityExistsInDraft ? `/submissions/current/images/${entityType}/${entityId}` : null;
+    const swrKey = entityExistsInDraft
+        ? `/submissions/current/images/${entityType}/${entityId}`
+        : null;
 
-    const { data, mutate, isLoading } = useSWR(swrKey, () => schoolSubmissionService.getFormEntityImages(entityType, entityId));
+    const { data, mutate, isLoading } = useSWR(swrKey, () =>
+        schoolSubmissionService.getFormEntityImages(entityType, entityId)
+    );
 
     const images = data?.images ?? [];
 
@@ -82,7 +83,11 @@ export function FormEntityImageDropzone({
         try {
             setIsUploading(true);
             if (ensureDraftSaved && !(await ensureDraftSaved())) return;
-            await schoolSubmissionService.uploadFormEntityImages(entityType, entityId, validFiles);
+            await schoolSubmissionService.uploadFormEntityImages(
+                entityType,
+                entityId,
+                validFiles
+            );
             await mutate();
             toast.success("Imagens enviadas com sucesso!");
         } catch (err: unknown) {
@@ -103,7 +108,11 @@ export function FormEntityImageDropzone({
     const handleRemoveSingle = async (filename: string) => {
         try {
             setIsUploading(true);
-            await schoolSubmissionService.deleteSingleFormEntityImage(entityType, entityId, filename);
+            await schoolSubmissionService.deleteSingleFormEntityImage(
+                entityType,
+                entityId,
+                filename
+            );
             await mutate();
             toast.success("Imagem removida.");
         } catch {
@@ -127,14 +136,22 @@ export function FormEntityImageDropzone({
                 <label className="text-font-primary flex items-center gap-2 text-xs font-semibold">
                     <ImageIcon size={14} className="text-[#088077]" />
                     {displayLabel}
-                    <span className="text-font-secondary font-normal">({images.length}/5)</span>
+                    <span className="text-font-secondary font-normal">
+                        ({images.length}/5)
+                    </span>
                 </label>
-                {images.length > 0 && <span className="text-[11px] font-medium text-emerald-600">✓ {images.length} imagem(ns) no rascunho</span>}
+                {images.length > 0 && (
+                    <span className="text-[11px] font-medium text-emerald-600">
+                        ✓ {images.length} imagem(ns) no rascunho
+                    </span>
+                )}
             </div>
 
             <label
                 className={`group relative flex min-h-[110px] w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#088077]/30 bg-[#088077]/5 p-4 transition-all duration-200 ${
-                    readOnly ? "cursor-not-allowed opacity-80" : "cursor-pointer hover:border-[#088077] hover:bg-[#088077]/10"
+                    readOnly
+                        ? "cursor-not-allowed opacity-80"
+                        : "cursor-pointer hover:border-[#088077] hover:bg-[#088077]/10"
                 }`}>
                 {!readOnly && (
                     <input
@@ -150,13 +167,17 @@ export function FormEntityImageDropzone({
                 {isLoading || isUploading ? (
                     <div className="flex flex-col items-center justify-center gap-2 py-2 text-[#088077]">
                         <Loader2 className="animate-spin" size={22} />
-                        <span className="text-xs font-semibold">{isUploading ? "Enviando..." : "Carregando..."}</span>
+                        <span className="text-xs font-semibold">
+                            {isUploading ? "Enviando..." : "Carregando..."}
+                        </span>
                     </div>
                 ) : images.length > 0 ? (
                     <div className="flex w-full flex-col gap-3">
                         <div className="flex flex-wrap gap-2">
                             {images.map((img) => (
-                                <div key={img.filename} className="bg-background relative size-20 overflow-hidden rounded-lg border border-border shadow-xs">
+                                <div
+                                    key={img.filename}
+                                    className="bg-background border-border relative size-20 overflow-hidden rounded-lg border shadow-xs">
                                     <Image
                                         src={img.url}
                                         alt={img.filename}
@@ -171,7 +192,7 @@ export function FormEntityImageDropzone({
                                                 e.stopPropagation();
                                                 handleRemoveSingle(img.filename);
                                             }}
-                                            className="absolute -right-1 -top-1 rounded-full bg-red-500 p-0.5 text-white shadow-md hover:bg-red-600">
+                                            className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white shadow-md hover:bg-red-600">
                                             <X size={12} />
                                         </button>
                                     )}
@@ -179,7 +200,9 @@ export function FormEntityImageDropzone({
                             ))}
                         </div>
                         {!readOnly && images.length < 5 && (
-                            <p className="text-center text-xs font-medium text-[#088077]">Clique para adicionar mais imagens (até 5, máx 5MB cada)</p>
+                            <p className="text-center text-xs font-medium text-[#088077]">
+                                Clique para adicionar mais imagens (até 5, máx 5MB cada)
+                            </p>
                         )}
                     </div>
                 ) : (
@@ -187,8 +210,14 @@ export function FormEntityImageDropzone({
                         <div className="rounded-full bg-[#088077]/15 p-2.5 text-[#088077] transition-transform group-hover:scale-110">
                             <UploadCloud size={20} />
                         </div>
-                        <p className="text-xs font-semibold text-[#088077]">Adicionar imagens</p>
-                        <span className="text-font-secondary text-[11px]">{readOnly ? "Nenhuma imagem anexada." : "Clique para selecionar (até 5 imagens, 5MB cada)"}</span>
+                        <p className="text-xs font-semibold text-[#088077]">
+                            Adicionar imagens
+                        </p>
+                        <span className="text-font-secondary text-[11px]">
+                            {readOnly
+                                ? "Nenhuma imagem anexada."
+                                : "Clique para selecionar (até 5 imagens, 5MB cada)"}
+                        </span>
                     </div>
                 )}
             </label>

@@ -168,7 +168,8 @@ export function SchoolSubEntitiesTabs({
             gender: "Não informado",
             race: "Não informado",
             lattes_id: "",
-            project_ids: currentProjects.length === 1 && firstProjectId ? [firstProjectId] : [],
+            project_ids:
+                currentProjects.length === 1 && firstProjectId ? [firstProjectId] : [],
         });
         setExpandedItems((prev) => ({ ...prev, [id]: true }));
     };
@@ -217,9 +218,9 @@ export function SchoolSubEntitiesTabs({
     const HeaderIcon = headerInfo.icon;
 
     return (
-        <div className="bg-card w-full rounded-2xl border border-border p-6 shadow-sm">
+        <div className="bg-card border-border w-full rounded-2xl border p-6 shadow-sm">
             {/* Header da Seção Ativa */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
+            <div className="border-border flex flex-wrap items-center justify-between gap-3 border-b pb-4">
                 <div className="flex items-center gap-2 text-[#088077]">
                     <HeaderIcon size={20} />
                     <h3 className="text-font-primary text-base font-bold">
@@ -234,7 +235,7 @@ export function SchoolSubEntitiesTabs({
                             type="button"
                             variant="outline"
                             onClick={toggleExpandAll}
-                            className="text-font-secondary gap-1.5 rounded-full border-border px-3 py-1.5 text-xs font-semibold transition-all hover:bg-muted">
+                            className="text-font-secondary border-border hover:bg-muted gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all">
                             {allExpanded ? (
                                 <ChevronsUp size={15} />
                             ) : (
@@ -327,8 +328,6 @@ export function SchoolSubEntitiesTabs({
                                 isExpanded={isItemExpanded(field.fieldId)}
                                 onToggleExpand={() => toggleExpand(field.fieldId)}
                                 onRemove={() => removeResearcher(index)}
-                                ensureDraftSaved={ensureDraftSaved}
-                                draftData={draftData}
                             />
                         ))
                     ))}

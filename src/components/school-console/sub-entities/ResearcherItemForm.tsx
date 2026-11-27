@@ -23,7 +23,6 @@ import { ProjectDraftData, SchoolFormDataInput } from "@/schemas/schoolSubmissio
 import { ResearcherTypes } from "@/core/constants/researcherType";
 import { GenderTypes } from "@/core/constants/sex";
 import { RaceTypes } from "@/core/constants/race";
-import { FormEntityImageDropzone } from "@/components/school-console/FormEntityImageDropzone";
 
 interface ResearcherItemFormProps {
     index: number;
@@ -34,8 +33,6 @@ interface ResearcherItemFormProps {
     isExpanded: boolean;
     onToggleExpand: () => void;
     onRemove: () => void;
-    ensureDraftSaved: () => Promise<boolean>;
-    draftData?: SchoolFormDataInput;
 }
 
 export function ResearcherItemForm({
@@ -46,8 +43,6 @@ export function ResearcherItemForm({
     isExpanded,
     onToggleExpand,
     onRemove,
-    ensureDraftSaved,
-    draftData,
 }: ResearcherItemFormProps) {
     const {
         register,
@@ -351,15 +346,10 @@ export function ResearcherItemForm({
                         )}
                     </div>
 
-                    {researcher?.id && (
-                        <FormEntityImageDropzone
-                            entityType="researcher"
-                            entityId={researcher.id}
-                            ensureDraftSaved={ensureDraftSaved}
-                            readOnly={readOnly}
-                            draftData={draftData}
-                        />
-                    )}
+                    <p className="text-font-secondary text-xs">
+                        A foto do pesquisador é obtida automaticamente pela integração
+                        SIMCC/Lattes.
+                    </p>
                 </div>
             )}
         </div>

@@ -46,8 +46,14 @@ export const Header = () => {
             </div>
             <div className="flex flex-row items-center gap-2 sm:gap-4">
                 {!isSchoolConsole && (
-                    <Button asChild size={isMobile ? "icon" : "default"} className="cursor-pointer text-xl">
-                        <Link target="_blank" aria-label="Observatório" href={"https://simcc.uesc.br/observatorio"}>
+                    <Button
+                        asChild
+                        size={isMobile ? "icon" : "default"}
+                        className="cursor-pointer text-xl">
+                        <Link
+                            target="_blank"
+                            aria-label="Observatório"
+                            href={"https://observatoriocti.secti.ba.gov.br"}>
                             {isMobile ? <ChevronRight /> : "Observatório"}
                         </Link>
                     </Button>
@@ -56,7 +62,11 @@ export const Header = () => {
                     size={"icon"}
                     variant="outline"
                     onClick={toggleTheme}
-                    aria-label={theme === "light" ? "Mudar para tema escuro" : "Mudar para tema claro"}
+                    aria-label={
+                        theme === "light"
+                            ? "Mudar para tema escuro"
+                            : "Mudar para tema claro"
+                    }
                     className="cursor-pointer text-xl"
                     title={
                         theme === "light"

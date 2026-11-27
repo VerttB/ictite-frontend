@@ -145,21 +145,20 @@ function DraftProjectImage({
     );
 }
 
-function DraftResearcherImage({ entityId, name, fallbackUrl, className }: {
-    entityId: string;
+function ResearcherImage({
+    name,
+    imageUrl,
+    className,
+}: {
     name: string;
-    fallbackUrl?: string;
+    imageUrl?: string;
     className: string;
 }) {
-    const { data } = useSWR(
-        entityId ? `/submissions/current/images/researcher/${entityId}` : null,
-        () => schoolSubmissionService.getFormEntityImages("researcher", entityId)
-    );
-    const imageUrl = data?.images?.[0]?.url || fallbackUrl;
     return imageUrl ? (
         <ImageDisplay src={imageUrl} alt={`Foto de ${name}`} className={className} />
     ) : (
-        <div className={`${className} bg-muted text-font-secondary flex items-center justify-center`}>
+        <div
+            className={`${className} bg-muted text-font-secondary flex items-center justify-center`}>
             <BookOpen size={32} />
         </div>
     );
@@ -252,7 +251,11 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                 {data.school?.city || "Cidade não informada"}
                             </span>
                             {data.school?.instagram_url && (
-                                <a href={formatInstagramUrl(data.school.instagram_url)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:underline">
+                                <a
+                                    href={formatInstagramUrl(data.school.instagram_url)}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="flex items-center gap-2 hover:underline">
                                     <Instagram size={16} />
                                     {data.school.instagram_url}
                                 </a>
@@ -363,7 +366,13 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                     </h2>
                                                     <div className="text-primary flex flex-col gap-2 text-sm md:flex-row md:items-center">
                                                         {club.instagram_url && (
-                                                            <a href={formatInstagramUrl(club.instagram_url)} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:underline">
+                                                            <a
+                                                                href={formatInstagramUrl(
+                                                                    club.instagram_url
+                                                                )}
+                                                                target="_blank"
+                                                                rel="noreferrer"
+                                                                className="flex items-center gap-2 hover:underline">
                                                                 <Instagram size={20} />
                                                                 {club.instagram_url}
                                                             </a>
@@ -518,7 +527,15 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                                                                         researcherIndex
                                                                                     }
                                                                                     className="bg-background text-font-primary relative flex min-h-[300px] min-w-0 flex-col justify-end overflow-hidden rounded-md border-2 p-4">
-                                                                                    <DraftResearcherImage entityId={researcher.id} name={researcher.name} fallbackUrl={researcher.image} className="absolute inset-0 h-full w-full rounded-none" />
+                                                                                    <ResearcherImage
+                                                                                        name={
+                                                                                            researcher.name
+                                                                                        }
+                                                                                        imageUrl={
+                                                                                            researcher.image
+                                                                                        }
+                                                                                        className="absolute inset-0 h-full w-full rounded-none"
+                                                                                    />
                                                                                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                                                                                     <div className="relative z-10 text-white">
                                                                                         <p className="text-xl">
@@ -584,7 +601,11 @@ export function ClubSitePreview({ data, onBack }: ClubSitePreviewProps) {
                                     <article
                                         key={researcher.id || index}
                                         className="bg-foreground flex min-w-0 items-center gap-4 rounded-md border p-4">
-                                        <DraftResearcherImage entityId={researcher.id} name={researcher.name} fallbackUrl={researcher.image} className="size-20 shrink-0 overflow-hidden rounded-full border" />
+                                        <ResearcherImage
+                                            name={researcher.name}
+                                            imageUrl={researcher.image}
+                                            className="size-20 shrink-0 overflow-hidden rounded-full border"
+                                        />
                                         <div className="min-w-0">
                                             <h3 className="text-font-primary truncate font-semibold">
                                                 {researcher.name || "Nome não informado"}

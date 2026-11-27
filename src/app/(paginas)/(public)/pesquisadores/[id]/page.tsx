@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <div className="mb-2 flex items-start justify-between gap-2 sm:items-center">
                         {researcher.simcc?.lattes_id?.trim() ? (
                             <Link
-                                href={`https://simcc.uesc.br/researcher?lattes_id=${researcher.simcc.lattes_id.trim()}`}
+                                href={`https://observatoriocti.secti.ba.gov.br/simcc/api/researchers?lattes_id=${researcher.simcc.lattes_id.trim()}`}
                                 target="_blank"
                                 className="flex cursor-pointer"
                                 title="Ver no SIMCC">
